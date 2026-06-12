@@ -207,7 +207,7 @@ fn create_panel_window(app: &AppHandle) -> Result<(), String> {
     .focused(false)
     .visible(false)
     .inner_size(PANEL_WINDOW_WIDTH, PANEL_WINDOW_HEIGHT)
-    .center()
+    // .center()
     .build()
     .map_err(|err| err.to_string())?;
 
