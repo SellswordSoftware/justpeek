@@ -50,7 +50,8 @@ export function createSettings() {
     }
   }
 
-  const settings = template({
+  /** @type {import("./runtime/naf.js").TemplateOptions<HTMLElement>} */
+  const settingsOptions = {
     root: ".peek-surface",
     onMount(_el, _parent, ctx) {
       const hotkeyInput = /** @type {HTMLInputElement} */ (requireRef(ctx.refs, "hotkeyInput"));
@@ -102,7 +103,9 @@ export function createSettings() {
         }),
       );
     },
-  })`
+  };
+
+  const settings = template(settingsOptions)`
     <section class="peek-surface panel settings-view">
       <header class="peek-header settings-view__header">
         <div class="peek-header__meta">

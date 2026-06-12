@@ -1,7 +1,6 @@
 // @ts-check
 
 import {
-  cleanupCollector,
   computed,
   effect,
   listener,
@@ -295,7 +294,8 @@ export function createPanel(data, options = {}) {
     }
   }
 
-  const panel = template({
+  /** @type {import("./runtime/naf.js").TemplateOptions<HTMLElement>} */
+  const panelOptions = {
     root: ".peek-surface",
     onMount(_el, _parent, ctx) {
       const searchInput = /** @type {HTMLInputElement} */ (requireRef(ctx.refs, "searchInput"));
@@ -439,7 +439,9 @@ export function createPanel(data, options = {}) {
         }),
       );
     },
-  })/*html*/`
+  };
+
+  const panel = template(panelOptions)/*html*/`
     <section class="peek-surface panel">
       <div class="window-resize-handles" aria-hidden="true">
         <div class="window-resize-handle window-resize-handle--n" data-tauri-drag-resize-region="Top"></div>

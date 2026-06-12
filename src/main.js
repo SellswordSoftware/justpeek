@@ -6,13 +6,21 @@ import { emit, getCurrentWindowLabel, invoke, isTauriRuntime, listen } from "./r
 const PANEL_WINDOW_LABEL = "panel";
 const SETTINGS_WINDOW_LABEL = "main";
 
-const root = document.getElementById("app");
+const rootNode = document.getElementById("app");
 
-if (!(root instanceof HTMLElement)) {
+if (!(rootNode instanceof HTMLElement)) {
   throw new Error("App root #app was not found");
 }
 
-/** @type {{ unmount: () => void } | null} */
+const root = rootNode;
+
+/**
+ * @typedef {object} MountedView
+ * @property {(container: HTMLElement) => void} mount
+ * @property {() => void} unmount
+ */
+
+/** @type {MountedView | null} */
 let mountedView = null;
 
 function unmountCurrentView() {

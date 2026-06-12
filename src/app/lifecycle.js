@@ -10,7 +10,7 @@ export function mountAppLifecycle(options) {
     listener(window, "beforeunload", () => {
       cleanup.run();
     }),
-    ...options.featureCleanups,
+    ...options.featureCleanups.map((feature) => feature.cleanup),
   );
 
   return {

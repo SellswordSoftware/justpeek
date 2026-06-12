@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "checkJs": true,
+        "allowJs": true,
+        "noEmit": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "target": "es2025",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"]
+    },
+    "include": ["src/**/*.js", "src/**/*.d.ts"],
+    "exclude": [
+        "src/**/*.test.js",
+        "src/vendor/**"
+    ]
+}
