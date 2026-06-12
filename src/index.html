@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>JustPeek</title>
+    <script type="module" src="/main.js" defer></script>
+  </head>
+  <body>
+    <main id="app" class="app-shell" data-loading>
+      <div class="app-shell__backdrop" aria-hidden="true"></div>
+      <section id="peek-surface" class="peek-surface panel">
+        <header class="peek-header">
+          <div class="peek-header__meta">
+            <p class="eyebrow">JustPeek</p>
+            <h1 class="peek-title">Contextual quick reference</h1>
+          </div>
+          <p id="peek-status" class="peek-status">Phase 1 scaffold</p>
+        </header>
+
+        <section class="peek-controls">
+          <label class="peek-search">
+            <span class="peek-search__label">Filter</span>
+            <input
+              id="peek-search-input"
+              class="input"
+              type="search"
+              placeholder="Try git, jordan, or ctrl"
+              autocomplete="off"
+            />
+          </label>
+          <p class="peek-controls__hint">
+            HTML-first shell with NAF and NASS wired in.
+          </p>
+        </section>
+
+        <section
+          id="peek-reference-groups"
+          class="peek-reference-groups"
+          aria-live="polite"
+        ></section>
+      </section>
+    </main>
+  </body>
+</html>

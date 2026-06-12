@@ -1,0 +1,20 @@
+name: Git Reference
+process:
+  - wezterm
+  - alacritty
+  - gnome-terminal
+references:
+  - group: Tagging
+    items:
+      - label: Annotated tag
+        value: git tag -a v1.2.3 -m "Release v1.2.3"
+      - label: Push tags
+        value: git push --tags
+  - group: Rollback
+    items:
+      - label: Revert a commit
+        value: git revert <commit>
+        notes: Safe for shared history
+      - label: Reset hard
+        value: git reset --hard <commit>
+        notes: Rewrites local state
