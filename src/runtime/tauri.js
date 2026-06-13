@@ -1,5 +1,14 @@
 // @ts-check
 
+export const APP_EVENTS = {
+  showPanel: "show-panel",
+  showPanelPicker: "show-panel-picker",
+  hidePanel: "hide-panel",
+  openSettings: "open-settings",
+  panelReady: "justpeek://panel-ready",
+  themeChanged: "justpeek://theme-changed",
+};
+
 /**
  * @returns {any | null}
  */
@@ -58,6 +67,85 @@ export function invoke(command, args) {
 }
 
 /**
+ * Invoke a JustPeek backend command.
+ * Tauri exposes these commands with their Rust function names, which currently
+ * use a `cmd_` prefix.
+ *
+ * @param {string} command
+ * @param {Record<string, unknown>=} args
+ * @returns {Promise<unknown>}
+ */
+export function invokeAppCommand(command, args) {
+  return invoke(`cmd_${command}`, args);
+}
+
+/**
+ * @typedef {object} AppConfig
+ * @property {string} hotkey
+ * @property {string} theme
+ * @property {string | null | undefined} references_dir
+ */
+
+/**
+ * @returns {Promise<AppConfig>}
+ */
+export async function getConfig() {
+  return /** @type {Promise<AppConfig>} */ (invokeAppCommand("get_config"));
+}
+
+/**
+ * @param {AppConfig} configData
+ * @returns {Promise<void>}
+ */
+export async function setConfig(configData) {
+  await invokeAppCommand("set_config", { configData });
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+export async function hidePanelWindow() {
+  await invokeAppCommand("hide_panel");
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+export async function reloadShortcuts() {
+  await invokeAppCommand("reload_shortcuts");
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+export async function openShortcutsDir() {
+  await invokeAppCommand("open_shortcuts_dir");
+}
+
+/**
+ * @param {string} url
+ * @returns {Promise<void>}
+ */
+export async function openExternalUrl(url) {
+  await invokeAppCommand("open_external_url", { url });
+}
+
+/**
+ * @returns {Promise<unknown>}
+ */
+export async function getPickerApps() {
+  return invokeAppCommand("get_picker_apps");
+}
+
+/**
+ * @param {string} pickerId
+ * @returns {Promise<unknown>}
+ */
+export async function loadPickerApp(pickerId) {
+  return invokeAppCommand("load_picker_app", { pickerId, picker_id: pickerId });
+}
+
+/**
  * @param {string} event
  * @param {(payload: { payload: unknown }) => void} handler
  * @returns {Promise<() => void>}
@@ -83,6 +171,14 @@ export function emit(event, payload) {
   }
 
   return tauri.event.emit(event, payload);
+}
+
+/**
+ * @param {string} theme
+ * @returns {Promise<void>}
+ */
+export async function emitThemeChanged(theme) {
+  await emit(APP_EVENTS.themeChanged, theme);
 }
 
 /**
@@ -126,17 +222,4 @@ export function getCurrentWindowLabel() {
   }
 
   return null;
-}
-
-/**
- * @param {"east"|"west"|"north"|"south"|"northeast"|"northwest"|"southeast"|"southwest"} direction
- * @returns {Promise<void>}
- */
-export async function startResizeDragging(direction) {
-  const currentWindow = getCurrentWindow();
-  if (!currentWindow?.startResizeDragging) {
-    return;
-  }
-
-  await currentWindow.startResizeDragging(direction);
 }

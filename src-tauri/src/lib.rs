@@ -82,6 +82,7 @@ pub fn run() {
             cmd_set_config,
             cmd_reload_shortcuts,
             cmd_open_shortcuts_dir,
+            cmd_open_external_url,
             cmd_get_picker_apps,
             cmd_load_picker_app,
         ])
@@ -143,9 +144,13 @@ fn install_hotkey_toggle_handler(app: &AppHandle) {
     // `justpeek://toggle-panel`, which keeps the toggle behavior centralized.
 }
 
+#[cfg(debug_assertions)]
 fn debug_log(message: impl AsRef<str>) {
-    //eprintln!("[justpeek] {}", message.as_ref());
+    eprintln!("[justpeek] {}", message.as_ref());
 }
+
+#[cfg(not(debug_assertions))]
+fn debug_log(_message: impl AsRef<str>) {}
 
 fn install_panel_ready_handler(app: &AppHandle) {
     let app_handle = app.clone();
@@ -364,6 +369,31 @@ fn open_shortcuts_dir() -> Result<(), String> {
     Ok(())
 }
 
+fn open_external_url(url: &str) -> Result<(), String> {
+    let normalized = url.trim();
+    if !(normalized.starts_with("https://") || normalized.starts_with("http://")) {
+        return Err("Only http:// and https:// URLs are supported".to_string());
+    }
+
+    #[cfg(target_os = "linux")]
+    std::process::Command::new("xdg-open")
+        .arg(normalized)
+        .spawn()
+        .map_err(|err| err.to_string())?;
+    #[cfg(windows)]
+    std::process::Command::new("explorer")
+        .arg(normalized)
+        .spawn()
+        .map_err(|err| err.to_string())?;
+    #[cfg(target_os = "macos")]
+    std::process::Command::new("open")
+        .arg(normalized)
+        .spawn()
+        .map_err(|err| err.to_string())?;
+
+    Ok(())
+}
+
 #[tauri::command]
 async fn cmd_show_panel(app: tauri::AppHandle) -> Result<(), String> {
     show_panel_window(&app)
@@ -410,6 +440,11 @@ async fn cmd_reload_shortcuts(app: tauri::AppHandle) -> Result<(), String> {
 #[tauri::command]
 async fn cmd_open_shortcuts_dir() -> Result<(), String> {
     open_shortcuts_dir()
+}
+
+#[tauri::command]
+async fn cmd_open_external_url(url: String) -> Result<(), String> {
+    open_external_url(&url)
 }
 
 #[tauri::command]

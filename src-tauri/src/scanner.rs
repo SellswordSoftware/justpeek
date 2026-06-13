@@ -1,5 +1,5 @@
 use regex::Regex;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -7,9 +7,12 @@ use std::path::{Path, PathBuf};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ShortcutFile {
     pub name: String,
+    #[serde(default, deserialize_with = "deserialize_processes")]
     pub process: Vec<String>,
     #[serde(default)]
     pub title_pattern: Option<String>,
+    #[serde(default)]
+    pub title_contains: Option<String>,
     #[serde(alias = "shortcuts")]
     pub references: Vec<ReferenceGroup>,
     #[serde(skip)]
@@ -24,13 +27,18 @@ pub struct ReferenceGroup {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReferenceItem {
-    #[serde(default)]
-    pub keys: Option<String>,
+    #[serde(default, deserialize_with = "deserialize_string_list")]
+    pub keys: Vec<String>,
     pub label: String,
     #[serde(default)]
+    #[serde(alias = "command")]
     pub value: Option<String>,
     #[serde(default)]
     pub notes: Option<String>,
+    #[serde(default)]
+    pub url: Option<String>,
+    #[serde(default)]
+    pub search_terms: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -77,6 +85,11 @@ pub fn scan_shortcuts(dir: &Path) -> HashMap<String, ShortcutFile> {
         }
 
         if let Some(file) = parse_shortcut_file(&path) {
+            if file.process.is_empty() {
+                map.insert(manual_only_identity(&file), file);
+                continue;
+            }
+
             for process_name in &file.process {
                 map.insert(process_name.to_lowercase(), file.clone());
             }
@@ -128,7 +141,10 @@ pub fn lookup_shortcuts_with_trace(
         log_lines.push("no process candidates were available for direct matching".to_string());
     }
 
-    for file in unique_files(map) {
+    for file in unique_files(map)
+        .into_iter()
+        .filter(|file| !file.process.is_empty())
+    {
         let title_match = title_pattern_matches(file, &window.window_title);
         log_lines.push(format!(
             "fallback candidate: {} [{}]",
@@ -201,6 +217,10 @@ fn file_identity(file: &ShortcutFile) -> String {
         .unwrap_or_else(|| format!("{}::{:?}", file.name, file.process))
 }
 
+fn manual_only_identity(file: &ShortcutFile) -> String {
+    format!("__manual__::{}", file_identity(file))
+}
+
 fn panel_data_for(file: &ShortcutFile) -> PanelData {
     PanelData {
         app_name: file.name.clone(),
@@ -219,10 +239,16 @@ fn describe_file(file: &ShortcutFile) -> String {
 }
 
 fn describe_title_check(file: &ShortcutFile, matched: bool) -> String {
-    match &file.title_pattern {
-        Some(pattern) => format!("title_pattern={pattern:?} matched={matched}"),
-        None => "title_pattern=<none> matched=true".to_string(),
-    }
+    let pattern = match &file.title_pattern {
+        Some(pattern) => format!("title_pattern={pattern:?}"),
+        None => "title_pattern=<none>".to_string(),
+    };
+    let contains = match &file.title_contains {
+        Some(value) => format!("title_contains={value:?}"),
+        None => "title_contains=<none>".to_string(),
+    };
+
+    format!("{pattern} {contains} matched={matched}")
 }
 
 impl WindowInfo {
@@ -361,7 +387,7 @@ fn is_yaml_file(path: &Path) -> bool {
 fn parse_shortcut_file(path: &Path) -> Option<ShortcutFile> {
     let content = fs::read_to_string(path).ok()?;
     let mut file: ShortcutFile = serde_yaml::from_str(&content).ok()?;
-    if file.process.is_empty() || file.references.is_empty() {
+    if file.references.is_empty() {
         return None;
     }
 
@@ -369,11 +395,439 @@ fn parse_shortcut_file(path: &Path) -> Option<ShortcutFile> {
     Some(file)
 }
 
+fn deserialize_processes<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum ProcessField {
+        Single(String),
+        Multiple(Vec<String>),
+    }
+
+    let value = Option::<ProcessField>::deserialize(deserializer)?;
+    let processes = match value {
+        Some(ProcessField::Single(process)) => vec![process],
+        Some(ProcessField::Multiple(processes)) => processes,
+        None => Vec::new(),
+    };
+
+    Ok(processes
+        .into_iter()
+        .map(|value| value.trim().to_string())
+        .filter(|value| !value.is_empty())
+        .collect())
+}
+
+fn deserialize_string_list<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum StringField {
+        Single(String),
+        Multiple(Vec<String>),
+    }
+
+    let value = Option::<StringField>::deserialize(deserializer)?;
+    let values = match value {
+        Some(StringField::Single(value)) => vec![value],
+        Some(StringField::Multiple(values)) => values,
+        None => Vec::new(),
+    };
+
+    Ok(values
+        .into_iter()
+        .map(|value| value.trim().to_string())
+        .filter(|value| !value.is_empty())
+        .collect())
+}
+
 fn title_pattern_matches(file: &ShortcutFile, window_title: &str) -> bool {
-    match &file.title_pattern {
+    let pattern_matches = match &file.title_pattern {
         Some(pattern) => Regex::new(pattern)
             .map(|regex| regex.is_match(window_title))
             .unwrap_or(false),
         None => true,
+    };
+
+    let contains_matches = match &file.title_contains {
+        Some(value) => window_title.to_lowercase().contains(&value.to_lowercase()),
+        None => true,
+    };
+
+    pattern_matches && contains_matches
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    fn sample_reference_group(name: &str) -> ReferenceGroup {
+        ReferenceGroup {
+            group: name.to_string(),
+            items: vec![ReferenceItem {
+                keys: vec!["Ctrl+P".to_string()],
+                label: format!("{name} item"),
+                value: Some("value".to_string()),
+                notes: Some("notes".to_string()),
+                url: None,
+                search_terms: Vec::new(),
+            }],
+        }
+    }
+
+    fn sample_shortcut_file(
+        name: &str,
+        process: &[&str],
+        title_pattern: Option<&str>,
+        path: &str,
+    ) -> ShortcutFile {
+        ShortcutFile {
+            name: name.to_string(),
+            process: process.iter().map(|value| value.to_string()).collect(),
+            title_pattern: title_pattern.map(str::to_string),
+            title_contains: None,
+            references: vec![sample_reference_group(name)],
+            source_path: Some(PathBuf::from(path)),
+        }
+    }
+
+    fn build_map(files: &[ShortcutFile]) -> HashMap<String, ShortcutFile> {
+        let mut map = HashMap::new();
+
+        for file in files {
+            if file.process.is_empty() {
+                map.insert(manual_only_identity(file), file.clone());
+                continue;
+            }
+
+            for process_name in &file.process {
+                map.insert(process_name.to_lowercase(), file.clone());
+            }
+        }
+
+        map
+    }
+
+    fn write_yaml_file(dir: &Path, name: &str, body: &str) -> PathBuf {
+        let path = dir.join(name);
+        fs::write(&path, body).unwrap();
+        path
+    }
+
+    fn temp_dir_path(prefix: &str) -> PathBuf {
+        let unique = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        std::env::temp_dir().join(format!("justpeek-{prefix}-{unique}"))
+    }
+
+    #[test]
+    fn window_info_from_candidates_normalizes_process_variants() {
+        let window = WindowInfo::from_candidates(
+            "org.wezfurlong.wezterm",
+            "WezTerm",
+            ["wezterm-gui", "/usr/bin/wezterm"],
+        );
+
+        assert_eq!(
+            window.process_candidates,
+            vec![
+                "org.wezfurlong.wezterm",
+                "wezterm",
+                "wezterm-gui",
+                "/usr/bin/wezterm",
+            ]
+        );
+    }
+
+    #[test]
+    fn lookup_shortcuts_prefers_direct_process_match_when_title_matches() {
+        let vscode = sample_shortcut_file(
+            "VS Code",
+            &["code"],
+            Some("workspace"),
+            "/tmp/vscode.yaml",
+        );
+        let git = sample_shortcut_file("Git", &["gitui"], None, "/tmp/git.yaml");
+        let map = build_map(&[vscode, git]);
+        let window = WindowInfo::from_candidates("code", "my workspace", ["Code"]);
+
+        let trace = lookup_shortcuts_with_trace(&map, &window);
+
+        assert_eq!(trace.panel_data.unwrap().app_name, "VS Code");
+        assert!(
+            trace.log_lines
+                .iter()
+                .any(|line| line.contains("selected 'VS Code'"))
+        );
+    }
+
+    #[test]
+    fn lookup_shortcuts_falls_back_to_title_pattern_match() {
+        let firefox = sample_shortcut_file(
+            "Firefox",
+            &["firefox"],
+            Some("Docs"),
+            "/tmp/firefox.yaml",
+        );
+        let slack = sample_shortcut_file("Slack", &["slack"], None, "/tmp/slack.yaml");
+        let map = build_map(&[firefox, slack]);
+        let window = WindowInfo::from_process_name("unknown-app", "Project Docs");
+
+        let trace = lookup_shortcuts_with_trace(&map, &window);
+
+        assert_eq!(trace.panel_data.unwrap().app_name, "Firefox");
+        assert!(
+            trace.log_lines
+                .iter()
+                .any(|line| line.contains("title pattern matched the active window"))
+        );
+    }
+
+    #[test]
+    fn picker_apps_are_unique_and_sorted_by_name() {
+        let vscode = sample_shortcut_file(
+            "VS Code",
+            &["code", "Code"],
+            None,
+            "/tmp/vscode.yaml",
+        );
+        let arc = sample_shortcut_file("Arc", &["arc"], None, "/tmp/arc.yaml");
+        let map = build_map(&[vscode, arc]);
+
+        let apps = get_picker_apps(&map);
+
+        assert_eq!(apps.len(), 2);
+        assert_eq!(
+            apps.iter().map(|app| app.name.as_str()).collect::<Vec<_>>(),
+            vec!["Arc", "VS Code"]
+        );
+    }
+
+    #[test]
+    fn lookup_picker_app_returns_panel_data_for_selected_picker_id() {
+        let vscode = sample_shortcut_file(
+            "VS Code",
+            &["code", "Code"],
+            None,
+            "/tmp/vscode.yaml",
+        );
+        let map = build_map(&[vscode.clone()]);
+        let picker_id = file_identity(&vscode);
+
+        let panel = lookup_picker_app(&map, &picker_id).unwrap();
+
+        assert_eq!(panel.app_name, "VS Code");
+        assert_eq!(panel.groups.len(), 1);
+        assert_eq!(panel.groups[0].group, "VS Code");
+    }
+
+    #[test]
+    fn parse_supports_process_as_single_string() {
+        let dir = temp_dir_path("single-process");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "vscode.yaml",
+            r#"
+name: VS Code
+process: code
+references:
+  - group: Navigation
+    items:
+      - label: Quick Open
+"#,
+        );
+
+        let map = scan_shortcuts(&dir);
+        let file = map.get("code").unwrap();
+
+        assert_eq!(file.process, vec!["code"]);
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_picker_only_files_without_process() {
+        let dir = temp_dir_path("picker-only");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "git.yaml",
+            r#"
+name: Git Reference
+references:
+  - group: Rollback
+    items:
+      - label: Revert a commit
+        value: git revert <commit>
+"#,
+        );
+
+        let map = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&map);
+
+        assert_eq!(apps.len(), 1);
+        assert_eq!(apps[0].name, "Git Reference");
+        assert!(apps[0].processes.is_empty());
+
+        let window = WindowInfo::from_process_name("random-app", "anything");
+        let trace = lookup_shortcuts_with_trace(&map, &window);
+        assert!(trace.panel_data.is_none());
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_search_terms() {
+        let dir = temp_dir_path("search-terms");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "vscode.yaml",
+            r#"
+name: VS Code
+process: code
+references:
+  - group: Navigation
+    items:
+      - label: Command Palette
+        keys: Ctrl+Shift+P
+        search_terms:
+          - actions
+          - cmd pal
+"#,
+        );
+
+        let map = scan_shortcuts(&dir);
+        let file = map.get("code").unwrap();
+        let item = &file.references[0].items[0];
+
+        assert_eq!(item.search_terms, vec!["actions", "cmd pal"]);
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_keys_as_list() {
+        let dir = temp_dir_path("keys-list");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "vscode.yaml",
+            r#"
+name: VS Code
+process: code
+references:
+  - group: Navigation
+    items:
+      - label: Quick Open
+        keys:
+          - Ctrl+P
+          - Cmd+P
+"#,
+        );
+
+        let map = scan_shortcuts(&dir);
+        let file = map.get("code").unwrap();
+        let item = &file.references[0].items[0];
+
+        assert_eq!(item.keys, vec!["Ctrl+P", "Cmd+P"]);
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_command_alias_for_value() {
+        let dir = temp_dir_path("command-alias");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "git.yaml",
+            r#"
+name: Git Reference
+references:
+  - group: Rollback
+    items:
+      - label: Revert a commit
+        command: git revert <commit>
+"#,
+        );
+
+        let map = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&map);
+        let picker_id = &apps[0].id;
+        let panel = lookup_picker_app(&map, picker_id).unwrap();
+
+        assert_eq!(panel.groups[0].items[0].value.as_deref(), Some("git revert <commit>"));
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_title_contains_matching() {
+        let dir = temp_dir_path("title-contains");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "browser.yaml",
+            r#"
+name: GitHub Browser
+process: firefox
+title_contains: pull request
+references:
+  - group: Reviews
+    items:
+      - label: Review changes
+"#,
+        );
+
+        let map = scan_shortcuts(&dir);
+        let window = WindowInfo::from_process_name("firefox", "My Pull Request - GitHub");
+        let trace = lookup_shortcuts_with_trace(&map, &window);
+
+        assert_eq!(trace.panel_data.unwrap().app_name, "GitHub Browser");
+
+        let miss = WindowInfo::from_process_name("firefox", "Homepage");
+        let miss_trace = lookup_shortcuts_with_trace(&map, &miss);
+        assert!(miss_trace.panel_data.is_none());
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_item_url() {
+        let dir = temp_dir_path("item-url");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "git.yaml",
+            r#"
+name: Git Reference
+references:
+  - group: Rollback
+    items:
+      - label: Revert a commit
+        command: git revert <commit>
+        url: https://git-scm.com/docs/git-revert
+"#,
+        );
+
+        let map = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&map);
+        let panel = lookup_picker_app(&map, &apps[0].id).unwrap();
+
+        assert_eq!(
+            panel.groups[0].items[0].url.as_deref(),
+            Some("https://git-scm.com/docs/git-revert")
+        );
+
+        fs::remove_dir_all(&dir).unwrap();
     }
 }

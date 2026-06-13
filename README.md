@@ -99,15 +99,24 @@ references:
 Supported fields:
 
 - `name`: display name for the matched reference set
-- `process`: list of process names that should match
+- `process`: optional process name or list of process names for contextual matching
 - `title_pattern`: optional regex for window-title matching
+- `title_contains`: optional case-insensitive window-title substring matcher
 - `references`: list of groups
 - `group`: section title
 - `items`: list of entries inside the group
-- `keys`: optional key chord rendered with `<kbd>`
+- `keys`: optional key chord or list of key chords rendered with `<kbd>`
 - `label`: primary text
 - `value`: optional secondary value such as a command
+- `command`: alias for `value`, recommended for CLI-style entries
 - `notes`: optional descriptive text
+- `url`: optional supporting link such as docs or a runbook
+- `search_terms`: optional list of extra search-only aliases
+
+More detailed docs:
+
+- `docs/referencefile.md`: practical authoring guide for new users
+- `docs/reference-schema-proposal.md`: concrete schema improvements and migration direction
 
 ## Example Files
 

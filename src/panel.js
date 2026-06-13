@@ -11,14 +11,22 @@ import {
   text,
 } from "./runtime/naf.js";
 import { fuzzyFilter } from "./runtime/fuzzy.js";
-import { closeCurrentWindow, invoke } from "./runtime/tauri.js";
+import {
+  closeCurrentWindow,
+  getPickerApps,
+  hidePanelWindow,
+  loadPickerApp as loadPickerReference,
+  openExternalUrl,
+} from "./runtime/tauri.js";
 
 /**
  * @typedef {object} PanelItem
- * @property {string=} keys
+ * @property {string[]} keys
  * @property {string} label
  * @property {string=} value
  * @property {string=} notes
+ * @property {string=} url
+ * @property {string[]=} search_terms
  */
 
 /**
@@ -47,38 +55,98 @@ import { closeCurrentWindow, invoke } from "./runtime/tauri.js";
  */
 
 /**
- * @param {string} keys
+ * @param {string[]} keys
  * @returns {string}
  */
 function renderKeys(keys) {
   return keys
-    .split("+")
-    .map((part) => `<kbd>${text(part.trim())}</kbd>`)
-    .join('<span aria-hidden="true">+</span>');
+    .map((variant) =>
+      variant
+        .split("+")
+        .map((part) => `<kbd>${text(part.trim())}</kbd>`)
+        .join('<span aria-hidden="true">+</span>'),
+    )
+    .join('<span class="peek-keys__or" aria-hidden="true">/</span>');
+}
+
+/**
+ * @param {string} value
+ * @returns {boolean}
+ */
+function isCommandLikeValue(value) {
+  return /(^|[\s])(git|npm|pnpm|yarn|npx|cargo|docker|kubectl|ssh|curl)\b|--|[<>]/i.test(value);
 }
 
 /**
  * @param {PanelItem} item
  * @returns {string}
  */
-function renderSecondary(item) {
-  const parts = [item.value, item.notes].filter(Boolean);
-  return parts.length > 0
-    ? `<p class="peek-item__notes">${text(parts.join(" • "))}</p>`
+function getItemKind(item) {
+  if (item.keys.length > 0) {
+    return "shortcut";
+  }
+
+  if (item.value && isCommandLikeValue(item.value)) {
+    return "command";
+  }
+
+  return "detail";
+}
+
+/**
+ * @param {PanelItem} item
+ * @returns {string}
+ */
+function renderBody(item) {
+  const value = item.value?.trim();
+  const itemKind = getItemKind(item);
+  const valueMarkup = value
+    ? isCommandLikeValue(value)
+      ? `<code class="peek-item__value peek-item__value--command">${text(value)}</code>`
+      : `<p class="peek-item__value">${text(value)}</p>`
     : "";
+  const notesMarkup = item.notes ? `<p class="peek-item__notes">${text(item.notes)}</p>` : "";
+  const actionMarkup = item.url
+    && itemKind === "command"
+    ? `
+        <button
+          type="button"
+          class="peek-item__action"
+          data-item-url="${text(item.url)}"
+          aria-label="Open link"
+          title="Open link"
+        >
+          <span class="peek-item__action-label">Open</span>
+          <span class="icon-mask peek-item__action-icon" aria-hidden="true"></span>
+        </button>
+      `
+    : "";
+
+  if (itemKind === "command") {
+    return `${valueMarkup}${notesMarkup}${actionMarkup}`;
+  }
+
+  return `
+    <div class="peek-item__meta">
+      ${valueMarkup}
+      ${notesMarkup}
+      ${actionMarkup}
+    </div>
+  `;
 }
 
 /**
  * @param {PickerApp[]} apps
  * @returns {PanelData}
  */
-function pickerAppsToPanelData(apps) {
+export function pickerAppsToPanelData(apps) {
   return {
     app_name: "Available References",
     groups: [
       {
         group: "Reference Files",
         items: apps.map((app) => ({
+          keys: [],
           label: app.name,
           value: app.processes.join(", "),
           notes: "Select a reference file to load it.",
@@ -108,10 +176,12 @@ export function createPanel(data, options = {}) {
     return groups.map((group) => ({
       group: group.group,
       items: fuzzyFilter(group.items, currentQuery, (item) => [
-        item.keys ?? "",
+        ...item.keys,
+        item.keys.join(" "),
         item.label,
         item.value ?? "",
         item.notes ?? "",
+        ...(item.search_terms ?? []),
       ]),
     }));
   });
@@ -158,9 +228,7 @@ export function createPanel(data, options = {}) {
    */
   async function openPicker() {
     statusMessage("");
-    const apps = /** @type {PickerApp[]} */ (
-      await invokeCommandWithFallback(["get_picker_apps", "cmd_get_picker_apps"])
-    );
+    const apps = /** @type {PickerApp[]} */ (await getPickerApps());
     pickerApps(apps);
     appData(pickerAppsToPanelData(apps));
     mode("picker");
@@ -174,37 +242,12 @@ export function createPanel(data, options = {}) {
    */
   async function loadPickerApp(pickerId) {
     statusMessage("");
-    const next = /** @type {PanelData} */ (
-      await invokeCommandWithFallback(
-        ["load_picker_app", "cmd_load_picker_app"],
-        { pickerId, picker_id: pickerId },
-      )
-    );
+    const next = /** @type {PanelData} */ (await loadPickerReference(pickerId));
     appData(next);
     mode("contextual");
     query("");
     collapsedGroups(new Set());
     highlightedIndex(-1);
-  }
-
-  /**
-   * @param {string[]} commandNames
-   * @param {Record<string, unknown>=} args
-   * @returns {Promise<unknown>}
-   */
-  async function invokeCommandWithFallback(commandNames, args) {
-    /** @type {unknown} */
-    let lastError = null;
-
-    for (const commandName of commandNames) {
-      try {
-        return await invoke(commandName, args);
-      } catch (error) {
-        lastError = error;
-      }
-    }
-
-    throw lastError ?? new Error("Command invocation failed");
   }
 
   /**
@@ -214,7 +257,7 @@ export function createPanel(data, options = {}) {
     try {
       await closeCurrentWindow();
     } catch {
-      invoke("hide_panel").catch(() => {});
+      hidePanelWindow().catch(() => {});
     }
   }
 
@@ -318,6 +361,19 @@ export function createPanel(data, options = {}) {
         }),
         listener(groupsHost, "click", (event) => {
           const target = event.target instanceof HTMLElement ? event.target : null;
+          const urlTarget = target?.closest("[data-item-url]");
+          if (urlTarget instanceof HTMLElement) {
+            const url = urlTarget.getAttribute("data-item-url");
+            if (url) {
+              openExternalUrl(url).catch((error) => {
+                statusMessage(
+                  `Link failed: ${error instanceof Error ? error.message : String(error)}`,
+                );
+              });
+            }
+            return;
+          }
+
           const pickerTarget = target?.closest("[data-picker-id]");
           if (pickerTarget instanceof HTMLElement) {
             const pickerId = pickerTarget.getAttribute("data-picker-id");
@@ -409,13 +465,24 @@ export function createPanel(data, options = {}) {
                           .map((item) => {
                             const itemKey = `${group.group}::${item.label}`;
                             const isHighlighted = itemKey === activeKey;
+                            const itemKind = getItemKind(item);
                             return `
-                              <article class="peek-item${isHighlighted ? " peek-item--highlighted" : ""}">
-                                <div class="peek-item__topline">
+                              <article class="peek-item peek-item--${itemKind}${isHighlighted ? " peek-item--highlighted" : ""}">
+                                <div class="peek-item__topline${item.url ? " peek-item__topline--actionable" : ""}">
                                   <span class="peek-item__label">${text(item.label)}</span>
-                                  ${item.keys ? `<span class="peek-keys">${renderKeys(item.keys)}</span>` : ""}
+                                  ${itemKind !== "command" && item.url ? `<button
+                                    type="button"
+                                    class="peek-item__action"
+                                    data-item-url="${text(item.url)}"
+                                    aria-label="Open link"
+                                    title="Open link"
+                                  >
+                                    <span class="peek-item__action-label">Open</span>
+                                    <span class="icon-mask peek-item__action-icon" aria-hidden="true"></span>
+                                  </button>` : ""}
                                 </div>
-                                ${renderSecondary(item)}
+                                ${item.keys.length > 0 ? `<div class="peek-item__keys"><span class="peek-keys">${renderKeys(item.keys)}</span></div>` : ""}
+                                ${renderBody(item)}
                               </article>
                             `;
                           })

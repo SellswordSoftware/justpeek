@@ -1,7 +1,14 @@
-import { createApp } from "./app/create-app.js";
-import { createPanel } from "./panel.js";
+import { createPanel, pickerAppsToPanelData } from "./panel.js";
 import { createSettings } from "./settings.js";
-import { emit, getCurrentWindowLabel, invoke, isTauriRuntime, listen } from "./runtime/tauri.js";
+import {
+  APP_EVENTS,
+  emit,
+  getCurrentWindowLabel,
+  getConfig,
+  hidePanelWindow,
+  isTauriRuntime,
+  listen,
+} from "./runtime/tauri.js";
 
 const PANEL_WINDOW_LABEL = "panel";
 const SETTINGS_WINDOW_LABEL = "main";
@@ -29,6 +36,53 @@ function unmountCurrentView() {
   root.replaceChildren();
 }
 
+function showBrowserFallback() {
+  unmountCurrentView();
+  root.classList.remove("panel-host");
+
+  const section = document.createElement("section");
+  section.className = "peek-surface panel app-fallback";
+  section.innerHTML = `
+    <header class="peek-header">
+      <div class="peek-header__meta">
+        <p class="eyebrow">JustPeek</p>
+        <h1 class="peek-title">Tauri runtime required</h1>
+      </div>
+    </header>
+    <section class="app-fallback__body">
+      <p class="app-fallback__text">
+        This build is meant to run inside the desktop app.
+      </p>
+      <p class="app-fallback__text">
+        Start it with <code>npm run dev</code> or open the packaged application.
+      </p>
+    </section>
+  `;
+
+  root.append(section);
+  root.removeAttribute("data-loading");
+}
+
+/**
+ * @param {string | undefined} theme
+ * @returns {void}
+ */
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+async function syncThemeFromConfig() {
+  try {
+    const config = await getConfig();
+    applyTheme(config.theme);
+  } catch {
+    applyTheme("dark");
+  }
+}
+
 /**
  * @param {import("./panel.js").PanelData} data
  * @param {import("./panel.js").CreatePanelOptions=} options
@@ -51,73 +105,62 @@ function showSettings() {
 }
 
 /**
- * @param {import("./panel.js").PickerApp[]} apps
- * @returns {import("./panel.js").PanelData}
- */
-function pickerAppsToPanelData(apps) {
-  return {
-    app_name: "Available References",
-    groups: [
-      {
-        group: "Reference Files",
-        items: apps.map((app) => ({
-          label: app.name,
-          value: app.processes.join(", "),
-          notes: "No contextual match was detected for the active window.",
-        })),
-      },
-    ],
-  };
-}
-
-/**
  * @returns {Promise<void>}
  */
 async function wireTauriPanelEvents() {
   const windowLabel = getCurrentWindowLabel();
+  await syncThemeFromConfig();
 
-  await listen("show-panel", (event) => {
+  await listen(APP_EVENTS.showPanel, (event) => {
     if (windowLabel !== PANEL_WINDOW_LABEL) {
       return;
     }
-    showPanel(/** @type {import("./panel.js").PanelData} */ (event.payload));
+    void syncThemeFromConfig().finally(() => {
+      showPanel(/** @type {import("./panel.js").PanelData} */ (event.payload));
+    });
   });
 
-  await listen("show-panel-picker", (event) => {
+  await listen(APP_EVENTS.showPanelPicker, (event) => {
     if (windowLabel !== PANEL_WINDOW_LABEL) {
       return;
     }
     const apps = /** @type {import("./panel.js").PickerApp[]} */ (event.payload);
-    showPanel(pickerAppsToPanelData(apps), { initialMode: "picker", pickerApps: apps });
+    void syncThemeFromConfig().finally(() => {
+      showPanel(pickerAppsToPanelData(apps), { initialMode: "picker", pickerApps: apps });
+    });
   });
 
-  await listen("hide-panel", () => {
+  await listen(APP_EVENTS.hidePanel, () => {
     if (windowLabel !== PANEL_WINDOW_LABEL) {
       return;
     }
     unmountCurrentView();
     root.classList.remove("panel-host");
-    invoke("hide_panel").catch(() => {});
+    hidePanelWindow().catch(() => {});
   });
 
-  await listen("open-settings", () => {
+  await listen(APP_EVENTS.themeChanged, (event) => {
+    applyTheme(/** @type {string | undefined} */ (event.payload));
+  });
+
+  await listen(APP_EVENTS.openSettings, () => {
     if (windowLabel !== SETTINGS_WINDOW_LABEL) {
       return;
     }
-    showSettings();
+    void syncThemeFromConfig().finally(() => {
+      showSettings();
+    });
   });
 
   if (windowLabel === PANEL_WINDOW_LABEL) {
-    await emit("justpeek://panel-ready", windowLabel);
+    await emit(APP_EVENTS.panelReady, windowLabel);
   }
 }
 
 if (isTauriRuntime()) {
   wireTauriPanelEvents().catch(() => {
-    root.classList.remove("panel-host");
-    createApp(root);
+    showBrowserFallback();
   });
 } else {
-  root.classList.remove("panel-host");
-  createApp(root);
+  showBrowserFallback();
 }

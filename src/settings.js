@@ -1,14 +1,14 @@
 // @ts-check
 
 import { effect, listener, mount, requireRef, signal, template, text } from "./runtime/naf.js";
-import { closeCurrentWindow, invoke } from "./runtime/tauri.js";
-
-/**
- * @typedef {object} SettingsConfig
- * @property {string} hotkey
- * @property {string} theme
- * @property {string | null | undefined} references_dir
- */
+import {
+  closeCurrentWindow,
+  emitThemeChanged,
+  getConfig,
+  openShortcutsDir,
+  reloadShortcuts,
+  setConfig,
+} from "./runtime/tauri.js";
 
 /**
  * @returns {{ mount: (container: HTMLElement) => void, unmount: () => void }}
@@ -19,13 +19,12 @@ export function createSettings() {
   const referencesDir = signal("");
   const status = signal("Loading configuration...");
 
-  invoke("get_config")
+  getConfig()
     .then((cfg) => {
-      const config = /** @type {SettingsConfig} */ (cfg);
-      hotkey(config.hotkey);
-      theme(config.theme);
-      referencesDir(config.references_dir ?? "");
-      document.documentElement.setAttribute("data-theme", config.theme);
+      hotkey(cfg.hotkey);
+      theme(cfg.theme);
+      referencesDir(cfg.references_dir ?? "");
+      document.documentElement.setAttribute("data-theme", cfg.theme);
       status("Hotkey changes apply after restarting the app.");
     })
     .catch(() => {
@@ -36,14 +35,13 @@ export function createSettings() {
     status("Saving...");
 
     try {
-      await invoke("set_config", {
-        configData: {
-          hotkey: hotkey().trim() || "CommandOrControl+Alt+Slash",
-          theme: theme(),
-          references_dir: referencesDir().trim() || null,
-        },
+      await setConfig({
+        hotkey: hotkey().trim() || "CommandOrControl+Alt+Slash",
+        theme: theme(),
+        references_dir: referencesDir().trim() || null,
       });
       document.documentElement.setAttribute("data-theme", theme());
+      await emitThemeChanged(theme());
       status("Saved. Hotkey changes apply after restarting the app.");
     } catch {
       status("Failed to save configuration.");
@@ -84,10 +82,10 @@ export function createSettings() {
           void closeCurrentWindow();
         }),
         listener(openDirButton, "click", () => {
-          void invoke("open_shortcuts_dir");
+          void openShortcutsDir();
         }),
         listener(reloadButton, "click", () => {
-          void invoke("reload_shortcuts")
+          void reloadShortcuts()
             .then(() => {
               status("References reloaded.");
             })
