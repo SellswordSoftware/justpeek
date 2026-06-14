@@ -1,12 +1,14 @@
 use regex::Regex;
 use serde::{Deserialize, Deserializer, Serialize};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fs;
 use std::path::{Path, PathBuf};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ShortcutFile {
     pub name: String,
+    #[serde(default)]
+    pub group: Option<String>,
     #[serde(default, deserialize_with = "deserialize_processes")]
     pub process: Vec<String>,
     #[serde(default)]
@@ -29,10 +31,13 @@ pub struct ReferenceGroup {
 pub struct ReferenceItem {
     #[serde(default, deserialize_with = "deserialize_string_list")]
     pub keys: Vec<String>,
+    #[serde(default, deserialize_with = "deserialize_os_string_lists")]
+    pub keys_by_os: BTreeMap<String, Vec<String>>,
     pub label: String,
     #[serde(default)]
-    #[serde(alias = "command")]
     pub value: Option<String>,
+    #[serde(default)]
+    pub command: Option<String>,
     #[serde(default)]
     pub notes: Option<String>,
     #[serde(default)]
@@ -58,7 +63,10 @@ pub struct PanelData {
 pub struct PickerApp {
     pub id: String,
     pub name: String,
+    pub group: String,
     pub processes: Vec<String>,
+    pub source_path: String,
+    pub error: Option<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -67,12 +75,25 @@ pub struct LookupTrace {
     pub log_lines: Vec<String>,
 }
 
-pub fn scan_shortcuts(dir: &Path) -> HashMap<String, ShortcutFile> {
-    let mut map = HashMap::new();
+#[derive(Debug, Clone)]
+pub struct ScanResult {
+    pub shortcut_map: HashMap<String, ShortcutFile>,
+    pub picker_apps: Vec<PickerApp>,
+    pub picker_panels: HashMap<String, PanelData>,
+}
+
+pub fn scan_shortcuts(dir: &Path) -> ScanResult {
+    let mut shortcut_map = HashMap::new();
+    let mut picker_apps = Vec::new();
+    let mut picker_panels = HashMap::new();
 
     if !dir.exists() {
         fs::create_dir_all(dir).expect("Failed to create references directory");
-        return map;
+        return ScanResult {
+            shortcut_map,
+            picker_apps,
+            picker_panels,
+        };
     }
 
     for entry in walkdir(dir) {
@@ -84,19 +105,39 @@ pub fn scan_shortcuts(dir: &Path) -> HashMap<String, ShortcutFile> {
             continue;
         }
 
-        if let Some(file) = parse_shortcut_file(&path) {
-            if file.process.is_empty() {
-                map.insert(manual_only_identity(&file), file);
-                continue;
-            }
+        match parse_shortcut_file(&path) {
+            Ok(file) => {
+                let picker_app = picker_app_for_valid_file(&file);
+                picker_panels.insert(picker_app.id.clone(), panel_data_for(&file));
+                picker_apps.push(picker_app);
 
-            for process_name in &file.process {
-                map.insert(process_name.to_lowercase(), file.clone());
+                if file.process.is_empty() {
+                    shortcut_map.insert(manual_only_identity(&file), file);
+                    continue;
+                }
+
+                for process_name in &file.process {
+                    shortcut_map.insert(process_name.to_lowercase(), file.clone());
+                }
+            }
+            Err(error) => {
+                let picker_app = picker_app_for_invalid_file(&path, &error);
+                picker_panels.insert(
+                    picker_app.id.clone(),
+                    error_panel_data_for_path(&path, &picker_app.name, &error),
+                );
+                picker_apps.push(picker_app);
             }
         }
     }
 
-    map
+    picker_apps.sort_by(|left, right| left.name.to_lowercase().cmp(&right.name.to_lowercase()));
+
+    ScanResult {
+        shortcut_map,
+        picker_apps,
+        picker_panels,
+    }
 }
 
 pub fn lookup_shortcuts_with_trace(
@@ -174,29 +215,16 @@ pub fn lookup_shortcuts_with_trace(
     }
 }
 
-pub fn get_picker_apps(map: &HashMap<String, ShortcutFile>) -> Vec<PickerApp> {
-    let mut apps = Vec::new();
-
-    for file in unique_files(map) {
-        apps.push(PickerApp {
-            id: file_identity(file),
-            name: file.name.clone(),
-            processes: file.process.clone(),
-        });
-    }
-
+#[cfg(test)]
+pub fn get_picker_apps(scan_result: &ScanResult) -> Vec<PickerApp> {
+    let mut apps = scan_result.picker_apps.clone();
     apps.sort_by(|left, right| left.name.to_lowercase().cmp(&right.name.to_lowercase()));
     apps
 }
 
-pub fn lookup_picker_app(
-    map: &HashMap<String, ShortcutFile>,
-    picker_id: &str,
-) -> Option<PanelData> {
-    unique_files(map)
-        .into_iter()
-        .find(|file| file_identity(file) == picker_id)
-        .map(panel_data_for)
+#[cfg(test)]
+pub fn lookup_picker_app(scan_result: &ScanResult, picker_id: &str) -> Option<PanelData> {
+    scan_result.picker_panels.get(picker_id).cloned()
 }
 
 fn unique_files<'a>(map: &'a HashMap<String, ShortcutFile>) -> Vec<&'a ShortcutFile> {
@@ -222,11 +250,86 @@ fn manual_only_identity(file: &ShortcutFile) -> String {
     format!("__manual__::{}", file_identity(file))
 }
 
+fn picker_app_for_valid_file(file: &ShortcutFile) -> PickerApp {
+    let source_path = file
+        .source_path
+        .as_ref()
+        .map(|path| path.to_string_lossy().into_owned())
+        .unwrap_or_else(|| "<unknown path>".to_string());
+
+    PickerApp {
+        id: file_identity(file),
+        name: file.name.clone(),
+        group: picker_group_name(file.group.as_deref()),
+        processes: file.process.clone(),
+        source_path,
+        error: None,
+    }
+}
+
+fn picker_app_for_invalid_file(path: &Path, error: &str) -> PickerApp {
+    PickerApp {
+        id: path.to_string_lossy().into_owned(),
+        name: fallback_reference_name(path),
+        group: "Invalid".to_string(),
+        processes: Vec::new(),
+        source_path: path.to_string_lossy().into_owned(),
+        error: Some(error.to_string()),
+    }
+}
+
 fn panel_data_for(file: &ShortcutFile) -> PanelData {
     PanelData {
         app_name: file.name.clone(),
         groups: file.references.clone(),
     }
+}
+
+fn error_panel_data_for_path(path: &Path, name: &str, error: &str) -> PanelData {
+    PanelData {
+        app_name: name.to_string(),
+        groups: vec![ReferenceGroup {
+            group: "Reference File Error".to_string(),
+            items: vec![
+                ReferenceItem {
+                    keys: Vec::new(),
+                    keys_by_os: BTreeMap::new(),
+                    label: "Issue".to_string(),
+                    value: Some(error.to_string()),
+                    command: None,
+                    notes: Some("Fix the file and reload references.".to_string()),
+                    url: None,
+                    search_terms: Vec::new(),
+                },
+                ReferenceItem {
+                    keys: Vec::new(),
+                    keys_by_os: BTreeMap::new(),
+                    label: "File".to_string(),
+                    value: Some(path.to_string_lossy().into_owned()),
+                    command: None,
+                    notes: None,
+                    url: None,
+                    search_terms: Vec::new(),
+                },
+            ],
+        }],
+    }
+}
+
+fn fallback_reference_name(path: &Path) -> String {
+    path.file_stem()
+        .and_then(|value| value.to_str())
+        .filter(|value| !value.trim().is_empty())
+        .unwrap_or("Invalid Reference File")
+        .to_string()
+}
+
+fn picker_group_name(value: Option<&str>) -> String {
+    value
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .unwrap_or("Ungrouped")
+        .to_string()
 }
 
 fn describe_file(file: &ShortcutFile) -> String {
@@ -390,15 +493,17 @@ fn is_yaml_file(path: &Path) -> bool {
     )
 }
 
-fn parse_shortcut_file(path: &Path) -> Option<ShortcutFile> {
-    let content = fs::read_to_string(path).ok()?;
-    let mut file: ShortcutFile = serde_yaml::from_str(&content).ok()?;
+fn parse_shortcut_file(path: &Path) -> Result<ShortcutFile, String> {
+    let content = fs::read_to_string(path)
+        .map_err(|error| format!("Failed to read file: {error}"))?;
+    let mut file: ShortcutFile = serde_yaml::from_str(&content)
+        .map_err(|error| format!("YAML parse error: {error}"))?;
     if file.references.is_empty() {
-        return None;
+        return Err("Reference file must include at least one group under 'references'.".to_string());
     }
 
     file.source_path = Some(path.to_path_buf());
-    Some(file)
+    Ok(file)
 }
 
 fn deserialize_processes<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
@@ -451,6 +556,50 @@ where
         .collect())
 }
 
+fn deserialize_os_string_lists<'de, D>(
+    deserializer: D,
+) -> Result<BTreeMap<String, Vec<String>>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let value = Option::<BTreeMap<String, serde_yaml::Value>>::deserialize(deserializer)?;
+    let Some(entries) = value else {
+        return Ok(BTreeMap::new());
+    };
+
+    let mut parsed = BTreeMap::new();
+    for (raw_key, raw_value) in entries {
+        #[derive(Deserialize)]
+        #[serde(untagged)]
+        enum StringField {
+            Single(String),
+            Multiple(Vec<String>),
+        }
+
+        let key = raw_key.trim().to_ascii_lowercase();
+        if !matches!(key.as_str(), "macos" | "windows" | "linux") {
+            return Err(serde::de::Error::custom(format!(
+                "Unsupported keys_by_os platform '{raw_key}'. Use one of: macos, windows, linux."
+            )));
+        }
+
+        let values = serde_yaml::from_value::<StringField>(raw_value)
+            .map_err(|error| serde::de::Error::custom(error.to_string()))?;
+        let values = match values {
+            StringField::Single(value) => vec![value],
+            StringField::Multiple(values) => values,
+        }
+        .into_iter()
+        .map(|item| item.trim().to_string())
+        .filter(|item| !item.is_empty())
+        .collect::<Vec<_>>();
+
+        parsed.insert(key, values);
+    }
+
+    Ok(parsed)
+}
+
 fn title_pattern_matches(file: &ShortcutFile, window_title: &str) -> bool {
     let pattern_matches = match &file.title_pattern {
         Some(pattern) => Regex::new(pattern)
@@ -477,8 +626,10 @@ mod tests {
             group: name.to_string(),
             items: vec![ReferenceItem {
                 keys: vec!["Ctrl+P".to_string()],
+                keys_by_os: BTreeMap::new(),
                 label: format!("{name} item"),
                 value: Some("value".to_string()),
+                command: None,
                 notes: Some("notes".to_string()),
                 url: None,
                 search_terms: Vec::new(),
@@ -494,6 +645,7 @@ mod tests {
     ) -> ShortcutFile {
         ShortcutFile {
             name: name.to_string(),
+            group: None,
             process: process.iter().map(|value| value.to_string()).collect(),
             title_pattern: title_pattern.map(str::to_string),
             title_contains: None,
@@ -617,9 +769,30 @@ mod tests {
     fn picker_apps_are_unique_and_sorted_by_name() {
         let vscode = sample_shortcut_file("VS Code", &["code", "Code"], None, "/tmp/vscode.yaml");
         let arc = sample_shortcut_file("Arc", &["arc"], None, "/tmp/arc.yaml");
-        let map = build_map(&[vscode, arc]);
+        let scan_result = ScanResult {
+            shortcut_map: build_map(&[vscode, arc]),
+            picker_apps: vec![
+                PickerApp {
+                    id: "/tmp/vscode.yaml".to_string(),
+                    name: "VS Code".to_string(),
+                    group: "Editors".to_string(),
+                    processes: vec!["code".to_string(), "Code".to_string()],
+                    source_path: "/tmp/vscode.yaml".to_string(),
+                    error: None,
+                },
+                PickerApp {
+                    id: "/tmp/arc.yaml".to_string(),
+                    name: "Arc".to_string(),
+                    group: "Browsers".to_string(),
+                    processes: vec!["arc".to_string()],
+                    source_path: "/tmp/arc.yaml".to_string(),
+                    error: None,
+                },
+            ],
+            picker_panels: HashMap::new(),
+        };
 
-        let apps = get_picker_apps(&map);
+        let apps = get_picker_apps(&scan_result);
 
         assert_eq!(apps.len(), 2);
         assert_eq!(
@@ -631,10 +804,15 @@ mod tests {
     #[test]
     fn lookup_picker_app_returns_panel_data_for_selected_picker_id() {
         let vscode = sample_shortcut_file("VS Code", &["code", "Code"], None, "/tmp/vscode.yaml");
-        let map = build_map(&[vscode.clone()]);
+        let panel = panel_data_for(&vscode);
         let picker_id = file_identity(&vscode);
+        let scan_result = ScanResult {
+            shortcut_map: build_map(&[vscode]),
+            picker_apps: Vec::new(),
+            picker_panels: HashMap::from([(picker_id.clone(), panel)]),
+        };
 
-        let panel = lookup_picker_app(&map, &picker_id).unwrap();
+        let panel = lookup_picker_app(&scan_result, &picker_id).unwrap();
 
         assert_eq!(panel.app_name, "VS Code");
         assert_eq!(panel.groups.len(), 1);
@@ -658,10 +836,37 @@ references:
 "#,
         );
 
-        let map = scan_shortcuts(&dir);
-        let file = map.get("code").unwrap();
+        let scan_result = scan_shortcuts(&dir);
+        let file = scan_result.shortcut_map.get("code").unwrap();
 
         assert_eq!(file.process, vec!["code"]);
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_top_level_picker_group() {
+        let dir = temp_dir_path("picker-group");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "vscode.yaml",
+            r#"
+name: VS Code
+group: Editors
+process: code
+references:
+  - group: Navigation
+    items:
+      - label: Quick Open
+"#,
+        );
+
+        let scan_result = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&scan_result);
+
+        assert_eq!(scan_result.shortcut_map.get("code").unwrap().group.as_deref(), Some("Editors"));
+        assert_eq!(apps[0].group, "Editors");
 
         fs::remove_dir_all(&dir).unwrap();
     }
@@ -683,15 +888,17 @@ references:
 "#,
         );
 
-        let map = scan_shortcuts(&dir);
-        let apps = get_picker_apps(&map);
+        let scan_result = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&scan_result);
 
         assert_eq!(apps.len(), 1);
         assert_eq!(apps[0].name, "Git Reference");
+        assert_eq!(apps[0].group, "Ungrouped");
         assert!(apps[0].processes.is_empty());
+        assert_eq!(apps[0].error, None);
 
         let window = WindowInfo::from_process_name("random-app", "anything");
-        let trace = lookup_shortcuts_with_trace(&map, &window);
+        let trace = lookup_shortcuts_with_trace(&scan_result.shortcut_map, &window);
         assert!(trace.panel_data.is_none());
 
         fs::remove_dir_all(&dir).unwrap();
@@ -718,13 +925,100 @@ references:
 "#,
         );
 
-        let map = scan_shortcuts(&dir);
-        let file = map.get("code").unwrap();
+        let scan_result = scan_shortcuts(&dir);
+        let file = scan_result.shortcut_map.get("code").unwrap();
         let item = &file.references[0].items[0];
 
         assert_eq!(item.search_terms, vec!["actions", "cmd pal"]);
 
         fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_keeps_value_and_command_distinct() {
+        let dir = temp_dir_path("value-and-command");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "git.yaml",
+            r#"
+name: Git Reference
+references:
+  - group: Rollback
+    items:
+      - label: Revert a commit
+        value: Safe for shared history
+        command: git revert <commit>
+"#,
+        );
+
+        let scan_result = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&scan_result);
+        let panel = lookup_picker_app(&scan_result, &apps[0].id).unwrap();
+        let item = &panel.groups[0].items[0];
+
+        assert_eq!(item.value.as_deref(), Some("Safe for shared history"));
+        assert_eq!(item.command.as_deref(), Some("git revert <commit>"));
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_supports_keys_by_os() {
+        let dir = temp_dir_path("keys-by-os");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "vscode.yaml",
+            r#"
+name: VS Code
+process: code
+references:
+  - group: Navigation
+    items:
+      - label: Quick Open
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+          windows:
+            - Ctrl+P
+            - Ctrl+Shift+P
+"#,
+        );
+
+        let scan_result = scan_shortcuts(&dir);
+        let file = scan_result.shortcut_map.get("code").unwrap();
+        let item = &file.references[0].items[0];
+
+        assert_eq!(item.keys, vec!["Ctrl+P"]);
+        assert_eq!(
+            item.keys_by_os.get("macos").cloned(),
+            Some(vec!["Cmd+P".to_string()])
+        );
+        assert_eq!(
+            item.keys_by_os.get("windows").cloned(),
+            Some(vec!["Ctrl+P".to_string(), "Ctrl+Shift+P".to_string()])
+        );
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn parse_rejects_unknown_keys_by_os_platform() {
+        let content = r#"
+name: VS Code
+process: code
+references:
+  - group: Navigation
+    items:
+      - label: Quick Open
+        keys_by_os:
+          bsd: Ctrl+P
+"#;
+
+        let result = serde_yaml::from_str::<ShortcutFile>(content);
+
+        assert!(result.is_err());
     }
 
     #[test]
@@ -747,8 +1041,8 @@ references:
 "#,
         );
 
-        let map = scan_shortcuts(&dir);
-        let file = map.get("code").unwrap();
+        let scan_result = scan_shortcuts(&dir);
+        let file = scan_result.shortcut_map.get("code").unwrap();
         let item = &file.references[0].items[0];
 
         assert_eq!(item.keys, vec!["Ctrl+P", "Cmd+P"]);
@@ -757,8 +1051,8 @@ references:
     }
 
     #[test]
-    fn parse_supports_command_alias_for_value() {
-        let dir = temp_dir_path("command-alias");
+    fn parse_supports_command_field() {
+        let dir = temp_dir_path("command-field");
         fs::create_dir_all(&dir).unwrap();
         write_yaml_file(
             &dir,
@@ -773,15 +1067,16 @@ references:
 "#,
         );
 
-        let map = scan_shortcuts(&dir);
-        let apps = get_picker_apps(&map);
+        let scan_result = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&scan_result);
         let picker_id = &apps[0].id;
-        let panel = lookup_picker_app(&map, picker_id).unwrap();
+        let panel = lookup_picker_app(&scan_result, picker_id).unwrap();
 
         assert_eq!(
-            panel.groups[0].items[0].value.as_deref(),
+            panel.groups[0].items[0].command.as_deref(),
             Some("git revert <commit>")
         );
+        assert_eq!(panel.groups[0].items[0].value.as_deref(), None);
 
         fs::remove_dir_all(&dir).unwrap();
     }
@@ -804,14 +1099,14 @@ references:
 "#,
         );
 
-        let map = scan_shortcuts(&dir);
+        let scan_result = scan_shortcuts(&dir);
         let window = WindowInfo::from_process_name("firefox", "My Pull Request - GitHub");
-        let trace = lookup_shortcuts_with_trace(&map, &window);
+        let trace = lookup_shortcuts_with_trace(&scan_result.shortcut_map, &window);
 
         assert_eq!(trace.panel_data.unwrap().app_name, "GitHub Browser");
 
         let miss = WindowInfo::from_process_name("firefox", "Homepage");
-        let miss_trace = lookup_shortcuts_with_trace(&map, &miss);
+        let miss_trace = lookup_shortcuts_with_trace(&scan_result.shortcut_map, &miss);
         assert!(miss_trace.panel_data.is_none());
 
         fs::remove_dir_all(&dir).unwrap();
@@ -835,14 +1130,50 @@ references:
 "#,
         );
 
-        let map = scan_shortcuts(&dir);
-        let apps = get_picker_apps(&map);
-        let panel = lookup_picker_app(&map, &apps[0].id).unwrap();
+        let scan_result = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&scan_result);
+        let panel = lookup_picker_app(&scan_result, &apps[0].id).unwrap();
 
         assert_eq!(
             panel.groups[0].items[0].url.as_deref(),
             Some("https://git-scm.com/docs/git-revert")
         );
+
+        fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn invalid_reference_files_still_appear_in_picker_with_error_panel() {
+        let dir = temp_dir_path("invalid-picker");
+        fs::create_dir_all(&dir).unwrap();
+        write_yaml_file(
+            &dir,
+            "broken.yaml",
+            r#"
+name: Broken Reference
+references:
+  - group: Broken
+    items:
+      - label Oops
+"#,
+        );
+
+        let scan_result = scan_shortcuts(&dir);
+        let apps = get_picker_apps(&scan_result);
+
+        assert_eq!(scan_result.shortcut_map.len(), 0);
+        assert_eq!(apps.len(), 1);
+        assert_eq!(apps[0].name, "broken");
+        assert_eq!(apps[0].group, "Invalid");
+        assert!(apps[0]
+            .error
+            .as_deref()
+            .is_some_and(|error| error.contains("YAML parse error")));
+
+        let panel = lookup_picker_app(&scan_result, &apps[0].id).unwrap();
+        assert_eq!(panel.app_name, "broken");
+        assert_eq!(panel.groups[0].group, "Reference File Error");
+        assert_eq!(panel.groups[0].items[0].label, "Issue");
 
         fs::remove_dir_all(&dir).unwrap();
     }

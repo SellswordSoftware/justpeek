@@ -13,7 +13,9 @@ import {
 import { fuzzyFilter } from "./runtime/fuzzy.js";
 import {
   closeCurrentWindow,
+  getConfig,
   getPickerApps,
+  getRuntimeInfo,
   hidePanelWindow,
   loadPickerApp as loadPickerReference,
   openSettingsWindow,
@@ -22,10 +24,19 @@ import {
 } from "./runtime/tauri.js";
 
 /**
+ * @typedef {object} KeysByOs
+ * @property {string[]=} macos
+ * @property {string[]=} windows
+ * @property {string[]=} linux
+ */
+
+/**
  * @typedef {object} PanelItem
  * @property {string[]} keys
+ * @property {KeysByOs=} keys_by_os
  * @property {string} label
  * @property {string=} value
+ * @property {string=} command
  * @property {string=} notes
  * @property {string=} url
  * @property {string[]=} search_terms
@@ -47,7 +58,10 @@ import {
  * @typedef {object} PickerApp
  * @property {string} id
  * @property {string} name
+ * @property {string} group
  * @property {string[]} processes
+ * @property {string} source_path
+ * @property {string=} error
  */
 
 /**
@@ -58,6 +72,13 @@ import {
 
 /**
  * @typedef {{ type: "group", group: string } | { type: "item", group: string, item: PanelItem }} ContextualEntry
+ * @typedef {{ type: "group", group: string } | { type: "app", group: string, app: PickerApp }} PickerEntry
+ */
+
+/**
+ * @typedef {object} DisplayKeySet
+ * @property {string | null} label
+ * @property {string[]} keys
  */
 
 /**
@@ -76,23 +97,74 @@ function renderKeys(keys) {
 }
 
 /**
- * @param {string} value
- * @returns {boolean}
+ * @param {DisplayKeySet[]} keySets
+ * @returns {string}
  */
-function isCommandLikeValue(value) {
-  return /(^|[\s])(git|npm|pnpm|yarn|npx|cargo|docker|kubectl|ssh|curl)\b|--|[<>]/i.test(value);
+function renderDisplayKeySets(keySets) {
+  return keySets
+    .map(
+      (keySet) => `
+        <span class="peek-keyset">
+          ${keySet.label ? `<span class="peek-keyset__label">${text(keySet.label)}</span>` : ""}
+          <span class="peek-keys">${renderKeys(keySet.keys)}</span>
+        </span>
+      `,
+    )
+    .join("");
 }
 
 /**
  * @param {PanelItem} item
+ * @param {"auto" | "macos" | "windows" | "linux"} preferredOs
+ * @param {"macos" | "windows" | "linux"} currentRuntimeOs
+ * @param {"current" | "all"} displayMode
+ * @returns {DisplayKeySet[]}
+ */
+function resolveDisplayKeys(item, preferredOs, currentRuntimeOs, displayMode) {
+  const effectiveOs =
+    preferredOs === "macos" || preferredOs === "windows" || preferredOs === "linux"
+      ? preferredOs
+      : currentRuntimeOs;
+
+  if (displayMode === "all") {
+    /** @type {DisplayKeySet[]} */
+    const keySets = [];
+    /** @type {Array<["macos" | "windows" | "linux", string]>} */
+    const ordered = [
+      ["macos", "macOS"],
+      ["windows", "Windows"],
+      ["linux", "Linux"],
+    ];
+
+    for (const [osKey, label] of ordered) {
+      const keys = item.keys_by_os?.[osKey];
+      if (keys && keys.length > 0) {
+        keySets.push({ label, keys });
+      }
+    }
+
+    if (item.keys.length > 0) {
+      keySets.push({ label: "Default", keys: item.keys });
+    }
+
+    return keySets;
+  }
+
+  const osKeys = item.keys_by_os?.[effectiveOs];
+  return [{ label: null, keys: osKeys && osKeys.length > 0 ? osKeys : item.keys }];
+}
+
+/**
+ * @param {PanelItem} item
+ * @param {string[]=} displayKeys
  * @returns {string}
  */
-function getItemKind(item) {
-  if (item.keys.length > 0) {
+function getItemKind(item, displayKeys = item.keys) {
+  if (displayKeys.length > 0) {
     return "shortcut";
   }
 
-  if (item.value && isCommandLikeValue(item.value)) {
+  if (item.command?.trim()) {
     return "command";
   }
 
@@ -101,15 +173,16 @@ function getItemKind(item) {
 
 /**
  * @param {PanelItem} item
+ * @param {string[]=} displayKeys
  * @returns {string}
  */
-function renderBody(item) {
+function renderBody(item, displayKeys = item.keys) {
   const value = item.value?.trim();
-  const itemKind = getItemKind(item);
-  const valueMarkup = value
-    ? isCommandLikeValue(value)
-      ? `<code class="peek-item__value peek-item__value--command">${text(value)}</code>`
-      : `<p class="peek-item__value">${text(value)}</p>`
+  const command = item.command?.trim();
+  const itemKind = getItemKind(item, displayKeys);
+  const valueMarkup = value ? `<p class="peek-item__value">${text(value)}</p>` : "";
+  const commandMarkup = command
+    ? `<code class="peek-item__value peek-item__value--command">${text(command)}</code>`
     : "";
   const notesMarkup = item.notes ? `<p class="peek-item__notes">${text(item.notes)}</p>` : "";
   const actionMarkup = item.url
@@ -129,12 +202,13 @@ function renderBody(item) {
     : "";
 
   if (itemKind === "command") {
-    return `${valueMarkup}${notesMarkup}${actionMarkup}`;
+    return `${valueMarkup}${commandMarkup}${notesMarkup}${actionMarkup}`;
   }
 
   return `
     <div class="peek-item__meta">
       ${valueMarkup}
+      ${commandMarkup}
       ${notesMarkup}
       ${actionMarkup}
     </div>
@@ -146,19 +220,31 @@ function renderBody(item) {
  * @returns {PanelData}
  */
 export function pickerAppsToPanelData(apps) {
+  /** @type {Map<string, PickerApp[]>} */
+  const appsByGroup = new Map();
+  for (const app of apps) {
+    const group = app.group || "Ungrouped";
+    const groupApps = appsByGroup.get(group) ?? [];
+    groupApps.push(app);
+    appsByGroup.set(group, groupApps);
+  }
+
   return {
     app_name: "Available References",
-    groups: [
-      {
-        group: "Reference Files",
-        items: apps.map((app) => ({
+    groups: Array.from(appsByGroup.entries())
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([group, groupApps]) => ({
+        group,
+        items: groupApps
+          .slice()
+          .sort((left, right) => left.name.localeCompare(right.name))
+          .map((app) => ({
           keys: [],
           label: app.name,
-          value: app.processes.join(", "),
-          notes: "Select a reference file to load it.",
-        })),
-      },
-    ],
+          value: app.processes.length > 0 ? `Processes: ${app.processes.join(", ")}` : app.source_path,
+          notes: app.error ? `Error: ${app.error}` : "Select a reference file to load it.",
+          })),
+      })),
   };
 }
 
@@ -172,6 +258,9 @@ export function createPanel(data, options = {}) {
   const query = signal("");
   const mode = signal(options.initialMode ?? "contextual");
   const pickerApps = signal(options.pickerApps ?? []);
+  const preferredShortcutOs = signal("auto");
+  const shortcutDisplayMode = signal("current");
+  const runtimeOs = signal("linux");
   const statusMessage = signal("");
   const collapsedGroups = signal(new Set());
   const highlightedIndex = signal(-1);
@@ -188,9 +277,11 @@ export function createPanel(data, options = {}) {
       group: group.group,
       items: fuzzyFilter(group.items, currentQuery, (item) => [
         ...item.keys,
+        ...Object.values(item.keys_by_os ?? {}).flat(),
         item.keys.join(" "),
         item.label,
         item.value ?? "",
+        item.command ?? "",
         item.notes ?? "",
         ...(item.search_terms ?? []),
       ]),
@@ -199,8 +290,53 @@ export function createPanel(data, options = {}) {
 
   const filteredPickerApps = computed(() => {
     const currentQuery = query().trim();
-    return fuzzyFilter(pickerApps(), currentQuery, (app) => [app.name, app.processes.join(" ")]);
+    return fuzzyFilter(pickerApps(), currentQuery, (app) => [
+      app.group,
+      app.name,
+      app.processes.join(" "),
+      app.source_path,
+      app.error ?? "",
+    ]);
   });
+
+  const visiblePickerGroups = computed(() => {
+    /** @type {Map<string, PickerApp[]>} */
+    const appsByGroup = new Map();
+    for (const app of filteredPickerApps()) {
+      const groupApps = appsByGroup.get(app.group) ?? [];
+      groupApps.push(app);
+      appsByGroup.set(app.group, groupApps);
+    }
+
+    return Array.from(appsByGroup.entries())
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([group, apps]) => ({
+        group,
+        apps: apps.slice().sort((left, right) => left.name.localeCompare(right.name)),
+      }));
+  });
+
+  const navigablePickerEntries = computed(
+    /** @returns {PickerEntry[]} */ () => {
+      /** @type {PickerEntry[]} */
+      const entries = [];
+      for (const group of visiblePickerGroups()) {
+        entries.push({ type: "group", group: group.group });
+        if (collapsedGroups().has(group.group)) {
+          continue;
+        }
+
+        for (const app of group.apps) {
+          entries.push({
+            type: "app",
+            group: group.group,
+            app,
+          });
+        }
+      }
+      return entries;
+    },
+  );
 
   const visibleContextualGroups = computed(() =>
     contextualGroups().filter((group) => group.items.length > 0),
@@ -230,7 +366,9 @@ export function createPanel(data, options = {}) {
 
   const highlightedKey = computed(() => {
     if (mode() === "picker") {
-      const visible = filteredPickerApps().map((app) => `picker::${app.id}`);
+      const visible = navigablePickerEntries().map((entry) =>
+        entry.type === "group" ? `${entry.group}::group` : `picker::${entry.app.id}`,
+      );
       const index = highlightedIndex();
       return index >= 0 && index < visible.length ? visible[index] : null;
     }
@@ -305,9 +443,16 @@ export function createPanel(data, options = {}) {
    * @returns {PickerApp | null}
    */
   function getActivePickerApp() {
-    const apps = filteredPickerApps();
+    const entries = navigablePickerEntries();
     const currentIndex = highlightedIndex();
-    return currentIndex >= 0 && currentIndex < apps.length ? apps[currentIndex] : (apps[0] ?? null);
+    if (currentIndex >= 0 && currentIndex < entries.length) {
+      const entry = entries[currentIndex];
+      if (entry?.type === "app") {
+        return entry.app;
+      }
+    }
+
+    return entries.find((entry) => entry.type === "app")?.app ?? null;
   }
 
   /**
@@ -324,11 +469,24 @@ export function createPanel(data, options = {}) {
   }
 
   /**
+   * @returns {string | null}
+   */
+  function getActivePickerGroupName() {
+    const entries = navigablePickerEntries();
+    const currentIndex = highlightedIndex();
+    if (currentIndex >= 0 && currentIndex < entries.length) {
+      return entries[currentIndex]?.group ?? null;
+    }
+
+    return visiblePickerGroups()[0]?.group ?? null;
+  }
+
+  /**
    * @returns {void}
    */
   function syncHighlightedIndex() {
     if (mode() === "picker") {
-      const apps = filteredPickerApps();
+      const apps = navigablePickerEntries();
       highlightedIndex(
         apps.length === 0 ? -1 : Math.min(Math.max(highlightedIndex(), 0), apps.length - 1),
       );
@@ -449,9 +607,9 @@ export function createPanel(data, options = {}) {
     }
 
     if (mode() === "picker") {
-      const apps = filteredPickerApps();
+      const entries = navigablePickerEntries();
 
-      if (apps.length === 0) {
+      if (entries.length === 0) {
         if (event.key === "Escape") {
           event.preventDefault();
           closePanel().catch(() => {});
@@ -461,13 +619,13 @@ export function createPanel(data, options = {}) {
 
       if (event.key === "ArrowDown") {
         event.preventDefault();
-        highlightedIndex((highlightedIndex() + 1 + apps.length) % apps.length);
+        highlightedIndex((highlightedIndex() + 1 + entries.length) % entries.length);
         return;
       }
 
       if (event.key === "ArrowUp") {
         event.preventDefault();
-        highlightedIndex((highlightedIndex() - 1 + apps.length) % apps.length);
+        highlightedIndex((highlightedIndex() - 1 + entries.length) % entries.length);
         return;
       }
 
@@ -476,6 +634,15 @@ export function createPanel(data, options = {}) {
         const app = getActivePickerApp();
         if (app) {
           loadPickerApp(app.id).catch(() => {});
+        }
+        return;
+      }
+
+      if (event.key === " " && !isEditingTextField()) {
+        event.preventDefault();
+        const groupName = getActivePickerGroupName();
+        if (groupName) {
+          toggleGroup(groupName);
         }
         return;
       }
@@ -513,11 +680,33 @@ export function createPanel(data, options = {}) {
     if (event.key === "Enter") {
       event.preventDefault();
       const entry = getActiveContextualEntry();
-      if (entry?.type === "item" && entry.item.value) {
+      if (entry?.type === "item") {
+        const copyTarget = entry.item.command ?? entry.item.value;
+        if (!copyTarget) {
+          return;
+        }
+
         flashCopiedItem(`${entry.group}::${entry.item.label}`);
-        copyValueToClipboard(entry.item.value);
+        copyValueToClipboard(copyTarget);
       }
       return;
+    }
+
+    if (
+      event.key.toLowerCase() === "o"
+      && !event.altKey
+      && !event.ctrlKey
+      && !event.metaKey
+      && !isEditingTextField()
+    ) {
+      const entry = getActiveContextualEntry();
+      if (entry?.type === "item" && entry.item.url) {
+        event.preventDefault();
+        openExternalUrl(entry.item.url).catch((error) => {
+          statusMessage(`Link failed: ${error instanceof Error ? error.message : String(error)}`);
+        });
+        return;
+      }
     }
 
     if (event.key === " " && !isEditingTextField()) {
@@ -560,6 +749,16 @@ export function createPanel(data, options = {}) {
       queueMicrotask(() => {
         searchInput.focus();
       });
+
+      void Promise.all([getConfig(), getRuntimeInfo()])
+        .then(([config, info]) => {
+          preferredShortcutOs(config.preferred_shortcut_os ?? "auto");
+          shortcutDisplayMode(config.shortcut_display_mode === "all" ? "all" : "current");
+          runtimeOs(
+            info.os === "macos" || info.os === "windows" || info.os === "linux" ? info.os : "linux",
+          );
+        })
+        .catch(() => {});
 
       ctx.cleanup.add(
         listener(searchInput, "input", (event) => {
@@ -649,40 +848,64 @@ export function createPanel(data, options = {}) {
           title.textContent = appData().app_name;
 
           if (currentMode === "picker") {
-            const apps = filteredPickerApps();
+            const groups = visiblePickerGroups();
             groupsHost.innerHTML =
-              apps.length === 0
+              groups.length === 0
                 ? `
                     <div class="peek-empty">
                       No reference files match this filter.
                     </div>
                   `
                 : `
-                    <section class="peek-group">
-                      <div class="peek-group__toggle peek-group__toggle--static">
-                        <span>▾</span>
-                        <span class="peek-group__title">Reference Files</span>
-                      </div>
-                      <div class="peek-item-list">
-                        ${apps
+                    ${groups
+                      .map((group) => {
+                        const isCollapsed = collapsed.has(group.group);
+                        const itemsMarkup = isCollapsed
+                          ? ""
+                          : group.apps
                           .map((app) => {
                             const itemKey = `picker::${app.id}`;
                             const isHighlighted = itemKey === activeKey;
+                            const processText = app.processes.join(", ");
+                            const detailText = app.error
+                              ? `Error: ${app.error}`
+                              : processText
+                                ? `Processes: ${processText}`
+                                : app.source_path;
                             return `
                               <button
                                 type="button"
-                                class="peek-item peek-item--picker${isHighlighted ? " peek-item--highlighted" : ""}"
+                                class="peek-item peek-item--picker${app.error ? " peek-item--invalid" : ""}${isHighlighted ? " peek-item--highlighted" : ""}"
                                 data-picker-id="${text(app.id)}"
                                 ${isHighlighted ? 'data-active-entry="true"' : ""}
                               >
-                                <span class="peek-item__label">${text(app.name)}</span>
-                                <p class="peek-item__notes">${text(app.processes.join(", "))}</p>
+                                <div class="peek-item__topline">
+                                  <span class="peek-item__label">${text(app.name)}</span>
+                                  ${app.error ? '<span class="peek-item__badge">Error</span>' : ""}
+                                </div>
+                                <p class="peek-item__notes">${text(detailText)}</p>
+                                ${app.error ? `<p class="peek-item__value">${text(app.source_path)}</p>` : ""}
                               </button>
                             `;
                           })
-                          .join("")}
-                      </div>
-                    </section>
+                          .join("");
+
+                        return `
+                          <section class="peek-group">
+                            <button
+                              type="button"
+                              class="peek-group__toggle${activeKey === `${group.group}::group` ? " peek-group__toggle--highlighted" : ""}"
+                              data-group-toggle="${text(group.group)}"
+                              ${activeKey === `${group.group}::group` ? 'data-active-entry="true"' : ""}
+                            >
+                              <span>${isCollapsed ? "▸" : "▾"}</span>
+                              <span class="peek-group__title">${text(group.group)}</span>
+                            </button>
+                            <div class="peek-item-list">${itemsMarkup}</div>
+                          </section>
+                        `;
+                      })
+                      .join("")}
                   `;
             return;
           }
@@ -711,7 +934,14 @@ export function createPanel(data, options = {}) {
                             const itemKey = `${group.group}::${item.label}`;
                             const isHighlighted = itemKey === activeKey;
                             const isCopied = itemKey === copiedKey;
-                            const itemKind = getItemKind(item);
+                            const displayKeySets = resolveDisplayKeys(
+                              item,
+                              /** @type {"auto" | "macos" | "windows" | "linux"} */ (preferredShortcutOs()),
+                              /** @type {"macos" | "windows" | "linux"} */ (runtimeOs()),
+                              /** @type {"current" | "all"} */ (shortcutDisplayMode()),
+                            );
+                            const primaryDisplayKeys = displayKeySets[0]?.keys ?? [];
+                            const itemKind = getItemKind(item, primaryDisplayKeys);
                             return `
                               <article
                                 class="peek-item peek-item--${itemKind}${isHighlighted ? " peek-item--highlighted" : ""}${isCopied ? " peek-item--copied" : ""}"
@@ -730,8 +960,8 @@ export function createPanel(data, options = {}) {
                                     <span class="icon-mask peek-item__action-icon" aria-hidden="true"></span>
                                   </button>` : ""}
                                 </div>
-                                ${item.keys.length > 0 ? `<div class="peek-item__keys"><span class="peek-keys">${renderKeys(item.keys)}</span></div>` : ""}
-                                ${renderBody(item)}
+                                ${displayKeySets.length > 0 ? `<div class="peek-item__keys${displayKeySets.length > 1 ? " peek-item__keys--stacked" : ""}">${renderDisplayKeySets(displayKeySets)}</div>` : ""}
+                                ${renderBody(item, primaryDisplayKeys)}
                               </article>
                             `;
                           })

@@ -27,6 +27,8 @@ enum PanelDisplayPayload {
 pub struct AppData {
     config: RwLock<config::Config>,
     shortcut_map: RwLock<HashMap<String, scanner::ShortcutFile>>,
+    picker_apps: RwLock<Vec<scanner::PickerApp>>,
+    picker_panels: RwLock<HashMap<String, scanner::PanelData>>,
     panel_window: RwLock<Option<String>>,
     panel_visible: RwLock<bool>,
     panel_ready: RwLock<bool>,
@@ -62,10 +64,12 @@ pub fn run() {
             let mut chain = detection::DetectionChain::new();
             chain.init();
 
-            let reference_map = scanner::scan_shortcuts(&references_dir);
+            let scan_result = scanner::scan_shortcuts(&references_dir);
             let app_data = AppData {
                 config: RwLock::new(cfg.clone()),
-                shortcut_map: RwLock::new(reference_map),
+                shortcut_map: RwLock::new(scan_result.shortcut_map),
+                picker_apps: RwLock::new(scan_result.picker_apps),
+                picker_panels: RwLock::new(scan_result.picker_panels),
                 panel_window: RwLock::new(None),
                 panel_visible: RwLock::new(false),
                 panel_ready: RwLock::new(false),
@@ -247,7 +251,9 @@ fn install_reference_watcher(app: &tauri::AppHandle, dir: std::path::PathBuf) ->
 fn reload_shortcuts_for_path(app: &tauri::AppHandle, path: &std::path::Path) -> Result<(), String> {
     let state = app.state::<AppData>();
     let next = scanner::scan_shortcuts(path);
-    *state.shortcut_map.write().unwrap() = next;
+    *state.shortcut_map.write().unwrap() = next.shortcut_map;
+    *state.picker_apps.write().unwrap() = next.picker_apps;
+    *state.picker_panels.write().unwrap() = next.picker_panels;
     Ok(())
 }
 
@@ -370,7 +376,7 @@ fn show_panel_window(app: &AppHandle) -> Result<(), String> {
             ));
             PanelDisplayPayload::References(panel_data)
         } else {
-            let picker_apps = scanner::get_picker_apps(&shortcut_map);
+            let picker_apps = state.picker_apps.read().unwrap().clone();
             debug_log(format!(
                 "panel payload: no contextual match; showing picker with {} app(s)",
                 picker_apps.len()
@@ -378,7 +384,7 @@ fn show_panel_window(app: &AppHandle) -> Result<(), String> {
             PanelDisplayPayload::Picker(picker_apps)
         }
     } else {
-        let picker_apps = scanner::get_picker_apps(&shortcut_map);
+        let picker_apps = state.picker_apps.read().unwrap().clone();
         debug_log(format!(
             "panel payload: no active window detected; showing picker with {} app(s)",
             picker_apps.len()
@@ -511,6 +517,18 @@ async fn cmd_get_runtime_info() -> Result<RuntimeInfo, String> {
 #[tauri::command]
 async fn cmd_set_config(app: tauri::AppHandle, config_data: config::Config) -> Result<(), String> {
     hotkey::validate_hotkey(&config_data.hotkey)?;
+    if !config::is_supported_preferred_shortcut_os(&config_data.preferred_shortcut_os) {
+        return Err(format!(
+            "Unsupported preferred shortcut OS '{}'. Use one of: auto, macos, windows, linux.",
+            config_data.preferred_shortcut_os
+        ));
+    }
+    if !config::is_supported_shortcut_display_mode(&config_data.shortcut_display_mode) {
+        return Err(format!(
+            "Unsupported shortcut display mode '{}'. Use one of: current, all.",
+            config_data.shortcut_display_mode
+        ));
+    }
 
     let state: State<'_, AppData> = app.state();
     let old_config = state.config.read().unwrap().clone();
@@ -551,8 +569,8 @@ async fn cmd_open_external_url(url: String) -> Result<(), String> {
 #[tauri::command]
 async fn cmd_get_picker_apps(app: tauri::AppHandle) -> Result<Vec<scanner::PickerApp>, String> {
     let state: State<'_, AppData> = app.state();
-    let shortcut_map = state.shortcut_map.read().unwrap().clone();
-    Ok(scanner::get_picker_apps(&shortcut_map))
+    let picker_apps = state.picker_apps.read().unwrap().clone();
+    Ok(picker_apps)
 }
 
 #[tauri::command]
@@ -561,7 +579,12 @@ async fn cmd_load_picker_app(
     picker_id: String,
 ) -> Result<scanner::PanelData, String> {
     let state: State<'_, AppData> = app.state();
-    let shortcut_map = state.shortcut_map.read().unwrap().clone();
-    scanner::lookup_picker_app(&shortcut_map, &picker_id)
-        .ok_or_else(|| format!("Reference file not found for picker id '{picker_id}'"))
+    let panel = state
+        .picker_panels
+        .read()
+        .unwrap()
+        .get(&picker_id)
+        .cloned()
+        .ok_or_else(|| format!("Reference file not found for picker id '{picker_id}'"));
+    panel
 }

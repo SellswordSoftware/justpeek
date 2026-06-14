@@ -87,6 +87,8 @@ export function invokeAppCommand(command, args) {
  * @typedef {object} AppConfig
  * @property {string} hotkey
  * @property {string} theme
+ * @property {string} preferred_shortcut_os
+ * @property {string} shortcut_display_mode
  * @property {string | null | undefined} references_dir
  */
 

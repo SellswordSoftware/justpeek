@@ -114,28 +114,49 @@ For the most predictable behavior across environments, prefer simple modifier co
 Example:
 
 ```yaml
-name: VS Code
+name: VS Code Workspace
+group: Editors
 process:
   - code
   - Code
+title_pattern: ^.+ - Visual Studio Code$
+title_contains: project
 references:
   - group: Navigation
     items:
-      - keys: Ctrl+P
-        label: Quick Open
+      - label: Quick Open
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+          windows: Ctrl+P
+          linux: Ctrl+P
         notes: Opens a file by name
-      - keys: Ctrl+Shift+P
-        label: Command Palette
-  - group: Git
+        search_terms:
+          - files
+          - open file
+      - label: Command Palette
+        keys_by_os:
+          macos: Cmd+Shift+P
+          windows: Ctrl+Shift+P
+          linux: Ctrl+Shift+P
+        notes: Opens the action menu
+  - group: Cli
     items:
-      - label: Revert a commit
-        value: git revert <commit>
-        notes: Safe for shared history
+      - label: Open VS Code in Current Directory
+        value: code .
+        notes: Easy way to launch vs code from the terminal
+        url: https://code.visualstudio.com/docs/configure/command-line
+      - label: VS Code Help
+        command: code -h
+        notes: cli help output
 ```
+
+`keys_by_os` is optional. If JustPeek has a variant for the preferred or current OS, it uses that. Otherwise it falls back to `keys`.
 
 Supported fields:
 
 - `name`: display name for the matched reference set
+- `group`: optional picker category used to group reference files in the picker
 - `process`: optional process name or list of process names for contextual matching
 - `title_pattern`: optional regex for window-title matching
 - `title_contains`: optional case-insensitive window-title substring matcher
@@ -143,9 +164,10 @@ Supported fields:
 - `group`: section title
 - `items`: list of entries inside the group
 - `keys`: optional key chord or list of key chords rendered with `<kbd>`
+- `keys_by_os`: optional OS-specific key overrides for `macos`, `windows`, and `linux`
 - `label`: primary text
-- `value`: optional secondary value such as a command
-- `command`: alias for `value`, recommended for CLI-style entries
+- `value`: optional secondary text
+- `command`: optional command text rendered in a command block
 - `notes`: optional descriptive text
 - `url`: optional supporting link such as docs or a runbook
 - `search_terms`: optional list of extra search-only aliases

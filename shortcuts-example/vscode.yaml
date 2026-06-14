@@ -1,4 +1,5 @@
 name: VS Code
+group: Editors
 process:
   - code
   - Code

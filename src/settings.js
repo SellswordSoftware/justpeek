@@ -20,6 +20,8 @@ export function createSettings() {
   const hotkeyEditable = signal(true);
   const hotkeyNotice = signal("");
   const theme = signal("dark");
+  const preferredShortcutOs = signal("auto");
+  const shortcutDisplayMode = signal("current");
   const referencesDir = signal("");
   const status = signal("Loading configuration...");
 
@@ -33,6 +35,8 @@ export function createSettings() {
           : "On Linux Wayland, the global shortcut is managed by the desktop environment.",
       );
       theme(cfg.theme);
+      preferredShortcutOs(cfg.preferred_shortcut_os ?? "auto");
+      shortcutDisplayMode(cfg.shortcut_display_mode ?? "current");
       referencesDir(cfg.references_dir ?? "");
       document.documentElement.setAttribute("data-theme", cfg.theme);
       status("Hotkey changes apply after restarting the app.");
@@ -48,6 +52,8 @@ export function createSettings() {
       await setConfig({
         hotkey: hotkey().trim() || "CommandOrControl+Alt+Slash",
         theme: theme(),
+        preferred_shortcut_os: preferredShortcutOs(),
+        shortcut_display_mode: shortcutDisplayMode(),
         references_dir: referencesDir().trim() || null,
       });
       document.documentElement.setAttribute("data-theme", theme());
@@ -70,6 +76,12 @@ export function createSettings() {
       const hotkeyNoticeNode = /** @type {HTMLElement} */ (requireRef(ctx.refs, "hotkeyNotice"));
       const hotkeyInput = /** @type {HTMLInputElement} */ (requireRef(ctx.refs, "hotkeyInput"));
       const themeSelect = /** @type {HTMLSelectElement} */ (requireRef(ctx.refs, "themeSelect"));
+      const preferredShortcutOsSelect = /** @type {HTMLSelectElement} */ (
+        requireRef(ctx.refs, "preferredShortcutOsSelect")
+      );
+      const shortcutDisplayModeSelect = /** @type {HTMLSelectElement} */ (
+        requireRef(ctx.refs, "shortcutDisplayModeSelect")
+      );
       const referencesDirInput = /** @type {HTMLInputElement} */ (
         requireRef(ctx.refs, "referencesDirInput")
       );
@@ -87,6 +99,12 @@ export function createSettings() {
         }),
         listener(themeSelect, "change", (event) => {
           theme((/** @type {HTMLSelectElement} */ (event.currentTarget)).value);
+        }),
+        listener(preferredShortcutOsSelect, "change", (event) => {
+          preferredShortcutOs((/** @type {HTMLSelectElement} */ (event.currentTarget)).value);
+        }),
+        listener(shortcutDisplayModeSelect, "change", (event) => {
+          shortcutDisplayMode((/** @type {HTMLSelectElement} */ (event.currentTarget)).value);
         }),
         listener(referencesDirInput, "input", (event) => {
           referencesDir((/** @type {HTMLInputElement} */ (event.currentTarget)).value);
@@ -136,6 +154,8 @@ export function createSettings() {
           hotkeyNoticeNode.textContent = hotkeyNotice();
           hotkeyInput.value = hotkey();
           themeSelect.value = theme();
+          preferredShortcutOsSelect.value = preferredShortcutOs();
+          shortcutDisplayModeSelect.value = shortcutDisplayMode();
           referencesDirInput.value = referencesDir();
           statusNode.textContent = status();
         }),
@@ -195,6 +215,30 @@ export function createSettings() {
             <option value="dark">Dark</option>
             <option value="light">Light</option>
           </select>
+        </label>
+
+        <label class="settings-field">
+          <span class="settings-field__label">Preferred Shortcut OS</span>
+          <select class="input" data-ref="preferredShortcutOsSelect">
+            <option value="auto">Auto-detect</option>
+            <option value="macos">macOS</option>
+            <option value="windows">Windows</option>
+            <option value="linux">Linux</option>
+          </select>
+          <span class="settings-field__hint">
+            Controls which OS-specific shortcut variants are shown when available.
+          </span>
+        </label>
+
+        <label class="settings-field">
+          <span class="settings-field__label">Shortcut Display Mode</span>
+          <select class="input" data-ref="shortcutDisplayModeSelect">
+            <option value="current">Current OS only</option>
+            <option value="all">All OS variants</option>
+          </select>
+          <span class="settings-field__hint">
+            Show only one platform's shortcuts or show every OS-specific variant.
+          </span>
         </label>
 
         <label class="settings-field">

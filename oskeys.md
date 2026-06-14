@@ -532,6 +532,200 @@ Defer:
 
 That release already solves the main user problem while keeping the UI simple.
 
+## Task List
+
+This task list maps the plan onto the current JustPeek codebase.
+
+### Slice A: Extend the Rust Reference Schema
+
+- [ ] Add `keys_by_os` to the Rust `ReferenceItem` model in `scanner.rs`.
+- [ ] Add a parser for OS-keyed shortcut variants that reuses the current string-or-list handling for `keys`.
+- [ ] Restrict supported OS keys to `macos`, `windows`, and `linux`.
+- [ ] Decide parser behavior for unknown OS keys and implement it consistently.
+- [ ] Add unit tests for:
+  - `keys` only
+  - `keys_by_os` only
+  - both `keys` and `keys_by_os`
+  - invalid OS names
+  - invalid `keys_by_os` value shapes
+
+After this:
+
+- JustPeek can parse OS-specific shortcut variants without breaking existing files.
+
+### Slice B: Extend the Frontend Item Shape
+
+- [ ] Update the frontend `PanelItem` typedef in `src/panel.js` to represent OS-specific key data.
+- [ ] Decide whether frontend payloads should carry:
+  - raw `keys` plus raw `keys_by_os`, or
+  - already-resolved display keys from Rust
+- [ ] Keep the raw-vs-resolved contract explicit so rendering and search do not drift.
+
+Recommended decision:
+
+- keep raw data in Rust and resolve display behavior in the frontend only if the setting is purely presentation-driven
+- otherwise resolve in Rust if you want one canonical display contract from backend to UI
+
+After this:
+
+- The JS side can represent OS-specific key data without forcing an immediate UI change.
+
+### Slice C: Add Config Fields for OS Preference
+
+- [ ] Extend `Config` in `src-tauri/src/config.rs` with:
+  - preferred shortcut OS
+  - shortcut display mode
+- [ ] Add defaults for both fields in `Config::default()`.
+- [ ] Ensure config read/write remains backward compatible with older `config.yaml` files.
+- [ ] Extend the config payload shape exposed through `src/runtime/tauri.js`.
+- [ ] Add or update tests for the config contract if present.
+
+Suggested values:
+
+- preferred shortcut OS: `auto`, `macos`, `windows`, `linux`
+- display mode: `current`, `all`
+
+After this:
+
+- The app can persist the settings needed to drive OS-specific shortcut display.
+
+### Slice D: Surface the Settings in the Settings Window
+
+- [ ] Add frontend state in `src/settings.js` for:
+  - preferred shortcut OS
+  - shortcut display mode
+- [ ] Load those values from `getConfig()`.
+- [ ] Save them through `setConfig()`.
+- [ ] Add controls to the settings form:
+  - select for preferred shortcut OS
+  - select or toggle for shortcut display mode
+- [ ] Update `src/styles/app.css` if the settings layout needs additional spacing or wrapping.
+
+After this:
+
+- A user can control shortcut OS resolution from the settings UI.
+
+### Slice E: Implement Current-OS Key Resolution
+
+- [ ] Add one resolver for current-OS display.
+- [ ] Resolver rule:
+  - use `keys_by_os.<preferred_os>` when present
+  - otherwise fall back to `keys`
+- [ ] Determine how `auto` maps to runtime OS.
+- [ ] Decide where runtime OS should come from:
+  - reuse existing backend runtime info, or
+  - expose a frontend runtime OS field if needed
+
+Likely touch points:
+
+- `src-tauri/src/lib.rs` runtime info surface
+- `src/runtime/tauri.js`
+- `src/panel.js`
+
+After this:
+
+- The panel can show the correct keys for one effective OS without showing all variants.
+
+### Slice F: Update Panel Rendering for Resolved Keys
+
+- [ ] Replace direct rendering of `item.keys` in `src/panel.js` with resolved display keys.
+- [ ] Preserve the current look when only one key set is displayed.
+- [ ] Ensure items with no displayable keys still render cleanly.
+- [ ] Verify that keyboard navigation, copy behavior, and current row highlighting remain unchanged.
+
+After this:
+
+- OS-specific bindings appear in the panel for the selected platform without changing the surrounding UX.
+
+### Slice G: Update Search Indexing
+
+- [ ] Extend the contextual fuzzy-search key source in `src/panel.js`.
+- [ ] Include:
+  - fallback `keys`
+  - all values from `keys_by_os`
+- [ ] Keep rendering filtered by the chosen display mode even if search matched a hidden OS variant.
+
+After this:
+
+- Searching for a hidden platform-specific binding still finds the right action.
+
+### Slice H: Add All-Variants Display Mode
+
+- [ ] Extend the resolver to return multiple labeled key sets when display mode is `all`.
+- [ ] Decide the output order:
+  - `macOS`
+  - `Windows`
+  - `Linux`
+  - `Default`
+- [ ] Update `renderKeys()` or add a new render path for labeled OS groups.
+- [ ] Add light styling for OS labels in `src/styles/app.css`.
+
+After this:
+
+- The panel can show every OS-specific binding on one item in a readable way.
+
+### Slice I: Add Samples and Documentation
+
+- [ ] Update the reference file docs with a `keys_by_os` example.
+- [ ] Add at least one sample reference file that uses OS-specific keys.
+- [ ] Update `README.md` if the feature should be discoverable there.
+- [ ] Update this proposal doc if implementation details diverge from the recommendation.
+
+After this:
+
+- Maintainers and users can discover and author the feature correctly.
+
+### Slice J: Verification Pass
+
+- [ ] Run Rust parser tests for the new schema.
+- [ ] Run frontend typecheck after panel and settings updates.
+- [ ] Manually verify:
+  - current OS only mode
+  - explicit preferred OS override
+  - all variants mode
+  - fallback from `keys_by_os` to `keys`
+  - search hits hidden variants
+  - old YAML files still render unchanged
+
+After this:
+
+- The feature is verified end to end across schema, settings, rendering, and search.
+
+## Suggested Execution Order
+
+Use this dependency order:
+
+1. Slice A
+2. Slice B
+3. Slice C
+4. Slice D
+5. Slice E
+6. Slice F
+7. Slice G
+8. Slice H
+9. Slice I
+10. Slice J
+
+## Smallest Useful First Milestone
+
+If you want the thinnest useful first implementation, stop after:
+
+- Slice A
+- Slice C
+- Slice D
+- Slice E
+- Slice F
+- Slice G
+
+That yields:
+
+- `keys_by_os` support
+- preferred OS selection
+- current-OS-only rendering
+- search across all key variants
+
+and leaves all-variants display for a second pass.
+
 ## Example Full File
 
 ```yaml

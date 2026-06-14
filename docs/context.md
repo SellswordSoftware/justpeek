@@ -19,7 +19,9 @@ The project is functional now. Most recent work has focused on:
 - keeping the panel window preloaded and hidden instead of recreating it each time
 - panel drag/resize/transparent styling fixes
 - picker fallback improvements
-- keyboard-only switch to the manual picker via `Escape`
+- keyboard-only picker and panel navigation improvements
+- OS-specific shortcut variants via `keys_by_os`
+- shortcut display preferences in settings
 
 ## Important Current Reality
 
@@ -33,7 +35,9 @@ Current reality:
 - Windows detection is implemented.
 - Sway detection is still stubbed.
 - The picker is no longer just a passive fallback list; it is now intended as a manual reference selector.
-- The visible `Pick` button was removed. Picker entry is intended to be keyboard-only via `Escape`.
+- The visible `Pick` button was removed. Picker entry is intended to be keyboard-first.
+- Reference items can define OS-specific key overrides with `keys_by_os`.
+- Settings now include preferred shortcut OS and shortcut display mode.
 
 ## Product Behavior
 
@@ -47,11 +51,12 @@ Normal flow:
 
 Manual fallback flow:
 1. If detection fails or no file matches, backend sends picker data.
-2. Frontend shows the manual picker list.
+2. Frontend shows the manual picker list grouped by reference-file `group`.
 3. User can select a reference file manually.
 
 Context override flow:
 1. If the wrong contextual file is shown, pressing `Escape` is intended to switch from the contextual view to the picker.
+2. `Left Arrow` also returns to the picker from contextual mode.
 
 ## Tech Stack
 
@@ -182,15 +187,21 @@ Compatibility alias still supported:
 
 Reference file model:
 - `name`
+- optional `group`
 - `process`
 - optional `title_pattern`
+ - optional `title_contains`
 - `references`
   - `group`
   - `items`
     - optional `keys`
+    - optional `keys_by_os`
     - `label`
     - optional `value`
+    - optional `command`
     - optional `notes`
+    - optional `url`
+    - optional `search_terms`
 
 Sample files live in:
 - [shortcuts-example/vscode.yaml](/home/mike/sellsword/justpeek/shortcuts-example/vscode.yaml)
@@ -204,6 +215,13 @@ Config path:
 
 Default references dir:
 - `~/.config/justpeek/references`
+
+Current config fields include:
+- `hotkey`
+- `theme`
+- `preferred_shortcut_os`
+- `shortcut_display_mode`
+- `references_dir`
 
 Setup helper:
 - [setup.sh](/home/mike/sellsword/justpeek/setup.sh)
@@ -221,17 +239,26 @@ Panel behavior:
 
 Keyboard behavior:
 - arrows move highlight
-- `Escape` is intended to switch contextual view to picker
+- `Enter` activates the current selection
+- `Enter` on a contextual item with a `command` copies the command to the clipboard
+- otherwise `Enter` on a contextual item with a `value` copies that value to the clipboard
+- `Escape` switches contextual view to picker
 - `Escape` from picker mode closes the panel
+- `Left Arrow` switches contextual view to picker
+- `Right Arrow` activates the highlighted picker item
+- `Space` toggles collapse for the highlighted group or item group
+- `/` focuses the search input when it is not focused
+- `Up` / `Down` while search is focused blur the input and return control to list navigation
+- collapsed groups remain keyboard-selectable
+- the highlighted entry auto-scrolls into view during keyboard navigation
 
-The picker flow was still being refined at the end of the last session, so this is one area a new agent should verify directly before making assumptions.
+The keyboard interaction model changed substantially after the original panel work, so a new agent should trust the current `panel.js` behavior over older planning notes.
 
 ## Known Gaps / Likely Next Work
 
 Known open or likely-fragile areas:
-- verify the `Escape`-to-picker path in a live running app after the latest frontend/backend changes
 - Sway Wayland detection is still unimplemented
-- some README/docs statements still lag behind the current persistent-panel architecture
+- all-OS-variants display should still be manually verified in a live running app
 - hotkey changes in settings still require restart in practice
 - active-window handling on Wayland should be re-verified after any KWin or desktop-session changes
 

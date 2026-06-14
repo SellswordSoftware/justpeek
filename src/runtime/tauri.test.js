@@ -97,6 +97,8 @@ test("config helpers use the expected backend commands", async () => {
   const config = {
     hotkey: "CommandOrControl+Alt+Slash",
     theme: "light",
+    preferred_shortcut_os: "auto",
+    shortcut_display_mode: "current",
     references_dir: "/tmp/references",
   };
 

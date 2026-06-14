@@ -1,4 +1,5 @@
 name: Git Reference
+group: CLI
 process:
   - wezterm
   - alacritty
@@ -7,14 +8,14 @@ references:
   - group: Tagging
     items:
       - label: Annotated tag
-        value: git tag -a v1.2.3 -m "Release v1.2.3"
+        command: git tag -a v1.2.3 -m "Release v1.2.3"
       - label: Push tags
-        value: git push --tags
+        command: git push --tags
   - group: Rollback
     items:
       - label: Revert a commit
-        value: git revert <commit>
+        command: git revert <commit>
         notes: Safe for shared history
       - label: Reset hard
-        value: git reset --hard <commit>
+        command: git reset --hard <commit>
         notes: Rewrites local state

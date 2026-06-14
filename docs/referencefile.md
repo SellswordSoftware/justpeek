@@ -32,13 +32,14 @@ Reference files are useful for more than keyboard shortcuts. They also work well
 
 ```yaml
 name: VS Code
+group: Editors
 process:
   - code
 references:
   - group: Navigation
     items:
-      - keys: Ctrl+P
-        label: Quick Open
+      - label: Quick Open
+        keys: Ctrl+P
         notes: Opens a file by name
 ```
 
@@ -56,6 +57,7 @@ The current schema supports these fields.
 ### Top level
 
 - `name`: required display name for the reference set
+- `group`: optional picker category used to group files in the manual reference picker
 - `process`: optional process name or list of process names used for contextual matching
 - `title_pattern`: optional regex for narrowing the match by window title
 - `title_contains`: optional simpler substring matcher for the window title
@@ -70,9 +72,10 @@ The current schema supports these fields.
 ### Item level
 
 - `keys`: optional shortcut chord or list of shortcut chords such as `Ctrl+P`
+- `keys_by_os`: optional OS-specific key overrides keyed by `macos`, `windows`, and `linux`
 - `label`: required primary text
 - `value`: optional secondary text
-- `command`: alias for `value`, useful for CLI-style entries
+- `command`: optional command text, rendered in a command block
 - `notes`: optional descriptive text
 - `url`: optional supporting link
 - `search_terms`: optional list of extra search-only aliases
@@ -116,6 +119,24 @@ references:
 ```
 
 If a file has no `process`, it is treated as picker-only content. It can still be opened manually from the picker, but it will not be selected automatically from the active window.
+
+## How Picker Grouping Works
+
+If you set a top-level `group`, JustPeek uses it to group files in the manual reference picker.
+
+Example:
+
+```yaml
+name: Git Reference
+group: CLI
+references:
+  - group: Rollback
+    items:
+      - label: Revert a commit
+        command: git revert <commit>
+```
+
+If `group` is omitted, the file goes into `Ungrouped`.
 
 ## How to Choose `process`
 
@@ -162,13 +183,13 @@ A good entry is short, scannable, and searchable.
   notes: Opens the action menu
 ```
 
-### Good cross-platform shortcut entry
+### Good OS-specific shortcut entry
 
 ```yaml
 - label: Quick Open
-  keys:
-    - Ctrl+P
-    - Cmd+P
+  keys: Ctrl+P
+  keys_by_os:
+    macos: Cmd+P
 ```
 
 ### Good command entry
@@ -188,6 +209,15 @@ A good entry is short, scannable, and searchable.
   notes: Escalate incident-related questions
 ```
 
+### Good mixed entry
+
+```yaml
+- label: Revert a commit
+  value: Safe for shared history
+  command: git revert <commit>
+  url: https://git-scm.com/docs/git-revert
+```
+
 ## Authoring Tips
 
 ### Keep labels short
@@ -196,9 +226,15 @@ The `label` should be the thing you want to scan for quickly. Put extra explanat
 
 ### Use `value` for the most important secondary text
 
-For commands, `command` is the clearest choice. `value` still works and remains valid.
+Use `value` for plain secondary text such as roles, short descriptions, or guidance.
 
 For people references, `value` can be a role or team.
+
+### Use `command` for CLI-style content
+
+`command` is distinct from `value`.
+
+Anything defined under `command` renders in a command block in the panel. `value` does not.
 
 ### Use `url` for source material
 
@@ -249,17 +285,32 @@ Example:
 
 `search_terms` improves filtering without changing what is visibly rendered in the panel.
 
-### Use a `keys` list for variants
+### Use `keys_by_os` for OS-specific variants
 
-If the same action has different bindings on different platforms, use a list instead of duplicating the whole item.
+If the same action has different bindings on different platforms, keep one item and use `keys_by_os`.
 
 Example:
 
 ```yaml
 - label: Quick Open
-  keys:
-    - Ctrl+P
-    - Cmd+P
+  keys: Ctrl+P
+  keys_by_os:
+    macos: Cmd+P
+```
+
+`keys` acts as the fallback. JustPeek uses:
+
+1. `keys_by_os.<preferred or current OS>` when present
+2. otherwise `keys`
+
+Fully explicit example:
+
+```yaml
+- label: Command Palette
+  keys_by_os:
+    macos: Cmd+Shift+P
+    windows: Ctrl+Shift+P
+    linux: Ctrl+Shift+P
 ```
 
 ### Group by how you search
@@ -288,10 +339,15 @@ process:
 references:
   - group: Navigation
     items:
-      - keys: Ctrl+P
-        label: Quick Open
-      - keys: Ctrl+Shift+P
-        label: Command Palette
+      - label: Quick Open
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Command Palette
+        keys_by_os:
+          macos: Cmd+Shift+P
+          windows: Ctrl+Shift+P
+          linux: Ctrl+Shift+P
   - group: View
     items:
       - keys: Ctrl+B
@@ -353,10 +409,10 @@ If you want a simple rule set to follow:
 1. Start with `name`, `process`, and `references`.
 2. Add `title_pattern` only when one app needs multiple contexts.
 3. Keep `label` short.
-4. Put commands or roles in `value`.
-   For CLI-style entries, prefer `command`.
-5. Put explanation in `notes`.
-6. Group entries by how you naturally look them up.
+4. Put roles or short secondary text in `value`.
+5. Put CLI-style content in `command`.
+6. Put explanation in `notes`.
+7. Group entries by how you naturally look them up.
 
 ## Proposed Next Improvements
 
@@ -367,7 +423,6 @@ The current schema works, but a few additions would make it easier to author:
 - `keys` as either a string or a list
 - `search_terms` for better filtering
 - `title_contains` as a simpler alternative to `title_pattern`
-- `command` as a clearer alias for `value`
 - `url` for docs or runbooks
 
 See the schema proposal document for the full recommendation and rollout order.
