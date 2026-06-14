@@ -9,7 +9,10 @@ use std::sync::{Mutex, RwLock};
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::TrayIconBuilder;
 use tauri::webview::WebviewWindowBuilder;
-use tauri::{AppHandle, Emitter, Listener, Manager, State, WebviewUrl, WebviewWindow, WindowEvent};
+use tauri::{
+    AppHandle, Emitter, Listener, Manager, PhysicalPosition, State, WebviewUrl, WebviewWindow,
+    WindowEvent,
+};
 
 const PANEL_WINDOW_LABEL: &str = "panel";
 const PANEL_WINDOW_WIDTH: f64 = 420.0;
@@ -25,10 +28,19 @@ pub struct AppData {
     config: RwLock<config::Config>,
     shortcut_map: RwLock<HashMap<String, scanner::ShortcutFile>>,
     panel_window: RwLock<Option<String>>,
+    panel_visible: RwLock<bool>,
     panel_ready: RwLock<bool>,
     pending_panel_payload: RwLock<Option<PanelDisplayPayload>>,
+    panel_position: Mutex<Option<PhysicalPosition<i32>>>,
     detection_chain: RwLock<detection::DetectionChain>,
     watcher: Mutex<Option<watcher::ShortcutWatcher>>,
+}
+
+#[derive(Debug, Clone, serde::Serialize)]
+struct RuntimeInfo {
+    os: String,
+    session_type: Option<String>,
+    hotkey_editable: bool,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -55,8 +67,10 @@ pub fn run() {
                 config: RwLock::new(cfg.clone()),
                 shortcut_map: RwLock::new(reference_map),
                 panel_window: RwLock::new(None),
+                panel_visible: RwLock::new(false),
                 panel_ready: RwLock::new(false),
                 pending_panel_payload: RwLock::new(None),
+                panel_position: Mutex::new(None),
                 detection_chain: RwLock::new(chain),
                 watcher: Mutex::new(None),
             };
@@ -79,8 +93,10 @@ pub fn run() {
             cmd_show_panel,
             cmd_hide_panel,
             cmd_get_config,
+            cmd_get_runtime_info,
             cmd_set_config,
             cmd_reload_shortcuts,
+            cmd_open_settings_window,
             cmd_open_shortcuts_dir,
             cmd_open_external_url,
             cmd_get_picker_apps,
@@ -93,8 +109,13 @@ pub fn run() {
 fn build_tray(app: &mut tauri::App) -> tauri::Result<()> {
     let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
     let reload_item = MenuItem::with_id(app, "reload", "Reload References", true, None::<&str>)?;
-    let open_dir_item =
-        MenuItem::with_id(app, "open_dir", "Open References Directory", true, None::<&str>)?;
+    let open_dir_item = MenuItem::with_id(
+        app,
+        "open_dir",
+        "Open References Directory",
+        true,
+        None::<&str>,
+    )?;
     let settings_item = MenuItem::with_id(app, "settings", "Settings", true, None::<&str>)?;
     let tray_menu = Menu::with_items(
         app,
@@ -170,6 +191,47 @@ fn install_panel_ready_handler(app: &AppHandle) {
     });
 }
 
+fn remember_panel_position(app: &AppHandle, position: PhysicalPosition<i32>) {
+    let state = app.state::<AppData>();
+    *state.panel_position.lock().unwrap() = Some(position);
+}
+
+fn set_panel_visible(app: &AppHandle, visible: bool) {
+    let state = app.state::<AppData>();
+    *state.panel_visible.write().unwrap() = visible;
+}
+
+fn is_panel_visible(app: &AppHandle) -> bool {
+    let state = app.state::<AppData>();
+    let visible = *state.panel_visible.read().unwrap();
+    visible
+}
+
+fn snapshot_panel_position(window: &WebviewWindow) {
+    match window.outer_position() {
+        Ok(position) => remember_panel_position(&window.app_handle(), position),
+        Err(error) => {
+            debug_log(format!("panel position snapshot unavailable: {error}"));
+        }
+    }
+}
+
+fn restore_panel_position(window: &WebviewWindow) {
+    let saved_position = {
+        let state = window.app_handle().state::<AppData>();
+        let position = *state.panel_position.lock().unwrap();
+        position
+    };
+
+    let Some(position) = saved_position else {
+        return;
+    };
+
+    if let Err(error) = window.set_position(position) {
+        debug_log(format!("panel position restore unavailable: {error}"));
+    }
+}
+
 fn install_reference_watcher(app: &tauri::AppHandle, dir: std::path::PathBuf) -> tauri::Result<()> {
     let handle = app.clone();
     let shortcut_watcher = watcher::ShortcutWatcher::new(dir, move |path| {
@@ -182,10 +244,7 @@ fn install_reference_watcher(app: &tauri::AppHandle, dir: std::path::PathBuf) ->
     Ok(())
 }
 
-fn reload_shortcuts_for_path(
-    app: &tauri::AppHandle,
-    path: &std::path::Path,
-) -> Result<(), String> {
+fn reload_shortcuts_for_path(app: &tauri::AppHandle, path: &std::path::Path) -> Result<(), String> {
     let state = app.state::<AppData>();
     let next = scanner::scan_shortcuts(path);
     *state.shortcut_map.write().unwrap() = next;
@@ -211,6 +270,7 @@ fn create_panel_window(app: &AppHandle) -> Result<(), String> {
     .resizable(true)
     .focused(false)
     .visible(false)
+    .min_inner_size(400., 300.)
     .inner_size(PANEL_WINDOW_WIDTH, PANEL_WINDOW_HEIGHT)
     // .center()
     .build()
@@ -219,13 +279,19 @@ fn create_panel_window(app: &AppHandle) -> Result<(), String> {
     let app_handle = app.clone();
     let panel_window_handle = panel_window.clone();
     panel_window.on_window_event(move |event| match event {
+        WindowEvent::Moved(position) => {
+            remember_panel_position(&app_handle, *position);
+        }
         WindowEvent::CloseRequested { api, .. } => {
             api.prevent_close();
+            snapshot_panel_position(&panel_window_handle);
+            set_panel_visible(&app_handle, false);
             let _ = panel_window_handle.hide();
         }
         WindowEvent::Destroyed => {
             let state = app_handle.state::<AppData>();
             *state.panel_window.write().unwrap() = None;
+            *state.panel_visible.write().unwrap() = false;
             *state.panel_ready.write().unwrap() = false;
         }
         _ => {}
@@ -241,6 +307,8 @@ fn hide_panel_window(app: &AppHandle) -> Result<(), String> {
         return Ok(());
     };
 
+    snapshot_panel_position(&window);
+    set_panel_visible(app, false);
     window.hide().map_err(|err| err.to_string())
 }
 
@@ -251,7 +319,9 @@ fn show_panel_payload(app: &AppHandle, payload: PanelDisplayPayload) -> Result<(
 
     match payload {
         PanelDisplayPayload::References(panel_data) => {
-            window.emit("show-panel", panel_data).map_err(|err| err.to_string())?;
+            window
+                .emit("show-panel", panel_data)
+                .map_err(|err| err.to_string())?;
         }
         PanelDisplayPayload::Picker(picker_apps) => {
             window
@@ -261,15 +331,17 @@ fn show_panel_payload(app: &AppHandle, payload: PanelDisplayPayload) -> Result<(
     }
 
     window.show().map_err(|err| err.to_string())?;
+    restore_panel_position(&window);
+    set_panel_visible(app, true);
     window.set_focus().map_err(|err| err.to_string())
 }
 
 fn show_panel_window(app: &AppHandle) -> Result<(), String> {
-    let Some(window) = app.get_webview_window(PANEL_WINDOW_LABEL) else {
+    let Some(_window) = app.get_webview_window(PANEL_WINDOW_LABEL) else {
         return Err("Panel window not found".to_string());
     };
 
-    if window.is_visible().map_err(|err| err.to_string())? {
+    if is_panel_visible(app) {
         debug_log("panel already visible; hiding current panel window");
         return hide_panel_window(app);
     }
@@ -394,6 +466,24 @@ fn open_external_url(url: &str) -> Result<(), String> {
     Ok(())
 }
 
+fn current_session_type() -> Option<String> {
+    std::env::var("XDG_SESSION_TYPE")
+        .ok()
+        .map(|value| value.trim().to_ascii_lowercase())
+        .filter(|value| !value.is_empty())
+}
+
+fn runtime_info() -> RuntimeInfo {
+    let session_type = current_session_type();
+    let hotkey_editable = cfg!(target_os = "linux") && session_type.as_deref() != Some("wayland");
+
+    RuntimeInfo {
+        os: std::env::consts::OS.to_string(),
+        session_type,
+        hotkey_editable,
+    }
+}
+
 #[tauri::command]
 async fn cmd_show_panel(app: tauri::AppHandle) -> Result<(), String> {
     show_panel_window(&app)
@@ -401,6 +491,8 @@ async fn cmd_show_panel(app: tauri::AppHandle) -> Result<(), String> {
 
 #[tauri::command]
 async fn cmd_hide_panel(_app: tauri::AppHandle, window: WebviewWindow) -> Result<(), String> {
+    snapshot_panel_position(&window);
+    set_panel_visible(&window.app_handle(), false);
     window.hide().map_err(|err| err.to_string())
 }
 
@@ -412,10 +504,14 @@ async fn cmd_get_config(app: tauri::AppHandle) -> Result<config::Config, String>
 }
 
 #[tauri::command]
-async fn cmd_set_config(
-    app: tauri::AppHandle,
-    config_data: config::Config,
-) -> Result<(), String> {
+async fn cmd_get_runtime_info() -> Result<RuntimeInfo, String> {
+    Ok(runtime_info())
+}
+
+#[tauri::command]
+async fn cmd_set_config(app: tauri::AppHandle, config_data: config::Config) -> Result<(), String> {
+    hotkey::validate_hotkey(&config_data.hotkey)?;
+
     let state: State<'_, AppData> = app.state();
     let old_config = state.config.read().unwrap().clone();
     *state.config.write().unwrap() = config_data.clone();
@@ -435,6 +531,11 @@ async fn cmd_set_config(
 #[tauri::command]
 async fn cmd_reload_shortcuts(app: tauri::AppHandle) -> Result<(), String> {
     reload_shortcuts(&app)
+}
+
+#[tauri::command]
+async fn cmd_open_settings_window(app: tauri::AppHandle) -> Result<(), String> {
+    show_settings_window(&app)
 }
 
 #[tauri::command]

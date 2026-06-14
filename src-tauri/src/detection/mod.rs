@@ -65,8 +65,8 @@ impl DetectionChain {
             {
                 let session_type =
                     std::env::var("XDG_SESSION_TYPE").unwrap_or_else(|_| "<unset>".to_string());
-                let desktop = std::env::var("XDG_CURRENT_DESKTOP")
-                    .unwrap_or_else(|_| "<unset>".to_string());
+                let desktop =
+                    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_else(|_| "<unset>".to_string());
                 log_lines.push(format!(
                     "window detection: no detectors initialized for session_type='{session_type}' desktop='{desktop}'"
                 ));

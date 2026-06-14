@@ -31,7 +31,11 @@ impl WindowDetector for X11Detector {
 }
 
 fn intern_atom<C: Connection>(conn: &C, name: &[u8]) -> Option<Atom> {
-    conn.intern_atom(false, name).ok()?.reply().ok().map(|reply| reply.atom)
+    conn.intern_atom(false, name)
+        .ok()?
+        .reply()
+        .ok()
+        .map(|reply| reply.atom)
 }
 
 fn get_window_property<C: Connection>(conn: &C, root: Window, atom: Atom) -> Option<Window> {

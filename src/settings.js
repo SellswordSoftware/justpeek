@@ -5,9 +5,11 @@ import {
   closeCurrentWindow,
   emitThemeChanged,
   getConfig,
+  getRuntimeInfo,
   openShortcutsDir,
   reloadShortcuts,
   setConfig,
+  startResizeDragging,
 } from "./runtime/tauri.js";
 
 /**
@@ -15,13 +17,21 @@ import {
  */
 export function createSettings() {
   const hotkey = signal("");
+  const hotkeyEditable = signal(true);
+  const hotkeyNotice = signal("");
   const theme = signal("dark");
   const referencesDir = signal("");
   const status = signal("Loading configuration...");
 
-  getConfig()
-    .then((cfg) => {
+  Promise.all([getConfig(), getRuntimeInfo()])
+    .then(([cfg, runtimeInfo]) => {
       hotkey(cfg.hotkey);
+      hotkeyEditable(runtimeInfo.hotkey_editable);
+      hotkeyNotice(
+        runtimeInfo.hotkey_editable
+          ? ""
+          : "On Linux Wayland, the global shortcut is managed by the desktop environment.",
+      );
       theme(cfg.theme);
       referencesDir(cfg.references_dir ?? "");
       document.documentElement.setAttribute("data-theme", cfg.theme);
@@ -43,8 +53,10 @@ export function createSettings() {
       document.documentElement.setAttribute("data-theme", theme());
       await emitThemeChanged(theme());
       status("Saved. Hotkey changes apply after restarting the app.");
-    } catch {
-      status("Failed to save configuration.");
+    } catch (error) {
+      status(
+        `Failed to save configuration: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
 
@@ -52,6 +64,10 @@ export function createSettings() {
   const settingsOptions = {
     root: ".peek-surface",
     onMount(_el, _parent, ctx) {
+      const resizeHandles = requireRef(ctx.refs, "resizeHandles");
+      const hotkeyField = /** @type {HTMLElement} */ (requireRef(ctx.refs, "hotkeyField"));
+      const hotkeyNoticeField = /** @type {HTMLElement} */ (requireRef(ctx.refs, "hotkeyNoticeField"));
+      const hotkeyNoticeNode = /** @type {HTMLElement} */ (requireRef(ctx.refs, "hotkeyNotice"));
       const hotkeyInput = /** @type {HTMLInputElement} */ (requireRef(ctx.refs, "hotkeyInput"));
       const themeSelect = /** @type {HTMLSelectElement} */ (requireRef(ctx.refs, "themeSelect"));
       const referencesDirInput = /** @type {HTMLInputElement} */ (
@@ -81,6 +97,27 @@ export function createSettings() {
         listener(closeButton, "click", () => {
           void closeCurrentWindow();
         }),
+        listener(resizeHandles, "mousedown", (event) => {
+          if (!(event.target instanceof HTMLElement) || event.button !== 0) {
+            return;
+          }
+
+          const handle = event.target.closest("[data-resize-direction]");
+          if (!(handle instanceof HTMLElement)) {
+            return;
+          }
+
+          const direction = handle.getAttribute("data-resize-direction");
+          if (!direction) {
+            return;
+          }
+
+          event.preventDefault();
+          event.stopPropagation();
+          startResizeDragging(
+            /** @type {import("./runtime/tauri.js").ResizeDirection} */ (direction),
+          ).catch(() => {});
+        }),
         listener(openDirButton, "click", () => {
           void openShortcutsDir();
         }),
@@ -94,6 +131,9 @@ export function createSettings() {
             });
         }),
         effect(() => {
+          hotkeyField.hidden = !hotkeyEditable();
+          hotkeyNoticeField.hidden = hotkeyEditable();
+          hotkeyNoticeNode.textContent = hotkeyNotice();
           hotkeyInput.value = hotkey();
           themeSelect.value = theme();
           referencesDirInput.value = referencesDir();
@@ -103,25 +143,38 @@ export function createSettings() {
     },
   };
 
-  const settings = template(settingsOptions)`
+  const settings = template(settingsOptions) /*html*/`
     <section class="peek-surface panel settings-view">
-      <header class="peek-header settings-view__header">
-        <div class="peek-header__meta">
-          <p class="eyebrow">JustPeek</p>
-          <h1 class="peek-title">${text("Settings")}</h1>
-        </div>
+      <div class="window-resize-handles" data-ref="resizeHandles" aria-hidden="true">
+        <div class="window-resize-handle window-resize-handle--n" data-resize-direction="North"></div>
+        <div class="window-resize-handle window-resize-handle--e" data-resize-direction="East"></div>
+        <div class="window-resize-handle window-resize-handle--s" data-resize-direction="South"></div>
+        <div class="window-resize-handle window-resize-handle--w" data-resize-direction="West"></div>
+        <div class="window-resize-handle window-resize-handle--ne" data-resize-direction="NorthEast"></div>
+        <div class="window-resize-handle window-resize-handle--nw" data-resize-direction="NorthWest"></div>
+        <div class="window-resize-handle window-resize-handle--se" data-resize-direction="SouthEast"></div>
+        <div class="window-resize-handle window-resize-handle--sw" data-resize-direction="SouthWest"></div>
+      </div>
+      <div class="peek-window-actions">
         <button
           type="button"
-          class="peek-close"
+          class="peek-window-action peek-window-action--close"
           data-ref="closeButton"
           aria-label="Close settings"
+          title="Close settings"
         >
-          ×
+          <span class="icon-mask peek-window-action__icon peek-window-action__icon--close" aria-hidden="true"></span>
         </button>
+      </div>
+      <header class="peek-header settings-view__header" data-tauri-drag-region>
+        <div class="peek-header__meta" data-tauri-drag-region>
+          <p class="eyebrow no-click">JustPeek</p>
+          <h1 class="peek-title no-click">${text("Settings")}</h1>
+        </div>
       </header>
 
       <section class="settings-form">
-        <label class="settings-field">
+        <label class="settings-field" data-ref="hotkeyField">
           <span class="settings-field__label">Hotkey</span>
           <input
             class="input"
@@ -132,6 +185,9 @@ export function createSettings() {
           />
           <span class="settings-field__hint">Use Tauri shortcut syntax.</span>
         </label>
+        <div class="settings-field" data-ref="hotkeyNoticeField" hidden>
+          <span class="settings-field__hint" data-ref="hotkeyNotice"></span>
+        </div>
 
         <label class="settings-field">
           <span class="settings-field__label">Theme</span>

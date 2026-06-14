@@ -77,11 +77,7 @@ impl ActiveWindowReceiver {
         let next = if candidates.is_empty() && window_title.trim().is_empty() {
             None
         } else {
-            let process_name = candidates
-                .first()
-                .copied()
-                .unwrap_or("unknown")
-                .to_string();
+            let process_name = candidates.first().copied().unwrap_or("unknown").to_string();
 
             Some(WindowInfo::from_candidates(
                 process_name,
@@ -122,7 +118,10 @@ impl KdeWaylandBridge {
         let _ignored: Result<bool, _> = scripting.call("unloadScript", &(KWIN_SCRIPT_PLUGIN_NAME));
         let script_path_str = script_path.to_string_lossy().into_owned();
         let script_id: i32 = scripting
-            .call("loadScript", &(script_path_str.as_str(), KWIN_SCRIPT_PLUGIN_NAME))
+            .call(
+                "loadScript",
+                &(script_path_str.as_str(), KWIN_SCRIPT_PLUGIN_NAME),
+            )
             .map_err(|err| err.to_string())?;
 
         let script_proxy = Proxy::new(
@@ -133,7 +132,9 @@ impl KdeWaylandBridge {
         )
         .map_err(|err| err.to_string())?;
 
-        let _: () = script_proxy.call("run", &()).map_err(|err| err.to_string())?;
+        let _: () = script_proxy
+            .call("run", &())
+            .map_err(|err| err.to_string())?;
 
         Ok(Self {
             _connection: connection,

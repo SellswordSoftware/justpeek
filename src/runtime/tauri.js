@@ -53,6 +53,10 @@ function getCurrentWindow() {
 }
 
 /**
+ * @typedef {"East" | "North" | "NorthEast" | "NorthWest" | "South" | "SouthEast" | "SouthWest" | "West"} ResizeDirection
+ */
+
+/**
  * @param {string} command
  * @param {Record<string, unknown>=} args
  * @returns {Promise<unknown>}
@@ -87,10 +91,24 @@ export function invokeAppCommand(command, args) {
  */
 
 /**
+ * @typedef {object} RuntimeInfo
+ * @property {string} os
+ * @property {string | null | undefined} session_type
+ * @property {boolean} hotkey_editable
+ */
+
+/**
  * @returns {Promise<AppConfig>}
  */
 export async function getConfig() {
   return /** @type {Promise<AppConfig>} */ (invokeAppCommand("get_config"));
+}
+
+/**
+ * @returns {Promise<RuntimeInfo>}
+ */
+export async function getRuntimeInfo() {
+  return /** @type {Promise<RuntimeInfo>} */ (invokeAppCommand("get_runtime_info"));
 }
 
 /**
@@ -113,6 +131,13 @@ export async function hidePanelWindow() {
  */
 export async function reloadShortcuts() {
   await invokeAppCommand("reload_shortcuts");
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+export async function openSettingsWindow() {
+  await invokeAppCommand("open_settings_window");
 }
 
 /**
@@ -199,6 +224,19 @@ export async function closeCurrentWindow() {
   }
 
   await currentWindow.close();
+}
+
+/**
+ * @param {ResizeDirection} direction
+ * @returns {Promise<void>}
+ */
+export async function startResizeDragging(direction) {
+  const currentWindow = getCurrentWindow();
+  if (!currentWindow?.startResizeDragging) {
+    throw new Error("Current window startResizeDragging is unavailable");
+  }
+
+  await currentWindow.startResizeDragging(direction);
 }
 
 /**

@@ -145,6 +145,7 @@ pub fn lookup_shortcuts_with_trace(
         .into_iter()
         .filter(|file| !file.process.is_empty())
     {
+        let has_title_constraints = file.title_pattern.is_some() || file.title_contains.is_some();
         let title_match = title_pattern_matches(file, &window.window_title);
         log_lines.push(format!(
             "fallback candidate: {} [{}]",
@@ -152,7 +153,7 @@ pub fn lookup_shortcuts_with_trace(
             describe_title_check(file, title_match),
         ));
 
-        if title_match {
+        if has_title_constraints && title_match {
             log_lines.push(format!(
                 "selected {} because its title pattern matched the active window",
                 describe_file(file),
@@ -252,7 +253,10 @@ fn describe_title_check(file: &ShortcutFile, matched: bool) -> String {
 }
 
 impl WindowInfo {
-    pub fn from_process_name(process_name: impl Into<String>, window_title: impl Into<String>) -> Self {
+    pub fn from_process_name(
+        process_name: impl Into<String>,
+        window_title: impl Into<String>,
+    ) -> Self {
         let process_name = process_name.into();
         let process_candidates = normalized_process_candidates([process_name.as_str()]);
 
@@ -280,7 +284,9 @@ impl WindowInfo {
         Self {
             process_name,
             window_title: window_title.into(),
-            process_candidates: normalized_process_candidates(candidate_inputs.iter().map(String::as_str)),
+            process_candidates: normalized_process_candidates(
+                candidate_inputs.iter().map(String::as_str),
+            ),
         }
     }
 }
@@ -548,12 +554,8 @@ mod tests {
 
     #[test]
     fn lookup_shortcuts_prefers_direct_process_match_when_title_matches() {
-        let vscode = sample_shortcut_file(
-            "VS Code",
-            &["code"],
-            Some("workspace"),
-            "/tmp/vscode.yaml",
-        );
+        let vscode =
+            sample_shortcut_file("VS Code", &["code"], Some("workspace"), "/tmp/vscode.yaml");
         let git = sample_shortcut_file("Git", &["gitui"], None, "/tmp/git.yaml");
         let map = build_map(&[vscode, git]);
         let window = WindowInfo::from_candidates("code", "my workspace", ["Code"]);
@@ -561,21 +563,16 @@ mod tests {
         let trace = lookup_shortcuts_with_trace(&map, &window);
 
         assert_eq!(trace.panel_data.unwrap().app_name, "VS Code");
-        assert!(
-            trace.log_lines
-                .iter()
-                .any(|line| line.contains("selected 'VS Code'"))
-        );
+        assert!(trace
+            .log_lines
+            .iter()
+            .any(|line| line.contains("selected 'VS Code'")));
     }
 
     #[test]
     fn lookup_shortcuts_falls_back_to_title_pattern_match() {
-        let firefox = sample_shortcut_file(
-            "Firefox",
-            &["firefox"],
-            Some("Docs"),
-            "/tmp/firefox.yaml",
-        );
+        let firefox =
+            sample_shortcut_file("Firefox", &["firefox"], Some("Docs"), "/tmp/firefox.yaml");
         let slack = sample_shortcut_file("Slack", &["slack"], None, "/tmp/slack.yaml");
         let map = build_map(&[firefox, slack]);
         let window = WindowInfo::from_process_name("unknown-app", "Project Docs");
@@ -583,21 +580,42 @@ mod tests {
         let trace = lookup_shortcuts_with_trace(&map, &window);
 
         assert_eq!(trace.panel_data.unwrap().app_name, "Firefox");
-        assert!(
-            trace.log_lines
-                .iter()
-                .any(|line| line.contains("title pattern matched the active window"))
+        assert!(trace
+            .log_lines
+            .iter()
+            .any(|line| line.contains("title pattern matched the active window")));
+    }
+
+    #[test]
+    fn lookup_shortcuts_does_not_fallback_to_unconstrained_process_file() {
+        let git = sample_shortcut_file("Git Reference", &["gitui"], None, "/tmp/git.yaml");
+        let map = build_map(&[git]);
+        let window = WindowInfo::from_candidates(
+            "vivaldi-stable",
+            "window | Tauri - Vivaldi",
+            ["vivaldi", "vivaldi-bin"],
         );
+
+        let trace = lookup_shortcuts_with_trace(&map, &window);
+
+        assert!(trace.panel_data.is_none());
+        assert!(trace
+            .log_lines
+            .iter()
+            .any(|line| line.contains("fallback candidate: 'Git Reference'")));
+        assert!(trace
+            .log_lines
+            .iter()
+            .any(|line| line.contains("matched=true")));
+        assert!(trace
+            .log_lines
+            .iter()
+            .any(|line| line.contains("no reference file matched the active window")));
     }
 
     #[test]
     fn picker_apps_are_unique_and_sorted_by_name() {
-        let vscode = sample_shortcut_file(
-            "VS Code",
-            &["code", "Code"],
-            None,
-            "/tmp/vscode.yaml",
-        );
+        let vscode = sample_shortcut_file("VS Code", &["code", "Code"], None, "/tmp/vscode.yaml");
         let arc = sample_shortcut_file("Arc", &["arc"], None, "/tmp/arc.yaml");
         let map = build_map(&[vscode, arc]);
 
@@ -612,12 +630,7 @@ mod tests {
 
     #[test]
     fn lookup_picker_app_returns_panel_data_for_selected_picker_id() {
-        let vscode = sample_shortcut_file(
-            "VS Code",
-            &["code", "Code"],
-            None,
-            "/tmp/vscode.yaml",
-        );
+        let vscode = sample_shortcut_file("VS Code", &["code", "Code"], None, "/tmp/vscode.yaml");
         let map = build_map(&[vscode.clone()]);
         let picker_id = file_identity(&vscode);
 
@@ -765,7 +778,10 @@ references:
         let picker_id = &apps[0].id;
         let panel = lookup_picker_app(&map, picker_id).unwrap();
 
-        assert_eq!(panel.groups[0].items[0].value.as_deref(), Some("git revert <commit>"));
+        assert_eq!(
+            panel.groups[0].items[0].value.as_deref(),
+            Some("git revert <commit>")
+        );
 
         fs::remove_dir_all(&dir).unwrap();
     }
