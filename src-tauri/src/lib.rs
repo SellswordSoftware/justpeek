@@ -343,7 +343,7 @@ fn show_panel_payload(app: &AppHandle, payload: PanelDisplayPayload) -> Result<(
 }
 
 fn show_panel_window(app: &AppHandle) -> Result<(), String> {
-    let Some(_window) = app.get_webview_window(PANEL_WINDOW_LABEL) else {
+    let Some(window) = app.get_webview_window(PANEL_WINDOW_LABEL) else {
         return Err("Panel window not found".to_string());
     };
 
@@ -397,6 +397,10 @@ fn show_panel_window(app: &AppHandle) -> Result<(), String> {
     } else {
         debug_log("panel window not ready yet; queued payload until ready event arrives");
         *state.pending_panel_payload.write().unwrap() = Some(payload);
+        window.show().map_err(|err| err.to_string())?;
+        restore_panel_position(&window);
+        set_panel_visible(app, true);
+        window.set_focus().map_err(|err| err.to_string())?;
         Ok(())
     }
 }
@@ -416,11 +420,11 @@ fn show_settings_window(app: &AppHandle) -> Result<(), String> {
         return Err("Settings window not found".to_string());
     };
 
+    window.show().map_err(|err| err.to_string())?;
+    window.set_focus().map_err(|err| err.to_string())?;
     window
         .emit("open-settings", ())
         .map_err(|err| err.to_string())?;
-    window.show().map_err(|err| err.to_string())?;
-    window.set_focus().map_err(|err| err.to_string())?;
     Ok(())
 }
 

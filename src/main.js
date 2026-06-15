@@ -111,6 +111,10 @@ async function wireTauriPanelEvents() {
   const windowLabel = getCurrentWindowLabel();
   await syncThemeFromConfig();
 
+  if (windowLabel === SETTINGS_WINDOW_LABEL) {
+    showSettings();
+  }
+
   await listen(APP_EVENTS.showPanel, (event) => {
     if (windowLabel !== PANEL_WINDOW_LABEL) {
       return;
