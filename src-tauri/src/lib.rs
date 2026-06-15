@@ -305,6 +305,42 @@ fn create_panel_window(app: &AppHandle) -> Result<(), String> {
         PANEL_WINDOW_LABEL,
         WebviewUrl::App("index.html".into()),
     )
+    .on_navigation(|url| {
+        debug_log(format!("panel navigation: {url}"));
+        true
+    })
+    .on_page_load(|_window, payload| {
+        debug_log(format!(
+            "panel page load: event={:?} url={}",
+            payload.event(),
+            payload.url()
+        ));
+    })
+    .on_web_resource_request(|request, _response| {
+        debug_log(format!("panel resource request: {}", request.uri()));
+    })
+    .initialization_script(
+        r#"
+        (() => {
+          const send = (message) => {
+            try {
+              const invoke = window.__TAURI__?.core?.invoke;
+              if (typeof invoke === "function") {
+                void invoke("cmd_log_client_event", { message: `[init-script] ${message}` });
+              }
+            } catch {}
+          };
+
+          send(`location=${window.location.href}`);
+          document.addEventListener("DOMContentLoaded", () => {
+            send(`DOMContentLoaded readyState=${document.readyState}`);
+          });
+          window.addEventListener("load", () => {
+            send(`window.load readyState=${document.readyState}`);
+          });
+        })();
+        "#,
+    )
     .title("JustPeek")
     .transparent(true)
     .decorations(false)
