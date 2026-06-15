@@ -158,6 +158,14 @@ export async function openExternalUrl(url) {
 }
 
 /**
+ * @param {string} message
+ * @returns {Promise<void>}
+ */
+export async function logClientEvent(message) {
+  await invokeAppCommand("log_client_event", { message });
+}
+
+/**
  * @returns {Promise<unknown>}
  */
 export async function getPickerApps() {

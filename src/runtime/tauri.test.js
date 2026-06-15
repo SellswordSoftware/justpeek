@@ -13,6 +13,7 @@ import {
   isTauriRuntime,
   listen,
   loadPickerApp,
+  logClientEvent,
   openExternalUrl,
   openShortcutsDir,
   reloadShortcuts,
@@ -118,6 +119,7 @@ test("config helpers use the expected backend commands", async () => {
   await reloadShortcuts();
   await openShortcutsDir();
   await openExternalUrl("https://example.com");
+  await logClientEvent("frontend started");
   await hidePanelWindow();
   await getPickerApps();
   await loadPickerApp("picker-1");
@@ -128,6 +130,7 @@ test("config helpers use the expected backend commands", async () => {
     { command: "cmd_reload_shortcuts", args: undefined },
     { command: "cmd_open_shortcuts_dir", args: undefined },
     { command: "cmd_open_external_url", args: { url: "https://example.com" } },
+    { command: "cmd_log_client_event", args: { message: "frontend started" } },
     { command: "cmd_hide_panel", args: undefined },
     { command: "cmd_get_picker_apps", args: undefined },
       { command: "cmd_load_picker_app", args: { pickerId: "picker-1", picker_id: "picker-1" } },
