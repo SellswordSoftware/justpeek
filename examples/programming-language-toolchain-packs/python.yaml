@@ -1,0 +1,135 @@
+name: Python Toolchain
+group: programming language / toolchain packs
+process:
+  - python
+  - python3
+  - python.exe
+  - py
+search_terms:
+  - venv
+  - pip
+  - pytest
+  - ruff
+  - mypy
+references:
+  - group: Interpreter and Environment
+    items:
+      - label: Show version
+        command: python --version
+      - label: Run script
+        command: python path/to/script.py
+      - label: Run module
+        command: python -m package.module
+      - label: Start REPL
+        command: python
+      - label: Create virtual environment
+        command: python -m venv .venv
+      - label: Activate virtual environment
+        command: |
+          source .venv/bin/activate
+          .venv\Scripts\activate
+      - label: Upgrade pip in venv
+        command: python -m pip install --upgrade pip
+
+  - group: Package Management
+    items:
+      - label: Install package
+        command: python -m pip install requests
+      - label: Install dev dependencies
+        command: python -m pip install -r requirements-dev.txt
+      - label: Freeze environment
+        command: python -m pip freeze > requirements.txt
+      - label: Show installed package details
+        command: python -m pip show package_name
+      - label: List outdated packages
+        command: python -m pip list --outdated
+      - label: Build package
+        command: python -m build
+      - label: Publish package
+        command: python -m twine upload dist/*
+
+  - group: Testing and Quality
+    items:
+      - label: Run pytest
+        command: pytest
+      - label: Run one test file or test
+        command: |
+          pytest tests/test_app.py
+          pytest tests/test_app.py::test_name
+      - label: Run with coverage
+        command: pytest --cov=src --cov-report=term-missing
+      - label: Lint with ruff
+        command: ruff check .
+      - label: Auto-fix with ruff
+        command: ruff check . --fix
+      - label: Format with ruff
+        command: ruff format .
+      - label: Type-check with mypy
+        command: mypy src
+
+  - group: Project Layout and Entry Points
+    items:
+      - label: Common src layout
+        value: src/package_name, tests, pyproject.toml, README.md
+      - label: Main guard
+        command: |
+          if __name__ == "__main__":
+              main()
+      - label: Console script entry point
+        value: Define under `[project.scripts]` in `pyproject.toml`
+      - label: Editable install
+        command: python -m pip install -e .
+      - label: Module execution habit
+        value: Prefer `python -m package.module` when imports depend on package context
+
+  - group: Handy Snippets
+    items:
+      - label: Dataclass
+        command: |
+          from dataclasses import dataclass
+          
+          @dataclass
+          class User:
+              name: str
+              active: bool = True
+      - label: Pathlib file read
+        command: |
+          from pathlib import Path
+          
+          text = Path("data.txt").read_text()
+      - label: JSON read and write
+        command: |
+          import json
+          
+          with open("data.json") as f:
+              data = json.load(f)
+          
+          with open("data.json", "w") as f:
+              json.dump(data, f, indent=2)
+      - label: Subprocess run
+        command: |
+          import subprocess
+          
+          result = subprocess.run(["git", "status"], check=True, text=True, capture_output=True)
+          print(result.stdout)
+      - label: Async entry point
+        command: |
+          import asyncio
+          
+          async def main() -> None:
+              await asyncio.sleep(0)
+          
+          asyncio.run(main())
+
+  - group: Common Concepts
+    items:
+      - label: pyproject.toml
+        value: Primary config surface for packaging, build system, dependencies, and many tool settings
+      - label: Virtual environments
+        value: Keep dependencies isolated per project instead of installing everything globally
+      - label: Sync trio
+        value: Ruff, pytest, and mypy cover style, behavior, and type confidence well for many projects
+      - label: Import resolution
+        value: Package layout and execution mode strongly affect relative and absolute import behavior
+      - label: user:// equivalent
+        value: For app data in Python apps, prefer platform-appropriate config and state directories via pathlib or platformdirs

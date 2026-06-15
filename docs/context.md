@@ -46,7 +46,7 @@ Normal flow:
 2. Backend scans the references directory and starts a watcher.
 3. Global hotkey toggles the panel.
 4. Backend detects the active window.
-5. Backend matches a YAML reference file by process name and optional title regex.
+5. Backend matches a YAML reference file by process name and optional title refinement.
 6. Frontend shows grouped reference data with fuzzy filtering.
 
 Manual fallback flow:
@@ -157,6 +157,7 @@ Still a stub returning `None`.
 ## Matching Logic
 
 Reference files are keyed primarily by process name, with optional title filtering.
+Title-based fields do not auto-match by themselves; they only refine files that already declare `process`.
 
 Current lookup behavior in [scanner.rs](/home/mike/sellsword/justpeek/src-tauri/src/scanner.rs):
 - direct process candidate matching first

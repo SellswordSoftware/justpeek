@@ -1,0 +1,187 @@
+name: Blender
+group: cad / 3d / maker tools
+process:
+  - blender
+  - blender.exe
+  - Blender
+search_terms:
+  - blender shortcuts
+  - 3d viewport
+  - modifiers
+  - geometry nodes
+references:
+  - group: File and Global
+    items:
+      - label: New file
+        keys: Ctrl+N
+      - label: Open file
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Save as
+        keys: Ctrl+Shift+S
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Shift+Z
+      - label: Search commands
+        keys: F3
+      - label: Quick favorites
+        keys: Q
+        notes: Add operators to Quick Favorites for repeated modeling or animation workflows.
+
+  - group: Viewport Navigation
+    items:
+      - label: Orbit pan zoom
+        keys: MiddleMouse drag / Shift+MiddleMouse drag / MouseWheel
+      - label: Front right top views
+        keys: Numpad1 / Numpad3 / Numpad7
+      - label: Opposite views
+        keys: Ctrl+Numpad1 / Ctrl+Numpad3 / Ctrl+Numpad7
+      - label: Camera view
+        keys: Numpad0
+      - label: Toggle perspective or orthographic
+        keys: Numpad5
+      - label: Frame selected
+        keys: NumpadPeriod
+      - label: View all
+        keys: Home
+      - label: Local view isolate
+        keys: NumpadSlash
+
+  - group: Selection and Transforms
+    items:
+      - label: Select all or none
+        keys: A / Alt+A
+      - label: Box select
+        keys: B
+      - label: Circle select
+        keys: C
+      - label: Lasso select
+        keys: Ctrl+RightMouse drag
+      - label: Grab move
+        keys: G
+      - label: Rotate
+        keys: R
+      - label: Scale
+        keys: S
+      - label: Constrain transform axis
+        keys: Press X Y or Z after G R or S
+      - label: Snap while transforming
+        keys: Hold Ctrl during transform
+      - label: Duplicate
+        keys: Shift+D
+      - label: Duplicate linked
+        keys: Alt+D
+      - label: Delete
+        keys: X or Delete
+
+  - group: Object Mode
+    items:
+      - label: Add object
+        keys: Shift+A
+        notes: "UI path: `Add` menu in the 3D Viewport header."
+      - label: Rename selected object
+        keys: F2
+      - label: Apply transforms
+        keys: Ctrl+A
+        notes: "UI path: `Object > Apply`."
+      - label: Join selected objects
+        keys: Ctrl+J
+      - label: Parent
+        keys: Ctrl+P
+      - label: Clear parent
+        keys: Alt+P
+      - label: Move object to collection
+        keys: M
+      - label: Shade smooth or flat
+        notes: "UI path: `Object > Shade Smooth` or `Object > Shade Flat`."
+      - label: Add modifier
+        notes: "UI path: Properties editor > wrench icon > `Add Modifier`."
+
+  - group: Edit Mode Modeling
+    items:
+      - label: Toggle object or edit mode
+        keys: Tab
+      - label: Vertex edge face select
+        keys: 1 / 2 / 3
+      - label: Extrude
+        keys: E
+      - label: Inset faces
+        keys: I
+      - label: Bevel
+        keys: Ctrl+B
+      - label: Knife tool
+        keys: K
+      - label: Loop cut
+        keys: Ctrl+R
+      - label: Fill
+        keys: F
+      - label: Merge
+        keys: M
+      - label: Separate
+        keys: P
+      - label: Recalculate normals
+        keys: Shift+N
+        notes: "UI path: `Mesh > Normals > Recalculate Outside`."
+      - label: Snap menu
+        keys: Shift+Tab
+        notes: "UI path: magnet icon in the 3D Viewport header."
+
+  - group: Common Tools and UI Paths
+    items:
+      - label: Proportional editing
+        keys: O
+        notes: "UI path: circle icon in the 3D Viewport header."
+      - label: Transform orientations
+        value: Global, Local, Normal, Gimbal, View, Cursor
+        notes: "UI path: orientation dropdown in the viewport header."
+      - label: Pivot point
+        value: Median Point, Individual Origins, 3D Cursor, Active Element
+        notes: "UI path: pivot dropdown in the viewport header."
+      - label: Add mirror modifier
+        notes: "UI path: Properties > Modifiers > `Add Modifier > Generate > Mirror`."
+      - label: Add subdivision surface
+        notes: "UI path: Properties > Modifiers > `Add Modifier > Generate > Subdivision Surface`."
+      - label: Geometry nodes
+        notes: "UI path: switch workspace to `Geometry Nodes` or add a Geometry Nodes modifier from the Modifiers tab."
+      - label: Material settings
+        notes: "UI path: Properties > material sphere icon."
+      - label: UV unwrap
+        keys: U
+        notes: "UI path: `UV` menu in Edit Mode."
+
+  - group: Animation and Timeline
+    items:
+      - label: Insert keyframe
+        keys: I
+      - label: Delete keyframe
+        keys: Alt+I
+      - label: Play or pause animation
+        keys: Space
+      - label: Go to next or previous keyframe
+        keys: UpArrow / DownArrow
+      - label: Timeline and graph editors
+        notes: Use the `Animation` workspace when switching between transforms, dopesheet, graph editor, and timeline review.
+
+  - group: Render and Export
+    items:
+      - label: Render image
+        keys: F12
+      - label: Render animation
+        keys: Ctrl+F12
+      - label: View rendered result
+        keys: F11
+      - label: Export mesh formats
+        notes: "UI path: `File > Export` for FBX, OBJ, STL, glTF, Alembic, USD, and more."
+      - label: Render settings
+        notes: "UI path: Properties > camera icon for engine, sampling, motion blur, and output behavior."
+      - label: Output path and format
+        notes: "UI path: Properties > printer or output icon."
+
+  - group: Common Reference
+    items:
+      - label: Workspaces
+        value: Layout, Modeling, Sculpting, UV Editing, Texture Paint, Shading, Animation, Rendering, Geometry Nodes, Scripting
+      - label: Modeling habit
+        value: Apply scale when needed, keep topology intentional, and use modifiers non-destructively as long as possible
+      - label: Best fit
+        value: General 3D modeling, animation, sculpting, rendering, simulation, and asset export pipelines

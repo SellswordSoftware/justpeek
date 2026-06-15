@@ -1,0 +1,107 @@
+name: PHP Toolchain
+group: programming language / toolchain packs
+process:
+  - php
+  - php.exe
+  - composer
+search_terms:
+  - composer
+  - phpunit
+  - phpstan
+  - artisan
+references:
+  - group: CLI and Runtime Basics
+    items:
+      - label: Show version
+        command: php -v
+      - label: Run script
+        command: php script.php
+      - label: Start local server
+        command: php -S localhost:8000 -t public
+      - label: Run one-liner
+        command: php -r 'echo "hello\n";'
+      - label: Show loaded modules
+        command: php -m
+      - label: Show ini file
+        command: php --ini
+      - label: Syntax check
+        command: php -l script.php
+
+  - group: Composer and Dependencies
+    items:
+      - label: Initialize composer project
+        command: composer init
+      - label: Install dependencies
+        command: composer install
+      - label: Add package
+        command: composer require monolog/monolog
+      - label: Add dev package
+        command: composer require --dev phpunit/phpunit
+      - label: Update dependencies
+        command: composer update
+      - label: Show installed packages
+        command: composer show
+      - label: Dump optimized autoload
+        command: composer dump-autoload -o
+
+  - group: Testing and Quality
+    items:
+      - label: Run PHPUnit
+        command: vendor/bin/phpunit
+      - label: Run one test file
+        command: vendor/bin/phpunit tests/Feature/UserTest.php
+      - label: Run with coverage
+        command: vendor/bin/phpunit --coverage-text
+      - label: Static analysis with PHPStan
+        command: vendor/bin/phpstan analyse
+      - label: Code style with PHP CS Fixer
+        command: vendor/bin/php-cs-fixer fix
+      - label: Framework command runner
+        value: Laravel uses `php artisan`, Symfony often uses `php bin/console`
+      - label: Clear common caches
+        notes: In Laravel, `php artisan optimize:clear` is a frequent recovery move.
+
+  - group: Handy Snippets
+    items:
+      - label: Basic script
+        command: |
+          <?php
+          
+          echo "hello\n";
+      - label: Strict types and function
+        command: |
+          <?php
+          declare(strict_types=1);
+          
+          function add(int $a, int $b): int {
+              return $a + $b;
+          }
+      - label: Read JSON file
+        command: |
+          <?php
+          
+          $data = json_decode(file_get_contents("data.json"), true);
+      - label: PDO query
+        command: |
+          <?php
+          
+          $pdo = new PDO($dsn, $user, $pass);
+          $stmt = $pdo->query("SELECT id, name FROM users");
+      - label: Composer autoload
+        command: |
+          <?php
+          
+          require __DIR__ . "/vendor/autoload.php";
+
+  - group: Common Concepts
+    items:
+      - label: Composer
+        value: Dependency manager plus autoloading backbone for most modern PHP projects
+      - label: Front controller pattern
+        value: Framework apps often route all requests through one public entry file such as `public/index.php`
+      - label: Type discipline
+        value: Modern PHP benefits from strict types, return types, and static analysis even though the language remains dynamic
+      - label: CLI vs web runtime
+        value: The same PHP code may behave differently across CLI, FPM, and web-server contexts due to env and config differences
+      - label: Project fit
+        value: Most real-world PHP work is framework-backed, so know whether the project is plain PHP, Laravel, Symfony, or WordPress-style

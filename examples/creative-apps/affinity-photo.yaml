@@ -1,0 +1,83 @@
+name: Affinity Photo
+group: creative apps
+process:
+  - Affinity Photo
+  - affinity-photo
+  - Photo
+references:
+  - group: Personas and File Work
+    items:
+      - label: Photo persona
+        notes: Main environment for retouching, masking, selections, and corrections.
+      - label: Liquify persona
+        notes: Used for controlled shape distortion and refinement.
+      - label: Develop persona
+        notes: Raw-oriented adjustments happen before deeper pixel editing.
+      - label: New document
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+
+  - group: Tools and Selections
+    items:
+      - label: Move tool
+        keys: V
+      - label: Marquee selection
+        keys: M
+      - label: Freehand selection
+        keys: L
+      - label: Crop tool
+        keys: C
+      - label: Brush tool
+        keys: B
+      - label: Erase brush
+        keys: E
+      - label: Clone brush
+        keys: S
+      - label: Inpainting brush
+        keys: J
+
+  - group: Layers Masks and Adjustments
+    items:
+      - label: Duplicate layer
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+J
+      - label: Group
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: New mask layer
+        notes: Masks are the default safe path for non-destructive visibility control.
+      - label: Curves adjustment
+        notes: One of the highest-value tonal control layers for contrast and channel-specific work.
+      - label: HSL adjustment
+        notes: Use for targeted hue, saturation, and luminance tuning.
+      - label: Live filters
+        notes: Prefer live filters before destructive blur, sharpen, or distortion edits.
+
+  - group: Common Workflows
+    items:
+      - label: Frequency separation
+        value: Split texture from color or tone for retouching skin and surfaces
+      - label: Dodge and burn
+        value: Use non-destructive layers when shaping light and shadow
+      - label: Raw then pixel
+        value: Keep broad exposure and white balance work early, then move into detailed cleanup
+
+  - group: Common Reference
+    items:
+      - label: Layer masks
+        value: Black conceals, white reveals, gray partially reveals
+      - label: Blend modes
+        value: Multiply darkens, Screen brightens, Overlay mixes contrast, Soft Light is gentler
+      - label: Export targets
+        value: Keep final destination in mind for bit depth, color profile, and compression choices

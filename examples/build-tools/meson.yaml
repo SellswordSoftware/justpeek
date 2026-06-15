@@ -1,0 +1,113 @@
+name: meson
+group: build tools
+process:
+  - meson
+  - ninja
+search_terms:
+  - meson setup
+  - meson test
+  - meson configure
+  - meson introspect
+references:
+  - group: Setup and Configure
+    items:
+      - label: Configure build directory
+        command: meson setup build
+      - label: Debug build
+        command: meson setup build --buildtype debug
+      - label: Release build
+        command: meson setup build --buildtype release
+      - label: Reconfigure existing build
+        command: meson setup build --reconfigure
+      - label: Wipe and reconfigure
+        command: meson setup build --wipe
+      - label: Set install prefix
+        command: meson setup build --prefix /usr/local
+      - label: Cross file
+        command: meson setup build --cross-file cross.txt
+      - label: Native file
+        command: meson setup build --native-file native.ini
+
+  - group: Build and Install
+    items:
+      - label: Compile project
+        command: meson compile -C build
+      - label: Compile one target
+        command: meson compile -C build app
+      - label: Parallel build
+        command: meson compile -C build -j 8
+      - label: Install
+        command: meson install -C build
+      - label: Install with sudo handoff
+        command: meson install -C build --destdir /tmp/pkgroot
+      - label: Become root
+        notes: Meson can integrate with privilege escalation, but packaging or staging installs are usually cleaner.
+
+  - group: Testing and Benchmarking
+    items:
+      - label: Run tests
+        command: meson test -C build
+      - label: Verbose tests
+        command: meson test -C build -v
+      - label: Run one test
+        command: meson test -C build unit_tests
+      - label: Re-run failed tests
+        command: meson test -C build --repeat 2
+      - label: Setup for gdb
+        command: meson test -C build --gdb unit_tests
+      - label: Benchmark targets
+        command: meson test -C build --benchmark
+      - label: Print logs
+        command: meson test -C build --print-errorlogs
+
+  - group: Configure Options and Introspection
+    items:
+      - label: Show configure options
+        command: meson configure build
+      - label: Set project option
+        command: meson configure build -Dwarning_level=3
+      - label: Set backend option
+        command: meson configure build -Db_lto=true
+      - label: Introspect targets
+        command: meson introspect build --targets
+      - label: Introspect tests
+        command: meson introspect build --tests
+      - label: Introspect build options
+        command: meson introspect build --buildoptions
+      - label: Introspect dependencies
+        command: meson introspect build --dependencies
+
+  - group: Handy Snippets
+    items:
+      - label: Minimal project
+        command: |
+          project('app', 'c')
+          
+          executable('app', 'src/main.c')
+      - label: Library plus executable
+        command: |
+          libutil = static_library('util', 'src/util.c')
+          executable('app', 'src/main.c', link_with: libutil)
+      - label: Dependency lookup
+        command: |
+          zlib_dep = dependency('zlib', required: true)
+          executable('app', 'src/main.c', dependencies: zlib_dep)
+      - label: Feature option
+        command: |
+          option('tests', type: 'feature', value: 'auto')
+      - label: Test target
+        command: |
+          test('unit_tests', app_test_exe)
+
+  - group: Common Concepts
+    items:
+      - label: Setup then compile
+        value: Meson configures once into a build directory, then drives a backend such as Ninja for actual compilation
+      - label: Buildtype and backend options
+        value: "Project options and built-in `b_` options together control optimization, debug info, LTO, sanitizers, and warnings"
+      - label: Introspection strength
+        value: "`meson introspect` is one of the best ways to inspect build graph state programmatically"
+      - label: Out-of-tree discipline
+        value: Meson assumes clean build directories and rewards staying out of the source tree
+      - label: Best fit
+        value: Modern native-language builds with strong defaults, explicit dependencies, and reproducible configure state

@@ -1,0 +1,86 @@
+name: Audacity
+group: video / audio
+process:
+  - audacity
+  - audacity.exe
+references:
+  - group: Playback and Recording
+    items:
+      - label: Play or stop
+        keys: Space
+      - label: Record
+        keys: R
+      - label: Append record
+        keys: Shift+R
+      - label: Pause or resume
+        keys: P
+      - label: Loop play
+        keys: Shift+Space
+      - label: Play one second before or after selection
+        keys: Shift+J / Shift+K
+      - label: Move to selection start or end
+        keys: J / K
+      - label: Skip to start or end of project
+        keys: Home / End
+
+  - group: Selection and Navigation
+    items:
+      - label: Select all
+        keys: Ctrl+A
+      - label: Zoom in or out
+        keys: Ctrl+1 / Ctrl+3
+      - label: Zoom normal
+        keys: Ctrl+2
+      - label: Fit selection in window
+        keys: Ctrl+E
+      - label: Fit project in window
+        keys: Ctrl+F
+      - label: Cursor left or right
+        keys: LeftArrow / RightArrow
+      - label: Extend selection left or right
+        keys: Shift+LeftArrow / Shift+RightArrow
+      - label: Next or previous clip boundary
+        keys: Alt+RightArrow / Alt+LeftArrow
+
+  - group: Editing
+    items:
+      - label: Cut copy paste
+        keys: Ctrl+X / Ctrl+C / Ctrl+V
+      - label: Duplicate selection
+        keys: Ctrl+D
+      - label: Delete selection
+        keys: Ctrl+K
+      - label: Split delete
+        keys: Ctrl+Alt+K
+      - label: Trim audio outside selection
+        keys: Ctrl+T
+      - label: Silence selection
+        keys: Ctrl+L
+      - label: Join clips
+        keys: Ctrl+J
+      - label: Split
+        keys: Ctrl+I
+
+  - group: Tools and Tracks
+    items:
+      - label: Selection tool
+        keys: F1
+      - label: Envelope tool
+        keys: F2
+      - label: Draw tool
+        keys: F3
+      - label: Multi-tool
+        keys: F6
+      - label: New mono or stereo track
+        notes: Add tracks from the Tracks menu when layering narration, music, or cleanup passes.
+      - label: Gain and pan
+        value: Use per-track controls for rough balance before destructive processing
+
+  - group: Common Reference
+    items:
+      - label: Noise reduction flow
+        value: Capture noise profile first, then apply conservative reduction
+      - label: Normalize vs amplify
+        value: Normalize evens peaks to a target, amplify applies gain relative to current peak
+      - label: Export habit
+        value: Keep the project file for editing, export WAV or FLAC for masters, MP3 for delivery copies

@@ -1,0 +1,96 @@
+name: Photopea
+group: creative apps
+process:
+  - google-chrome
+  - chrome
+  - chrome.exe
+  - firefox
+  - firefox-bin
+  - msedge
+  - msedge.exe
+  - brave
+  - brave-browser
+title_contains: Photopea
+references:
+  - group: File and View
+    items:
+      - label: New document
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save as PSD
+        keys: Ctrl+Shift+S
+        keys_by_os:
+          macos: Cmd+Shift+S
+      - label: Export as
+        notes: Use File > Export As for PNG, JPG, SVG, PDF, and other delivery formats.
+      - label: Transform
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Zoom in or out
+        keys: Ctrl+Plus / Ctrl+Minus
+        keys_by_os:
+          macos: Cmd+Plus / Cmd+Minus
+
+  - group: Tools
+    items:
+      - label: Move tool
+        keys: V
+      - label: Marquee select
+        keys: M
+      - label: Lasso tool
+        keys: L
+      - label: Crop tool
+        keys: C
+      - label: Brush tool
+        keys: B
+      - label: Eraser tool
+        keys: E
+      - label: Clone stamp
+        keys: S
+      - label: Type tool
+        keys: T
+
+  - group: Layers and Masks
+    items:
+      - label: New layer
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: Duplicate layer
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+J
+      - label: Merge layers
+        keys: Ctrl+E
+        keys_by_os:
+          macos: Cmd+E
+      - label: Add layer mask
+        notes: Use masks instead of erasing when edits may need revision.
+      - label: Clipping mask
+        notes: Keep adjustments or textures bound to one target layer without destructive merges.
+      - label: Smart-object-like workflow
+        notes: Preserve layered PSD structure when round-tripping across tools.
+
+  - group: Common Workflows
+    items:
+      - label: Web-first editing
+        value: Fast fit for PSD inspection, lightweight retouching, compositing, and export without a desktop install
+      - label: Heal then adjust
+        value: Remove distractions before final color and contrast tuning
+      - label: Export discipline
+        value: Keep layered source when possible, then export flattened delivery formats as needed
+
+  - group: Common Reference
+    items:
+      - label: Layer masks
+        value: Black conceals, white reveals, gray partially reveals
+      - label: Blend modes
+        value: Multiply darkens, Screen brightens, Overlay mixes contrast, Soft Light is gentler
+      - label: Format coverage
+        value: Strong browser option for PSD-centric work plus common web and print export formats

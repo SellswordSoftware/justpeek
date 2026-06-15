@@ -1,0 +1,94 @@
+name: just
+group: build tools
+process:
+  - just
+search_terms:
+  - justfile
+  - recipe
+  - dotenv
+  - aliases
+references:
+  - group: Running Recipes
+    items:
+      - label: Default recipe
+        command: just
+      - label: Run one recipe
+        command: just test
+      - label: Pass arguments
+        command: just deploy staging
+      - label: List recipes
+        command: just --list
+      - label: Show recipe body
+        command: just --show test
+      - label: Evaluate without running
+        command: just --dry-run test
+      - label: Choose justfile
+        command: just --justfile Justfile test
+
+  - group: Variables and Environment
+    items:
+      - label: Set variable on command line
+        command: just build target=linux
+      - label: Export variables
+        value: "Use `set export := true` to export just variables into recipe environments"
+      - label: dotenv support
+        value: "Use `set dotenv-load := true` to load `.env`"
+      - label: Shell override
+        value: "Use `set shell := [\"bash\", \"-cu\"]` or similar when shell behavior matters"
+      - label: Working directory
+        notes: Recipes run from the justfile directory unless changed intentionally.
+      - label: Backticks
+        value: Use backticks in expressions to capture command output into variables
+
+  - group: Recipe Structure
+    items:
+      - label: Dependency recipe
+        value: "Prefix dependencies before the body such as `build: lint test`"
+      - label: Private recipe
+        value: Prefix recipe with underscore or mark behavior via comments and team convention
+      - label: Quiet command
+        value: Prefix one line with `@` to hide the echoed command
+      - label: Ignore errors
+        value: Prefix one line with `-` when failure should not stop the recipe
+      - label: Parameters
+        value: Positional and defaulted parameters make `just` far more ergonomic than many raw shell wrappers
+      - label: Working with shebang scripts
+        value: Multiline recipes can use shebang mode for larger embedded scripts
+
+  - group: Handy Snippets
+    items:
+      - label: Minimal justfile
+        command: |
+          default:
+            just --list
+      - label: Parameterized recipe
+        command: |
+          build target:
+            echo "building {{target}}"
+      - label: Dependencies
+        command: |
+          check: fmt lint test
+            echo "done"
+      - label: dotenv and export
+        command: |
+          set dotenv-load := true
+          set export := true
+      - label: Shebang recipe
+        command: |
+          script:
+            #!/usr/bin/env bash
+            set -euo pipefail
+            echo hi
+
+  - group: Common Concepts
+    items:
+      - label: just vs make
+        value: "`just` is a command runner, not a timestamp-based build system; it is closer to a task DSL than to Make’s dependency engine"
+      - label: Readability fit
+        value: Recipe names, parameters, defaults, and dotenv support make it well-suited for dev workflows and repo tasks
+      - label: No incremental model
+        value: "`just` does not decide rebuild necessity from file timestamps the way `make` does"
+      - label: Expression language
+        value: Interpolation, defaults, and backtick capture let justfiles stay compact without turning into giant shell scripts
+      - label: Best fit
+        value: Developer ergonomics layer for setup, lint, test, build, release, and environment-specific commands

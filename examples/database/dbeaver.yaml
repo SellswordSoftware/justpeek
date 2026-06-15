@@ -1,0 +1,136 @@
+name: DBeaver
+group: database
+process:
+  - dbeaver
+  - dbeaver-ce
+search_terms:
+  - dbeaver
+  - sql editor
+  - database navigator
+  - er diagram
+  - data transfer
+references:
+  - group: Navigation and Window Management
+    items:
+      - label: Open SQL editor
+        keys: Ctrl+]
+        keys_by_os:
+          macos: Cmd+]
+        notes: Opens a new SQL editor for the current connection
+      - label: Quick search in navigator
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: Switch editor tabs
+        keys: Ctrl+PageUp / Ctrl+PageDown
+        keys_by_os:
+          macos: Ctrl+Shift+Tab / Ctrl+Tab
+      - label: Maximize active view
+        keys: Ctrl+M
+        keys_by_os:
+          macos: Cmd+M
+      - label: Open preferences
+        keys: Alt+Enter
+        keys_by_os:
+          macos: Cmd+,
+      - label: Reset perspective
+        notes: "UI path: `Window -> Perspective -> Reset Perspective`."
+
+  - group: SQL Editor Shortcuts
+    items:
+      - label: Execute statement
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Enter
+      - label: Execute SQL script
+        keys: Alt+X
+        keys_by_os:
+          macos: Option+X
+      - label: Explain execution plan
+        keys: Ctrl+Shift+E
+        keys_by_os:
+          macos: Cmd+Shift+E
+      - label: Format SQL
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+      - label: Content assist
+        keys: Ctrl+Space
+      - label: Comment or uncomment line
+        keys: Ctrl+/
+        keys_by_os:
+          macos: Cmd+/
+      - label: Duplicate current line
+        keys: Ctrl+Alt+Down
+        keys_by_os:
+          macos: Option+Cmd+Down
+
+  - group: Data Grid and Result Tabs
+    items:
+      - label: Apply row changes
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Refresh result set
+        keys: F5
+      - label: Filter rows
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+        notes: In data grids this typically opens or focuses filtering rather than SQL formatting
+      - label: Inline edit cell
+        keys: Enter
+      - label: Open value panel editor
+        keys: Shift+Enter
+      - label: Export result set
+        notes: "UI path: `Right click result grid -> Export Resultset`."
+      - label: View value as text or JSON
+        notes: "UI path: `Value panel / Right click cell -> View/Format`."
+
+  - group: Connection and Schema Tasks
+    items:
+      - label: New connection
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+        notes: "UI path: `Database -> New Database Connection`."
+      - label: Reconnect
+        keys: Ctrl+F5
+        keys_by_os:
+          macos: Cmd+F5
+      - label: Disconnect
+        notes: "UI path: `Right click connection -> Disconnect`."
+      - label: Open table data
+        notes: "UI path: `Database Navigator -> right click table -> View Data -> All Rows`."
+      - label: Generate SQL
+        notes: "UI path: `Right click object -> Generate SQL` for DDL, drop, insert, and more."
+      - label: ER diagram
+        notes: "UI path: `Select tables -> right click -> ER Diagram`."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Data transfer wizard
+        notes: "UI path: `Right click table/schema -> Export Data` or `Tools -> Data Transfer`."
+      - label: Compare and synchronize schema
+        notes: "UI path: `Tools -> Compare/Migrate` in editions that support it."
+      - label: Driver properties
+        notes: "UI path: `Edit Connection -> Driver Properties`."
+      - label: Variables and parameters
+        notes: "UI path: `SQL Editor -> use variables/parameters support in scripts and execution dialogs`."
+      - label: Query manager
+        notes: "UI path: `Window -> Show View -> Query Manager`."
+      - label: Task scheduler
+        notes: "UI path: `Database -> Tasks` or object context menus for backup/export task setup."
+
+  - group: Common Concepts
+    items:
+      - label: Eclipse-style workbench
+        value: DBeaver uses an Eclipse-like layout, so perspectives, views, and context menus are part of normal navigation
+      - label: Context matters
+        value: The same shortcut can behave differently in the SQL editor, data grid, or navigator depending on focus
+      - label: Right-click heavy workflow
+        value: Many advanced actions such as generate SQL, export, diagramming, and compare tools are fastest through context menus
+      - label: Best fit
+        value: DBeaver is strongest as a cross-database workstation when you switch between engines and want one consistent UI
+      - label: Common lookup
+        value: Execution shortcuts, data export, schema browsing, ER diagrams, and connection property paths are the most commonly revisited items

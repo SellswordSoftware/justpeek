@@ -1,0 +1,64 @@
+name: Darktable
+group: creative apps
+process:
+  - darktable
+  - darktable.exe
+references:
+  - group: Core Workflow
+    items:
+      - label: Lighttable view
+        value: Library management, culling, tagging, and batch-oriented selection
+      - label: Darkroom view
+        value: Raw development and detailed image adjustment
+      - label: Import images
+        notes: Bring files into the catalog before rating or developing.
+      - label: Export selected
+        notes: Export is usually the final delivery step after development and curation.
+      - label: History stack
+        value: Each edit module contributes to a reversible processing history
+
+  - group: Navigation and Rating
+    items:
+      - label: Reject image
+        keys: R
+      - label: Rate 1 through 5 stars
+        keys: 1 through 5
+      - label: Remove rating
+        keys: "0"
+      - label: Color labels
+        value: Use color labels for culling stages, client review state, or export grouping
+      - label: Compare and cull
+        notes: Use lighttable comparison tools to narrow near-duplicate shots quickly.
+
+  - group: High-value Modules
+    items:
+      - label: Exposure
+        value: First-stop global brightness correction
+      - label: White balance
+        value: Correct cast before fine contrast or color grading
+      - label: Filmic RGB
+        value: Tone-mapping and highlight/shadow shaping for modern scene-referred workflow
+      - label: Color calibration
+        value: High-value control point for channel balance and scene color response
+      - label: Tone equalizer
+        value: Fine-grained luminance balancing across zones
+      - label: Denoise
+        value: Apply with care after exposure adjustments reveal actual noise behavior
+
+  - group: Common Workflows
+    items:
+      - label: Scene-referred habit
+        value: Keep exposure, white balance, filmic, and local contrast in a deliberate order
+      - label: Masks and drawn corrections
+        value: Use parametric or drawn masks for local edits without duplicating files
+      - label: Style reuse
+        value: Apply consistent looks across a shoot, then fine-tune per image
+
+  - group: Common Reference
+    items:
+      - label: Non-destructive pipeline
+        value: Source raw files stay untouched; edits are stored as processing instructions
+      - label: Raw-first editing
+        value: Best fit for exposure, color, and highlight recovery before pixel editors
+      - label: Export targets
+        value: JPEG for web delivery, TIFF for high-quality handoff, sidecars for edit portability

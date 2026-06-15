@@ -1,0 +1,84 @@
+name: Kdenlive
+group: video / audio
+process:
+  - kdenlive
+  - kdenlive.exe
+references:
+  - group: Playback and Timeline
+    items:
+      - label: Play or pause
+        keys: Space
+      - label: Step one frame backward or forward
+        keys: LeftArrow / RightArrow
+      - label: Jump to previous or next clip edge
+        keys: UpArrow / DownArrow
+      - label: Go to beginning or end of project
+        keys: Home / End
+      - label: Set in or out point
+        keys: I / O
+      - label: Clear in or out point
+        keys: Alt+I / Alt+O
+      - label: Zoom timeline in or out
+        keys: Ctrl+Plus / Ctrl+Minus
+      - label: Fit timeline to project
+        keys: Shift+Z
+
+  - group: Editing
+    items:
+      - label: Cut at playhead
+        keys: Shift+R
+      - label: Delete selection
+        keys: Delete
+      - label: Extract clip
+        keys: Shift+Delete
+      - label: Insert space
+        notes: Use spacer workflows when large sections need room without manual ripple edits on every track.
+      - label: Group clips
+        keys: Ctrl+G
+      - label: Ungroup clips
+        keys: Ctrl+Shift+G
+      - label: Disable or enable clip
+        notes: Useful for A/B checking effects or alternate takes without deleting anything.
+      - label: Add marker
+        keys: M
+
+  - group: Tools and Track Work
+    items:
+      - label: Selection tool
+        keys: S
+      - label: Razor tool
+        keys: X
+      - label: Spacer tool
+        keys: M
+      - label: Slip tool
+        keys: Y
+      - label: Ripple tool
+        notes: Use ripple-aware edits when downstream sync should move with the change.
+      - label: Toggle snapping
+        keys: Shift+S
+      - label: Add video track
+        notes: Track creation is usually handled from the track header context menu.
+      - label: Add guide
+        keys: G
+
+  - group: Monitor and Clip Navigation
+    items:
+      - label: Previous or next frame in monitor
+        keys: LeftArrow / RightArrow
+      - label: Shuttle backward or forward
+        keys: J / L
+      - label: Stop playback
+        keys: K
+      - label: Switch project or clip monitor focus
+        notes: Many transport commands follow the currently focused monitor or timeline.
+      - label: Insert selected bin clip
+        notes: Mark clips in the source monitor before cutting them into the sequence.
+
+  - group: Common Reference
+    items:
+      - label: Editing model
+        value: Bin, source or clip monitor, timeline, effects stack, and render queue
+      - label: Proxy workflow
+        value: Enable proxies when timeline responsiveness matters more than full-resolution playback
+      - label: Render habit
+        value: Check zone, profile, filename, and frame rate before final export

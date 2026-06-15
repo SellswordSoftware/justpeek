@@ -1,0 +1,79 @@
+name: Krita
+group: creative apps
+process:
+  - krita
+  - krita.exe
+references:
+  - group: File and Canvas
+    items:
+      - label: New document
+        keys: Ctrl+N
+      - label: Open document
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Quick save incremental habit
+        notes: Use frequent saves before transforms, filters, or major paint passes.
+      - label: Zoom in or out
+        keys: Ctrl+Plus / Ctrl+Minus
+      - label: Rotate canvas
+        keys: "4 / 6"
+      - label: Reset canvas rotation
+        keys: "5"
+
+  - group: Brushes and Tools
+    items:
+      - label: Brush tool
+        keys: B
+      - label: Eraser mode
+        keys: E
+      - label: Color picker
+        keys: P
+      - label: Gradient tool
+        keys: G
+      - label: Fill tool
+        keys: F
+      - label: Move tool
+        keys: T
+      - label: Crop tool
+        keys: C
+      - label: Assistant tool
+        keys: Shift+L
+
+  - group: Selection and Layers
+    items:
+      - label: Freehand selection
+        keys: R
+      - label: Rectangular selection
+        keys: Ctrl+R
+      - label: Select opaque
+        notes: Useful for turning painted pixels into a selection before masking or transforming.
+      - label: New paint layer
+        keys: Insert
+      - label: Duplicate layer
+        keys: Ctrl+J
+      - label: Merge with layer below
+        keys: Ctrl+E
+      - label: Transform tool
+        keys: Ctrl+T
+
+  - group: Common Workflows
+    items:
+      - label: Mirror view
+        keys: M
+        notes: Helpful for catching proportion and composition problems.
+      - label: Wrap-around mode
+        value: Useful for seamless textures and repeating patterns
+      - label: Selection then mask
+        value: Make precise corrections by selecting first, then painting or filtering inside the selection
+      - label: Brush stabilizer
+        notes: Turn on stabilizer for cleaner line art when freehand strokes feel shaky.
+
+  - group: Common Reference
+    items:
+      - label: Layer types
+        value: Paint, group, vector, filter, clone, and file layers each change the editing model
+      - label: Color management
+        value: Keep export target in mind when choosing color space and bit depth
+      - label: Non-destructive habit
+        value: Prefer duplicate layers, masks, and filter layers before destructive edits

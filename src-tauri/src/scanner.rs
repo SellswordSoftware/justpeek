@@ -150,9 +150,12 @@ pub fn lookup_shortcuts_with_trace(
     )];
 
     let mut direct_match_found = false;
+    let mut direct_unconstrained_match: Option<&ShortcutFile> = None;
     for candidate in &window.process_candidates {
         if let Some(file) = map.get(candidate) {
             direct_match_found = true;
+            let has_title_constraints =
+                file.title_pattern.is_some() || file.title_contains.is_some();
             let title_match = title_pattern_matches(file, &window.window_title);
             log_lines.push(format!(
                 "direct process match: '{}' -> {} [{}]",
@@ -161,9 +164,9 @@ pub fn lookup_shortcuts_with_trace(
                 describe_title_check(file, title_match),
             ));
 
-            if title_match {
+            if has_title_constraints && title_match {
                 log_lines.push(format!(
-                    "selected {} because process matched '{}' and title check passed",
+                    "selected {} because process matched '{}' and title-constrained check passed",
                     describe_file(file),
                     candidate,
                 ));
@@ -172,6 +175,10 @@ pub fn lookup_shortcuts_with_trace(
                     panel_data: Some(panel_data_for(file)),
                     log_lines,
                 };
+            }
+
+            if !has_title_constraints && direct_unconstrained_match.is_none() {
+                direct_unconstrained_match = Some(file);
             }
         } else {
             log_lines.push(format!("no direct process match for '{}'", candidate));
@@ -205,6 +212,18 @@ pub fn lookup_shortcuts_with_trace(
                 log_lines,
             };
         }
+    }
+
+    if let Some(file) = direct_unconstrained_match {
+        log_lines.push(format!(
+            "selected {} because it matched the active process and no title-constrained reference matched",
+            describe_file(file),
+        ));
+
+        return LookupTrace {
+            panel_data: Some(panel_data_for(file)),
+            log_lines,
+        };
     }
 
     log_lines.push("no reference file matched the active window".to_string());
@@ -736,6 +755,24 @@ mod tests {
             .log_lines
             .iter()
             .any(|line| line.contains("title pattern matched the active window")));
+    }
+
+    #[test]
+    fn lookup_shortcuts_prefers_title_match_over_generic_process_match() {
+        let chrome = sample_shortcut_file("Chrome", &["chrome"], None, "/tmp/chrome.yaml");
+        let mut github =
+            sample_shortcut_file("GitHub", &["firefox"], None, "/tmp/github.yaml");
+        github.title_contains = Some("github".to_string());
+        let map = build_map(&[chrome, github]);
+        let window = WindowInfo::from_candidates("chrome", "OpenAI - GitHub", ["google-chrome"]);
+
+        let trace = lookup_shortcuts_with_trace(&map, &window);
+
+        assert_eq!(trace.panel_data.unwrap().app_name, "GitHub");
+        assert!(trace
+            .log_lines
+            .iter()
+            .any(|line| line.contains("selected 'GitHub'")));
     }
 
     #[test]

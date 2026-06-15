@@ -1,0 +1,98 @@
+name: Mocha
+group: testing tools
+process:
+  - mocha
+  - node
+  - npm
+  - pnpm
+  - yarn
+search_terms:
+  - mocha tests
+  - chai
+  - hooks
+  - grep
+references:
+  - group: Running Tests
+    items:
+      - label: Run all tests
+        command: npx mocha
+      - label: Watch files
+        command: npx mocha --watch
+      - label: One file
+        command: npx mocha test/app.spec.js
+      - label: Grep by name
+        command: npx mocha --grep "user flow"
+      - label: Invert grep
+        command: npx mocha --grep "slow" --invert
+      - label: Timeout
+        command: npx mocha --timeout 5000
+      - label: Parallel mode
+        command: npx mocha --parallel
+
+  - group: Debugging and Reporters
+    items:
+      - label: Bail on first failure
+        command: npx mocha --bail
+      - label: Full stack traces
+        command: npx mocha --full-trace
+      - label: Reporter
+        command: npx mocha --reporter spec
+      - label: JSON reporter
+        command: npx mocha --reporter json
+      - label: Debug in inspector
+        command: node --inspect-brk ./node_modules/.bin/mocha
+      - label: Recursive discovery
+        command: npx mocha --recursive
+      - label: Require setup file
+        command: npx mocha --require test/setup.js
+
+  - group: Hooks and Async
+    items:
+      - label: Suite hooks
+        value: before, beforeEach, afterEach, after
+      - label: Async with promise
+        value: Return a promise or use async functions
+      - label: Async with callback
+        value: "Accept `done`, but prefer promises or async for clarity"
+      - label: Only and skip
+        value: "`describe.only`, `it.only`, `describe.skip`, `it.skip`"
+      - label: Chai pairing
+        value: Mocha often pairs with Chai for assertions and Sinon for spies or stubs
+
+  - group: Handy Snippets
+    items:
+      - label: Basic suite
+        command: |
+          describe("add", () => {
+            it("adds numbers", () => {
+              if (1 + 2 !== 3) throw new Error("bad math");
+            });
+          });
+      - label: Async test
+        command: |
+          it("loads data", async () => {
+            const data = await loadData();
+            if (!data.ok) throw new Error("not ok");
+          });
+      - label: Hook
+        command: |
+          beforeEach(() => {
+            resetDatabase();
+          });
+      - label: Chai expect
+        command: |
+          const { expect } = require("chai");
+          expect(value).to.equal(3);
+
+  - group: Common Concepts
+    items:
+      - label: Minimal core
+        value: Mocha provides test running, suites, hooks, and reporters, but not assertions or mocks by default
+      - label: Config freedom
+        value: Flexible setup is powerful, but can also create inconsistent patterns across projects
+      - label: Async correctness
+        value: Hanging tests often come from mixed callback and promise styles or unclosed resources
+      - label: Legacy gravity
+        value: Many older Node codebases still use Mocha plus Chai plus Sinon stacks
+      - label: grep workflow
+        value: "`--grep` is one of the fastest ways to focus on one area during debugging"

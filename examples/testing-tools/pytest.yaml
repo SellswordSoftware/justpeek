@@ -1,0 +1,98 @@
+name: pytest
+group: testing tools
+process:
+  - pytest
+search_terms:
+  - python tests
+  - fixtures
+  - parametrize
+  - coverage
+references:
+  - group: Running Tests
+    items:
+      - label: Run all tests
+        command: pytest
+      - label: Run one file
+        command: pytest tests/test_app.py
+      - label: Run one test
+        command: pytest tests/test_app.py::test_name
+      - label: Verbose
+        command: pytest -v
+      - label: Stop on first failure
+        command: pytest -x
+      - label: Last failed only
+        command: pytest --lf
+      - label: Failed first then rest
+        command: pytest --ff
+
+  - group: Selection and Debugging
+    items:
+      - label: Keyword filter
+        command: pytest -k user
+      - label: Marker filter
+        command: pytest -m slow
+      - label: Show print output
+        command: pytest -s
+      - label: Drop into debugger on failure
+        command: pytest --pdb
+      - label: Show locals in tracebacks
+        command: pytest -l
+      - label: Enter debugger at test start
+        command: pytest --trace
+      - label: Max failures
+        command: pytest --maxfail=3
+
+  - group: Coverage and Parallel
+    items:
+      - label: Coverage summary
+        command: pytest --cov=src --cov-report=term-missing
+      - label: HTML coverage
+        command: pytest --cov=src --cov-report=html
+      - label: Parallel with xdist
+        command: pytest -n auto
+      - label: Durations
+        command: pytest --durations=10
+      - label: Rerun flaky tests
+        command: pytest --reruns 2
+        notes: Requires `pytest-rerunfailures`.
+
+  - group: Handy Snippets
+    items:
+      - label: Basic test
+        command: |
+          def test_add():
+              assert 1 + 2 == 3
+      - label: Fixture
+        command: |
+          import pytest
+          
+          @pytest.fixture
+          def user():
+              return {"name": "sam"}
+      - label: Parametrize
+        command: |
+          import pytest
+          
+          @pytest.mark.parametrize("a,b,want", [(1, 2, 3), (2, 3, 5)])
+          def test_add(a, b, want):
+              assert a + b == want
+      - label: Raises
+        command: |
+          import pytest
+          
+          def test_error():
+              with pytest.raises(ValueError):
+                  int("x")
+
+  - group: Common Concepts
+    items:
+      - label: Discovery
+        value: pytest finds `test_*.py` and functions or methods named `test_*` by default
+      - label: Fixtures
+        value: Preferred reuse mechanism for setup, teardown, and dependency injection into tests
+      - label: Markers
+        value: Useful for slow, integration, db, or platform-specific test grouping
+      - label: Assertion rewriting
+        value: Plain `assert` statements become much more informative under pytest
+      - label: Plugin gravity
+        value: Coverage, parallelism, reruns, async support, and env control often come from plugins

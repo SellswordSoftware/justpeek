@@ -1,0 +1,124 @@
+name: Slack
+group: communication apps
+process:
+  - slack
+  - Slack
+search_terms:
+  - huddle
+  - slack search
+  - slack shortcuts
+  - remind
+  - workflow builder
+references:
+  - group: Navigation and Workspace
+    items:
+      - label: Quick switcher
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Search
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: Open direct messages
+        keys: Ctrl+Shift+K
+        keys_by_os:
+          macos: Cmd+Shift+K
+      - label: Next unread channel
+        keys: Alt+Shift+Down
+        keys_by_os:
+          macos: Option+Shift+Down
+      - label: Previous unread channel
+        keys: Alt+Shift+Up
+        keys_by_os:
+          macos: Option+Shift+Up
+      - label: Jump to later section
+        keys: PageDown
+      - label: Jump to earlier section
+        keys: PageUp
+
+  - group: Message Composition and Triage
+    items:
+      - label: New message
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Reply in thread
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: Edit last message
+        keys: Up
+        notes: Works when the message box is empty and focus is in the conversation area
+      - label: Mark all as read
+        keys: Shift+Esc
+      - label: Mark current channel read
+        keys: Esc
+      - label: Save message
+        keys: Ctrl+Shift+S
+        keys_by_os:
+          macos: Cmd+Shift+S
+      - label: Toggle unread filter
+        keys: Ctrl+Shift+A
+        keys_by_os:
+          macos: Cmd+Shift+A
+
+  - group: Calls Huddles and Sidebars
+    items:
+      - label: Start huddle
+        notes: "UI path: conversation header `headphones` or huddle button."
+      - label: Open activity view
+        notes: "UI path: left sidebar `Activity`."
+      - label: Open Later
+        notes: "UI path: left sidebar `Later` for saved items and reminders."
+      - label: Open threads view
+        notes: "UI path: left sidebar `Threads`."
+      - label: Open canvas
+        notes: "UI path: channel or DM header `Canvas` when available."
+      - label: Start clip
+        notes: "UI path: message field `camera/clip` controls depending on workspace features."
+
+  - group: Search Operators and Handy Commands
+    items:
+      - label: From person
+        value: "from:@sam"
+      - label: In channel
+        value: "in:#engineering"
+      - label: Has reaction
+        value: "has::eyes:"
+      - label: Has link or file
+        value: "has:link or has:file"
+      - label: Before or after date
+        value: "before:2026-06-01 after:2026-05-01"
+      - label: Remind command
+        value: /remind me to follow up tomorrow at 9am
+      - label: Status command
+        value: /status in focus mode
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Mute channel
+        notes: "UI path: `Open channel -> channel name -> Notifications -> Mute channel`."
+      - label: Set channel notifications
+        notes: "UI path: `Channel name -> Notifications`."
+      - label: Format code block
+        value: Use triple backticks for fenced blocks and single backticks for inline code
+      - label: Workflow builder
+        notes: "UI path: workspace menu or `More` area depending on plan and rollout."
+      - label: Create reminder
+        notes: "UI path: message `More actions` menu or `/remind`."
+      - label: Message link
+        notes: "UI path: message `More actions -> Copy link`."
+
+  - group: Common Concepts
+    items:
+      - label: Focus on quick switcher
+        value: "`Cmd/Ctrl+K` is usually the fastest route to channels, DMs, and jumping across large workspaces"
+      - label: Threads matter
+        value: Threading changes channel noise and searchability, so reply location is often as important as reply content
+      - label: Search grammar
+        value: "Search operators like `from:`, `in:`, `has:`, and date filters are some of Slack's highest-value recall items"
+      - label: Sidebar surfaces
+        value: Later, Threads, Activity, and DMs are the core triage views people bounce between all day
+      - label: Shortcut density
+        value: Slack is shortcut-friendly for navigation and triage, but many settings and collaboration features still depend on menus

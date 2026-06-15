@@ -1,0 +1,85 @@
+name: Haskell Toolchain
+group: programming language / toolchain packs
+process:
+  - ghc
+  - ghci
+  - cabal
+  - stack
+search_terms:
+  - ghci
+  - cabal
+  - stack
+  - hspec
+references:
+  - group: Compiler and REPL
+    items:
+      - label: Show compiler version
+        command: ghc --version
+      - label: Start GHCi
+        command: ghci
+      - label: Run script
+        command: runghc app/Main.hs
+      - label: Compile file
+        command: ghc app/Main.hs -o app
+      - label: Load module in GHCi
+        command: ghci app/Main.hs
+      - label: Reload in GHCi
+        value: Use `:reload` or short form `:r`
+      - label: Type of expression
+        value: Use `:type expr` or `:t expr` inside GHCi
+
+  - group: Cabal and Stack
+    items:
+      - label: Initialize Cabal project
+        command: cabal init
+      - label: Build with Cabal
+        command: cabal build
+      - label: Test with Cabal
+        command: cabal test
+      - label: Run with Cabal
+        command: cabal run
+      - label: Initialize Stack project
+        command: stack new my-project
+      - label: Build with Stack
+        command: stack build
+      - label: Test with Stack
+        command: stack test
+
+  - group: Handy Snippets
+    items:
+      - label: Main function
+        command: |
+          main :: IO ()
+          main = putStrLn "hello"
+      - label: Maybe pattern
+        command: |
+          maybeLength :: Maybe [a] -> Int
+          maybeLength Nothing = 0
+          maybeLength (Just xs) = length xs
+      - label: map filter sum
+        command: |
+          total = sum (map (* 2) (filter odd [1..10]))
+      - label: do notation
+        command: |
+          greet :: IO ()
+          greet = do
+            name <- getLine
+            putStrLn ("hello " ++ name)
+      - label: Hspec test
+        command: |
+          describe "add" $
+            it "adds numbers" $
+              add 1 2 `shouldBe` 3
+
+  - group: Common Concepts
+    items:
+      - label: Purity and IO
+        value: Side effects live in IO; most other code is pure and easier to reason about
+      - label: Types first
+        value: A large part of Haskell design quality comes from precise types and compiler feedback
+      - label: Cabal vs Stack
+        value: Cabal is the standard toolchain core; Stack adds curated resolver workflows and project isolation
+      - label: GHCi workflow
+        value: Interactive loading and type inspection are central for learning and debugging
+      - label: Laziness
+        value: Evaluation order is deferred, which is powerful but can affect space use and debugging intuition

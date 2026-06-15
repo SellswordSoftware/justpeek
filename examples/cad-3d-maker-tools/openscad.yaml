@@ -1,0 +1,76 @@
+name: OpenSCAD
+group: cad / 3d / maker tools
+process:
+  - openscad
+  - openscad.exe
+references:
+  - group: File and Preview
+    items:
+      - label: New file
+        keys: Ctrl+N
+      - label: Open file
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Preview
+        keys: F5
+      - label: Render CGAL
+        keys: F6
+      - label: Export STL
+        keys: F7
+      - label: Export image
+        keys: F8
+
+  - group: View Navigation
+    items:
+      - label: Rotate view
+        keys: LeftMouse drag
+      - label: Pan view
+        keys: Shift+LeftMouse drag
+      - label: Zoom
+        keys: MouseWheel or RightMouse drag
+      - label: View all
+        keys: Ctrl+Shift+V
+      - label: Center view
+        keys: Ctrl+Shift+C
+      - label: Perspective or orthographic
+        notes: Switch view style when judging dimensional relationships versus presentation.
+
+  - group: Editor and Development
+    items:
+      - label: Find
+        keys: Ctrl+F
+      - label: Find and replace
+        keys: Ctrl+R
+      - label: Comment or uncomment selection
+        keys: Ctrl+Slash
+      - label: Indent or unindent
+        keys: Tab / Shift+Tab
+      - label: Automatic reload and preview
+        notes: Fast iteration depends on previewing frequently before expensive renders.
+      - label: Console errors
+        value: Parse and manifold errors usually point directly to syntax or invalid geometry assumptions
+
+  - group: Core Language Reference
+    items:
+      - label: Cube
+        value: cube([x, y, z], center=true|false);
+      - label: Cylinder
+        value: cylinder(h=10, r=5, $fn=64);
+      - label: Sphere
+        value: sphere(r=10, $fn=64);
+      - label: Translate rotate scale
+        value: translate([x,y,z]) rotate([a,b,c]) scale([x,y,z]) child();
+      - label: Difference union intersection
+        value: difference() union() intersection()
+      - label: Linear or rotate extrude
+        value: linear_extrude(height=10) shape(); rotate_extrude() shape();
+
+  - group: Common Reference
+    items:
+      - label: Preview vs render
+        value: F5 is fast approximation, F6 is full geometry evaluation for export-safe results
+      - label: Parametric strength
+        value: Best fit for code-defined parts, enclosures, brackets, and reproducible generated geometry
+      - label: Debug habit
+        value: Reduce model complexity and isolate one module when CGAL render errors become hard to reason about

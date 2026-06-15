@@ -27,7 +27,7 @@ references:
         keys: Ctrl+1..Ctrl+8
         keys_by_os:
           macos: Cmd+1..Cmd+8
-        notes: `9` jumps to the last tab.
+        notes: "`9` jumps to the last tab."
 
   - group: Navigation
     items:

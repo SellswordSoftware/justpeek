@@ -1,0 +1,102 @@
+name: Zig Toolchain
+group: programming language / toolchain packs
+process:
+  - zig
+search_terms:
+  - zig build
+  - zig test
+  - zig fmt
+  - cross compile
+references:
+  - group: Build and Run
+    items:
+      - label: Show version
+        command: zig version
+      - label: Run one file
+        command: zig run src/main.zig
+      - label: Build executable
+        command: zig build-exe src/main.zig
+      - label: Build library
+        command: zig build-lib src/lib.zig
+      - label: Run project build script
+        command: zig build
+      - label: Release-safe build
+        command: zig build -Doptimize=ReleaseSafe
+      - label: Release-fast build
+        command: zig build -Doptimize=ReleaseFast
+
+  - group: Testing and Formatting
+    items:
+      - label: Run one file tests
+        command: zig test src/main.zig
+      - label: Run project tests
+        command: zig build test
+      - label: Format file
+        command: zig fmt src/main.zig
+      - label: Format project
+        command: zig fmt .
+      - label: Check formatting in CI style
+        command: zig fmt --check .
+      - label: Build documentation
+        command: zig test src/main.zig -femit-docs
+
+  - group: Cross Compilation and Diagnostics
+    items:
+      - label: Cross compile
+        command: zig build-exe src/main.zig -target x86_64-linux
+      - label: Build for Windows
+        command: zig build-exe src/main.zig -target x86_64-windows
+      - label: Build for macOS
+        command: zig build-exe src/main.zig -target aarch64-macos
+      - label: Emit assembly
+        command: zig build-exe src/main.zig -femit-asm
+      - label: Emit LLVM IR
+        command: zig build-exe src/main.zig -femit-llvm-ir
+      - label: Reference trace depth
+        command: zig test src/main.zig -freference-trace=10
+
+  - group: Handy Snippets
+    items:
+      - label: Main function
+        command: |
+          const std = @import("std");
+          
+          pub fn main() !void {
+              std.debug.print("hello\n", .{});
+          }
+      - label: Unit test
+        command: |
+          const std = @import("std");
+          
+          test "adds numbers" {
+              try std.testing.expectEqual(@as(i32, 3), 1 + 2);
+          }
+      - label: Error union
+        command: |
+          fn load() !void {
+              return error.NotReady;
+          }
+      - label: Optional unwrap
+        command: |
+          if (maybe_value) |value| {
+              _ = value;
+          } else {
+              // handle null
+          }
+      - label: ArrayList
+        command: |
+          var list = std.ArrayList(u8).init(allocator);
+          defer list.deinit();
+
+  - group: Common Concepts
+    items:
+      - label: Build.zig
+        value: Project build logic lives in Zig code rather than a separate declarative file format
+      - label: Safety modes
+        value: Debug and ReleaseSafe keep more checks; ReleaseFast trades safety for speed
+      - label: Error unions and optionals
+        value: Explicit error and null handling are central to day-to-day Zig control flow
+      - label: Cross-compilation strength
+        value: Zig excels at cross-compiling without the usual external toolchain friction
+      - label: Standard library style
+        value: Expect explicit allocators, explicit lifetimes, and visible error handling

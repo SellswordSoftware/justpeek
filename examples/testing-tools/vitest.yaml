@@ -1,0 +1,103 @@
+name: Vitest
+group: testing tools
+process:
+  - vitest
+  - node
+  - npm
+  - pnpm
+  - yarn
+search_terms:
+  - vitest watch
+  - vi mock
+  - coverage
+  - jsdom
+references:
+  - group: Running Tests
+    items:
+      - label: Run all tests
+        command: npx vitest run
+      - label: Watch mode
+        command: npx vitest
+      - label: UI mode
+        command: npx vitest --ui
+      - label: Coverage
+        command: npx vitest run --coverage
+      - label: Run one file
+        command: npx vitest run src/app.test.ts
+      - label: Filter by test name
+        command: npx vitest run -t "user flow"
+      - label: Update snapshots
+        command: npx vitest run -u
+
+  - group: Selection and Debugging
+    items:
+      - label: Related tests
+        command: npx vitest related src/app.ts
+      - label: Browser mode
+        command: npx vitest --browser
+      - label: Environment
+        value: configure `node`, `jsdom`, or `happy-dom` depending on what APIs your tests need
+      - label: Open handles and hangs
+        notes: Check timers, network mocks, server shutdown, and unresolved promises when watch mode never settles.
+      - label: Inspect transformed config
+        notes: Vite config and alias resolution often explain surprising Vitest failures.
+
+  - group: Mocks and Timers
+    items:
+      - label: Mock function
+        value: "`vi.fn()`"
+      - label: Mock module
+        value: "`vi.mock(\"./api\")`"
+      - label: Spy on method
+        value: "`vi.spyOn(obj, \"method\")`"
+      - label: Fake timers
+        value: "`vi.useFakeTimers()`"
+      - label: Advance timers
+        value: "`vi.advanceTimersByTime(ms)`"
+      - label: Reset mocks
+        value: "`vi.clearAllMocks()` or `vi.resetAllMocks()`"
+
+  - group: Handy Snippets
+    items:
+      - label: Basic test
+        command: |
+          import { expect, test } from "vitest";
+          
+          test("adds numbers", () => {
+            expect(1 + 2).toBe(3);
+          });
+      - label: Async test
+        command: |
+          import { expect, test } from "vitest";
+          
+          test("loads data", async () => {
+            const data = await loadData();
+            expect(data.ok).toBe(true);
+          });
+      - label: Mock example
+        command: |
+          import { expect, vi } from "vitest";
+          
+          const fn = vi.fn();
+          fn("x");
+          expect(fn).toHaveBeenCalledWith("x");
+      - label: beforeEach
+        command: |
+          import { beforeEach } from "vitest";
+          
+          beforeEach(() => {
+            vi.clearAllMocks();
+          });
+
+  - group: Common Concepts
+    items:
+      - label: Vite alignment
+        value: Vitest reuses Vite’s module graph, aliases, and transform pipeline, which reduces config drift
+      - label: Fast watch loop
+        value: Vitest is often chosen because local feedback is faster than older Jest setups
+      - label: Compatibility
+        value: The API is intentionally Jest-like, but not every Jest plugin or edge behavior maps perfectly
+      - label: Environment choice
+        value: Browser-like tests often need jsdom or happy-dom instead of the default node environment
+      - label: Frontend fit
+        value: Especially strong in Vite, Vue, Svelte, and modern React projects

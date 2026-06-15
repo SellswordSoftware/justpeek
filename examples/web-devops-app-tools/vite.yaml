@@ -1,0 +1,161 @@
+name: Vite
+group: web / devops / app tools
+process:
+  - node
+title_contains: vite
+search_terms:
+  - vitejs
+  - dev server
+  - hmr
+  - esbuild
+  - vite config
+references:
+  - group: Project Setup
+    items:
+      - label: Create React project
+        command: npm create vite@latest my-app -- --template react
+      - label: Create Vue project
+        command: npm create vite@latest my-app -- --template vue
+      - label: Create Svelte project
+        command: npm create vite@latest my-app -- --template svelte
+      - label: Create Vanilla JS project
+        command: npm create vite@latest my-app -- --template vanilla
+      - label: Create Lit project
+        command: npm create vite@latest my-app -- --template lit
+      - label: Create Preact project
+        command: npm create vite@latest my-app -- --template preact
+      - label: Available templates
+        command: npm create vite@latest
+        notes: Interactive mode lists all templates including TypeScript variants
+
+  - group: Dev Server
+    items:
+      - label: Start dev server
+        command: npx vite
+      - label: Start with specific port
+        command: npx vite --port 3000
+      - label: Open browser automatically
+        command: npx vite --open
+      - label: Force dependency optimization
+        command: npx vite --force
+      - label: Clear cache
+        command: rm -rf node_modules/.vite && npx vite
+      - label: Strict port (error instead of fallback)
+        command: npx vite --strictPort
+      - label: Host for network access
+        command: npx vite --host
+      - label: Disable HMR preview overlay
+        command: npx vite --no-clearScreen
+
+  - group: Build
+    items:
+      - label: Production build
+        command: npx vite build
+      - label: Build with custom base
+        command: npx vite build --base /app/
+      - label: Preview production build
+        command: npx vite preview
+      - label: Preview with specific port
+        command: npx vite preview --port 4173
+      - label: Build for development mode
+        command: npx vite build --mode development
+      - label: Generate manifest
+        command: npx vite build
+        notes: Vite generates dist/.vite/manifest.json when the manifest plugin option is enabled in vite.config.js
+
+  - group: Configuration
+    items:
+      - label: Basic config structure
+        command: |
+          // vite.config.js
+          import { defineConfig } from 'vite'
+          
+          export default defineConfig({
+            server: {
+              port: 3000,
+              open: true,
+            },
+            build: {
+              outDir: 'dist',
+              sourcemap: true,
+            },
+          })
+      - label: Add proxy for backend API
+        command: |
+          server: {
+            proxy: {
+              '/api': {
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+              },
+            },
+          }
+      - label: Define environment variables
+        command: |
+          define: {
+            'import.meta.env.APP_VERSION': JSON.stringify(process.env.npm_package_version),
+          }
+        notes: Or use .env files -- Vite loads .env, .env.local, .env.[mode], .env.[mode].local automatically
+      - label: Resolve alias
+        command: |
+          resolve: {
+            alias: {
+              '@': '/src',
+            },
+          }
+      - label: Multiple environments
+        value: Vite loads .env, .env.local, .env.[mode], .env.[mode].local in order of priority. Prefix vars with VITE_ to expose them to client code via import.meta.env.
+
+  - group: Plugins
+    items:
+      - label: Install a plugin
+        command: npm install -D @vitejs/plugin-react
+      - label: Add React plugin
+        command: |
+          import react from '@vitejs/plugin-react'
+          
+          plugins: [react()],
+      - label: Add Vue plugin
+        command: |
+          npm install -D @vitejs/plugin-vue
+          
+          // vite.config.js
+          import vue from '@vitejs/plugin-vue'
+          plugins: [vue()]
+      - label: Common plugins
+        value: "@vitejs/plugin-react, @vitejs/plugin-vue, @sveltejs/vite-plugin-svelte, vite-plugin-svgr, vite-plugin-html"
+
+  - group: CLI Options
+    items:
+      - label: Show all options
+        command: npx vite --help
+      - label: Run specific command with config
+        command: npx vite build --config vite.config.prod.js
+      - label: Silent mode
+        command: npx vite build --logLevel silent
+      - label: Show open URL
+        command: npx vite --host --clearScreen false
+      - label: List environment variables
+        command: npx vite --mode development
+        notes: Vite prints loaded env vars on startup in dev mode
+
+  - group: Common Patterns
+    items:
+      - label: Conditional plugin loading
+        command: |
+          import { defineConfig, loadEnv } from 'vite'
+          
+          export default defineConfig(({ mode }) => {
+            const env = loadEnv(mode, process.cwd())
+            return {
+              plugins: env.VITE_ENABLE_ANALYTICS ? [analyticsPlugin()] : [],
+            }
+          })
+      - label: CSS modules
+        value: Import with .module.css extension. Vite handles CSS Modules automatically without extra config.
+      - label: Static assets
+        value: Place files in public/ directory. Reference with root-relative paths like /logo.png. Files in src/ are processed as module assets.
+      - label: TypeScript support
+        value: Vite supports TypeScript out of the box for TSX/TS files. No compiler step -- transformation happens at build time. Use tsconfig.json for IDE support.
+      - label: Preprocessors
+        value: Sass, Less, and Stylus are supported out of the box. Install the preprocessor as a peer dependency (e.g., npm install -D sass).

@@ -1,0 +1,142 @@
+name: ClickHouse
+group: database
+process:
+  - clickhouse-client
+  - clickhouse
+  - clickhouse-server
+search_terms:
+  - clickhouse
+  - clickhouse-client
+  - merge tree
+  - system tables
+  - optimize table
+references:
+  - group: Connect and Session
+    items:
+      - label: Connect local
+        command: clickhouse-client
+      - label: Connect remote host
+        command: clickhouse-client --host localhost --port 9000 --user default --password
+      - label: Connect with database
+        command: clickhouse-client --host localhost --database analytics
+      - label: Run one query
+        command: "clickhouse-client --query \"SELECT version()\""
+      - label: Show current database
+        command: SELECT currentDatabase();
+      - label: Show version
+        command: SELECT version();
+      - label: Exit client
+        command: exit
+
+  - group: Query and Introspection
+    items:
+      - label: Show databases
+        command: SHOW DATABASES;
+      - label: Show tables
+        command: SHOW TABLES;
+      - label: Describe table
+        command: DESCRIBE TABLE events;
+      - label: Show create table
+        command: SHOW CREATE TABLE events;
+      - label: Count rows
+        command: SELECT count(*) FROM events;
+      - label: Top rows newest first
+        command: SELECT * FROM events ORDER BY timestamp DESC LIMIT 20;
+      - label: Format output as JSON
+        command: SELECT * FROM events LIMIT 1 FORMAT JSONEachRow;
+
+  - group: Table and Engine Basics
+    items:
+      - label: Create database
+        command: CREATE DATABASE analytics;
+      - label: Create MergeTree table
+        command: |
+          CREATE TABLE events (
+              timestamp DateTime,
+              user_id UInt64,
+              event_name String
+          )
+          ENGINE = MergeTree
+          ORDER BY (timestamp, user_id);
+      - label: Add column
+        command: ALTER TABLE events ADD COLUMN metadata String DEFAULT '';
+      - label: Delete rows mutation
+        command: ALTER TABLE events DELETE WHERE timestamp < now() - INTERVAL 30 DAY;
+      - label: Update rows mutation
+        command: ALTER TABLE events UPDATE event_name = 'unknown' WHERE event_name = '';
+      - label: Optimize table
+        command: OPTIMIZE TABLE events FINAL;
+      - label: Partition insight
+        value: Partition key, primary sort order, and engine choice drive most ClickHouse performance outcomes more than row-by-row tuning
+
+  - group: Insert Export and File Work
+    items:
+      - label: Insert one row
+        command: |
+          INSERT INTO events (timestamp, user_id, event_name)
+          VALUES (now(), 42, 'login');
+      - label: Insert from CSV file
+        command: "clickhouse-client --query \"INSERT INTO events FORMAT CSV\" < events.csv"
+      - label: Export query to CSV
+        command: "clickhouse-client --query \"SELECT * FROM events FORMAT CSVWithNames\" > events.csv"
+      - label: Read CSV via table function
+        command: |
+          SELECT *
+          FROM file('events.csv', 'CSVWithNames')
+          LIMIT 20;
+      - label: Read Parquet via table function
+        command: |
+          SELECT *
+          FROM file('events.parquet', 'Parquet')
+          LIMIT 20;
+      - label: Import from select
+        command: |
+          INSERT INTO events
+          SELECT *
+          FROM staging_events;
+
+  - group: System Tables and Diagnostics
+    items:
+      - label: Running queries
+        command: |
+          SELECT query_id, user, elapsed, memory_usage, query
+          FROM system.processes
+          ORDER BY elapsed DESC;
+      - label: Recent query log
+        command: |
+          SELECT event_time, query_duration_ms, read_rows, query
+          FROM system.query_log
+          ORDER BY event_time DESC
+          LIMIT 20;
+      - label: Parts for table
+        command: |
+          SELECT partition, name, rows, bytes_on_disk
+          FROM system.parts
+          WHERE table = 'events' AND active
+          ORDER BY rows DESC;
+      - label: Table size
+        command: |
+          SELECT
+            table,
+            formatReadableSize(sum(bytes)) AS size
+          FROM system.parts
+          WHERE active AND database = currentDatabase()
+          GROUP BY table
+          ORDER BY sum(bytes) DESC;
+      - label: Explain query
+        command: EXPLAIN SELECT * FROM events WHERE user_id = 42;
+      - label: Kill query
+        command: KILL QUERY WHERE query_id = 'query-id';
+
+  - group: Common Concepts
+    items:
+      - label: OLAP-first database
+        value: ClickHouse is optimized for analytical scans and aggregations, not OLTP-style row-by-row transactional workloads
+      - label: MergeTree family
+        value: MergeTree engines are the core storage model, and understanding order keys, partitions, and merges matters early
+      - label: System tables
+        value: "`system.processes`, `system.query_log`, `system.parts`, and related tables are the main observability surface."
+      - label: Mutations are not OLTP updates
+        value: ALTER UPDATE and ALTER DELETE are batch mutations with different cost and timing expectations than transactional row updates
+      - label: Common lookup
+        value: SHOW CREATE TABLE, system tables, OPTIMIZE, partitions, and file import/export patterns are the most frequently revisited basics

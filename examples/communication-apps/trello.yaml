@@ -1,0 +1,89 @@
+name: Trello
+group: communication apps
+title_contains: trello
+search_terms:
+  - trello board
+  - card shortcuts
+  - butler
+  - labels
+  - power-ups
+references:
+  - group: Navigation and Card Shortcuts
+    items:
+      - label: Show shortcuts
+        keys: "?"
+      - label: Open board menu
+        keys: B
+      - label: Search cards
+        keys: Slash
+      - label: New card
+        keys: N
+      - label: Archive card
+        keys: C
+      - label: Open labels
+        keys: L
+      - label: Open members
+        keys: M
+      - label: Due date
+        keys: D
+
+  - group: Board and List Workflow
+    items:
+      - label: Move card
+        keys: LessThan / GreaterThan
+        notes: Move between lists when card shortcuts are active
+      - label: Subscribe to card
+        keys: S
+      - label: Add checklist
+        keys: Shift+C
+      - label: Add or remove vote
+        keys: V
+      - label: Edit title or text
+        keys: E
+      - label: Save changes
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Enter
+      - label: Close dialog
+        keys: Esc
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Butler automation
+        notes: "UI path: board top bar or menu -> `Automation`."
+      - label: Power-Ups
+        notes: "UI path: board menu -> `Power-Ups`."
+      - label: Filter cards
+        notes: "UI path: board top bar -> `Filter`."
+      - label: Board visibility
+        notes: "UI path: board menu or board header visibility controls."
+      - label: Card cover and custom fields
+        notes: "UI path: open card -> right-side actions and Power-Ups / fields."
+      - label: Archive list
+        notes: "UI path: list `More` menu -> `Archive this list`."
+
+  - group: Search and Workflow Patterns
+    items:
+      - label: Find board by quick switch
+        notes: "UI path: slash search and workspace navigation are usually faster than browsing manually."
+      - label: Due soon triage
+        value: Use filters plus due dates, members, and labels to reduce board scanning
+      - label: Card checklist habit
+        value: Checklists are often the simplest substitute for over-modeling work into too many cards
+      - label: Template cards
+        notes: "UI path: create reusable cards or use board templates depending on workspace setup."
+      - label: Butler fit
+        value: Butler is usually the first automation surface people need to re-find for repetitive card actions
+
+  - group: Common Concepts
+    items:
+      - label: Card-centric workflow
+        value: Trello is fundamentally a card and list manipulation tool, so the best shortcuts revolve around card editing rather than global navigation
+      - label: Light structure
+        value: Labels, due dates, checklists, members, and lists do most of the organizational work before heavier automation is needed
+      - label: Board menu reliance
+        value: Power-Ups, automation, visibility, and many settings live in the board menu rather than obvious global settings
+      - label: Best fit
+        value: Trello works well for lightweight workflow coordination where boards need to stay flexible rather than highly structured
+      - label: Shortcut density
+        value: Trello has excellent in-board card shortcuts, but many admin and integration flows remain menu-driven

@@ -1,0 +1,107 @@
+name: Microsoft Teams
+group: communication apps
+process:
+  - Teams
+  - ms-teams
+  - teams
+  - msteams
+search_terms:
+  - teams shortcuts
+  - slash commands
+  - teams search
+  - meeting controls
+  - teams settings
+references:
+  - group: Navigation and Search
+    items:
+      - label: Search
+        keys: Ctrl+E
+      - label: Go to chat
+        keys: Ctrl+2
+      - label: Go to teams
+        keys: Ctrl+3
+      - label: Go to calendar
+        keys: Ctrl+4
+      - label: Go to calls
+        keys: Ctrl+5
+      - label: Go to files
+        keys: Ctrl+6
+      - label: Show shortcuts
+        keys: Ctrl+Period
+
+  - group: Messaging and Meetings
+    items:
+      - label: New chat
+        keys: Ctrl+N
+      - label: Expand compose box
+        keys: Ctrl+Shift+X
+      - label: Send message
+        keys: Ctrl+Enter
+      - label: Start audio call
+        keys: Ctrl+Shift+C
+      - label: Start video call
+        keys: Ctrl+Shift+U
+      - label: Accept video call
+        keys: Ctrl+Shift+A
+      - label: Accept audio call
+        keys: Ctrl+Shift+S
+      - label: Decline call
+        keys: Ctrl+Shift+D
+
+  - group: Meeting Controls and UI Paths
+    items:
+      - label: Raise or lower hand
+        keys: Ctrl+Shift+K
+      - label: Toggle background blur
+        notes: "UI path: pre-join screen or meeting toolbar `More -> Video effects / Backgrounds` depending on build."
+      - label: Share screen
+        notes: "UI path: meeting toolbar `Share`."
+      - label: View participants
+        notes: "UI path: meeting toolbar `People`."
+      - label: Open chat in meeting
+        notes: "UI path: meeting toolbar `Chat`."
+      - label: Recording or transcription
+        notes: "UI path: meeting toolbar `More -> Record and transcribe`."
+
+  - group: Search and Slash Patterns
+    items:
+      - label: Slash command help
+        value: /keys
+      - label: Set status
+        value: /available or /busy or /dnd
+      - label: Go to person or app
+        value: "/goto <name>"
+      - label: Call command
+        value: "/call <name>"
+      - label: File search
+        value: "Use the top search bar with filenames, people, channels, or messages."
+      - label: Filter search results
+        notes: Search result filtering is usually done through the result UI rather than a rich search-operator grammar.
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Device settings
+        notes: "UI path: `More -> Settings -> Devices`."
+      - label: Notifications
+        notes: "UI path: `Settings -> Notifications and activity`."
+      - label: Manage team and channel
+        notes: "UI path: team name `More options` menu."
+      - label: Presence and status duration
+        notes: "UI path: profile picture -> status menu."
+      - label: Meeting options
+        notes: "UI path: calendar event or active meeting `More -> Meeting options`."
+      - label: Together mode and gallery views
+        notes: "UI path: meeting `View` menu."
+
+  - group: Common Concepts
+    items:
+      - label: Search-centric workflow
+        value: Teams puts a lot of navigation pressure on the top search bar and command surface rather than purely on sidebars
+      - label: Meetings are first-class
+        value: Meeting controls, presence, and device settings are part of the everyday core workflow, not a niche feature set
+      - label: Slash commands
+        value: "`/keys`, `/call`, status commands, and `/goto` are some of the most useful built-in commands to remember"
+      - label: Version variance
+        value: Classic Teams, new Teams, web, and platform builds can move controls around, so UI paths matter more than exact button memory
+      - label: Shortcut density
+        value: Teams has solid navigation shortcuts, but many admin, meeting, and settings flows still require menus

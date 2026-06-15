@@ -1,0 +1,76 @@
+name: Cura
+group: cad / 3d / maker tools
+process:
+  - cura
+  - ultimaker-cura
+  - Ultimaker Cura
+  - Cura.exe
+references:
+  - group: File and Setup
+    items:
+      - label: Open model
+        keys: Ctrl+O
+      - label: Save project
+        keys: Ctrl+S
+      - label: Slice
+        notes: Slicing is usually triggered from the main action button rather than a dense shortcut map.
+      - label: Save to file
+        notes: Export path matters, especially when using removable media or remote printer workflows.
+      - label: Search settings
+        keys: Ctrl+F
+      - label: Custom settings mode
+        notes: Switch out of recommended mode when real control over print behavior is needed.
+
+  - group: Object Manipulation
+    items:
+      - label: Move
+        keys: M
+      - label: Scale
+        keys: S
+      - label: Rotate
+        keys: R
+      - label: Mirror
+        keys: H
+      - label: Per model settings
+        notes: Use for support blockers, infill overrides, and local setting changes.
+      - label: Arrange all models
+        keys: Ctrl+R
+      - label: Delete selection
+        keys: Delete
+      - label: Multiply selected model
+        keys: Ctrl+D
+
+  - group: View and Preview
+    items:
+      - label: Orbit pan zoom
+        keys: LeftMouse drag / Shift+LeftMouse drag / MouseWheel
+      - label: Layer view
+        value: Inspect paths, skin, walls, support, and travel after slicing
+      - label: X-ray or transparent inspection
+        notes: Helpful for spotting internal support surprises and wall continuity issues.
+      - label: Build plate adhesion preview
+        value: Check brim, skirt, raft, and first-layer footprint before printing
+
+  - group: High-value Settings
+    items:
+      - label: Layer height
+        value: Sets detail and overall print time expectations
+      - label: Wall line count
+        value: Strong lever for strength, screw holding, and thin-part survivability
+      - label: Top and bottom thickness
+        value: Helps prevent pillowing and weak top surfaces
+      - label: Infill density and pattern
+        value: Tune for structure, speed, and material efficiency
+      - label: Supports
+        value: Placement, overhang angle, interface, and density matter more than simply turning support on
+      - label: Cooling
+        value: Critical for bridges, overhangs, PLA detail, and layer-time-sensitive parts
+
+  - group: Common Reference
+    items:
+      - label: Print workflow
+        value: Import, orient, configure profile and material, slice, preview, export
+      - label: Machine and material profiles
+        value: Wrong nozzle, filament, or printer profile can invalidate every other tuning choice
+      - label: Preview first
+        value: Toolpath preview is the fastest way to catch missing walls, bad supports, or unexpected seams

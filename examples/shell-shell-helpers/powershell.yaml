@@ -11,7 +11,7 @@ references:
         notes: Reveal current-user, all-users, and host-specific profile script locations.
       - label: Edit current profile
         command: code $PROFILE
-        notes: Replace `code` with your editor if VS Code is not your default.
+        notes: "Replace `code` with your editor if VS Code is not your default."
       - label: Reload current profile
         command: . $PROFILE
         notes: Dot-source the profile to re-import functions, aliases, and modules.
@@ -23,7 +23,7 @@ references:
     items:
       - label: Get help for a command
         command: Get-Help Get-ChildItem -Full
-        notes: Use `-Examples` or `-Online` when you need narrower help output.
+        notes: "Use `-Examples` or `-Online` when you need narrower help output."
       - label: Update local help
         command: Update-Help
         notes: Refresh installed help content when documentation is missing or outdated.
@@ -68,7 +68,7 @@ references:
               param([string]$Name)
               "Hello $Name"
           }
-        notes: `param(...)` provides explicit typed parameters for reusable functions.
+        notes: "`param(...)` provides explicit typed parameters for reusable functions."
       - label: Dot-source a script
         command: . .\helpers.ps1
         notes: Load the script into the current scope so its functions stay available.
@@ -85,7 +85,7 @@ references:
         command: Get-Content .\file.txt
       - label: Tail a file
         command: Get-Content .\app.log -Wait -Tail 50
-        notes: Follow appended log lines similarly to `tail -f`.
+        notes: "Follow appended log lines similarly to `tail -f`."
       - label: Copy items recursively
         command: Copy-Item .\src -Destination .\backup -Recurse
       - label: Enter a remote session

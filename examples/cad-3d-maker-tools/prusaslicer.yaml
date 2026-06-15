@@ -1,0 +1,77 @@
+name: PrusaSlicer
+group: cad / 3d / maker tools
+process:
+  - prusa-slicer
+  - PrusaSlicer
+  - prusaslicer.exe
+references:
+  - group: File and Plater
+    items:
+      - label: Add model
+        keys: Ctrl+I
+      - label: Save project
+        keys: Ctrl+S
+      - label: Export G-code
+        keys: Ctrl+G
+      - label: Slice now
+        keys: Ctrl+R
+      - label: Arrange objects
+        keys: A
+      - label: Search settings
+        keys: Ctrl+F
+      - label: Switch simple advanced expert
+        notes: Expert mode exposes the settings people usually end up hunting for.
+
+  - group: Object Manipulation
+    items:
+      - label: Move
+        keys: M
+      - label: Scale
+        keys: S
+      - label: Rotate
+        keys: R
+      - label: Place on face
+        keys: F
+      - label: Cut object
+        keys: C
+      - label: Delete object
+        keys: Delete
+      - label: Duplicate object
+        keys: Ctrl+D
+      - label: Split into parts
+        notes: Useful when imported STLs contain multiple shells or assemblies.
+
+  - group: View and Preview
+    items:
+      - label: 3D view rotate pan zoom
+        keys: LeftMouse drag / Shift+LeftMouse drag / MouseWheel
+      - label: Plater preview
+        notes: Check toolpaths, seams, support contact, and top layers before exporting.
+      - label: Layer slider
+        value: Use preview layers to inspect bridges, thin walls, and support interfaces
+      - label: G-code viewer
+        value: Best place to catch travel-heavy or support-heavy surprises before printing
+
+  - group: High-value Settings
+    items:
+      - label: Layer height
+        value: Lower for detail, higher for speed and stronger layer bonding in some cases
+      - label: Perimeters
+        value: More walls improve strength and surface resilience
+      - label: Infill
+        value: Pattern and percentage affect strength, speed, and material use
+      - label: Supports
+        value: Confirm overhangs, interface density, and contact distance before slicing
+      - label: Seam position
+        value: Matters visibly on cylinders, cases, and cosmetic vertical surfaces
+      - label: Elephant foot compensation
+        value: Helps dimensional accuracy on first-layer-heavy parts
+
+  - group: Common Reference
+    items:
+      - label: Print workflow
+        value: Import, orient, arrange, tune settings, slice, preview, export G-code
+      - label: First layer discipline
+        value: Bed adhesion and first-layer quality are worth checking before blaming later layers
+      - label: Material profiles
+        value: Filament preset choice strongly affects temperature, cooling, and speed defaults

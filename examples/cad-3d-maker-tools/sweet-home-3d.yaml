@@ -1,0 +1,81 @@
+name: Sweet Home 3D
+group: cad / 3d / maker tools
+process:
+  - SweetHome3D
+  - sweethome3d
+  - Sweet Home 3D
+references:
+  - group: File and Project
+    items:
+      - label: New home
+        keys: Ctrl+N
+      - label: Open home
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Print
+        keys: Ctrl+P
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Y
+      - label: Preferences
+        keys: Ctrl+Shift+P
+      - label: Search furniture catalog mentally by category first
+        notes: Large projects move faster when furniture organization stays intentional.
+
+  - group: Navigation and View
+    items:
+      - label: Zoom in or out
+        keys: Ctrl+Plus / Ctrl+Minus
+      - label: Move around plan
+        keys: Arrow keys
+      - label: Pan quickly
+        keys: Mouse drag or scrollbars depending on focus
+      - label: Select next field or control
+        keys: Tab / Shift+Tab
+      - label: 3D view navigation
+        notes: Keep the 2D plan and 3D preview in sync when camera changes make placement look wrong.
+      - label: Virtual visitor camera
+        value: Best for walk-through scale checking rather than raw drafting precision
+
+  - group: Drawing and Editing
+    items:
+      - label: Create walls
+        keys: W
+      - label: Create rooms
+        keys: R
+      - label: Add dimension lines
+        keys: D
+      - label: Add text
+        keys: T
+      - label: Select object
+        keys: Escape
+      - label: Delete selection
+        keys: Delete
+      - label: Duplicate selection
+        keys: Ctrl+D
+      - label: Group furniture
+        keys: Ctrl+G
+      - label: Ungroup furniture
+        keys: Ctrl+Shift+G
+
+  - group: Furniture and Layout
+    items:
+      - label: Import furniture
+        keys: Ctrl+Shift+F
+      - label: Modify furniture
+        keys: Enter or double-click selection
+      - label: Rotate selected object
+        notes: Use angle edits for precision when drag rotation becomes visually close but not exact.
+      - label: Elevation and level
+        value: Important for counters, wall objects, stairs, and stacked room elements
+      - label: Align furniture intentionally
+        notes: Avoid gradual drift by using numeric dimensions and snap-aware placement.
+
+  - group: Common Reference
+    items:
+      - label: Main workflow
+        value: Draw walls, define rooms, place doors and windows, add furniture, inspect in 3D, annotate dimensions
+      - label: Best fit
+        value: Interior layout, quick floor plans, remodeling visualization, and furniture arrangement
+      - label: Accuracy habit
+        value: Enter exact lengths and positions when layouts need to survive beyond a visual mockup

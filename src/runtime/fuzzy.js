@@ -14,26 +14,11 @@ export function fuzzyMatch(query, text) {
   const normalizedQuery = query.toLowerCase();
   const normalizedText = text.toLowerCase();
 
-  let position = 0;
-  let score = 0;
-  let streak = 0;
-
-  for (let index = 0; index < normalizedQuery.length; index += 1) {
-    const next = normalizedText.indexOf(normalizedQuery[index], position);
-    if (next === -1) {
-      return null;
-    }
-
-    if (next === position) {
-      streak += 1;
-    } else {
-      streak = 0;
-    }
-
-    score += streak;
-    position = next + 1;
+  if (!normalizedText.includes(normalizedQuery)) {
+    return null;
   }
 
+  const score = normalizedQuery.length * normalizedQuery.length;
   return { match: true, score };
 }
 

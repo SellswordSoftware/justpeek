@@ -1,0 +1,102 @@
+name: LibreOffice Calc
+group: office apps
+process:
+  - soffice
+  - soffice.bin
+  - libreoffice
+  - scalc
+title_contains: Calc
+references:
+  - group: File and Sheets
+    items:
+      - label: New spreadsheet
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open spreadsheet
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Save as
+        keys: Ctrl+Shift+S
+        keys_by_os:
+          macos: Cmd+Shift+S
+      - label: Print
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Insert sheet
+        keys: Shift+F11
+      - label: Move to next or previous sheet
+        keys: Ctrl+PageDown / Ctrl+PageUp
+
+  - group: Navigation and Selection
+    items:
+      - label: Edit active cell
+        keys: F2
+      - label: Jump to edge of data region
+        keys: Ctrl+Arrow keys
+      - label: Select to edge of data region
+        keys: Ctrl+Shift+Arrow keys
+      - label: Go to cell
+        keys: Ctrl+L
+      - label: Select row
+        keys: Shift+Space
+      - label: Select column
+        keys: Ctrl+Space
+      - label: Select current data area
+        keys: Ctrl+A
+        notes: Repeating `Ctrl+A` expands selection from current block to the full sheet.
+
+  - group: Editing and Formulas
+    items:
+      - label: Start formula
+        value: "="
+      - label: Autosum
+        keys: Alt+Equal
+      - label: Fill down
+        keys: Ctrl+D
+      - label: Fill right
+        keys: Ctrl+R
+      - label: Show formulas
+        keys: Ctrl+Backtick
+      - label: Absolute reference toggle
+        keys: F4
+        notes: Cycle absolute and mixed references while editing a formula.
+      - label: Recalculate
+        keys: F9
+      - label: Hard recalculate
+        keys: Ctrl+Shift+F9
+
+  - group: High-value Functions
+    items:
+      - label: SUM
+        value: "=SUM(range)"
+      - label: AVERAGE
+        value: "=AVERAGE(range)"
+      - label: IF
+        value: "=IF(test; value_if_true; value_if_false)"
+        notes: Many LibreOffice locales use semicolons instead of commas as separators.
+      - label: VLOOKUP
+        value: "=VLOOKUP(search_key; range; index; 0)"
+      - label: XLOOKUP
+        value: "=XLOOKUP(search_key; lookup_array; return_array)"
+      - label: COUNTIF
+        value: "=COUNTIF(range; criteria)"
+      - label: TEXTJOIN
+        value: "=TEXTJOIN(delimiter; 1; text1; ...)"
+
+  - group: Tables and Analysis
+    items:
+      - label: Toggle AutoFilter
+        notes: Use Data > AutoFilter for header-based filtering in tabular data.
+      - label: Sort range
+        notes: Select the data range first so Calc can keep rows together.
+      - label: Freeze rows or columns
+        notes: Use View > Freeze Rows and Columns to keep labels visible.
+      - label: Data pilot
+        value: LibreOffice pivot tables are called DataPilot in older docs and Pivot Table in newer UI.

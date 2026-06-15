@@ -1,0 +1,139 @@
+name: Go Toolchain
+group: programming language / toolchain packs
+process:
+  - go
+  - go.exe
+search_terms:
+  - go mod
+  - go test
+  - go build
+  - profiling
+references:
+  - group: Modules and Dependencies
+    items:
+      - label: Initialize module
+        command: go mod init example.com/project
+      - label: Add or update dependencies
+        command: go get ./...
+      - label: Tidy module
+        command: go mod tidy
+      - label: Download modules
+        command: go mod download
+      - label: Verify dependencies
+        command: go mod verify
+      - label: Show module graph
+        command: go mod graph
+      - label: Replace local module
+        command: go mod edit -replace example.com/lib=../lib
+
+  - group: Build and Run
+    items:
+      - label: Run package
+        command: go run .
+      - label: Run one file
+        command: go run main.go
+      - label: Build binary
+        command: go build ./...
+      - label: Install command
+        command: go install ./...
+      - label: Cross-compile
+        command: GOOS=linux GOARCH=amd64 go build ./...
+      - label: Format code
+        command: gofmt -w .
+      - label: Vet code
+        command: go vet ./...
+
+  - group: Testing and Benchmarks
+    items:
+      - label: Run tests
+        command: go test ./...
+      - label: Verbose tests
+        command: go test -v ./...
+      - label: Run one test
+        command: go test -run TestName ./...
+      - label: Coverage
+        command: go test -cover ./...
+      - label: Benchmarks
+        command: go test -bench=. ./...
+      - label: Race detector
+        command: go test -race ./...
+      - label: Shuffle tests
+        command: go test -shuffle=on ./...
+
+  - group: Profiling and Diagnostics
+    items:
+      - label: CPU profile in tests
+        command: go test -cpuprofile cpu.out ./...
+      - label: Memory profile in tests
+        command: go test -memprofile mem.out ./...
+      - label: Inspect profile
+        command: go tool pprof cpu.out
+      - label: Web pprof UI
+        command: go tool pprof -http=:8080 cpu.out
+      - label: Trace
+        command: go test -trace trace.out ./...
+      - label: Inspect trace
+        command: go tool trace trace.out
+
+  - group: Handy Snippets
+    items:
+      - label: Main function
+        command: |
+          package main
+          
+          import "fmt"
+          
+          func main() {
+              fmt.Println("hello")
+          }
+      - label: Error wrapping
+        command: |
+          if err != nil {
+              return fmt.Errorf("load config: %w", err)
+          }
+      - label: HTTP server
+        command: |
+          package main
+          
+          import (
+              "log"
+              "net/http"
+          )
+          
+          func main() {
+              http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+                  w.Write([]byte("ok"))
+              })
+              log.Fatal(http.ListenAndServe(":8080", nil))
+          }
+      - label: Context timeout
+        command: |
+          ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+          defer cancel()
+      - label: Table-driven test
+        command: |
+          func TestAdd(t *testing.T) {
+              tests := []struct{
+                  a, b, want int
+              }{
+                  {1, 2, 3},
+              }
+              for _, tt := range tests {
+                  if got := Add(tt.a, tt.b); got != tt.want {
+                      t.Fatalf("got %d want %d", got, tt.want)
+                  }
+              }
+          }
+
+  - group: Common Concepts
+    items:
+      - label: go.mod and go.sum
+        value: Module manifest and dependency checksum files; keep both committed
+      - label: Interfaces
+        value: Define them where behavior is consumed, not preemptively in every package
+      - label: Context
+        value: Use for cancellation, deadlines, and request-scoped values across API boundaries
+      - label: Testing defaults
+        value: Standard library testing plus table-driven tests and race detection cover a lot without extra frameworks
+      - label: Profiling path
+        value: Bench or test first, collect profiles second, optimize only after evidence exists

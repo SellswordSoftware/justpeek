@@ -1,0 +1,89 @@
+name: Steam
+group: gaming / streaming
+process:
+  - steam
+  - steam.exe
+  - Steam
+search_terms:
+  - steam shortcuts
+  - controller settings
+  - remote play
+  - shader cache
+  - game properties
+references:
+  - group: Navigation and Library
+    items:
+      - label: Search library
+        keys: Ctrl+F
+      - label: Screenshot
+        keys: F12
+        notes: Default screenshot hotkey unless changed in settings
+      - label: Back
+        keys: Alt+Left
+      - label: Forward
+        keys: Alt+Right
+      - label: Refresh page
+        keys: Ctrl+R
+      - label: Open settings
+        notes: "UI path: `Steam -> Settings`."
+      - label: Downloads view
+        notes: "UI path: bottom bar or top navigation `Downloads`."
+
+  - group: Overlay and In-Game Features
+    items:
+      - label: Open Steam Overlay
+        keys: Shift+Tab
+        notes: Default overlay hotkey unless changed
+      - label: Open friends while in game
+        notes: Use the Steam Overlay, then friends/chat surfaces from there.
+      - label: Start recording clip
+        notes: "UI path: depends on current Steam Game Recording rollout and configured hotkeys in `Settings -> Game Recording`."
+      - label: Remote Play invite
+        notes: "UI path: overlay or friends context menu -> `Remote Play Together` when supported."
+      - label: Controller layout
+        notes: "UI path: game page or overlay -> controller settings/layout editor."
+      - label: Performance overlay
+        notes: "UI path: `Settings -> In Game` for overlay toggles and counters."
+
+  - group: Game Management
+    items:
+      - label: Install location
+        notes: "UI path: `Settings -> Storage`."
+      - label: Verify integrity of files
+        notes: "UI path: `Library -> right click game -> Properties -> Installed Files -> Verify integrity of game files`."
+      - label: Launch options
+        notes: "UI path: `Library -> right click game -> Properties -> General -> Launch Options`."
+      - label: Proton compatibility
+        notes: "UI path: `Game Properties -> Compatibility`."
+      - label: DLC management
+        notes: "UI path: `Game Properties -> DLC`."
+      - label: Browse local files
+        notes: "UI path: `Game Properties -> Installed Files -> Browse`."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Shader pre-caching
+        notes: "UI path: `Settings -> Downloads` or shader cache related sections depending on current Steam build."
+      - label: Big Picture mode
+        notes: "UI path: main window top bar controller icon or `View` surfaces depending on build."
+      - label: Family settings
+        notes: "UI path: `Settings -> Family`."
+      - label: Storage management
+        notes: "UI path: `Settings -> Storage` for moving installs and checking disk use."
+      - label: Friends invisible status
+        notes: "UI path: friends list profile status menu."
+      - label: Enable Steam beta
+        notes: "UI path: `Settings -> Interface` or account/beta participation area depending on current client version."
+
+  - group: Common Concepts
+    items:
+      - label: Overlay is central
+        value: Shift+Tab and the overlay settings are some of the highest-value Steam recall items because so many social and in-game tools route through them
+      - label: Per-game properties
+        value: Launch options, compatibility, installed files, controller layout, and DLC are mostly managed from the game's Properties panel
+      - label: Version variance
+        value: Steam's modern client moves some controls around compared with older guides, so UI paths matter more than exact memory of tabs
+      - label: Linux gaming fit
+        value: Proton compatibility, shader caching, and controller config are some of the most commonly revisited settings on Linux
+      - label: Shortcut density
+        value: Steam has a few important defaults, but many useful actions are menu and properties driven rather than shortcut heavy

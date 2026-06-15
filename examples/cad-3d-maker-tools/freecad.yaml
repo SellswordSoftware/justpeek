@@ -1,0 +1,62 @@
+name: FreeCAD
+group: cad / 3d / maker tools
+process:
+  - FreeCAD
+  - freecad
+  - FreeCAD.exe
+references:
+  - group: File and View
+    items:
+      - label: New document
+        keys: Ctrl+N
+      - label: Open document
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Save as
+        keys: Ctrl+Shift+S
+      - label: Fit all
+        keys: V then F
+      - label: Standard front top right views
+        keys: 1 / 2 / 3 in many navigation schemes
+      - label: Orthographic and perspective awareness
+        notes: View mode affects how modeling intent is interpreted during inspection.
+
+  - group: Navigation
+    items:
+      - label: Rotate view
+        keys: MiddleMouse drag
+      - label: Pan view
+        keys: Shift+MiddleMouse drag
+      - label: Zoom
+        keys: MouseWheel
+      - label: Selection
+        keys: LeftClick
+      - label: Box select
+        notes: Drag selection in tree or viewport depending on workbench and task.
+      - label: Tree view and 3D view
+        notes: Keep model tree context in sync with viewport selection to avoid editing the wrong body or sketch.
+
+  - group: Part Design and Sketcher
+    items:
+      - label: New sketch
+        notes: Start on a clear plane or support face before adding constrained geometry.
+      - label: Pad
+        notes: Extrudes sketch material into a solid feature.
+      - label: Pocket
+        notes: Removes material from an existing solid body.
+      - label: Fillet or chamfer
+        notes: Add late when possible; early rounds often create fragile models.
+      - label: Constrain geometry
+        value: Horizontal, vertical, coincident, tangent, symmetry, dimensional constraints
+      - label: Fully constrained target
+        value: FreeCAD sketches should usually end fully constrained before downstream features
+
+  - group: Common Reference
+    items:
+      - label: Workbenches
+        value: Part Design, Sketcher, Part, Draft, Arch, Spreadsheet, TechDraw
+      - label: Modeling habit
+        value: Keep a clean feature tree, name sketches, and defer cosmetic operations until the shape is stable
+      - label: Parametric mindset
+        value: Change dimensions and constraints first, not raw mesh-like geometry edits

@@ -1,0 +1,97 @@
+name: Figma
+group: creative apps
+process:
+  - Figma
+  - figma
+  - figma-linux
+references:
+  - group: Navigation and View
+    items:
+      - label: Search menus and actions
+        keys: Ctrl+Slash
+        keys_by_os:
+          macos: Cmd+Slash
+      - label: Zoom in or out
+        keys: Ctrl+Plus / Ctrl+Minus
+        keys_by_os:
+          macos: Cmd+Plus / Cmd+Minus
+      - label: Zoom to fit
+        keys: Shift+1
+      - label: Zoom to selection
+        keys: Shift+2
+      - label: Previous or next page
+        notes: Use the pages panel for document-scale navigation when files become large.
+      - label: Hand tool
+        keys: H or hold Space
+
+  - group: Tools and Selection
+    items:
+      - label: Move tool
+        keys: V
+      - label: Frame tool
+        keys: F
+      - label: Rectangle tool
+        keys: R
+      - label: Ellipse tool
+        keys: O
+      - label: Line tool
+        keys: L
+      - label: Pen tool
+        keys: P
+      - label: Text tool
+        keys: T
+      - label: Slice tool
+        keys: S
+
+  - group: Layers and Layout
+    items:
+      - label: Group selection
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: Ungroup selection
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Cmd+Shift+G
+      - label: Frame selection
+        keys: Ctrl+Alt+G
+        keys_by_os:
+          macos: Cmd+Option+G
+      - label: Bring forward or send backward
+        keys: Ctrl+RightBracket / Ctrl+LeftBracket
+        keys_by_os:
+          macos: Cmd+RightBracket / Cmd+LeftBracket
+      - label: Toggle UI
+        keys: Ctrl+Backslash
+        keys_by_os:
+          macos: Cmd+Backslash
+      - label: Add auto layout
+        keys: Shift+A
+      - label: Duplicate selection
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+
+  - group: Components and Reuse
+    items:
+      - label: Create component
+        keys: Ctrl+Alt+K
+        keys_by_os:
+          macos: Cmd+Option+K
+      - label: Detach instance
+        keys: Ctrl+Alt+B
+        keys_by_os:
+          macos: Cmd+Option+B
+      - label: Swap instance
+        notes: Use the right sidebar instance controls or quick actions to swap variants and related components.
+      - label: Boolean operations
+        value: Union, subtract, intersect, and exclude are high-value shape-combination tools for icon and UI work.
+
+  - group: Common Reference
+    items:
+      - label: Constraints
+        value: Define how layers pin or scale inside a parent frame during resize
+      - label: Auto layout
+        value: Use for stack-like spacing, padding, alignment, and responsive component behavior
+      - label: Prototype flow
+        value: Connect frames with interactions to model navigation, overlays, and animations

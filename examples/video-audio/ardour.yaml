@@ -1,0 +1,83 @@
+name: Ardour
+group: video / audio
+process:
+  - ardour
+  - ardour8
+  - ardour.exe
+references:
+  - group: Transport and Global
+    items:
+      - label: Play
+        keys: Space
+      - label: Stop
+        keys: Space or K
+      - label: Record enable and roll
+        keys: Shift+R
+      - label: Toggle loop playback
+        keys: L
+      - label: Add marker at playhead
+        keys: Insert
+      - label: Save session
+        keys: Ctrl+S
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Shift+Z
+
+  - group: Navigation and Range
+    items:
+      - label: Zoom in or out
+        keys: Equals / Minus
+      - label: Zoom to session
+        keys: Shift+Z
+      - label: Zoom to selection
+        keys: Z
+      - label: Previous or next marker
+        keys: Comma / Period
+      - label: Previous or next region boundary
+        keys: LeftArrow / RightArrow
+      - label: Set range start or end
+        notes: Ranges are central for looping, export windows, and focused editing.
+      - label: Nudge playhead
+        notes: Grid and edit point settings determine how far navigation steps move.
+
+  - group: Regions and Editing
+    items:
+      - label: Split region at playhead
+        keys: S
+      - label: Separate at transients
+        notes: Useful for drums, dialog cleanup, and beat-construction workflows.
+      - label: Duplicate
+        keys: Ctrl+D
+      - label: Delete selection
+        keys: Delete
+      - label: Normalize region
+        notes: Use intentionally after edit cleanup, not as a substitute for mix balance.
+      - label: Toggle snapping
+        keys: N
+      - label: Trim region edges
+        notes: Dragging and edit point modes control whether trims affect start, end, or playhead.
+
+  - group: Tracks and Mixer
+    items:
+      - label: Add track bus or VCA
+        keys: Ctrl+Shift+N
+      - label: Duplicate track or bus
+        notes: Valuable when routing and plugin chains should be preserved across multiple sources.
+      - label: Mute track
+        keys: M
+      - label: Solo track
+        keys: S
+      - label: Record arm track
+        keys: Shift+R in track context
+      - label: Mixer view
+        keys: Alt+M
+      - label: Editor and mixer split
+        notes: Ardour workflows often pivot between editor precision and mixer routing depth.
+
+  - group: Common Reference
+    items:
+      - label: Ardour strengths
+        value: Recording, editing, routing, bus processing, and Linux-native production workflows
+      - label: Routing model
+        value: Tracks, buses, monitor sections, and sends can all be combined for complex signal flow
+      - label: Session discipline
+        value: Set sample rate, I/O, latency expectations, and folder layout early in a project

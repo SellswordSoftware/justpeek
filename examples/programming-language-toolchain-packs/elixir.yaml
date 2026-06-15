@@ -1,0 +1,103 @@
+name: Elixir Toolchain
+group: programming language / toolchain packs
+process:
+  - elixir
+  - elixir.bat
+  - iex
+  - mix
+search_terms:
+  - mix
+  - iex
+  - exunit
+  - phoenix
+references:
+  - group: Runtime and Mix
+    items:
+      - label: Show version
+        command: elixir --version
+      - label: Run script
+        command: elixir script.exs
+      - label: Start interactive shell
+        command: iex
+      - label: Start shell with project loaded
+        command: iex -S mix
+      - label: Create new project
+        command: mix new my_app
+      - label: Fetch dependencies
+        command: mix deps.get
+      - label: Compile project
+        command: mix compile
+
+  - group: Testing and Quality
+    items:
+      - label: Run tests
+        command: mix test
+      - label: Run one test file
+        command: mix test test/my_app_test.exs
+      - label: Run one line
+        command: mix test test/my_app_test.exs:12
+      - label: Format project
+        command: mix format
+      - label: Check formatting
+        command: mix format --check-formatted
+      - label: Static analysis with Credo
+        command: mix credo
+      - label: Dialyzer
+        command: mix dialyzer
+
+  - group: Project and Framework Workflows
+    items:
+      - label: Run app
+        command: mix run --no-halt
+      - label: Run one-off code
+        command: mix run -e 'IO.puts("hello")'
+      - label: Generate docs
+        command: mix docs
+      - label: Phoenix server
+        command: mix phx.server
+      - label: Phoenix routes
+        command: mix phx.routes
+      - label: Ecto database setup
+        command: mix ecto.setup
+      - label: Reset database
+        command: mix ecto.reset
+
+  - group: Handy Snippets
+    items:
+      - label: Module and function
+        command: |
+          defmodule Greeter do
+            def hello(name), do: "hello #{name}"
+          end
+      - label: Enum pipeline
+        command: |
+          [1, 2, 3]
+          |> Enum.map(&(&1 * 2))
+          |> Enum.sum()
+      - label: Pattern match
+        command: |
+          {:ok, value} = {:ok, 123}
+      - label: Case expression
+        command: |
+          case result do
+            {:ok, value} -> value
+            {:error, reason} -> reason
+          end
+      - label: GenServer skeleton
+        command: |
+          defmodule Counter do
+            use GenServer
+          end
+
+  - group: Common Concepts
+    items:
+      - label: Mix
+        value: Project generator, build tool, task runner, dependency manager, and test entry point
+      - label: IEx
+        value: Interactive shell is central to exploring code, debugging, and calling project functions live
+      - label: Pattern matching
+        value: Core control-flow and data-deconstruction mechanism, not a niche feature
+      - label: BEAM strengths
+        value: Fault tolerance, concurrency, long-running services, and actor-style process design
+      - label: Phoenix and Ecto
+        value: Web and database work often revolve around these libraries rather than raw language-only patterns

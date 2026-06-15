@@ -1,0 +1,151 @@
+name: PostgreSQL
+group: database
+process:
+  - psql
+  - postgres
+search_terms:
+  - psql
+  - postgresql
+  - pg_dump
+  - pg_restore
+  - vacuum analyze
+references:
+  - group: Connect and Session
+    items:
+      - label: Connect with URL
+        command: "psql postgresql://user:password@localhost:5432/dbname"
+      - label: Connect with flags
+        command: psql -h localhost -p 5432 -U postgres -d appdb
+      - label: Connect from env vars
+        command: |
+          export PGHOST=localhost
+          export PGPORT=5432
+          export PGUSER=postgres
+          export PGDATABASE=appdb
+          psql
+      - label: Show connection info
+        command: \conninfo
+      - label: List databases
+        command: \l
+      - label: Switch database
+        command: \c appdb
+      - label: Quit psql
+        command: \q
+
+  - group: psql Meta Commands
+    items:
+      - label: List tables
+        command: \dt
+      - label: List views
+        command: \dv
+      - label: List schemas
+        command: \dn
+      - label: Describe table
+        command: \d users
+      - label: Describe table with extras
+        command: \d+ users
+      - label: List functions
+        command: \df
+      - label: Timing on
+        command: \timing on
+      - label: Expanded output
+        command: \x on
+
+  - group: Query and Admin Basics
+    items:
+      - label: Show current database and user
+        command: |
+          SELECT current_database(), current_user;
+      - label: Show server version
+        command: SHOW server_version;
+      - label: Create database
+        command: CREATE DATABASE appdb;
+      - label: Create role with password
+        command: CREATE ROLE appuser WITH LOGIN PASSWORD 'secret';
+      - label: Grant database privileges
+        command: GRANT ALL PRIVILEGES ON DATABASE appdb TO appuser;
+      - label: Terminate other sessions
+        command: |
+          SELECT pg_terminate_backend(pid)
+          FROM pg_stat_activity
+          WHERE datname = 'appdb'
+            AND pid <> pg_backend_pid();
+      - label: See active queries
+        command: |
+          SELECT pid, usename, state, query
+          FROM pg_stat_activity
+          ORDER BY query_start DESC;
+
+  - group: Schema and Table Work
+    items:
+      - label: Create schema
+        command: CREATE SCHEMA analytics;
+      - label: Set schema search path
+        command: SET search_path TO analytics, public;
+      - label: Create table
+        command: |
+          CREATE TABLE users (
+              id BIGSERIAL PRIMARY KEY,
+              email TEXT NOT NULL UNIQUE,
+              created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+          );
+      - label: Add column
+        command: ALTER TABLE users ADD COLUMN display_name TEXT;
+      - label: Rename column
+        command: ALTER TABLE users RENAME COLUMN display_name TO name;
+      - label: Create index
+        command: CREATE INDEX idx_users_created_at ON users (created_at);
+      - label: Create partial index
+        command: CREATE INDEX idx_users_active ON users (id) WHERE deleted_at IS NULL;
+      - label: Upsert
+        command: |
+          INSERT INTO users (email)
+          VALUES ('sam@example.com')
+          ON CONFLICT (email) DO UPDATE
+          SET email = EXCLUDED.email;
+
+  - group: Backup Restore and Import Export
+    items:
+      - label: Dump one database
+        command: pg_dump -h localhost -U postgres -d appdb > appdb.sql
+      - label: Dump in custom format
+        command: pg_dump -Fc -h localhost -U postgres -d appdb -f appdb.dump
+      - label: Restore SQL dump
+        command: psql -h localhost -U postgres -d appdb < appdb.sql
+      - label: Restore custom dump
+        command: pg_restore -h localhost -U postgres -d appdb --clean --if-exists appdb.dump
+      - label: Export query to CSV
+        command: |
+          \copy (SELECT * FROM users ORDER BY id) TO 'users.csv' CSV HEADER
+      - label: Import CSV into table
+        command: |
+          \copy users(email, created_at) FROM 'users.csv' CSV HEADER
+
+  - group: Performance and Maintenance
+    items:
+      - label: Explain query
+        command: EXPLAIN SELECT * FROM users WHERE email = 'sam@example.com';
+      - label: Explain analyze query
+        command: EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'sam@example.com';
+      - label: Vacuum and analyze
+        command: VACUUM ANALYZE users;
+      - label: Reindex table
+        command: REINDEX TABLE users;
+      - label: Table size
+        command: |
+          SELECT pg_size_pretty(pg_total_relation_size('users'));
+      - label: Top slow statements extension
+        value: "`pg_stat_statements` is one of the first things to enable when query performance becomes a real issue"
+
+  - group: Common Concepts
+    items:
+      - label: psql backslash commands
+        value: "`\\d`, `\\dt`, `\\l`, `\\c`, `\\x`, and `\\timing` are the main interactive navigation tools inside the shell"
+      - label: Serial versus identity
+        value: "Newer schemas often prefer `GENERATED ... AS IDENTITY` over legacy serial pseudo-types"
+      - label: Transaction habit
+        value: "Use `BEGIN`, `COMMIT`, and `ROLLBACK` intentionally when changing data or schema interactively"
+      - label: Explain first
+        value: "For performance work, start with `EXPLAIN ANALYZE` and indexes before reaching for broader tuning"
+      - label: Dump tool split
+        value: "`pg_dump` creates backups, `pg_restore` restores custom-format archives, and `psql` is often used for plain SQL dumps"

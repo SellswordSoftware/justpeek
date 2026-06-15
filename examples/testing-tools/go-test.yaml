@@ -1,0 +1,92 @@
+name: go test
+group: testing tools
+process:
+  - go
+search_terms:
+  - go test
+  - race
+  - bench
+  - cover
+references:
+  - group: Running Tests
+    items:
+      - label: Run all packages
+        command: go test ./...
+      - label: Verbose
+        command: go test -v ./...
+      - label: Run one test
+        command: go test -run TestName ./...
+      - label: Run one package
+        command: go test ./pkg/service
+      - label: Count one
+        command: go test -count=1 ./...
+        notes: Disables cached pass reuse for the run.
+      - label: Short mode
+        command: go test -short ./...
+      - label: Fail fast
+        command: go test -failfast ./...
+
+  - group: Coverage Bench and Race
+    items:
+      - label: Coverage
+        command: go test -cover ./...
+      - label: Coverage profile
+        command: go test -coverprofile=cover.out ./...
+      - label: View coverage in browser
+        command: go tool cover -html=cover.out
+      - label: Benchmarks
+        command: go test -bench=. ./...
+      - label: Benchmark memory
+        command: go test -bench=. -benchmem ./...
+      - label: Race detector
+        command: go test -race ./...
+
+  - group: Handy Snippets
+    items:
+      - label: Basic test
+        command: |
+          func TestAdd(t *testing.T) {
+              if got := 1 + 2; got != 3 {
+                  t.Fatalf("got %d want 3", got)
+              }
+          }
+      - label: Table-driven test
+        command: |
+          func TestAdd(t *testing.T) {
+              tests := []struct{
+                  a, b, want int
+              }{
+                  {1, 2, 3},
+              }
+              for _, tt := range tests {
+                  if got := Add(tt.a, tt.b); got != tt.want {
+                      t.Fatalf("got %d want %d", got, tt.want)
+                  }
+              }
+          }
+      - label: Benchmark
+        command: |
+          func BenchmarkAdd(b *testing.B) {
+              for i := 0; i < b.N; i++ {
+                  _ = 1 + 2
+              }
+          }
+      - label: Example test
+        command: |
+          func ExampleAdd() {
+              fmt.Println(Add(1, 2))
+              // Output: 3
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Package-oriented runner
+        value: "`go test` works at package granularity and compiles test binaries before executing them"
+      - label: Caching
+        value: "Passing test results can be cached, which is great until you forget and need `-count=1`"
+      - label: Table-driven style
+        value: One of the most common idioms for compact, scalable test coverage in Go codebases
+      - label: Race detector
+        value: Extremely high-value for concurrent code and worth running regularly
+      - label: Short mode
+        value: Lets tests opt out of expensive work during normal local loops

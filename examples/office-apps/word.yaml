@@ -1,0 +1,130 @@
+name: Word
+group: office apps
+process:
+  - WINWORD.EXE
+  - winword.exe
+  - winword
+  - Microsoft Word
+references:
+  - group: File and Document
+    items:
+      - label: New document
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open document
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Save as
+        keys: F12
+        keys_by_os:
+          macos: Cmd+Shift+S
+      - label: Print
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Close document
+        keys: Ctrl+W
+        keys_by_os:
+          macos: Cmd+W
+
+  - group: Navigation and Search
+    items:
+      - label: Find
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Replace
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Shift+Cmd+H
+      - label: Go to page section or line
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Option+Cmd+G
+      - label: Move one word left or right
+        keys: Ctrl+LeftArrow / Ctrl+RightArrow
+        keys_by_os:
+          macos: Option+LeftArrow / Option+RightArrow
+      - label: Start or end of document
+        keys: Ctrl+Home / Ctrl+End
+        keys_by_os:
+          macos: Cmd+Up / Cmd+Down
+      - label: Show navigation pane
+        keys: Ctrl+F
+        notes: Reuse headings and search results to move through long documents quickly.
+
+  - group: Formatting
+    items:
+      - label: Bold
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Italic
+        keys: Ctrl+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Underline
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Change case
+        keys: Shift+F3
+        notes: Cycle sentence case, lowercase, and uppercase.
+      - label: Increase font size
+        keys: Ctrl+Shift+GreaterThan
+        keys_by_os:
+          macos: Cmd+Shift+GreaterThan
+      - label: Decrease font size
+        keys: Ctrl+Shift+LessThan
+        keys_by_os:
+          macos: Cmd+Shift+LessThan
+      - label: Clear character formatting
+        keys: Ctrl+Space
+        keys_by_os:
+          macos: Cmd+Space
+      - label: Copy formatting
+        keys: Ctrl+Shift+C
+      - label: Paste formatting
+        keys: Ctrl+Shift+V
+
+  - group: Structure and Review
+    items:
+      - label: Apply Normal style
+        keys: Ctrl+Shift+N
+      - label: Apply Heading 1 2 or 3
+        keys: Alt+Ctrl+1 / Alt+Ctrl+2 / Alt+Ctrl+3
+      - label: Insert hyperlink
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Insert comment
+        keys: Ctrl+Alt+M
+        keys_by_os:
+          macos: Cmd+Option+A
+      - label: Track changes
+        keys: Ctrl+Shift+E
+      - label: Spelling and grammar
+        keys: F7
+      - label: Word count
+        keys: Ctrl+Shift+G
+        notes: Useful for editorial and submission workflows.
+
+  - group: Common Reference
+    items:
+      - label: Nonbreaking space
+        keys: Ctrl+Shift+Space
+      - label: Page break
+        keys: Ctrl+Enter
+      - label: Show or hide formatting marks
+        keys: Ctrl+Shift+8
+        notes: Helpful when debugging spacing, page breaks, and list indentation.
+      - label: Paste special
+        keys: Ctrl+Alt+V
+      - label: Keep source vs merge formatting
+        notes: Paste options are worth checking any time content comes from mail, web pages, or slides.

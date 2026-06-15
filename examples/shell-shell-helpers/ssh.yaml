@@ -14,7 +14,7 @@ references:
         notes: Execute a command non-interactively and return its output locally.
       - label: Force pseudo-terminal
         command: ssh -t user@host 'sudo systemctl status nginx'
-        notes: `-t` allocates a TTY for commands that require interactive terminal semantics.
+        notes: "`-t` allocates a TTY for commands that require interactive terminal semantics."
       - label: Connect quietly
         command: ssh -q user@host
         notes: Reduce diagnostic noise in scripts and wrappers.
@@ -41,7 +41,7 @@ references:
     items:
       - label: Use SSH config alias
         command: ssh prod-web
-        notes: Host aliases from `~/.ssh/config` simplify repeated connections.
+        notes: "Host aliases from `~/.ssh/config` simplify repeated connections."
       - label: Host config example
         command: |
           Host prod-web
@@ -63,17 +63,17 @@ references:
   - group: Tunnels and Port Forwarding
     items:
       - label: Local port forward
-        command: ssh -L 5432:db.internal:5432 user@bastion
+        command: "ssh -L 5432:db.internal:5432 user@bastion"
         notes: Expose a remote service locally through the SSH connection.
       - label: Remote port forward
-        command: ssh -R 8080:localhost:3000 user@host
+        command: "ssh -R 8080:localhost:3000 user@host"
         notes: Publish a local service outward through the remote host.
       - label: Dynamic SOCKS proxy
         command: ssh -D 1080 user@host
         notes: Create a local SOCKS proxy for browser or CLI traffic.
       - label: Background tunnel only
-        command: ssh -fN -L 5432:db.internal:5432 user@bastion
-        notes: `-N` skips running a remote shell and `-f` backgrounds after auth.
+        command: "ssh -fN -L 5432:db.internal:5432 user@bastion"
+        notes: "`-N` skips running a remote shell and `-f` backgrounds after auth."
       - label: Jump through bastion
         command: ssh -J bastion user@private-host
         notes: ProxyJump is cleaner than manual nested SSH in many environments.
@@ -81,7 +81,7 @@ references:
   - group: Multiplexing and Reliability
     items:
       - label: Enable connection multiplexing
-        command: ssh -o ControlMaster=auto -o ControlPersist=10m -o ControlPath=~/.ssh/cm-%r@%h:%p user@host
+        command: "ssh -o ControlMaster=auto -o ControlPersist=10m -o ControlPath=~/.ssh/cm-%r@%h:%p user@host"
         notes: Reuse one TCP connection across multiple SSH invocations.
       - label: Keepalive probes
         command: ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 user@host
@@ -93,7 +93,7 @@ references:
         command: ssh -C user@host
         notes: Can help for text-heavy sessions over limited bandwidth.
       - label: Escape sequence help
-        value: `~.` disconnects and `~?` shows client escape help at a new line in interactive SSH.
+        value: "`~.` disconnects and `~?` shows client escape help at a new line in interactive SSH."
         notes: Useful when a remote shell is hung but the client still responds.
 
   - group: Troubleshooting and Inspection

@@ -1,0 +1,161 @@
+name: Tauri
+group: web / devops / app tools
+search_terms:
+  - tauri 2
+  - desktop app
+  - rust frontend
+  - tauri commands
+  - invoke
+references:
+  - group: Project Setup
+    items:
+      - label: Create app
+        command: npm create tauri-app@latest
+      - label: Add Tauri to existing frontend
+        command: npm install @tauri-apps/cli @tauri-apps/api
+      - label: Initialize in existing project
+        command: npx tauri init
+      - label: Dev run
+        command: npm run tauri dev
+      - label: Build app
+        command: npm run tauri build
+      - label: Tauri info
+        command: npx tauri info
+      - label: Cargo check backend
+        command: cargo check --manifest-path src-tauri/Cargo.toml
+
+  - group: Core CLI and Workflow
+    items:
+      - label: Run CLI directly
+        command: npx tauri dev
+      - label: Build with debug symbols
+        command: npx tauri build --debug
+      - label: Android init
+        command: npx tauri android init
+      - label: iOS init
+        command: npx tauri ios init
+      - label: Plugin add
+        command: npx tauri plugin add shell
+      - label: Format frontend and backend loop
+        value: Pair frontend formatter with `cargo fmt` and `cargo clippy` for normal Rust-side hygiene
+      - label: Logs and diagnostics
+        notes: Run dev from a terminal when you need Rust panic output, plugin diagnostics, or CLI build logs.
+
+  - group: Frontend to Backend Bridge
+    items:
+      - label: Invoke command from frontend
+        command: |
+          import { invoke } from "@tauri-apps/api/core";
+          
+          const result = await invoke("greet", { name: "Sam" });
+      - label: Define Rust command
+        command: |
+          #[tauri::command]
+          fn greet(name: &str) -> String {
+              format!("Hello, {}!", name)
+          }
+      - label: Register command
+        command: |
+          tauri::Builder::default()
+              .invoke_handler(tauri::generate_handler![greet])
+      - label: Emit event from backend
+        command: |
+          app.emit("sync-complete", payload)?;
+      - label: Listen on frontend
+        command: |
+          import { listen } from "@tauri-apps/api/event";
+          
+          const unlisten = await listen("sync-complete", (event) => {
+            console.log(event.payload);
+          });
+
+  - group: Windows Menus and Tray
+    items:
+      - label: Create window
+        command: |
+          use tauri::WebviewWindowBuilder;
+          
+          WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("index.html".into()))
+              .title("App")
+              .build()?;
+      - label: System tray
+        value: In Tauri 2, use the tray API and menu builders from the Rust side rather than assuming old v1 examples still match
+      - label: Open devtools
+        notes: UI path during development depends on platform windowing and dev mode; terminal logs remain the most reliable first debug surface.
+      - label: Multiwindow fit
+        value: Tauri works well for tray apps, settings windows, and tool panels when window labels and state are kept intentional
+
+  - group: Config and Capability Paths
+    items:
+      - label: Main config
+        value: src-tauri/tauri.conf.json or version-equivalent config files
+      - label: Cargo manifest
+        value: src-tauri/Cargo.toml
+      - label: Rust backend entry
+        value: src-tauri/src/main.rs or src-tauri/src/lib.rs
+      - label: Capabilities
+        notes: "UI path in repo: `src-tauri/capabilities/` for permission capability files in Tauri 2."
+      - label: Icons and bundle assets
+        notes: "UI path in repo: `src-tauri/icons/` plus bundler config in Tauri config."
+      - label: Frontend dist path
+        notes: "UI path in config: `build.frontendDist` and related build settings."
+
+  - group: Plugins and Common Features
+    items:
+      - label: Shell plugin
+        value: Open files, spawn commands, and OS integrations often move through the shell plugin
+      - label: Dialog plugin
+        value: File pickers, save dialogs, and confirm flows usually come from the dialog plugin
+      - label: FS plugin
+        value: File operations and path work should respect Tauri capability and scope rules
+      - label: Store plugin
+        value: Useful for lightweight persisted settings on the frontend side
+      - label: Notification plugin
+        value: Good fit for background desktop workflows and tray-first apps
+      - label: Updater plugin
+        value: Common production requirement when distributing desktop apps outside dev environments
+
+  - group: Handy Snippets
+    items:
+      - label: Command returning Result
+        command: |
+          #[tauri::command]
+          fn load_user(id: String) -> Result<String, String> {
+              if id.is_empty() {
+                  return Err("missing id".into());
+              }
+              Ok(id)
+          }
+      - label: Frontend path usage
+        command: |
+          import { appDataDir } from "@tauri-apps/api/path";
+          
+          const dir = await appDataDir();
+      - label: Read file from frontend
+        command: |
+          import { readTextFile } from "@tauri-apps/plugin-fs";
+          
+          const text = await readTextFile("notes.txt");
+      - label: Open external URL
+        command: |
+          import { openUrl } from "@tauri-apps/plugin-opener";
+          
+          await openUrl("https://tauri.app");
+      - label: Spawn sidecar or command
+        command: |
+          import { Command } from "@tauri-apps/plugin-shell";
+          
+          const output = await Command.create("my-sidecar").execute();
+
+  - group: Common Concepts
+    items:
+      - label: Frontend plus Rust split
+        value: Tauri apps are usually web frontends paired with a Rust backend for native integration and distribution
+      - label: Capability model
+        value: Tauri 2 security and plugin access depend heavily on explicit capabilities and scoped permissions
+      - label: Dev loop
+        value: Most iteration involves `tauri dev`, the frontend dev server, and Cargo rebuilds happening together
+      - label: Plugin-first native access
+        value: Shell, fs, dialog, updater, and notification features are often plugin concerns before they become custom Rust code
+      - label: Best fit
+        value: Desktop utilities and cross-platform native-feeling apps where a web UI plus Rust bridge is a strong tradeoff

@@ -23,7 +23,7 @@ references:
     items:
       - label: Set a scalar field in place
         command: yq -i '.spec.replicas = 3' deployment.yaml
-        notes: `-i` edits the file directly for supported yq implementations.
+        notes: "`-i` edits the file directly for supported yq implementations."
       - label: Set nested field
         command: yq -i '.image.tag = "1.2.3"' values.yaml
         notes: Create or overwrite nested values via assignment.
@@ -65,7 +65,7 @@ references:
         notes: Common overlay pattern for environment-specific config.
       - label: Merge arrays by append
         command: yq eval-all '. as $item ireduce ({}; . *+ $item )' a.yaml b.yaml
-        notes: `*+` keeps array items rather than replacing arrays wholesale.
+        notes: "`*+` keeps array items rather than replacing arrays wholesale."
       - label: Split documents to files
         command: yq eval -s '.kind + "-" + .metadata.name' manifests.yaml
         notes: Write each document to a separate output file based on an expression.
@@ -88,13 +88,13 @@ references:
         command: yq '.items | length' config.yaml
         notes: Count sequence elements without external tooling.
       - label: Build new object
-        command: yq '{name: .metadata.name, ns: .metadata.namespace}' manifest.yaml
+        command: "yq '{name: .metadata.name, ns: .metadata.namespace}' manifest.yaml"
         notes: Reshape documents into simpler summaries.
 
   - group: Common Workflows and Debugging
     items:
       - label: Update Kubernetes image tag
-        command: yq -i '.spec.template.spec.containers[].image |= sub(":.*$"; ":1.2.3")' deploy.yaml
+        command: "yq -i '.spec.template.spec.containers[].image |= sub(\":.*$\"; \":1.2.3\")' deploy.yaml"
         notes: Practical pattern for manifest release updates.
       - label: Read Helm values path
         command: yq '.image.repository, .image.tag' values.yaml

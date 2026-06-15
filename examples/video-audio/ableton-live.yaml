@@ -1,0 +1,145 @@
+name: Ableton Live
+group: video / audio
+process:
+  - Ableton Live
+  - Ableton Live 12 Suite
+  - Ableton Live 11 Suite
+  - live
+references:
+  - group: Transport and Global
+    items:
+      - label: Play or stop
+        keys: Space
+      - label: Record
+        keys: F9
+      - label: Session record
+        keys: Ctrl+Shift+F9
+        keys_by_os:
+          macos: Cmd+Shift+F9
+      - label: Toggle metronome
+        keys: Ctrl+4
+        keys_by_os:
+          macos: Cmd+4
+      - label: Tap tempo
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Shift+Z
+        keys_by_os:
+          macos: Cmd+Z / Cmd+Shift+Z
+      - label: Save live set
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+
+  - group: Views and Navigation
+    items:
+      - label: Toggle session and arrangement view
+        keys: Tab
+      - label: Browser
+        keys: Ctrl+Alt+B
+        keys_by_os:
+          macos: Cmd+Option+B
+      - label: Detail view
+        keys: Ctrl+Alt+L
+        keys_by_os:
+          macos: Cmd+Option+L
+      - label: Device chain view
+        keys: Shift+Tab
+      - label: Clip view and device view
+        notes: "`Shift+Tab` flips the lower panel between clip and device focus depending on context."
+      - label: Toggle fullscreen
+        keys: F11
+      - label: Zoom to arrangement selection
+        keys: Z
+      - label: Back from zoom
+        keys: X
+
+  - group: Clips and Arrangement
+    items:
+      - label: Consolidate time selection or clips
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+J
+      - label: Duplicate
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Duplicate loop
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Split clip
+        keys: Ctrl+E
+        keys_by_os:
+          macos: Cmd+E
+      - label: Crop clip
+        keys: Ctrl+Shift+X
+        keys_by_os:
+          macos: Cmd+Shift+X
+      - label: Reverse sample
+        keys: R
+      - label: Quantize
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Quantize settings
+        keys: Ctrl+Shift+U
+        keys_by_os:
+          macos: Cmd+Shift+U
+
+  - group: Track and Mixer
+    items:
+      - label: Insert audio track
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Insert MIDI track
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: Group tracks
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: Ungroup tracks
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Cmd+Shift+G
+      - label: Arm selected track
+        keys: F9
+        notes: Transport record and track arm differ by focus and controller context.
+      - label: Solo selected track
+        keys: S
+      - label: Deactivate clip or device
+        keys: "0"
+      - label: Rename selected item
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+
+  - group: MIDI and Editing
+    items:
+      - label: Draw mode
+        keys: B
+      - label: Fold to used notes
+        notes: Crucial in dense MIDI editing sessions to reduce visible key clutter.
+      - label: Nudge notes left or right
+        keys: LeftArrow / RightArrow
+      - label: Transpose notes up or down
+        keys: UpArrow / DownArrow
+      - label: Transpose by octave
+        keys: Shift+UpArrow / Shift+DownArrow
+      - label: Legato
+        keys: Ctrl+J
+        notes: In note context this extends notes to fill gaps.
+
+  - group: Common Reference
+    items:
+      - label: Session vs arrangement
+        value: Session is clip launching and improvisation, Arrangement is linear song structure
+      - label: Freeze and flatten
+        value: Freeze saves CPU, flatten commits the rendered result into audio
+      - label: Warp discipline
+        value: Confirm warp mode and transient placement before timing edits or resampling

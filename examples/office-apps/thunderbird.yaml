@@ -1,0 +1,96 @@
+name: Thunderbird
+group: office apps
+process:
+  - thunderbird
+  - thunderbird-bin
+  - thunderbird.exe
+references:
+  - group: Mail Triage
+    items:
+      - label: New message
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Reply
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Reply all
+        keys: Ctrl+Shift+R
+        keys_by_os:
+          macos: Cmd+Shift+R
+      - label: Forward
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Archive
+        keys: A
+      - label: Delete
+        keys: Delete
+      - label: Mark unread
+        keys: M
+
+  - group: Search and Navigation
+    items:
+      - label: Global search
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Find in message
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Get new messages
+        keys: F5
+      - label: Next unread message
+        keys: N
+      - label: Previous unread message
+        keys: P
+      - label: Next tab
+        keys: Ctrl+Tab
+      - label: Previous tab
+        keys: Ctrl+Shift+Tab
+
+  - group: Composition and Calendar
+    items:
+      - label: Send message
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Return
+      - label: Save draft
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Attach file
+        keys: Ctrl+Shift+A
+      - label: Add link
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: New event
+        keys: Ctrl+I
+        notes: In calendar contexts this opens a new event item.
+      - label: New task
+        keys: Ctrl+D
+        notes: In calendar or tasks contexts this creates a new task.
+
+  - group: Filters Tags and Search Syntax
+    items:
+      - label: Tag message
+        keys: 1 through 5
+        notes: Numeric keys map to message tags for quick triage.
+      - label: Quick filter
+        value: unread, starred, tags, contacts, attachment
+      - label: Saved search folders
+        notes: Useful when the same triage slice spans multiple accounts or folders.
+      - label: Message filters
+        notes: Use filters for repeatable mail routing instead of manual folder cleanup.
+
+  - group: Common Reference
+    items:
+      - label: Offline sync
+        notes: Account settings control which folders stay available offline for travel or poor connectivity.
+      - label: Unified folders
+        notes: Unified inboxes are convenient, but per-account folders are often clearer during debugging or support work.
+      - label: OpenPGP
+        notes: Thunderbird includes built-in OpenPGP support for signed and encrypted mail workflows.

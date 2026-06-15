@@ -1,0 +1,466 @@
+name: React
+group: web / devops / app tools
+process:
+  - node
+title_contains: react
+search_terms:
+  - reactjs
+  - jsx
+  - hooks
+  - virtual dom
+  - component library
+references:
+  - group: Project Setup
+    items:
+      - label: Create with Vite (recommended)
+        command: npm create vite@latest my-app -- --template react
+      - label: Create with TypeScript
+        command: npm create vite@latest my-app -- --template react-ts
+      - label: Create with Create React App (legacy)
+        command: npx create-react-app my-app
+      - label: Install React into existing project
+        command: npm install react react-dom
+      - label: Install React 19 (canary)
+        command: npm install react@rc react-dom@rc
+
+  - group: Component Basics
+    items:
+      - label: Functional component
+        command: |
+          function Greeting({ name }) {
+            return <h1>Hello, {name}</h1>
+          }
+      - label: Arrow function component
+        command: |
+          const Greeting = ({ name }) => <h1>Hello, {name}</h1>
+      - label: Component composition
+        command: |
+          function Layout({ children, sidebar }) {
+            return (
+              <div>
+                <nav>Sidebar</nav>
+                <main>{children}</main>
+                <aside>{sidebar}</aside>
+              </div>
+            )
+          }
+      - label: Conditional rendering
+        command: |
+          function Status({ isLoggedIn }) {
+            return isLoggedIn ? <Welcome /> : <LoginPrompt />
+          }
+      - label: List rendering
+        command: |
+          function TodoList({ todos }) {
+            return (
+              <ul>
+                {todos.map(todo => (
+                  <li key={todo.id}>{todo.text}</li>
+                ))}
+              </ul>
+            )
+          }
+
+  - group: useState Hook
+    items:
+      - label: Basic state
+        command: |
+          import { useState } from 'react'
+          
+          function Counter() {
+            const [count, setCount] = useState(0)
+            return <button onClick={() => setCount(c => c + 1)}>{count}</button>
+          }
+      - label: Object state
+        command: |
+          const [form, setForm] = useState({ name: '', email: '' })
+          
+          const handleChange = (e) => {
+            setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
+          }
+      - label: Array state
+        command: |
+          const [items, setItems] = useState([])
+          
+          const addItem = (item) => {
+            setItems(prev => [...prev, item])
+          }
+          
+          const removeItem = (index) => {
+            setItems(prev => prev.filter((_, i) => i !== index))
+          }
+      - label: Lazy initialization
+        command: |
+          const [data, setData] = useState(() => {
+            return expensiveComputation()
+          })
+        notes: The function runs only on the initial render
+
+  - group: useEffect Hook
+    items:
+      - label: Run once on mount
+        command: |
+          import { useEffect } from 'react'
+          
+          useEffect(() => {
+            console.log('Mounted')
+          }, [])
+      - label: Run on dependency change
+        command: |
+          useEffect(() => {
+            fetchData(id).then(setData)
+          }, [id])
+      - label: Cleanup function
+        command: |
+          useEffect(() => {
+            const timer = setInterval(tick, 1000)
+            return () => clearInterval(timer)
+          }, [])
+      - label: Event listener
+        command: |
+          useEffect(() => {
+            const handler = (e) => console.log(e.key)
+            window.addEventListener('keydown', handler)
+            return () => window.removeEventListener('keydown', handler)
+          }, [])
+      - label: Multiple effects
+        value: |
+          Use separate useEffect hooks for separate concerns.
+          Each effect runs independently and cleans up only its own resources.
+
+  - group: useContext Hook
+    items:
+      - label: Create context
+        command: |
+          import { createContext } from 'react'
+          
+          const ThemeContext = createContext('light')
+      - label: Provide context
+        command: |
+          function App() {
+            return (
+              <ThemeContext.Provider value="dark">
+                <Child />
+              </ThemeContext.Provider>
+            )
+          }
+      - label: Consume context
+        command: |
+          import { useContext } from 'react'
+          
+          function Child() {
+            const theme = useContext(ThemeContext)
+            return <div className={theme}>Content</div>
+          }
+      - label: Multiple providers
+        command: |
+          function App() {
+            return (
+              <ThemeContext.Provider value="dark">
+                <UserContext.Provider value={user}>
+                  <Child />
+                </UserContext.Provider>
+              </ThemeContext.Provider>
+            )
+          }
+
+  - group: useReducer Hook
+    items:
+      - label: Basic reducer
+        command: |
+          import { useReducer } from 'react'
+          
+          function reducer(state, action) {
+            switch (action.type) {
+              case 'increment': return { count: state.count + 1 }
+              case 'decrement': return { count: state.count - 1 }
+              default: throw new Error()
+            }
+          }
+          
+          function Counter() {
+            const [state, dispatch] = useReducer(reducer, { count: 0 })
+            return (
+              <>
+                Count: {state.count}
+                <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+              </>
+            )
+          }
+      - label: State initialization
+        command: |
+          const [state, dispatch] = useReducer(reducer, initialState, (init) => {
+            return typeof window !== 'undefined'
+              ? JSON.parse(localStorage.getItem('state')) || init
+              : init
+          })
+        notes: Lazy initializer avoids double computation in Strict Mode
+
+  - group: useRef Hook
+    items:
+      - label: DOM ref
+        command: |
+          import { useRef, useEffect } from 'react'
+          
+          function InputFocus() {
+            const inputRef = useRef(null)
+            useEffect(() => inputRef.current.focus(), [])
+            return <input ref={inputRef} />
+          }
+      - label: Mutable value
+        command: |
+          const countRef = useRef(0)
+          
+          function increment() {
+            countRef.current += 1
+            // Does not trigger re-render
+          }
+        notes: Mutating ref.current does not cause a re-render
+
+  - group: useCallback / useMemo
+    items:
+      - label: useCallback
+        command: |
+          import { useCallback, useState } from 'react'
+          
+          function Parent() {
+            const [count, setCount] = useState(0)
+            
+            const handleClick = useCallback(() => {
+              console.log(count)
+            }, [count])
+            
+            return <ExpensiveChild onClick={handleClick} />
+          }
+        notes: Prevents unnecessary re-renders of memoized child components
+      - label: useMemo
+        command: |
+          import { useMemo, useState } from 'react'
+          
+          function Component({ items }) {
+            const sorted = useMemo(() => {
+              return [...items].sort((a, b) => a.value - b.value)
+            }, [items])
+            return <List items={sorted} />
+          }
+        notes: Cache expensive computation between renders
+
+  - group: Custom Hooks
+    items:
+      - label: Fetch hook
+        command: |
+          import { useState, useEffect } from 'react'
+          
+          function useFetch(url) {
+            const [data, setData] = useState(null)
+            const [loading, setLoading] = useState(true)
+            
+            useEffect(() => {
+              fetch(url).then(res => res.json()).then(setData)
+                .finally(() => setLoading(false))
+            }, [url])
+            
+            return { data, loading }
+          }
+      - label: Local storage hook
+        command: |
+          function useLocalStorage(key, initialValue) {
+            const [value, setValue] = useState(() => {
+              const stored = localStorage.getItem(key)
+              return stored ? JSON.parse(stored) : initialValue
+            })
+            
+            const set = (val) => {
+              setValue(val)
+              localStorage.setItem(key, JSON.stringify(val))
+            }
+            
+            return [value, set]
+          }
+      - label: Window size hook
+        command: |
+          function useWindowSize() {
+            const [size, setSize] = useState({
+              width: window.innerWidth,
+              height: window.innerHeight,
+            })
+            
+            useEffect(() => {
+              const handler = () => setSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+              })
+              window.addEventListener('resize', handler)
+              return () => window.removeEventListener('resize', handler)
+            }, [])
+            
+            return size
+          }
+
+  - group: Forms
+    items:
+      - label: Controlled input
+        command: |
+          function Form() {
+            const [value, setValue] = useState('')
+            return (
+              <input
+                type="text"
+                value={value}
+                onChange={e => setValue(e.target.value)}
+              />
+            )
+          }
+      - label: Controlled textarea
+        command: |
+          const [message, setMessage] = useState('')
+          
+          <textarea
+            value={message}
+            onChange={e => setMessage(e.target.value)}
+          />
+      - label: Form submission
+        command: |
+          function LoginForm() {
+            const [email, setEmail] = useState('')
+            const [password, setPassword] = useState('')
+            
+            const handleSubmit = (e) => {
+              e.preventDefault()
+              fetch('/api/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password }),
+              })
+            }
+            
+            return (
+              <form onSubmit={handleSubmit}>
+                <input name="email" onChange={e => setEmail(e.target.value)} />
+                <input type="password" onChange={e => setPassword(e.target.value)} />
+                <button type="submit">Login</button>
+              </form>
+            )
+          }
+
+  - group: React 19 Features
+    items:
+      - label: Server Components (RSC)
+        value: |
+          Components are Server Components by default in frameworks like Next.js.
+          They can fetch data directly, read env variables, and have zero bundle size.
+      - label: use() hook
+        command: |
+          import { use } from 'react'
+          
+          function Profile({ promise }) {
+            const user = use(promise)
+            return <h1>{user.name}</h1>
+          }
+        notes: Unwrap promises and context at render time
+      - label: Document metadata
+        command: |
+          // In a Server Component (Next.js)
+          export default function Page() {
+            return (
+              <>
+                <title>My Page</title>
+                <meta name="description" content="..." />
+              </>
+            )
+          }
+        notes: Native <title>, <link>, <meta> in React 19 with supporting frameworks
+      - label: Actions
+        command: |
+          // Server action pattern
+          async function handleSubmit(formData) {
+            'use server'
+            // Mutate data directly
+          }
+        notes: Server actions allow mutations without API routes
+      - label: useActionState
+        command: |
+          import { useActionState } from 'react'
+          
+          function Form() {
+            const [state, formAction] = useActionState(async (prev, formData) => {
+              // Process form
+              return { success: true }
+            }, { success: false })
+            
+            return <form action={formAction}>...</form>
+          }
+
+  - group: Error Boundaries
+    items:
+      - label: Class-based error boundary
+        command: |
+          class ErrorBoundary extends React.Component {
+            state = { hasError: false }
+            
+            static getDerivedStateFromError() {
+              return { hasError: true }
+            }
+            
+            render() {
+              if (this.state.hasError) {
+                return <h1>Something went wrong</h1>
+              }
+              return this.props.children
+            }
+          }
+        notes: Error boundaries only work as class components in React 18 and below
+      - label: Error boundary usage
+        command: |
+          <ErrorBoundary>
+            <ChildComponent />
+          </ErrorBoundary>
+
+  - group: Common Patterns
+    items:
+      - label: Compound component
+        command: |
+          function Select({ children, value, onChange }) {
+            return (
+              <select value={value} onChange={onChange}>
+                {children}
+              </select>
+            )
+          }
+          
+          function Option({ value, children }) {
+            return <option value={value}>{children}</option>
+          }
+          
+          Select.Option = Option
+      - label: Render props
+        command: |
+          function Mouse({ render }) {
+            const [pos, setPos] = useState({ x: 0, y: 0 })
+            useEffect(() => {
+              window.addEventListener('mousemove', e =>
+                setPos({ x: e.clientX, y: e.clientY })
+              )
+            }, [])
+            return render(pos)
+          }
+      - label: Controlled vs uncontrolled
+        value: |
+          Controlled: value is managed by React state.
+          Uncontrolled: value is managed by the DOM, accessed via ref.
+          Use controlled for validation, uncontrolled for simple forms.
+      - label: Performance tips
+        value: |
+          Use React.memo for pure components.
+          Use useMemo for expensive computations.
+          Use useCallback for stable function references.
+          Keep state as close to where it is used as possible.
+          Prefer useReducer for complex state logic.
+      - label: Strict Mode
+        command: |
+          // index.js or main.jsx
+          <StrictMode>
+            <App />
+          </StrictMode>
+        notes: |
+          Double-invokes effects in development to catch side effects.
+          Always enabled in Next.js and Vite React templates.

@@ -1,0 +1,640 @@
+name: Astro
+group: web / devops / app tools
+process:
+  - node
+title_contains: astro
+search_terms:
+  - astrojs
+  - islands architecture
+  - zero js
+  - content collections
+  - astro components
+references:
+  - group: Project Setup
+    items:
+      - label: Create new project
+        command: npm create astro@latest my-app
+      - label: Create with empty template
+        command: npm create astro@latest my-app -- --template minimal
+      - label: Create with blog template
+        command: npm create astro@latest my-app -- --template blog
+      - label: Create with docs template
+        command: npm create astro@latest my-app -- --template docs
+      - label: Create with dashboard template
+        command: npm create astro@latest my-app -- --template dashboard
+      - label: Install Astro manually
+        command: npm install astro
+
+  - group: Development
+    items:
+      - label: Start dev server
+        command: npm run dev
+      - label: Start on specific port
+        command: npm run dev -- --port 3000
+      - label: Open browser automatically
+        command: npm run dev -- --open
+      - label: Production build
+        command: npm run build
+      - label: Preview production build
+        command: npm run preview
+      - label: Check types
+        command: npx astro check
+      - label: Lint
+        command: npm run lint
+      - label: Content collection check
+        command: npx astro sync
+
+  - group: Astro Components
+    items:
+      - label: Basic component
+        command: |
+          ---
+          // Frontmatter - runs on server
+          const { title } = Astro.props
+          ---
+          
+          <html>
+            <head>
+              <title>{title}</title>
+            </head>
+            <body>
+              <h1>{title}</h1>
+            </body>
+          </html>
+      - label: Component with props
+        command: |
+          ---
+          interface Props {
+            title: string
+            description?: string
+          }
+          const { title, description } = Astro.props
+          ---
+          
+          <article>
+            <h1>{title}</h1>
+            {description && <p>{description}</p>}
+          </article>
+      - label: Component with slots
+        command: |
+          ---
+          const { title } = Astro.props
+          ---
+          
+          <div class="card">
+            <h2>{title}</h2>
+            <slot />
+          </div>
+        notes: "Use <slot /> for default slot, <slot name=\"header\" /> for named slots"
+      - label: Astro expression
+        command: |
+          ---
+          const items = ['foo', 'bar', 'baz']
+          ---
+          
+          <ul>
+            {items.map(item => <li>{item}</li>)}
+          </ul>
+      - label: Conditional rendering
+        command: |
+          ---
+          const isLoggedIn = true
+          ---
+          
+          {isLoggedIn ? <p>Welcome!</p> : <p>Please log in</p>}
+      - label: Client-side scripts
+        command: |
+          <script>
+            // Runs in browser
+            console.log('Hello from browser')
+          </script>
+          
+          <script is:inline>
+            // Not processed by Astro
+            const foo = 'bar'
+          </script>
+      - label: Client-side directives
+        value: |
+          client:load - Runs on page load
+          client:idle - Runs after page is idle
+          client:visible - Runs when element becomes visible
+          client:media=(query) - Runs when media query matches
+          client:only - Only renders on client
+
+  - group: Layouts
+    items:
+      - label: Base layout
+        command: |
+          ---
+          // src/layouts/base.astro
+          import { renderHead } from 'astro:head'
+          import type { Props } from './props'
+          const { title, description } = Astro.props
+          ---
+          
+          <!doctype html>
+          <html lang="en">
+            <head>
+              {renderHead(Astro)}
+              <meta name="description" content={description} />
+            </head>
+            <body>
+              <slot />
+            </body>
+          </html>
+      - label: Using layout
+        command: |
+          ---
+          // src/pages/index.astro
+          import Layout from '../layouts/base.astro'
+          ---
+          
+          <Layout title="Home" description="My Astro site">
+            <h1>Welcome!</h1>
+            <p>This is my homepage</p>
+          </Layout>
+      - label: Nested layouts
+        command: |
+          ---
+          // src/layouts/blog.astro
+          import Base from './base.astro'
+          const { author } = Astro.props
+          ---
+          
+          <Base title={`Blog by ${author}`}>
+            <nav>Blog Navigation</nav>
+            <main>
+              <slot />
+            </main>
+          </Base>
+      - label: Layout props
+        command: |
+          ---
+          // src/layouts/props.ts
+          export interface Props {
+            title: string
+            description?: string
+            images?: string[]
+            canonicalUrl?: string
+          }
+          ---
+
+  - group: Pages
+    items:
+      - label: Static page
+        command: |
+          ---
+          // src/pages/index.astro
+          import Layout from '../layouts/base.astro'
+          ---
+          
+          <Layout title="Home">
+            <h1>Welcome to my site</h1>
+          </Layout>
+      - label: Dynamic route
+        command: |
+          ---
+          // src/pages/blog/[slug].astro
+          import Layout from '../../layouts/base.astro'
+          const { slug } = Astro.params
+          const post = await getPost(slug)
+          ---
+          
+          <Layout title={post.title}>
+            <article>
+              <h1>{post.title}</h1>
+              <div set:html={post.content} />
+            </article>
+          </Layout>
+      - label: API route
+        command: |
+          // src/pages/api/hello.ts
+          export function GET() {
+            return new Response(JSON.stringify({ message: 'Hello' }))
+          }
+        notes: "API routes return Response objects directly"
+      - label: Redirect
+        command: |
+          // src/pages/old.astro
+          import { redirect } from 'astro:content'
+          
+          export function getStaticPaths() {
+            return [
+              { params: { slug: 'old' } }
+            ]
+          }
+          
+          export async function GET() {
+            return Astro.redirect('/new')
+          }
+      - label: 404 page
+        command: |
+          ---
+          // src/pages/404.astro
+          import Layout from '../layouts/base.astro'
+          ---
+          
+          <Layout title="Not Found">
+            <h1>404 - Page Not Found</h1>
+            <a href="/">Go home</a>
+          </Layout>
+      - label: getStaticPaths
+        command: |
+          ---
+          // src/pages/products/[id].astro
+          const products = await fetchProducts()
+          const { id } = Astro.params
+          const product = products.find(p => p.id === id)
+          ---
+          
+          <article>
+            <h1>{product.name}</h1>
+            <p>{product.description}</p>
+          </article>
+          
+          export async function getStaticPaths() {
+            return products.map(product => ({
+              params: { id: product.id }
+            }))
+          }
+        notes: "getStaticPaths is required for dynamic routes"
+
+  - group: Content Collections
+    items:
+      - label: Define collection schema
+        command: |
+          // src/content/config.ts
+          import { defineCollection, z } from 'astro:content'
+          
+          const blog = defineCollection({
+            type: 'content',
+            schema: z.object({
+              title: z.string(),
+              description: z.string(),
+              date: z.date(),
+              tags: z.array(z.string()),
+            })
+          })
+          
+          export const collections = { blog }
+      - label: Create content file
+        command: |
+          ---
+          # src/content/blog/first-post.md
+          title: 'My First Post'
+          description: 'Hello world'
+          date: 2024-01-01
+          tags: ['intro', 'hello']
+          ---
+          
+          This is my first blog post!
+      - label: Get content
+        command: |
+          ---
+          import { getCollection } from 'astro:content'
+          
+          const posts = await getCollection('blog')
+          const recentPosts = posts
+            .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+            .slice(0, 5)
+          ---
+      - label: Render markdown
+        command: |
+          ---
+          import { getCollection } from 'astro:content'
+          const { slug } = Astro.params
+          const post = await getCollection('blog', `${slug}.md`)
+          import PostLayout from '../../layouts/post.astro'
+          ---
+          
+          <PostLayout title={post.data.title}>
+            <post.render />
+          </PostLayout>
+        notes: "post.render contains the rendered markdown content"
+      - label: Content preview
+        command: |
+          ---
+          import { render } from 'astro:content'
+          const post = await getCollection('blog', 'post.md')
+          const { CodeBlock } = await import('../../components/CodeBlock.astro')
+          const html = await render(post, {
+            components: { CodeBlock }
+          })
+          ---
+          
+          <div set:html={html} />
+        notes: "Custom renderers for markdown components"
+      - label: Data collection
+        command: |
+          // src/content/config.ts
+          import { defineCollection, z } from 'astro:content'
+          
+          const data = defineCollection({
+            type: 'data',
+            schema: z.object({
+              users: z.array(z.object({
+                id: z.string(),
+                name: z.string(),
+                role: z.string(),
+              })),
+            })
+          })
+          
+          export const collections = { data }
+        notes: "Data collections for JSON/YAML data files"
+
+  - group: Islands Architecture
+    items:
+      - label: React island
+        command: |
+          ---
+          // src/pages/index.astro
+          import Counter from '../components/Counter.jsx'
+          ---
+          
+          <html>
+            <body>
+              <h1>Static content</h1>
+              <Counter client:load />
+              <p>More static content</p>
+            </body>
+          </html>
+        notes: "Only Counter component is hydrated - rest is static HTML"
+      - label: Vue island
+        command: |
+          ---
+          import Search from '../components/Search.vue'
+          ---
+          
+          <div>
+            <Search client:load />
+          </div>
+      - label: Svelte island
+        command: |
+          ---
+          import Tabs from '../components/Tabs.svelte'
+          ---
+          
+          <Tabs client:load />
+      - label: Multiple islands
+        command: |
+          ---
+          import Header from '../components/Header.jsx'
+          import Search from '../components/Search.jsx'
+          import Footer from '../components/Footer.jsx'
+          ---
+          
+          <div>
+            <Header client:load />
+            <main>Static content between islands</main>
+            <Search client:visible />
+            <Footer client:idle />
+          </div>
+        notes: "Each island is independent and only loads its own JS"
+      - label: Shared state between islands
+        command: |
+          ---
+          import { createContext, slot } from 'astro'
+          ---
+          
+          <div>
+            {slot()}
+          </div>
+        notes: "Use Astro components to coordinate islands"
+
+  - group: Integrations
+    items:
+      - label: React integration
+        command: |
+          npm install @astrojs/react react react-dom
+          
+          // astro.config.mjs
+          import react from '@astrojs/react'
+          
+          export default {
+            integrations: [react()],
+          }
+      - label: Vue integration
+        command: |
+          npm install @astrojs/vue vue
+          
+          // astro.config.mjs
+          import vue from '@astrojs/vue'
+          
+          export default {
+            integrations: [vue()],
+          }
+      - label: Svelte integration
+        command: |
+          npm install @astrojs/svelte svelte
+          
+          // astro.config.mjs
+          import svelte from '@astrojs/svelte'
+          
+          export default {
+            integrations: [svelte()],
+          }
+      - label: Markdown integration
+        command: |
+          npm install @astrojs/markdown-remark
+          
+          // astro.config.mjs
+          import markdown from '@astrojs/markdown-remark'
+          
+          export default {
+            integrations: [markdown()],
+          }
+      - label: MDX integration
+        command: |
+          npm install @astrojs/mdx
+          
+          // astro.config.mjs
+          import mdx from '@astrojs/mdx'
+          
+          export default {
+            integrations: [mdx()],
+          }
+        notes: "MDX allows JSX components in markdown"
+      - label: Tailwind CSS
+        command: |
+          npm install @astrojs/tailwind tailwindcss
+          
+          // astro.config.mjs
+          import tailwind from '@astrojs/tailwind'
+          
+          export default {
+            integrations: [tailwind()],
+          }
+
+  - group: Configuration
+    items:
+      - label: Basic config
+        command: |
+          // astro.config.mjs
+          import { defineConfig } from 'astro/config'
+          
+          export default defineConfig({
+            site: 'https://example.com',
+            output: 'static',
+          })
+      - label: Output modes
+        value: |
+          static - Full static site generation (default)
+          hybrid - Static with SSR fallback
+          server - Full server-side rendering
+      - label: Build options
+        command: |
+          export default defineConfig({
+            build: {
+              format: 'directory',
+              client: './dist/client',
+              server: './dist/server',
+            },
+          })
+        notes: "format: 'directory' or 'file'"
+      - label: Markdown config
+        command: |
+          export default defineConfig({
+            markdown: {
+              shikiConfig: {
+                theme: 'github-dark',
+              },
+              remarkPlugins: [],
+              rehypePlugins: [],
+            },
+          })
+      - label: Image service
+        command: |
+          export default defineConfig({
+            image: {
+              domains: ['example.com'],
+              service: 'sharp',
+            },
+          })
+      - label: Environment config
+        command: |
+          // .env
+          PUBLIC_API_URL=https://api.example.com
+          PRIVATE_DB_URL=postgresql://...
+          
+          // Access in Astro
+          import { ENV } from 'astro:env/client'
+          const apiUrl = ENV.PUBLIC_API_URL
+          
+          // Server-side
+          const dbUrl = import.meta.env.PRIVATE_DB_URL
+
+  - group: Assets and Images
+    items:
+      - label: Image optimization
+        command: |
+          ---
+          import { Image } from 'astro:assets'
+          import logo from '../assets/logo.png'
+          ---
+          
+          <Image src={logo} alt="Logo" width={200} height={100} />
+      - label: Responsive images
+        command: |
+          <Image
+            src={logo}
+            alt="Logo"
+            widths={[320, 640, 1280]}
+            sizes="(max-width: 640px) 100vw, 640px"
+          />
+      - label: SVG optimization
+        command: |
+          import { SVG } from 'astro:assets'
+          import icon from '../assets/icon.svg'
+          
+          <SVG src={icon} />
+        notes: "Optimizes SVG for web delivery"
+      - label: Video embedding
+        command: |
+          import { Video } from 'astro:assets'
+          import video from '../assets/video.mp4'
+          
+          <Video src={video} controls />
+      - label: Font optimization
+        command: |
+          ---
+          import { preloadFont } from 'astro:assets'
+          import font from '../assets/font.woff2'
+          ---
+          
+          <link rel="preload" href={font.src} as="font" crossorigin />
+          <style>
+            @font-face {
+              font-family: 'Custom Font';
+              src: url({font.src}) format('woff2');
+            }
+          </style>
+
+  - group: Common Patterns
+    items:
+      - label: SEO optimization
+        command: |
+          ---
+          import { renderHead } from 'astro:head'
+          const { title, description } = Astro.props
+          ---
+          
+          <head>
+            {renderHead(Astro)}
+            <title>{title}</title>
+            <meta name="description" content={description} />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            <link rel="canonical" href={Astro.url} />
+          </head>
+      - label: i18n setup
+        command: |
+          // src/i18n/locales.ts
+          export const translations = {
+            en: {
+              home: 'Home',
+              about: 'About',
+            },
+            es: {
+              home: 'Inicio',
+              about: 'Acerca de',
+            },
+          }
+          
+          // In component
+          const locale = Astro.params.lang || 'en'
+          const t = translations[locale]
+      - label: Analytics
+        command: |
+          ---
+          // src/components/Analytics.astro
+          ---
+          
+          <script is:inline>
+            // Analytics code here
+            window.dataLayer = window.dataLayer || []
+            function gtag(){dataLayer.push(arguments)}
+            gtag('js', new Date())
+            gtag('config', 'G-XXXXXXXXXX')
+          </script>
+      - label: Performance tips
+        value: |
+          Use islands architecture - only hydrate what needs JS.
+          Prefer static content over dynamic.
+          Use client:visible and client:idle wisely.
+          Optimize images with Astro's built-in image service.
+          Use content collections for type-safe content.
+          Leverage SSG for most pages, SSR only when needed.
+      - label: Testing
+        command: |
+          // src/components/__tests__/Counter.test.js
+          import { render } from '@testing-library/svelte'
+          import { expect } from 'vitest'
+          import Counter from '../Counter.jsx'
+          
+          test('renders and increments', () => {
+            const { getByText, getByRole } = render(Counter)
+            expect(getByText('0')).toBeTruthy()
+            getByRole('button').click()
+            expect(getByText('1')).toBeTruthy()
+          })

@@ -1,0 +1,120 @@
+name: Excel
+group: office apps
+process:
+  - EXCEL.EXE
+  - excel.exe
+  - excel
+  - Microsoft Excel
+references:
+  - group: Workbook and Sheets
+    items:
+      - label: New workbook
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open workbook
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Print
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: New worksheet
+        keys: Shift+F11
+      - label: Rename active sheet
+        notes: Double-click the sheet tab or use the context menu.
+      - label: Move to next or previous sheet
+        keys: Ctrl+PageDown / Ctrl+PageUp
+
+  - group: Navigation and Selection
+    items:
+      - label: Edit active cell
+        keys: F2
+      - label: Move to edge of data region
+        keys: Ctrl+Arrow keys
+        keys_by_os:
+          macos: Cmd+Arrow keys
+      - label: Select to edge of data region
+        keys: Ctrl+Shift+Arrow keys
+        keys_by_os:
+          macos: Cmd+Shift+Arrow keys
+      - label: Go to named cell or range
+        keys: Ctrl+G or F5
+        keys_by_os:
+          macos: Ctrl+G or Fn+F5
+      - label: Select entire row
+        keys: Shift+Space
+      - label: Select entire column
+        keys: Ctrl+Space
+      - label: Toggle filters
+        keys: Ctrl+Shift+L
+        keys_by_os:
+          macos: Cmd+Shift+F
+
+  - group: Editing and Formulas
+    items:
+      - label: Start formula
+        value: "="
+      - label: Autosum
+        keys: Alt+Equal
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: Show formulas
+        keys: Ctrl+Backtick
+      - label: Fill down
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Fill right
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Insert current date
+        keys: Ctrl+Semicolon
+        keys_by_os:
+          macos: Ctrl+Semicolon
+      - label: Insert current time
+        keys: Ctrl+Shift+Semicolon
+        keys_by_os:
+          macos: Cmd+Semicolon
+      - label: Absolute reference toggle
+        keys: F4
+        notes: Cycle `A1`, `$A$1`, `A$1`, and `$A1` while editing a formula.
+
+  - group: High-value Functions
+    items:
+      - label: SUM
+        value: "=SUM(range)"
+      - label: AVERAGE
+        value: "=AVERAGE(range)"
+      - label: XLOOKUP
+        value: "=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found])"
+      - label: INDEX and MATCH
+        value: "=INDEX(return_range, MATCH(value, lookup_range, 0))"
+      - label: IF
+        value: "=IF(test, value_if_true, value_if_false)"
+      - label: COUNTIF
+        value: "=COUNTIF(range, criteria)"
+      - label: TEXTJOIN
+        value: "=TEXTJOIN(delimiter, ignore_empty, text1, ...)"
+
+  - group: Tables and Analysis
+    items:
+      - label: Format as table
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Create pivot table
+        keys: Alt+N then V
+        notes: Exact ribbon traversal varies by version, but this remains a common entry path.
+      - label: Freeze panes
+        notes: Use View > Freeze Panes when headings need to stay visible during long-sheet navigation.
+      - label: Flash fill
+        keys: Ctrl+E
+      - label: Sort data
+        notes: Prefer table headers plus filters for reliable column-aware sorting.

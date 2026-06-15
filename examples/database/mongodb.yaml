@@ -1,0 +1,146 @@
+name: MongoDB
+group: database
+process:
+  - mongosh
+  - mongod
+search_terms:
+  - mongodb
+  - mongosh
+  - aggregate
+  - bson
+  - explain
+references:
+  - group: Connect and Session
+    items:
+      - label: Start shell local
+        command: mongosh
+      - label: Connect with URI
+        command: "mongosh \"mongodb://localhost:27017/appdb\""
+      - label: Connect with auth database
+        command: "mongosh \"mongodb://appuser:secret@localhost:27017/appdb?authSource=admin\""
+      - label: Show databases
+        command: show dbs
+      - label: Use database
+        command: use appdb
+      - label: Show current database
+        command: db
+      - label: Show collections
+        command: show collections
+
+  - group: CRUD Basics
+    items:
+      - label: Insert one document
+        command: |
+          db.users.insertOne({
+            email: "sam@example.com",
+            createdAt: new Date()
+          })
+      - label: Find one
+        command: |
+          db.users.findOne({ email: "sam@example.com" })
+      - label: Find with projection
+        command: |
+          db.users.find(
+            { active: true },
+            { email: 1, createdAt: 1, _id: 0 }
+          )
+      - label: Update one
+        command: |
+          db.users.updateOne(
+            { email: "sam@example.com" },
+            { $set: { active: true } }
+          )
+      - label: Delete one
+        command: |
+          db.users.deleteOne({ email: "sam@example.com" })
+      - label: Upsert
+        command: |
+          db.users.updateOne(
+            { email: "sam@example.com" },
+            { $set: { name: "Sam" } },
+            { upsert: true }
+          )
+
+  - group: Query Operators and Indexes
+    items:
+      - label: Filter with comparison
+        command: |
+          db.users.find({ age: { $gte: 18, $lt: 65 } })
+      - label: Filter with in
+        command: |
+          db.users.find({ status: { $in: ["active", "pending"] } })
+      - label: Sort and limit
+        command: |
+          db.users.find().sort({ createdAt: -1 }).limit(20)
+      - label: Distinct values
+        command: db.users.distinct("status")
+      - label: Create index
+        command: "db.users.createIndex({ email: 1 }, { unique: true })"
+      - label: List indexes
+        command: db.users.getIndexes()
+      - label: Drop index
+        command: db.users.dropIndex("email_1")
+
+  - group: Aggregation and Explain
+    items:
+      - label: Count documents
+        command: "db.users.countDocuments({ active: true })"
+      - label: Aggregation pipeline
+        command: |
+          db.orders.aggregate([
+            { $match: { status: "paid" } },
+            { $group: { _id: "$customerId", total: { $sum: "$amount" } } },
+            { $sort: { total: -1 } }
+          ])
+      - label: Lookup join-like stage
+        command: |
+          db.orders.aggregate([
+            {
+              $lookup: {
+                from: "customers",
+                localField: "customerId",
+                foreignField: "_id",
+                as: "customer"
+              }
+            }
+          ])
+      - label: Explain query
+        command: |
+          db.users.find({ email: "sam@example.com" }).explain("executionStats")
+      - label: Collection stats
+        command: db.users.stats()
+      - label: Database stats
+        command: db.stats()
+
+  - group: Import Export and Admin
+    items:
+      - label: Dump database
+        command: mongodump --db appdb --out ./dump
+      - label: Restore database
+        command: mongorestore --db appdb ./dump/appdb
+      - label: Import JSON array
+        command: mongoimport --db appdb --collection users --file users.json --jsonArray
+      - label: Export collection
+        command: mongoexport --db appdb --collection users --out users.json
+      - label: Create user
+        command: |
+          db.createUser({
+            user: "appuser",
+            pwd: "secret",
+            roles: [{ role: "readWrite", db: "appdb" }]
+          })
+      - label: Replica set status
+        command: rs.status()
+
+  - group: Common Concepts
+    items:
+      - label: Document model
+        value: MongoDB favors document-shaped data with nested objects and arrays, which changes schema design compared with normalized relational models
+      - label: BSON and ObjectId
+        value: "`ObjectId` is the default primary key type, and BSON supports richer types than plain JSON."
+      - label: Aggregation pipeline
+        value: "`$match`, `$project`, `$group`, `$sort`, `$lookup`, and `$unwind` are the highest-value stages to remember first"
+      - label: Explain before index churn
+        value: Use execution stats and query plans before adding or removing indexes so tuning is based on observed scan behavior
+      - label: Shell habit
+        value: "`mongosh` is the modern shell, and many older examples still refer to the retired `mongo` shell"

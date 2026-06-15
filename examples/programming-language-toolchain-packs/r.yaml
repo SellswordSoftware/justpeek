@@ -1,0 +1,85 @@
+name: R Toolchain
+group: programming language / toolchain packs
+process:
+  - R
+  - Rscript
+  - R.exe
+  - Rscript.exe
+search_terms:
+  - tidyverse
+  - renv
+  - testthat
+  - ggplot2
+references:
+  - group: Runtime and Scripts
+    items:
+      - label: Show version
+        command: R --version
+      - label: Start interactive session
+        command: R
+      - label: Run script
+        command: Rscript script.R
+      - label: Run expression
+        command: Rscript -e 'print("hello")'
+      - label: Restore renv environment
+        command: Rscript -e 'renv::restore()'
+      - label: Snapshot renv environment
+        command: Rscript -e 'renv::snapshot()'
+      - label: Install packages
+        command: Rscript -e 'install.packages(c("tidyverse", "testthat"))'
+
+  - group: Testing and Quality
+    items:
+      - label: Run tests with testthat
+        command: Rscript -e 'testthat::test_dir("tests/testthat")'
+      - label: Run package checks
+        command: R CMD check .
+      - label: Build package
+        command: R CMD build .
+      - label: Document package
+        command: Rscript -e 'devtools::document()'
+      - label: Lint with lintr
+        command: Rscript -e 'lintr::lint_dir()'
+      - label: Format style
+        command: Rscript -e 'styler::style_dir()'
+      - label: Package test workflow
+        value: devtools::test() and devtools::check() are common local loops
+
+  - group: Handy Snippets
+    items:
+      - label: Data frame load
+        command: |
+          df <- read.csv("data.csv")
+      - label: dplyr pipeline
+        command: |
+          library(dplyr)
+          
+          result <- df |>
+            filter(active) |>
+            group_by(team) |>
+            summarise(total = n())
+      - label: ggplot
+        command: |
+          library(ggplot2)
+          
+          ggplot(df, aes(x, y)) +
+            geom_point()
+      - label: List files
+        command: |
+          files <- list.files("data", full.names = TRUE)
+      - label: Save RDS
+        command: |
+          saveRDS(df, "data.rds")
+
+  - group: Common Concepts
+    items:
+      - label: renv
+        value: Project-local dependency management for reproducible package environments
+      - label: CRAN package structure
+        value: DESCRIPTION, NAMESPACE, R directory, man pages, and tests form the typical package layout
+      - label: Tidyverse vs base R
+        value: Many projects mix both; know which style the codebase already uses
+      - label: Interactive workflow
+        value: R is often driven from REPL, notebooks, or IDE sessions even when scripts exist
+      - label: Data-frame first mindset
+        value: A large amount of R work revolves around tabular transformation, modeling, and plotting

@@ -1,0 +1,126 @@
+name: Zoom
+group: communication apps
+process:
+  - zoom
+  - Zoom
+  - zoom.us
+search_terms:
+  - zoom shortcuts
+  - zoom meeting controls
+  - waiting room
+  - breakout rooms
+  - virtual background
+references:
+  - group: Meeting Controls
+    items:
+      - label: Mute or unmute
+        keys: Alt+A
+        keys_by_os:
+          macos: Shift+Cmd+A
+      - label: Start or stop video
+        keys: Alt+V
+        keys_by_os:
+          macos: Shift+Cmd+V
+      - label: Invite participants
+        keys: Alt+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Share screen
+        keys: Alt+S
+        keys_by_os:
+          macos: Shift+Cmd+S
+      - label: Pause or resume share
+        keys: Alt+T
+        keys_by_os:
+          macos: Shift+Cmd+T
+      - label: Record
+        keys: Alt+R
+        keys_by_os:
+          macos: Shift+Cmd+R
+      - label: Raise or lower hand
+        keys: Alt+Y
+        keys_by_os:
+          macos: Option+Y
+
+  - group: Panels and Views
+    items:
+      - label: Open or close chat
+        keys: Alt+H
+        keys_by_os:
+          macos: Shift+Cmd+H
+      - label: Open or close participants
+        keys: Alt+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Switch speaker and gallery view
+        keys: Alt+F2
+        keys_by_os:
+          macos: Cmd+Shift+W
+      - label: Enter or exit full screen
+        keys: Alt+F
+        keys_by_os:
+          macos: Ctrl+Cmd+F
+      - label: Minimize meeting window
+        keys: Alt+M
+        keys_by_os:
+          macos: Cmd+M
+      - label: Toggle always show controls
+        notes: "UI path: `Meeting settings / accessibility / in-meeting toolbar behavior` depending on platform."
+
+  - group: Scheduling and Main App
+    items:
+      - label: Schedule meeting
+        notes: "UI path: home screen `Schedule`."
+      - label: Join meeting
+        notes: "UI path: home screen `Join`."
+      - label: New meeting
+        notes: "UI path: home screen `New Meeting`."
+      - label: Screen recording location
+        notes: "UI path: `Settings -> Recording`."
+      - label: Virtual background
+        notes: "UI path: `Settings -> Backgrounds & Effects` or pre-join effects panel."
+      - label: Audio and camera devices
+        notes: "UI path: `Settings -> Audio` and `Settings -> Video`."
+
+  - group: Host and Collaboration Features
+    items:
+      - label: Security controls
+        notes: "UI path: in-meeting toolbar `Security` for waiting room, chat, rename, and participant permissions."
+      - label: Breakout rooms
+        notes: "UI path: in-meeting toolbar `Breakout Rooms` when enabled."
+      - label: Polls and quizzes
+        notes: "UI path: in-meeting toolbar `Polls/Quizzes` depending on account features."
+      - label: Captions and transcript
+        notes: "UI path: in-meeting toolbar `Show captions` or `More`."
+      - label: Reactions
+        notes: "UI path: in-meeting toolbar `Reactions`."
+      - label: Waiting room
+        notes: "UI path: `Security` during a meeting or web portal settings for account defaults."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Keyboard shortcuts settings
+        notes: "UI path: `Settings -> Keyboard Shortcuts`."
+      - label: Enable original sound
+        notes: "UI path: `Settings -> Audio` and in-meeting audio controls."
+      - label: Dual monitors
+        notes: "UI path: `Settings -> General -> Use dual monitors`."
+      - label: Local versus cloud recording
+        notes: "UI path: `Settings -> Recording` and host meeting controls."
+      - label: Web portal meeting options
+        notes: "UI path: many account-wide defaults live in the Zoom web portal rather than the desktop app."
+      - label: Remote control
+        notes: "UI path: while screen sharing, toolbar `Remote Control`."
+
+  - group: Common Concepts
+    items:
+      - label: Meeting-state shortcuts
+        value: Many of Zoom's best shortcuts only apply once you are actively in a meeting
+      - label: Host privilege matters
+        value: Security, waiting room, recording, breakout rooms, and polls depend on host role and account settings
+      - label: Desktop plus web split
+        value: The desktop app handles live meeting controls, while many defaults and admin options live in the Zoom web portal
+      - label: Audio reliability
+        value: Device selection, original sound, echo controls, and mute discipline are some of the most commonly revisited practical settings
+      - label: Shortcut density
+        value: Zoom has a strong meeting-control shortcut set, but setup and admin tasks still rely heavily on settings and toolbar menus

@@ -1,0 +1,102 @@
+name: Google Slides
+group: office apps
+process:
+  - google-chrome
+  - chrome
+  - chrome.exe
+  - firefox
+  - firefox-bin
+  - msedge
+  - msedge.exe
+  - brave
+  - brave-browser
+title_contains: Google Slides
+references:
+  - group: Deck and Navigation
+    items:
+      - label: New presentation
+        notes: Start from Drive or the Slides home screen; in-doc creation is usually template-driven.
+      - label: Find
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Open menus search
+        keys: Alt+Slash
+      - label: Next or previous slide
+        keys: PageDown / PageUp
+      - label: Select next or previous object
+        keys: Tab / Shift+Tab
+      - label: Speaker notes focus
+        notes: Keep notes populated before presentation mode so presenter view remains useful.
+
+  - group: Slides and Objects
+    items:
+      - label: New slide
+        keys: Ctrl+M
+        keys_by_os:
+          macos: Cmd+M
+      - label: Duplicate slide or object
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Group objects
+        keys: Ctrl+Alt+G
+        keys_by_os:
+          macos: Cmd+Option+G
+      - label: Ungroup objects
+        keys: Ctrl+Alt+Shift+G
+        keys_by_os:
+          macos: Cmd+Option+Shift+G
+      - label: Comment on selection
+        keys: Ctrl+Alt+M
+        keys_by_os:
+          macos: Cmd+Option+M
+      - label: Insert link
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+
+  - group: Formatting and Arrangement
+    items:
+      - label: Bold
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Italic
+        keys: Ctrl+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Underline
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Align left center right
+        keys: Ctrl+Shift+L / Ctrl+Shift+E / Ctrl+Shift+R
+      - label: Bring forward or send backward
+        notes: Use Arrange for layer ordering when slides get dense with shapes and screenshots.
+      - label: Format painter
+        notes: Good for keeping repeated slide elements visually consistent.
+
+  - group: Presentation Delivery
+    items:
+      - label: Present
+        keys: Ctrl+F5
+      - label: Presenter view
+        notes: Use presenter view for notes, timer, audience tools, and Q&A support.
+      - label: Next or previous slide in presentation
+        keys: RightArrow / LeftArrow
+      - label: Jump to slide number
+        value: Type slide number then Enter during presentation
+      - label: Black screen toggle
+        keys: B
+      - label: End presentation
+        keys: Escape
+
+  - group: Common Reference
+    items:
+      - label: Theme consistency
+        value: Use theme fonts, theme colors, and master layouts to avoid manual cleanup later
+      - label: Speaker notes
+        value: Best place for cues, links, and timing reminders that should stay off the slide
+      - label: Publish to web
+        notes: Useful for passive display decks, kiosks, or externally shared slide playback.

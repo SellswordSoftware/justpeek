@@ -32,7 +32,7 @@ references:
         notes: Query package metadata or expressions without building them.
       - label: Show flake outputs
         command: nix flake show nixpkgs
-        notes: Inspect what a flake exposes: packages, dev shells, apps, and more.
+        notes: "Inspect what a flake exposes: packages, dev shells, apps, and more."
       - label: Show store path for package
         command: nix build nixpkgs#ripgrep --print-out-paths
         notes: Build or fetch the package and print the resulting store path.

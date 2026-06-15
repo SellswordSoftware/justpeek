@@ -1,0 +1,84 @@
+name: Swift Toolchain
+group: programming language / toolchain packs
+process:
+  - swift
+  - swiftc
+  - xcodebuild
+search_terms:
+  - swift package
+  - swift test
+  - swift build
+  - xcodebuild
+references:
+  - group: Compiler and SwiftPM
+    items:
+      - label: Show version
+        command: swift --version
+      - label: Initialize package
+        command: swift package init --type executable
+      - label: Build package
+        command: swift build
+      - label: Run package
+        command: swift run
+      - label: Test package
+        command: swift test
+      - label: Compile one file
+        command: swiftc main.swift -o app
+      - label: Run script
+        command: swift main.swift
+
+  - group: Xcode and CLI Workflows
+    items:
+      - label: Generate Xcode-friendly workflow
+        value: Swift packages open directly in Xcode without a separate project generator in modern flows
+      - label: Build with xcodebuild
+        command: xcodebuild -scheme App build
+      - label: Test with xcodebuild
+        command: xcodebuild test -scheme App -destination 'platform=macOS'
+      - label: List schemes
+        command: xcodebuild -list
+      - label: Resolve package dependencies
+        command: xcodebuild -resolvePackageDependencies
+      - label: Release build
+        command: swift build -c release
+
+  - group: Handy Snippets
+    items:
+      - label: Main function
+        command: |
+          print("hello")
+      - label: Struct
+        command: |
+          struct User {
+              let name: String
+              var active: Bool = true
+          }
+      - label: Guard
+        command: |
+          func greet(_ name: String?) {
+              guard let name else { return }
+              print("hello \(name)")
+          }
+      - label: Async function
+        command: |
+          func load() async throws -> String {
+              return "ok"
+          }
+      - label: Codable
+        command: |
+          struct User: Codable {
+              let name: String
+          }
+
+  - group: Common Concepts
+    items:
+      - label: SwiftPM
+        value: First-party package manager and build system for many server-side and command-line Swift projects
+      - label: Xcode overlap
+        value: Apple-platform app work often mixes SwiftPM, Xcode GUI workflows, simulators, and xcodebuild automation
+      - label: Optionals
+        value: Explicit nil handling is central to day-to-day Swift code structure
+      - label: Value types
+        value: Structs are heavily favored and influence API design, copying behavior, and mutation rules
+      - label: Concurrency
+        value: async/await and structured concurrency are core modern Swift concepts rather than niche additions

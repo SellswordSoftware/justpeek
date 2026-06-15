@@ -1,0 +1,112 @@
+name: Beekeeper Studio
+group: database
+process:
+  - beekeeper-studio
+  - Beekeeper Studio
+search_terms:
+  - beekeeper studio
+  - sql editor
+  - saved query
+  - table data
+  - connection ui
+references:
+  - group: Navigation and Editor Basics
+    items:
+      - label: New query tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Run query
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Enter
+      - label: Run selected query
+        keys: Shift+Enter
+      - label: Format query
+        keys: Shift+Alt+F
+        keys_by_os:
+          macos: Shift+Option+F
+      - label: Save query
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Search app
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Command palette
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+
+  - group: Query Editor and Result Grid
+    items:
+      - label: Find in editor
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Replace in editor
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Option+F
+      - label: Comment line
+        keys: Ctrl+/
+        keys_by_os:
+          macos: Cmd+/
+      - label: Multi-cursor add next match
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Refresh results
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Export results
+        notes: "UI path: `Results pane -> download/export action`."
+      - label: Copy cell or rows
+        notes: "UI path: result grid context menu for copying values, rows, or CSV-style output."
+
+  - group: Tables Connections and Saved Queries
+    items:
+      - label: New connection
+        notes: "UI path: `Connection screen -> New Connection`."
+      - label: Edit connection
+        notes: "UI path: `Connection list -> right click or menu -> Edit Connection`."
+      - label: Browse table data
+        notes: "UI path: `Sidebar -> Tables -> click table`."
+      - label: Open table structure
+        notes: "UI path: `Sidebar -> table -> Structure / Columns / Indexes areas depending on version`."
+      - label: Saved queries
+        notes: "UI path: `Sidebar -> Saved Queries`."
+      - label: Duplicate query tab
+        notes: "UI path: query tab context menu or editor actions depending on version."
+      - label: Filter table rows
+        notes: "UI path: table data view filter/search controls above the result grid."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Explain query
+        notes: "UI path: query actions or command palette depending on driver and version; some flows rely on manually prefixing `EXPLAIN`."
+      - label: SSL and SSH tunnel settings
+        notes: "UI path: `Connection settings -> SSL` and `SSH Tunnel` sections."
+      - label: Hide system schemas
+        notes: "UI path: settings and connection/browser preferences depending on version."
+      - label: Theme and appearance
+        notes: "UI path: `Settings -> Appearance`."
+      - label: Import CSV
+        notes: "UI path: table actions or context menus for supported drivers and versions."
+      - label: Connection quick switch
+        notes: "UI path: tabs, sidebar, and command palette are usually the fastest routes."
+
+  - group: Common Concepts
+    items:
+      - label: Electron SQL client
+        value: Beekeeper Studio feels more like a modern editor-style SQL client than a full admin console
+      - label: Shortcut density
+        value: Most high-value shortcuts live in the editor, while connection management and schema browsing stay menu-driven
+      - label: Saved query workflow
+        value: Saved queries and sidebar browsing are part of the intended day-to-day workflow rather than a niche feature
+      - label: Best fit
+        value: Beekeeper Studio works well when you want a lighter, cleaner database UI without the broader workstation complexity of DBeaver
+      - label: Common lookup
+        value: Run query, format query, saved queries, connection settings, and results export are the most commonly revisited actions

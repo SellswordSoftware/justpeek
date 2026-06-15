@@ -1,0 +1,79 @@
+name: Affinity Designer
+group: creative apps
+process:
+  - Affinity Designer
+  - affinity-designer
+  - Designer
+references:
+  - group: Personas and View
+    items:
+      - label: Designer persona
+        notes: Vector editing is centered in Designer Persona; switch modes intentionally before deep edits.
+      - label: Pixel persona
+        notes: Pixel Persona is useful for brush-based cleanup and raster touch-up inside the same document.
+      - label: Zoom
+        keys: Ctrl+Plus / Ctrl+Minus
+        keys_by_os:
+          macos: Cmd+Plus / Cmd+Minus
+      - label: Hand tool
+        keys: H
+      - label: View mode discipline
+        notes: Check outlines, snapping, and zoom level before assuming geometry is wrong.
+
+  - group: Tools
+    items:
+      - label: Move tool
+        keys: V
+      - label: Node tool
+        keys: A
+      - label: Pen tool
+        keys: P
+      - label: Corner tool
+        keys: C
+      - label: Fill tool
+        keys: G
+      - label: Transparency tool
+        keys: Y
+      - label: Text tool
+        keys: T
+      - label: Shape tools
+        notes: Rectangles, ellipses, stars, and custom shapes are core primitives for UI and icon work.
+
+  - group: Layers and Geometry
+    items:
+      - label: Group
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: Ungroup
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Cmd+Shift+G
+      - label: Duplicate
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+J
+      - label: Convert to curves
+        notes: Convert shapes or text when raw node editing is required.
+      - label: Boolean add subtract intersect xor
+        notes: These are the core shape-building operations for logos, icons, and cutout forms.
+      - label: Align and distribute
+        notes: Use alignment tools instead of visual guessing for production assets.
+
+  - group: Common Workflows
+    items:
+      - label: Symbols
+        value: Linked reusable objects that update together across the document
+      - label: Constraints
+        value: Pin and scale object behavior inside parents for UI and responsive mockups
+      - label: Export persona
+        value: Slice-based asset export for multiple sizes and targets
+
+  - group: Common Reference
+    items:
+      - label: Curves vs shapes
+        value: Shapes stay parametric longer; curves allow detailed node control
+      - label: Non-destructive effects
+        value: Layer effects and live operations are safer than flattening too early
+      - label: Raster vs vector choice
+        value: Keep logos, diagrams, and icons vector until final output requires pixels

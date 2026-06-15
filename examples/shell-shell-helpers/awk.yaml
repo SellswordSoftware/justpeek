@@ -8,13 +8,13 @@ references:
         notes: Awk processes input record-by-record and runs the action for each line by default.
       - label: Print specific field
         command: awk '{ print $1 }' file.txt
-        notes: `$1`, `$2`, and so on refer to whitespace-delimited fields by default.
+        notes: "`$1`, `$2`, and so on refer to whitespace-delimited fields by default."
       - label: Print line number and content
         command: awk '{ print NR, $0 }' file.txt
-        notes: `NR` is the current input record number and `$0` is the full line.
+        notes: "`NR` is the current input record number and `$0` is the full line."
       - label: Run BEGIN and END blocks
         command: awk 'BEGIN { print "start" } { print $0 } END { print "done" }' file.txt
-        notes: `BEGIN` runs before input is read and `END` runs after all records are processed.
+        notes: "`BEGIN` runs before input is read and `END` runs after all records are processed."
       - label: Use a script file
         command: awk -f script.awk file.txt
         notes: Prefer script files once the program grows beyond a short one-liner.
@@ -23,19 +23,19 @@ references:
     items:
       - label: Set field separator
         command: awk -F, '{ print $1, $3 }' data.csv
-        notes: `-F` changes the input field separator for CSV-like data.
+        notes: "`-F` changes the input field separator for CSV-like data."
       - label: Set output field separator
         command: awk 'BEGIN { OFS="," } { print $1, $2 }' file.txt
-        notes: `OFS` controls how printed fields are joined.
+        notes: "`OFS` controls how printed fields are joined."
       - label: Split on tabs
         command: awk -F'\t' '{ print $2 }' file.tsv
         notes: Use a literal tab or escaped tab sequence depending on shell quoting.
       - label: Rebuild line after field changes
         command: awk '{$1=$1; print}' file.txt
-        notes: Reassigning a field forces `$0` to be reconstructed using `OFS`.
+        notes: "Reassigning a field forces `$0` to be reconstructed using `OFS`."
       - label: Print last field
         command: awk '{ print $NF }' file.txt
-        notes: `NF` is the number of fields in the current record.
+        notes: "`NF` is the number of fields in the current record."
 
   - group: Selection and Conditions
     items:
@@ -77,16 +77,16 @@ references:
     items:
       - label: Replace text in a field
         command: awk '{ gsub(/foo/, "bar", $2); print }' file.txt
-        notes: `gsub` replaces all matches in the target string or field.
+        notes: "`gsub` replaces all matches in the target string or field."
       - label: Lowercase a field
         command: awk '{ print tolower($1) }' file.txt
         notes: Built-in string helpers cover many simple normalization tasks.
       - label: Format aligned output
         command: awk '{ printf "%-20s %8d\n", $1, $2 }' file.txt
-        notes: `printf` gives precise control over width and formatting.
+        notes: "`printf` gives precise control over width and formatting."
       - label: Join continued lines
         command: awk '{ printf "%s ", $0 } END { print "" }' file.txt
-        notes: `printf` suppresses the automatic newline that `print` adds.
+        notes: "`printf` suppresses the automatic newline that `print` adds."
       - label: Trim surrounding spaces
         command: awk '{ gsub(/^[[:space:]]+|[[:space:]]+$/, "", $0); print }' file.txt
         notes: Practical cleanup pattern for loosely formatted text.
@@ -95,7 +95,7 @@ references:
     items:
       - label: Compare two files by key
         command: awk 'NR==FNR { seen[$1]=1; next } seen[$1]' first.txt second.txt
-        notes: `NR==FNR` distinguishes the first input file from later ones.
+        notes: "`NR==FNR` distinguishes the first input file from later ones."
       - label: Print header once across many files
         command: awk 'FNR==1 && NR!=1 { next } { print }' *.csv
         notes: Skip repeated per-file headers while concatenating data.
@@ -104,7 +104,7 @@ references:
         notes: Blank-line records are useful for paragraph-oriented text.
       - label: Inspect available implementation
         command: awk -W version
-        notes: Often works in `gawk`; other awk implementations expose version info differently.
+        notes: "Often works in `gawk`; other awk implementations expose version info differently."
       - label: Show gawk help
         command: gawk --help
         notes: GNU awk adds substantial functionality beyond the POSIX baseline.

@@ -1,0 +1,87 @@
+name: Heroic Games Launcher
+group: gaming / streaming
+process:
+  - heroic
+  - heroic-games-launcher
+  - Heroic
+search_terms:
+  - heroic launcher
+  - legendary
+  - gog
+  - wine manager
+  - heroic shortcuts
+references:
+  - group: Navigation and Library
+    items:
+      - label: Search library
+        keys: Ctrl+F
+      - label: Reload or refresh
+        keys: Ctrl+R
+      - label: Settings
+        keys: Ctrl+Comma
+        keys_by_os:
+          macos: Cmd+Comma
+      - label: Quit
+        keys: Ctrl+Q
+      - label: Downloads
+        notes: "UI path: sidebar `Downloads`."
+      - label: Library filters
+        notes: "UI path: library search and filter controls in the sidebar or header."
+
+  - group: Game Management
+    items:
+      - label: Install game
+        notes: Open a library game and use its install flow.
+      - label: Launch game
+        notes: Use the game page `Play` button.
+      - label: Configure game
+        notes: "UI path: library game page -> `Settings` or game actions menu."
+      - label: Verify files
+        notes: "UI path: game actions / manage installation depending on the store source."
+      - label: Import installed game
+        notes: "UI path: game actions or library tools for importing existing installs."
+      - label: Save and cloud sync status
+        notes: "UI path: game page details and store integration-specific options."
+
+  - group: Wine Proton and Backend Tools
+    items:
+      - label: Wine Manager
+        notes: "UI path: `Settings -> Wine Manager`."
+      - label: Legendary and Nile tools
+        notes: "UI path: backend integration settings and logs depending on store source."
+      - label: Proton or Wine version
+        notes: "UI path: per-game settings -> `Wine` or compatibility section."
+      - label: Environment variables
+        notes: "UI path: per-game settings for launch arguments and environment variables."
+      - label: Prefix path
+        notes: "UI path: per-game settings for wine prefix and installation paths."
+      - label: MangoHud and GameMode toggles
+        notes: "UI path: per-game settings or global settings toggles when supported."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: EOS overlay and anti-cheat caveat
+        value: Store integrations and anti-cheat behavior vary by game, so launch success can depend on compatibility layer choice and current backend support
+      - label: Add custom executable
+        notes: "UI path: library or game tools for importing non-store games depending on current Heroic build."
+      - label: Logs
+        notes: "UI path: game settings, launch logs, or global app logs when troubleshooting."
+      - label: Download location
+        notes: "UI path: global settings and per-game install path controls."
+      - label: Offline mode expectations
+        value: Whether a game works offline depends on the store backend, DRM, and how the title was installed
+      - label: Backend split
+        value: Heroic often fronts other command-line backends such as Legendary, so some troubleshooting details live below the GUI
+
+  - group: Common Concepts
+    items:
+      - label: Multi-store launcher
+        value: Heroic is mainly a unified launcher for Epic, GOG, and related backends rather than a single proprietary runtime
+      - label: Per-game compatibility
+        value: Proton or Wine version choice, environment variables, and launch options are some of the most frequently revisited settings
+      - label: Backend awareness
+        value: Knowing whether a problem belongs to Heroic itself, Legendary, Wine, or the game is usually the fastest route to a fix
+      - label: Linux-first relevance
+        value: Heroic matters most where store-native launchers are weak or absent and compatibility tooling has to be managed intentionally
+      - label: Shortcut density
+        value: Heroic has a few useful app shortcuts, but the important reference material is mostly settings paths and compatibility concepts

@@ -1,0 +1,495 @@
+name: Vue
+group: web / devops / app tools
+process:
+  - node
+title_contains: vue
+search_terms:
+  - vuejs
+  - vue 3
+  - composition api
+  - options api
+  - sfc
+  - vitepress
+references:
+  - group: Project Setup
+    items:
+      - label: Create new project
+        command: npm create vue@latest my-app
+      - label: Create with TypeScript
+        command: npm create vue@latest my-app -- --typescript
+      - label: Create with Router
+        command: npm create vue@latest my-app -- --router
+      - label: Create with Pinia
+        command: npm create vue@latest my-app -- --pinia
+      - label: Create with Vitest
+        command: npm create vue@latest my-app -- --vitest
+      - label: Create with all features
+        command: npm create vue@latest my-app -- --router --pinia --vitest --eslint
+
+  - group: Development
+    items:
+      - label: Start dev server
+        command: npm run dev
+      - label: Start on specific port
+        command: npm run dev -- --port 3000
+      - label: Open browser automatically
+        command: npm run dev -- --open
+      - label: Production build
+        command: npm run build
+      - label: Preview production build
+        command: npm run preview
+      - label: Lint and fix
+        command: npm run lint
+
+  - group: Component Basics (Composition API)
+    items:
+      - label: Single File Component
+        command: |
+          <script setup>
+          import { ref } from 'vue'
+          const count = ref(0)
+          </script>
+          
+          <template>
+            <button @click="count++">{{ count }}</button>
+          </template>
+          
+          <style scoped>
+          button { color: blue; }
+          </style>
+      - label: Props
+        command: |
+          <script setup>
+          const props = defineProps({
+            msg: String,
+            count: { type: Number, default: 0 },
+          })
+          </script>
+      - label: Emits
+        command: |
+          <script setup>
+          const emit = defineEmits(['update', 'submit'])
+          emit('update', 'new value')
+          </script>
+      - label: Define model (v-model)
+        command: |
+          <script setup>
+          const props = defineProps({ modelValue: String })
+          const emit = defineEmits(['update:modelValue'])
+          </script>
+          
+          <template>
+            <input
+              :value="modelValue"
+              @input="emit('update:modelValue', $event.target.value)"
+            />
+          </template>
+      - label: Slots
+        command: |
+          <!-- Parent -->
+          <MyComponent>
+            <template #header>Header content</template>
+            <template #footer>Footer content</template>
+            Default content
+          </MyComponent>
+          
+          <!-- MyComponent.vue -->
+          <template>
+            <div>
+              <slot name="header" />
+              <slot />
+              <slot name="footer" />
+            </div>
+          </template>
+
+  - group: Reactivity
+    items:
+      - label: ref()
+        command: |
+          import { ref } from 'vue'
+          
+          const count = ref(0)
+          const name = ref('Vue')
+          // Access with .value in script
+          count.value++
+          // In template, .value is unwrapped automatically
+      - label: reactive()
+        command: |
+          import { reactive } from 'vue'
+          
+          const state = reactive({
+            count: 0,
+            name: 'Vue',
+            items: [],
+          })
+          // Access directly, no .value
+          state.count++
+      - label: computed()
+        command: |
+          import { ref, computed } from 'vue'
+          
+          const count = ref(10)
+          const double = computed(() => count.value * 2)
+          // Read-only derived state
+      - label: writable computed
+        command: |
+          const fullName = computed({
+            get: () => firstName.value + ' ' + lastName.value,
+            set: (val) => {
+              const [first, last] = val.split(' ')
+              firstName.value = first
+              lastName.value = last
+            },
+          })
+      - label: watch()
+        command: |
+          import { watch } from 'vue'
+          
+          watch(source, (newVal, oldVal) => {
+            console.log('Changed from', oldVal, 'to', newVal)
+          })
+      - label: watchEffect()
+        command: |
+          import { watchEffect } from 'vue'
+          
+          watchEffect(() => {
+            // Runs immediately and tracks dependencies automatically
+            document.title = `Count: ${count.value}`
+          })
+
+  - group: Template Syntax
+    items:
+      - label: v-if / v-else-if / v-else
+        command: |
+          <div v-if="type === 'A'">A</div>
+          <div v-else-if="type === 'B'">B</div>
+          <div v-else>Other</div>
+      - label: v-for
+        command: |
+          <li v-for="(item, index) in items" :key="item.id">
+            {{ index }}: {{ item.name }}
+          </li>
+      - label: v-show
+        command: |
+          <div v-show="isVisible">Only hidden with display:none</div>
+        notes: |
+          v-if removes from DOM; v-show toggles CSS display.
+          Use v-show for frequent toggles, v-if for rare toggles.
+      - label: v-bind shorthand
+        command: |
+          <img :src="imageUrl" :alt="imageAlt" />
+          <!-- Equivalent to -->
+          <img v-bind:src="imageUrl" v-bind:alt="imageAlt" />
+      - label: v-on shorthand
+        command: |
+          <button @click="handleClick" @keyup.enter="submit">
+            Click me
+          </button>
+      - label: Event modifiers
+        command: |
+          <form @submit.prevent="submit">
+            <input @keyup.enter="onEnter" />
+            <button @click.stop="handleClick">Stop propagation</button>
+          </form>
+        notes: "Modifiers: .stop, .prevent, .self, .once, .capture, .passive"
+      - label: v-model
+        command: |
+          <input v-model="message" />
+          <textarea v-model="content" />
+          <select v-model="selected">
+            <option value="a">A</option>
+          </select>
+          <input type="checkbox" v-model="checked" />
+      - label: v-model modifiers
+        command: |
+          <input v-model.trim="message" />
+          <input v-model.number="age" />
+          <input v-model.lazy="text" />
+        notes: ".trim removes whitespace, .number casts to Number, .lazy syncs on change instead of input"
+      - label: v-memo
+        command: |
+          <div v-memo="[item.id]">
+            {{ item.name }}
+          </div>
+        notes: Memoizes the subtree when dependencies haven't changed
+
+  - group: Lifecycle Hooks
+    items:
+      - label: onMounted
+        command: |
+          import { onMounted } from 'vue'
+          
+          onMounted(() => {
+            console.log('Component mounted')
+          })
+      - label: onUnmounted
+        command: |
+          import { onUnmounted } from 'vue'
+          
+          onUnmounted(() => {
+            console.log('Component unmounted')
+          })
+      - label: onUpdated
+        command: |
+          import { onUpdated } from 'vue'
+          
+          onUpdated(() => {
+            console.log('DOM updated')
+          })
+      - label: All lifecycle hooks
+        value: |
+          onBeforeMount, onMounted, onBeforeUpdate, onUpdated,
+          onBeforeUnmount, onUnmounted, onActivated, onDeactivated,
+          onErrorCaptured, onRenderTracked, onRenderTriggered
+
+  - group: Vue Router
+    items:
+      - label: Install router
+        command: npm install vue-router@4
+      - label: Router setup
+        command: |
+          // router/index.js
+          import { createRouter, createWebHistory } from 'vue-router'
+          
+          const router = createRouter({
+            history: createWebHistory(),
+            routes: [
+              { path: '/', component: Home },
+              { path: '/about', component: About },
+              { path: '/user/:id', component: User },
+            ],
+          })
+          
+          export default router
+      - label: Router usage
+        command: |
+          <router-link to="/">Home</router-link>
+          <router-link to="/about">About</router-link>
+          <router-view />
+      - label: Programmatic navigation
+        command: |
+          import { useRouter } from 'vue-router'
+          
+          const router = useRouter()
+          router.push('/dashboard')
+          router.replace('/login')
+          router.go(-1)
+      - label: Dynamic route params
+        command: |
+          import { useRoute } from 'vue-router'
+          
+          const route = useRoute()
+          const userId = route.params.id
+      - label: Route guards
+        command: |
+          router.beforeEach((to, from) => {
+            if (to.meta.requiresAuth && !isAuthenticated) {
+              return '/login'
+            }
+          })
+
+  - group: Pinia (State Management)
+    items:
+      - label: Install Pinia
+        command: npm install pinia
+      - label: Store definition
+        command: |
+          // stores/counter.js
+          import { defineStore } from 'pinia'
+          import { ref, computed } from 'vue'
+          
+          export const useCounterStore = defineStore('counter', () => {
+            const count = ref(0)
+            const double = computed(() => count.value * 2)
+            
+            function increment() {
+              count.value++
+            }
+            
+            return { count, double, increment }
+          })
+      - label: Use store in component
+        command: |
+          import { useCounterStore } from '@/stores/counter'
+          
+          const counter = useCounterStore()
+          counter.increment()
+          // Template: {{ counter.count }}
+      - label: Actions with async
+        command: |
+          function fetchUser() {
+            const user = ref(null)
+            return user
+          }
+          
+          export const useUserStore = defineStore('user', () => {
+            const user = ref(null)
+            
+            async function fetchUser() {
+              const res = await fetch('/api/user')
+              user.value = await res.json()
+            }
+            
+            return { user, fetchUser }
+          })
+
+  - group: Options API
+    items:
+      - label: Basic component
+        command: |
+          export default {
+            data() {
+              return { count: 0 }
+            },
+            methods: {
+              increment() {
+                this.count++
+              },
+            },
+            computed: {
+              double() {
+                return this.count * 2
+              },
+            },
+            mounted() {
+              console.log('Mounted')
+            },
+          }
+        notes: Options API is still fully supported. Use Composition API for new projects.
+      - label: Props (Options API)
+        command: |
+          export default {
+            props: {
+              msg: String,
+              count: { type: Number, default: 0 },
+            },
+          }
+
+  - group: TypeScript
+    items:
+      - label: Typed props
+        command: |
+          <script setup lang="ts">
+          interface Props {
+            name: string
+            count?: number
+          }
+          
+          const props = withDefaults(defineProps<Props>(), {
+            count: 0,
+          })
+          </script>
+      - label: Typed emits
+        command: |
+          <script setup lang="ts">
+          const emit = defineEmits<{
+            (e: 'update', value: string): void
+            (e: 'submit'): void
+          }>()
+          </script>
+      - label: Typed ref
+        command: |
+          import { ref } from 'vue'
+          
+          const count = ref<number>(0)
+          const items = ref<string[]>([])
+      - label: Type inference
+        value: |
+          Vue 3 + TS infers types from ref(), reactive(), computed(),
+          and props automatically. Explicit typing only needed for complex cases.
+
+  - group: Configuration
+    items:
+      - label: Basic vite.config.js
+        command: |
+          import { defineConfig } from 'vite'
+          import vue from '@vitejs/plugin-vue'
+          
+          export default defineConfig({
+            plugins: [vue()],
+          })
+      - label: Vue-specific Vite config
+        command: |
+          plugins: [
+            vue({
+              template: {
+                transformAssetUrls: {
+                  video: ['src', 'poster'],
+                  source: 'src',
+                },
+              },
+            }),
+          ]
+      - label: Environment variables
+        command: |
+          // .env.local
+          VITE_API_URL=https://api.example.com
+          
+          // Access in component
+          const apiUrl = import.meta.env.VITE_API_URL
+        notes: Prefix with VITE_ for client-side access via import.meta.env
+
+  - group: Common Patterns
+    items:
+      - label: Teleport
+        command: |
+          <Teleport to="body">
+            <div class="modal">
+              <p>Modal content</p>
+            </div>
+          </Teleport>
+        notes: Renders content at a different DOM location
+      - label: Suspense
+        command: |
+          <Suspense>
+            <template #default>
+              <AsyncComponent />
+            </template>
+            <template #fallback>
+              <div>Loading...</div>
+            </template>
+          </Suspense>
+      - label: Provide / Inject
+        command: |
+          // Parent
+          import { provide } from 'vue'
+          provide('theme', 'dark')
+          
+          // Child
+          import { inject } from 'vue'
+          const theme = inject('theme', 'light')
+        notes: Default value is used if nothing was provided
+      - label: Transition
+        command: |
+          <Transition name="fade">
+            <div v-if="show">Content</div>
+          </Transition>
+          
+          <style>
+          .fade-enter-active,
+          .fade-leave-active { transition: opacity 0.3s }
+          .fade-enter-from,
+          .fade-leave-to { opacity: 0 }
+          </style>
+      - label: Transition Group
+        command: |
+          <TransitionGroup name="list" tag="ul">
+            <li v-for="item in items" :key="item.id">
+              {{ item.name }}
+            </li>
+          </TransitionGroup>
+      - label: Custom directives
+        command: |
+          // Focus directive
+          const vFocus = {
+            mounted: (el) => el.focus(),
+          }
+          
+          // Usage: <input v-focus />
+      - label: Performance tips
+        value: |
+          Use v-memo for expensive static subtrees.
+          Use v-once for content that never changes.
+          Prefer key-based updates in v-for loops.
+          Use shallowRef/shallowReactive for large immutable objects.
+          Memoize computed properties rather than methods.

@@ -1,0 +1,89 @@
+name: GameMode
+group: gaming / streaming
+process:
+  - gamemoded
+  - gamemode
+search_terms:
+  - gamemode
+  - gamemoderun
+  - gamemoded
+  - performance governor
+  - linux gaming
+references:
+  - group: Core Commands
+    items:
+      - label: Run app with GameMode
+        command: gamemoderun %command%
+      - label: Run native binary
+        command: gamemoderun ./game-binary
+      - label: Check daemon status
+        command: systemctl --user status gamemoded
+      - label: Test GameMode request
+        command: gamemoded -t
+      - label: Check if active for process
+        value: Verify through logs, system monitoring, or a known-good benchmark target because there is not always one universal GUI indicator
+      - label: Combine with MangoHud
+        command: gamemoderun mangohud %command%
+
+  - group: Config and Common Paths
+    items:
+      - label: User config file
+        value: ~/.config/gamemode.ini
+      - label: System config file
+        value: /etc/gamemode.ini
+      - label: Common config areas
+        command: |
+          [general]
+          renice=10
+          
+          [gpu]
+          apply_gpu_optimisations=accept-responsibility
+      - label: Launcher use
+        notes: "Add `gamemoderun %command%` in Steam, Lutris, Heroic, or direct shell launch commands."
+      - label: Service model
+        value: "GameMode usually relies on the `gamemoded` daemon responding to requests from launched games or wrappers"
+      - label: Logs
+        notes: "UI path in terminal: inspect user service logs with `journalctl --user -u gamemoded`."
+
+  - group: Common Integrations
+    items:
+      - label: Steam launch option
+        command: gamemoderun %command%
+      - label: Lutris launch command
+        command: gamemoderun mangohud %command%
+      - label: Heroic custom command
+        command: gamemoderun %command%
+      - label: Gamescope combo
+        command: gamemoderun gamescope -f -- %command%
+      - label: Emulator fit
+        value: Emulators, Wine titles, and some native games can all benefit, but the gains depend on CPU governor and system policy state
+      - label: Scope caveat
+        value: GameMode is not magic performance software; it mostly automates a small set of system-policy changes around a running game
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: CPU governor behavior
+        value: One of the most common reasons to use GameMode is requesting performance-oriented CPU behavior during gameplay
+      - label: Renice and I O priority
+        value: GameMode can adjust niceness and related scheduler priorities based on config and permissions
+      - label: Custom scripts
+        notes: "UI path in config: pre-start and post-stop script hooks can be defined in `gamemode.ini`."
+      - label: GPU tuning support
+        value: GPU-related optimization support depends on hardware, drivers, and distro packaging
+      - label: Troubleshooting first pass
+        value: Start by checking the daemon status, launch prefix, logs, and whether the requested optimizations are actually allowed on the system
+      - label: systemd user service nuance
+        value: Problems often come from service state, distro packaging, or missing user-session integration rather than from the game itself
+
+  - group: Common Concepts
+    items:
+      - label: Wrapper-first usage
+        value: "The main thing to remember is `gamemoderun %command%`; most people interact with GameMode through launch prefixes rather than direct commands"
+      - label: Daemon plus config
+        value: GameMode is basically a daemon plus optional config policy, not a launcher UI with visible toggles
+      - label: Best fit
+        value: It is most useful on Linux systems where governor, scheduling, and system-policy shifts can materially affect gameplay smoothness
+      - label: Combine intentionally
+        value: GameMode often pairs with MangoHud, Gamescope, Proton, emulators, and launchers, so wrapper order is a recurring recall item
+      - label: Common lookup
+        value: "`gamemoderun`, config paths, user service status, logs, and Steam launch integration are the most frequently revisited details"

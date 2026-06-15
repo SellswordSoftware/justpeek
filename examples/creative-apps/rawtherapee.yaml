@@ -1,0 +1,62 @@
+name: RawTherapee
+group: creative apps
+process:
+  - rawtherapee
+  - rawtherapee.exe
+references:
+  - group: Core Workflow
+    items:
+      - label: File browser
+        value: Browse and select raw images before deeper development
+      - label: Editor
+        value: Main panel for exposure, color, detail, geometry, and local processing
+      - label: Queue
+        value: Batch export pipeline for processed images
+      - label: Processing profiles
+        value: Reusable starting points for camera types, shoots, or target looks
+      - label: Sidecars
+        value: Edits are stored separately from the source raw file
+
+  - group: High-value Adjustments
+    items:
+      - label: Exposure compensation
+        value: Correct overall brightness early
+      - label: White balance
+        value: Set neutral color foundation before styling
+      - label: Tone curves
+        value: Shape contrast and tonal distribution
+      - label: Highlight reconstruction
+        value: Recover bright clipped areas when raw data allows it
+      - label: Sharpening
+        value: Apply late enough that noise and output size are understood
+      - label: Noise reduction
+        value: Balance cleanup against texture retention
+
+  - group: Detail and Color
+    items:
+      - label: Lens correction
+        value: Correct distortion, vignetting, and chromatic aberration where supported
+      - label: Demosaicing
+        value: Raw conversion step that affects detail rendering and artifacts
+      - label: Color toning
+        value: Shape mood after neutral balance is established
+      - label: Resize for output
+        value: Final sharpening choices should match delivery resolution
+
+  - group: Common Workflows
+    items:
+      - label: Raw-first pass
+        value: Fix exposure, white balance, and highlights before micro-contrast or styling
+      - label: Profile reuse
+        value: Save time by starting from a good profile for the camera and lighting setup
+      - label: Batch queue
+        value: Queue multiple processed files once edits are consistent across a set
+
+  - group: Common Reference
+    items:
+      - label: Non-destructive edit model
+        value: Source files remain unchanged while parameters live in sidecars
+      - label: Best fit
+        value: Strong for raw development before moving into pixel-level retouching
+      - label: Export targets
+        value: JPEG for delivery, TIFF for round-tripping into raster editors

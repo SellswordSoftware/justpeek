@@ -1,0 +1,105 @@
+name: maven
+group: build tools
+process:
+  - mvn
+  - mvnw
+search_terms:
+  - mvn package
+  - lifecycle
+  - surefire
+  - dependency tree
+references:
+  - group: Core Lifecycle
+    items:
+      - label: Compile
+        command: ./mvnw compile
+      - label: Test
+        command: ./mvnw test
+      - label: Package
+        command: ./mvnw package
+      - label: Install locally
+        command: ./mvnw install
+      - label: Clean package
+        command: ./mvnw clean package
+      - label: Verify
+        command: ./mvnw verify
+      - label: Wrapper first
+        value: Prefer `./mvnw` when available so Maven version and wrapper behavior match the repo
+
+  - group: Selection and Inspection
+    items:
+      - label: Run one test class
+        command: ./mvnw -Dtest=AppTest test
+      - label: Run one test method
+        command: ./mvnw -Dtest=AppTest#adds test
+      - label: Skip tests
+        command: ./mvnw package -DskipTests
+      - label: Dependency tree
+        command: ./mvnw dependency:tree
+      - label: Effective POM
+        command: ./mvnw help:effective-pom
+      - label: Active profiles
+        command: ./mvnw help:active-profiles
+      - label: Evaluate property
+        command: ./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout
+
+  - group: Debugging and Repository Behavior
+    items:
+      - label: Verbose errors
+        command: ./mvnw -e test
+      - label: Full debug logging
+        command: ./mvnw -X test
+      - label: Update snapshots
+        command: ./mvnw test -U
+      - label: Offline mode
+        command: ./mvnw -o test
+      - label: Resume reactor build
+        command: ./mvnw install -rf :module-name
+      - label: Parallel reactor build
+        command: ./mvnw -T 1C install
+      - label: Local repository override
+        command: ./mvnw test -Dmaven.repo.local=/tmp/m2
+
+  - group: Handy Snippets
+    items:
+      - label: Minimal pom
+        command: |
+          <project>
+            <modelVersion>4.0.0</modelVersion>
+            <groupId>com.example</groupId>
+            <artifactId>app</artifactId>
+            <version>1.0.0</version>
+          </project>
+      - label: JUnit dependency
+        command: |
+          <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+          </dependency>
+      - label: Java version properties
+        command: |
+          <properties>
+            <maven.compiler.source>21</maven.compiler.source>
+            <maven.compiler.target>21</maven.compiler.target>
+          </properties>
+      - label: Surefire plugin
+        command: |
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.2.5</version>
+          </plugin>
+
+  - group: Common Concepts
+    items:
+      - label: Lifecycle phases
+        value: "`validate`, `compile`, `test`, `package`, `verify`, `install`, and `deploy` are cumulative lifecycle steps"
+      - label: POM inheritance
+        value: Parent POMs, dependency management, and plugin management often explain behavior more than the local file alone
+      - label: Surefire vs Failsafe
+        value: Surefire usually runs unit tests and Failsafe usually handles integration-test phases
+      - label: Reactor build
+        value: Multi-module Maven builds are coordinated through the reactor, which affects ordering, resume, and parallel flags
+      - label: Best fit
+        value: Convention-heavy JVM builds where stable lifecycle semantics matter more than build-script flexibility

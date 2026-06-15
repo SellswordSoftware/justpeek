@@ -1,0 +1,103 @@
+name: Ruby Toolchain
+group: programming language / toolchain packs
+process:
+  - ruby
+  - ruby.exe
+  - bundle
+  - gem
+search_terms:
+  - bundler
+  - rspec
+  - rake
+  - irb
+references:
+  - group: Runtime and Gems
+    items:
+      - label: Show version
+        command: ruby -v
+      - label: Run script
+        command: ruby app.rb
+      - label: Start IRB
+        command: irb
+      - label: Install gem
+        command: gem install sinatra
+      - label: List gems
+        command: gem list
+      - label: Bundle install
+        command: bundle install
+      - label: Run command in bundle context
+        command: bundle exec rspec
+
+  - group: Bundler and Project Tasks
+    items:
+      - label: Initialize Gemfile
+        command: bundle init
+      - label: Add dependency
+        command: bundle add rubocop
+      - label: Update gems
+        command: bundle update
+      - label: Show dependency graph
+        command: bundle viz
+      - label: Run rake tasks
+        command: bundle exec rake -T
+      - label: Install binstubs
+        command: bundle binstubs rspec-core
+      - label: Framework commands
+        value: Rails typically uses `bin/rails`, plain task automation often uses `rake`
+
+  - group: Testing and Quality
+    items:
+      - label: Run RSpec
+        command: bundle exec rspec
+      - label: Run one spec
+        command: bundle exec rspec spec/models/user_spec.rb
+      - label: Run Minitest
+        command: ruby -Itest test/test_app.rb
+      - label: Lint with RuboCop
+        command: bundle exec rubocop
+      - label: Auto-correct with RuboCop
+        command: bundle exec rubocop -A
+      - label: Security scan with Brakeman
+        command: bundle exec brakeman
+      - label: Dependency audit
+        command: bundle exec bundle-audit
+
+  - group: Handy Snippets
+    items:
+      - label: Hello script
+        command: |
+          puts "hello"
+      - label: Class with initializer
+        command: |
+          class User
+            attr_reader :name
+          
+            def initialize(name)
+              @name = name
+            end
+          end
+      - label: File read
+        command: |
+          text = File.read("data.txt")
+      - label: JSON parse
+        command: |
+          require "json"
+          
+          data = JSON.parse(File.read("data.json"))
+      - label: Safe command execution
+        command: |
+          output = `git status`
+          puts output
+
+  - group: Common Concepts
+    items:
+      - label: Gemfile and lockfile
+        value: "`Gemfile` defines dependencies and `Gemfile.lock` pins the resolved versions"
+      - label: bundle exec
+        value: Forces commands to use the project’s dependency set instead of whatever is globally installed
+      - label: Blocks and enumerable style
+        value: A lot of Ruby expressiveness comes from iterators, blocks, and collection pipelines
+      - label: Rails gravity
+        value: Many Ruby projects are Rails apps, so framework conventions often matter more than raw language syntax
+      - label: Tooling habit
+        value: Prefer project-local executables such as `bin/rails`, `bin/rake`, and `bundle exec` over globals

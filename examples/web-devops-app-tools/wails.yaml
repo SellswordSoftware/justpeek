@@ -1,0 +1,150 @@
+name: Wails
+group: web / devops / app tools
+search_terms:
+  - go desktop app
+  - wails cli
+  - frontend bridge
+  - go bindings
+  - tray desktop
+references:
+  - group: Project Setup
+    items:
+      - label: Install CLI
+        command: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - label: Check version
+        command: wails version
+      - label: Create app
+        command: wails init -n myapp
+      - label: Create with template
+        command: wails init -n myapp -t react
+      - label: Dev mode
+        command: wails dev
+      - label: Production build
+        command: wails build
+      - label: Doctor
+        command: wails doctor
+
+  - group: Core CLI and Workflow
+    items:
+      - label: Generate bindings
+        command: wails generate bindings
+      - label: Build package
+        command: wails build -package
+      - label: Build for another platform
+        command: wails build -platform windows/amd64
+      - label: Clean build artifacts
+        command: wails build -clean
+      - label: Frontend install loop
+        value: Normal workflow usually combines Go tooling plus the frontend package manager inside the generated web directory
+      - label: Logs and diagnostics
+        notes: Run `wails dev` from a terminal when you need Go panic output, asset pipeline logs, or CLI diagnostics.
+
+  - group: Go to Frontend Bridge
+    items:
+      - label: Expose Go struct methods
+        command: |
+          type App struct{}
+          
+          func (a *App) Greet(name string) string {
+              return "Hello " + name
+          }
+      - label: Bind struct in app options
+        command: |
+          err := wails.Run(&options.App{
+              Bind: []interface{}{
+                  app,
+              },
+          })
+      - label: Call from frontend
+        command: |
+          import { Greet } from "../wailsjs/go/main/App";
+          
+          const message = await Greet("Sam");
+      - label: Regenerate frontend bindings
+        notes: Run `wails generate bindings` after backend API shape changes so the generated frontend bridge stays in sync.
+      - label: Events from backend
+        command: |
+          runtime.EventsEmit(ctx, "sync-complete", payload)
+      - label: Listen on frontend
+        command: |
+          import { EventsOn } from "../wailsjs/runtime/runtime";
+          
+          EventsOn("sync-complete", (payload) => {
+            console.log(payload);
+          });
+
+  - group: App Lifecycle and Windows
+    items:
+      - label: Startup hook
+        command: |
+          func (a *App) startup(ctx context.Context) {
+              a.ctx = ctx
+          }
+      - label: DOM ready hook
+        command: |
+          func (a *App) domReady(ctx context.Context) {}
+      - label: Before close hook
+        command: |
+          func (a *App) beforeClose(ctx context.Context) bool {
+              return false
+          }
+      - label: Window title and size
+        notes: "UI path in code: `options.App` fields such as `Title`, `Width`, `Height`, and related window options."
+      - label: Frameless and always on top
+        notes: "UI path in code: window configuration flags in `options.App` and platform-specific window options."
+      - label: Tray and menus
+        value: Wails supports native menus and system tray flows through the Go side rather than a browser-only abstraction
+
+  - group: Project Layout and Important Paths
+    items:
+      - label: Main entry
+        value: main.go
+      - label: App backend
+        value: app.go or project-specific Go package files
+      - label: Frontend app
+        value: frontend/ by default in many templates
+      - label: Generated JS bridge
+        value: wailsjs/
+      - label: Build config
+        value: wails.json
+      - label: Assets and icons
+        value: build/ and frontend asset folders, depending on template and packaging setup
+
+  - group: Handy Snippets
+    items:
+      - label: Runtime open URL
+        command: |
+          runtime.BrowserOpenURL(ctx, "https://wails.io")
+      - label: Save dialog
+        command: |
+          filename, err := runtime.SaveFileDialog(ctx, runtime.SaveDialogOptions{
+              Title: "Save Report",
+          })
+      - label: Message dialog
+        command: |
+          _, err := runtime.MessageDialog(ctx, runtime.MessageDialogOptions{
+              Type:    runtime.InfoDialog,
+              Title:   "Done",
+              Message: "Sync complete",
+          })
+      - label: Read file in Go backend
+        command: |
+          data, err := os.ReadFile("config.json")
+      - label: Frontend promise call
+        command: |
+          import { Greet } from "../wailsjs/go/main/App";
+          
+          Greet("Sam").then(console.log);
+
+  - group: Common Concepts
+    items:
+      - label: Frontend plus Go split
+        value: Wails apps are typically standard web frontends paired with a Go backend and generated bridge code
+      - label: Generated bindings
+        value: Frontend-to-Go calls depend on generated bindings, so regeneration is part of normal development
+      - label: Native desktop fit
+        value: Menus, dialogs, tray behavior, and OS integrations are generally driven from the Go side
+      - label: Template gravity
+        value: The frontend stack and file layout depend heavily on the template chosen at init time
+      - label: Best fit
+        value: Desktop apps where a Go backend plus web UI is a better tradeoff than Rust-native or pure Electron approaches

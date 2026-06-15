@@ -8,7 +8,7 @@ references:
         notes: Search package names and package metadata in configured feeds.
       - label: Install package
         command: choco install ripgrep -y
-        notes: `-y` accepts prompts automatically for unattended installs.
+        notes: "`-y` accepts prompts automatically for unattended installs."
       - label: Upgrade one package
         command: choco upgrade git -y
         notes: Update a single installed package.

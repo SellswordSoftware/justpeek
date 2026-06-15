@@ -1,0 +1,86 @@
+name: Fusion 360
+group: cad / 3d / maker tools
+process:
+  - Fusion360
+  - Fusion 360
+  - Fusion360.exe
+references:
+  - group: File and View
+    items:
+      - label: New design
+        keys: Ctrl+N
+      - label: Save
+        keys: Ctrl+S
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Shift+Z
+      - label: Search commands
+        keys: S
+      - label: Fit view
+        keys: F6
+      - label: Home view
+        keys: Shift+H
+      - label: Pan orbit zoom
+        keys: Shift+MiddleMouse / Shift+MiddleMouse drag / MouseWheel
+
+  - group: Sketching
+    items:
+      - label: Create sketch
+        keys: C then select plane from toolbar flow
+        notes: Command search is often faster than toolbar hunting once the plane is clear.
+      - label: Line
+        keys: L
+      - label: Rectangle
+        keys: R
+      - label: Circle
+        keys: C
+      - label: Dimension
+        keys: D
+      - label: Offset
+        keys: O
+      - label: Trim
+        keys: T
+      - label: Construction toggle
+        keys: X
+      - label: Coincident horizontal vertical tangent symmetry
+        value: Core constraints that should be applied intentionally until the sketch is fully constrained
+
+  - group: Solid Modeling
+    items:
+      - label: Extrude
+        keys: E
+      - label: Press pull
+        keys: Q
+      - label: Fillet
+        keys: F
+      - label: Chamfer
+        keys: Shift+F
+      - label: Shell
+        keys: H
+      - label: Move or copy
+        keys: M
+      - label: Mirror
+        keys: M from command search or toolbar, depending on workspace
+      - label: Pattern
+        notes: Rectangular and circular patterns are high-value for repeated hardware or design features.
+
+  - group: Selection and Browser
+    items:
+      - label: Select all
+        keys: Ctrl+A
+      - label: Delete selection
+        keys: Delete
+      - label: Rename selected item
+        keys: F2
+      - label: Isolate component
+        notes: Use isolate when large assemblies make accidental edits likely.
+      - label: Capture design history
+        notes: Keep history on for parametric work unless a mesh or direct-edit workflow explicitly needs otherwise.
+
+  - group: Common Reference
+    items:
+      - label: Workspaces
+        value: Design, Render, Manufacture, Simulation, Drawing, Electronics
+      - label: Parametric habit
+        value: Constrain sketches, name components, and keep timeline edits deliberate
+      - label: Joint mindset
+        value: Use components and joints rather than free-moving bodies when assemblies should remain editable

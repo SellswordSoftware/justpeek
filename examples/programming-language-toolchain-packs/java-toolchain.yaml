@@ -1,0 +1,129 @@
+name: Java Toolchain
+group: programming language / toolchain packs
+process:
+  - java
+  - java.exe
+  - javac
+  - javac.exe
+search_terms:
+  - javac
+  - maven
+  - gradle
+  - junit
+references:
+  - group: JDK and CLI Basics
+    items:
+      - label: Show Java version
+        command: java -version
+      - label: Show compiler version
+        command: javac -version
+      - label: Compile one file
+        command: javac src/Main.java
+      - label: Run class
+        command: java -cp src Main
+      - label: Run jar
+        command: java -jar app.jar
+      - label: Generate javadocs
+        command: javadoc -d docs src/**/*.java
+      - label: Inspect jar contents
+        command: jar tf app.jar
+
+  - group: Maven
+    items:
+      - label: Compile
+        command: mvn compile
+      - label: Run tests
+        command: mvn test
+      - label: Package app
+        command: mvn package
+      - label: Install locally
+        command: mvn install
+      - label: Run one test
+        command: mvn -Dtest=ClassNameTest test
+      - label: Dependency tree
+        command: mvn dependency:tree
+      - label: Skip tests for package
+        command: mvn package -DskipTests
+
+  - group: Gradle
+    items:
+      - label: Build
+        command: ./gradlew build
+      - label: Test
+        command: ./gradlew test
+      - label: Run app
+        command: ./gradlew run
+      - label: Clean build
+        command: ./gradlew clean build
+      - label: Run one test
+        command: ./gradlew test --tests ClassNameTest
+      - label: Show dependencies
+        command: ./gradlew dependencies
+      - label: List tasks
+        command: ./gradlew tasks
+
+  - group: Testing and Diagnostics
+    items:
+      - label: JUnit 5 test method
+        command: |
+          import static org.junit.jupiter.api.Assertions.assertEquals;
+          import org.junit.jupiter.api.Test;
+          
+          class AppTest {
+              @Test
+              void adds() {
+                  assertEquals(3, 1 + 2);
+              }
+          }
+      - label: Run tests from IDE or build tool
+        value: Prefer build-tool-backed test execution so classpath and plugins match CI behavior
+      - label: Show stack traces
+        command: java -XX:+ShowCodeDetailsInExceptionMessages -jar app.jar
+      - label: Heap dump on OOM
+        command: java -XX:+HeapDumpOnOutOfMemoryError -jar app.jar
+      - label: Thread dump with jcmd
+        command: jcmd <pid> Thread.print
+      - label: Heap histogram
+        command: jcmd <pid> GC.class_histogram
+
+  - group: Handy Snippets
+    items:
+      - label: Main method
+        command: |
+          public class Main {
+              public static void main(String[] args) {
+                  System.out.println("hello");
+              }
+          }
+      - label: Record type
+        command: |
+          public record User(String name, boolean active) {}
+      - label: Try with resources
+        command: |
+          try (var reader = Files.newBufferedReader(Path.of("data.txt"))) {
+              System.out.println(reader.readLine());
+          }
+      - label: Stream filter map collect
+        command: |
+          var names = users.stream()
+              .filter(User::active)
+              .map(User::name)
+              .toList();
+      - label: HTTP client
+        command: |
+          var client = HttpClient.newHttpClient();
+          var request = HttpRequest.newBuilder(URI.create("https://example.com")).build();
+          var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+  - group: Common Concepts
+    items:
+      - label: JDK vs JRE
+        value: Modern development typically assumes a full JDK; the compiler and tooling are not part of a bare runtime
+      - label: Build tool choice
+        value: Maven is convention-heavy and predictable; Gradle is more flexible and programmable
+      - label: Classpath
+        value: Many run and test problems are really classpath or module-path issues
+      - label: Records and sealed types
+        value: Useful modern Java features for modeling immutable data and constrained hierarchies
+      - label: Tooling habit
+        value: Prefer the wrapper scripts `./gradlew` or project-local Maven setup over assuming a matching global install

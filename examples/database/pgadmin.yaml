@@ -1,0 +1,105 @@
+name: pgAdmin
+group: database
+process:
+  - pgadmin4
+  - pgadmin
+search_terms:
+  - pgadmin
+  - postgres gui
+  - query tool
+  - backup restore
+  - server registration
+references:
+  - group: Navigation and Query Tool
+    items:
+      - label: Open query tool
+        keys: Alt+Shift+Q
+        notes: Opens the Query Tool for the selected database when available
+      - label: Execute query
+        keys: F5
+      - label: Explain query
+        keys: F7
+      - label: Explain analyze query
+        keys: Shift+F7
+      - label: Auto-complete
+        keys: Ctrl+Space
+      - label: Comment or uncomment selection
+        keys: Ctrl+/
+      - label: Find in query
+        keys: Ctrl+F
+
+  - group: Query Editing and Results
+    items:
+      - label: Save query file
+        keys: Ctrl+S
+      - label: Open query file
+        keys: Ctrl+O
+      - label: New query tab
+        keys: Ctrl+E
+      - label: Format SQL
+        notes: "UI path: `Query Tool -> dropdown/options depending on version; formatting is often toolbar-driven rather than a universal shortcut`."
+      - label: View messages and notices
+        notes: "UI path: `Query Tool -> Messages tab`."
+      - label: View query history
+        notes: "UI path: `Query Tool -> History tab`."
+      - label: Download result data
+        notes: "UI path: `Query Tool -> Data Output -> download/export controls`."
+
+  - group: Browser Tree and Object Tasks
+    items:
+      - label: Refresh selected object
+        keys: F5
+        notes: In the browser tree this refreshes the selected node rather than executing SQL
+      - label: Properties dialog
+        keys: Alt+Enter
+      - label: Create table
+        notes: "UI path: `Browser -> Schemas -> Tables -> right click -> Create -> Table`."
+      - label: View or edit data
+        notes: "UI path: `Right click table -> View/Edit Data -> All Rows / First 100 Rows / Filtered Rows`."
+      - label: Generate ERD
+        notes: "UI path: `Tools -> ERD Tool`."
+      - label: PSQL terminal
+        notes: "UI path: `Tools -> PSQL Tool`."
+
+  - group: Maintenance Backup and Restore
+    items:
+      - label: Backup database
+        notes: "UI path: `Right click database -> Backup...`."
+      - label: Restore database
+        notes: "UI path: `Right click database -> Restore...`."
+      - label: Maintenance
+        notes: "UI path: `Right click table or database -> Maintenance...` for vacuum, analyze, reindex, and more."
+      - label: Grant wizard
+        notes: "UI path: `Object properties -> Security / Privileges tabs`."
+      - label: Server registration
+        notes: "UI path: `Add New Server` from the object browser or dashboard."
+      - label: Dashboard stats
+        notes: "UI path: `Select server or database -> Dashboard` for sessions, TPS, tuples, and locks."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Restore custom dump
+        notes: "UI path: `Restore...` then select a custom format dump created by `pg_dump -Fc`."
+      - label: Query plan graph
+        notes: "UI path: `Query Tool -> Explain` opens textual and graphical plan views depending on version."
+      - label: Grant and ownership changes
+        notes: "UI path: `Right click object -> Properties -> Security / Definition / Owner`."
+      - label: Activity monitor
+        notes: "UI path: `Dashboard` and statistics/activity views on server and database nodes."
+      - label: Import and export data
+        notes: "UI path: `Right click table -> Import/Export Data...`."
+      - label: Connection settings
+        notes: "UI path: `Right click server -> Properties -> Connection`."
+
+  - group: Common Concepts
+    items:
+      - label: Browser tree focus
+        value: pgAdmin is heavily organized around the left browser tree, and many actions are object-scoped through right-click menus
+      - label: Query Tool split
+        value: The Query Tool is the main SQL workspace, while administration, dashboards, backups, and object editing live outside it
+      - label: Postgres-native admin fit
+        value: pgAdmin is strongest when you want PostgreSQL-specific admin surfaces rather than a cross-engine generic tool
+      - label: Common lookup
+        value: Query Tool shortcuts, backup and restore paths, maintenance dialogs, and table data browsing are the most frequently revisited items
+      - label: Shortcut density
+        value: pgAdmin has some useful editor shortcuts, but many important operations are still easier to reach through menus and context actions

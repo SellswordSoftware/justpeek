@@ -1,0 +1,106 @@
+name: Discord
+group: communication apps
+process:
+  - Discord
+  - discord
+search_terms:
+  - discord shortcuts
+  - slash commands
+  - overlay
+  - server settings
+  - search filters
+references:
+  - group: Navigation and Panels
+    items:
+      - label: Quick switcher
+        keys: Ctrl+K
+      - label: Search current channel
+        keys: Ctrl+F
+      - label: Search across Discord
+        keys: Ctrl+Shift+F
+      - label: Toggle member list
+        keys: Ctrl+U
+      - label: Mark server read
+        keys: Esc
+      - label: Jump to oldest unread
+        keys: Shift+PageUp
+      - label: Upload file
+        keys: Ctrl+Shift+U
+
+  - group: Messaging and Voice
+    items:
+      - label: Edit last message
+        keys: Up
+        notes: Works when the message box is empty
+      - label: Reply to message
+        keys: R
+      - label: Mark unread on message
+        keys: Alt+Click
+      - label: React with emoji picker
+        keys: Ctrl+E
+      - label: Mute or unmute
+        keys: Ctrl+Shift+M
+      - label: Deafen or undeafen
+        keys: Ctrl+Shift+D
+      - label: Start call in DM
+        notes: "UI path: DM header call or video icons."
+
+  - group: Server and Channel Features
+    items:
+      - label: Open inbox
+        notes: "UI path: top right `Inbox`."
+      - label: Browse threads
+        notes: "UI path: channel header `Threads` or thread side panels."
+      - label: Open pinned messages
+        notes: "UI path: channel header `Pins`."
+      - label: Server settings
+        notes: "UI path: server name menu -> `Server Settings`."
+      - label: Channel settings
+        notes: "UI path: hover channel -> gear icon."
+      - label: Roles and permissions
+        notes: "UI path: `Server Settings -> Roles` and channel `Permissions`."
+
+  - group: Search Filters and Slash Patterns
+    items:
+      - label: From user
+        value: "from:username"
+      - label: In channel
+        value: "in:#general"
+      - label: Before or after
+        value: "before:2026-06-01 after:2026-05-01"
+      - label: Has attachment
+        value: "has:file"
+      - label: Mentioned user
+        value: "mentions:username"
+      - label: Slash command idea
+        value: /giphy hello
+      - label: Nick and thread lookup
+        notes: Search behavior can depend on server indexing and whether the content lives in threads, forum posts, or normal channels.
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Developer mode
+        notes: "UI path: `User Settings -> Advanced -> Developer Mode`."
+      - label: Copy channel or message ID
+        notes: "UI path: enable Developer Mode, then right click object -> `Copy ID`."
+      - label: Overlay settings
+        notes: "UI path: `User Settings -> Game Overlay`."
+      - label: Notification settings
+        notes: "UI path: server menu -> `Notification Settings` or `User Settings -> Notifications`."
+      - label: Keybinds
+        notes: "UI path: `User Settings -> Keybinds`."
+      - label: Stream quality and activities
+        notes: "UI path: voice channel controls, stream window, and activity launcher in the voice panel."
+
+  - group: Common Concepts
+    items:
+      - label: Focus and context
+        value: Discord shortcuts depend heavily on whether focus is in chat, search, the server list, or voice controls
+      - label: Voice-first workflows
+        value: Mute, deafen, push-to-talk, and overlay settings are as important as text chat shortcuts for many users
+      - label: Developer mode utility
+        value: Developer Mode is one of the most commonly re-found settings because it unlocks copy-ID actions and technical workflows
+      - label: Search grammar
+        value: "Search filters like `from:`, `in:`, `mentions:`, and date constraints are much faster than manual scrolling"
+      - label: Shortcut density
+        value: Discord exposes a good set of everyday shortcuts, but many admin and server-management tasks remain menu-driven

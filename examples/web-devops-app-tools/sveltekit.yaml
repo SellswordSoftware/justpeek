@@ -1,0 +1,576 @@
+name: SvelteKit
+group: web / devops / app tools
+process:
+  - node
+title_contains: sveltekit
+search_terms:
+  - svelte
+  - sveltekit
+  - kit
+  - adapters
+  - load function
+  - server routes
+references:
+  - group: Project Setup
+    items:
+      - label: Create new project
+        command: |
+          npx sv create my-app
+          cd my-app
+          npm run dev
+      - label: Add SvelteKit packages
+        command: |
+          npm install @sveltejs/kit @sveltejs/vite-plugin-svelte
+          npm install -D svelte @sveltejs/adapter-auto
+          npm create svelte@latest -- --yes
+
+  - group: Development
+    items:
+      - label: Start dev server
+        command: npm run dev
+      - label: Start on specific port
+        command: npm run dev -- --port 3000
+      - label: Open browser automatically
+        command: npm run dev -- --open
+      - label: Production build
+        command: npm run build
+      - label: Preview production build
+        command: npm run preview
+      - label: Check types
+        command: npx svelte-check --tsconfig ./tsconfig.json
+      - label: Lint
+        command: npm run lint
+      - label: Type check with watch
+        command: npx svelte-check --tsconfig ./tsconfig.json --watch
+
+  - group: Routing
+    items:
+      - label: File-based routing
+        value: |
+          src/routes/+page.svelte -> /
+          src/routes/about/+page.svelte -> /about
+          src/routes/blog/+page.svelte -> /blog
+          src/routes/blog/[slug]/+page.svelte -> /blog/:slug
+      - label: Dynamic routes
+        command: |
+          // src/routes/blog/[slug]/+page.server.js
+          export function load({ params }) {
+            return {
+              slug: params.slug,
+            }
+          }
+      - label: Rest parameters
+        command: |
+          // src/routes/files/[...path]/+page.svelte
+          export function load({ params }) {
+            return {
+              path: params.path,
+            }
+          }
+        notes: "Captures remaining path segments"
+      - label: Optional parameters
+        command: |
+          // src/routes/[slug]/+page.server.js
+          export function load({ params }) {
+            return {
+              slug: params.slug || 'default',
+            }
+          }
+        notes: "The parameter is optional in the URL"
+      - label: Layouts
+        command: |
+          <!-- src/routes/+layout.svelte -->
+          <script>
+          export let data
+          </script>
+          
+          <nav>Navigation</nav>
+          <main>{children}</main>
+          <footer>Footer</footer>
+      - label: Layout data
+        command: |
+          // src/routes/+layout.server.js
+          export function load() {
+            return {
+              siteName: 'My App',
+              user: await getUser(),
+            }
+          }
+      - label: Error pages
+        command: |
+          <!-- src/routes/+error.svelte -->
+          <script>
+          export let error
+          </script>
+          
+          <h1>Error</h1>
+          <p>{error.message}</p>
+      - label: Route guards
+        command: |
+          // src/hooks.server.js
+          export async function handle({ event, resolve }) {
+            const session = await getSession(event.cookies)
+            
+            if (event.url.pathname.startsWith('/admin') && !session.user) {
+              return new Response('Unauthorized', { status: 401 })
+            }
+            
+            return resolve(event)
+          }
+
+  - group: Data Loading
+    items:
+      - label: Universal load
+        command: |
+          // +page.js
+          export async function load({ fetch }) {
+            const res = await fetch('/api/data')
+            const data = await res.json()
+            return { data }
+          }
+        notes: "Runs on server during SSR and client during navigation"
+      - label: Server load
+        command: |
+          // +page.server.js
+          export async function load() {
+            // This only runs on the server
+            const data = await database.query('SELECT * FROM items')
+            return { data }
+          }
+        notes: "File with .server suffix only runs on the server"
+      - label: Form action
+        command: |
+          // +page.server.js
+          export async function actions() {
+            return {
+              create: async ({ request }) => {
+                const data = await request.formData()
+                const item = await database.create(data)
+                return { success: true, item }
+              },
+            }
+          }
+      - label: Form handling
+        command: |
+          <form method="POST" action="?/create">
+            <input name="name" />
+            <button type="submit">Create</button>
+          </form>
+        notes: "Use method=POST and action with form action name"
+      - label: Using form action result
+        command: |
+          <script>
+          export let form
+          </script>
+          
+          {#if form.success}
+            <p>Created!</p>
+          {/if}
+          
+          <form method="POST" action="?/create">
+            <input name="name" />
+            <button type="submit">Create</button>
+          </form>
+      - label: fetch in load
+        command: |
+          // +page.js
+          export async function load({ fetch }) {
+            // This fetch uses the server's context
+            const res = await fetch('/api/internal')
+            return { data: await res.json() }
+          }
+        notes: |
+          SvelteKit's fetch uses the server's context during SSR.
+          You can access protected resources without CORS issues.
+      - label: Page data
+        command: |
+          <script>
+          export let data
+          </script>
+          
+          <h1>{data.title}</h1>
+          <ul>
+            {#each data.items as item}
+              <li>{item.name}</li>
+            {/each}
+          </ul>
+
+  - group: API Routes
+    items:
+      - label: GET endpoint
+        command: |
+          // src/routes/api/hello/+server.js
+          export function GET() {
+            return new Response(JSON.stringify({ message: 'Hello' }))
+          }
+      - label: JSON endpoint
+        command: |
+          import { json } from '@sveltejs/kit'
+          
+          export function GET() {
+            return json({ message: 'Hello' })
+          }
+      - label: POST endpoint
+        command: |
+          export async function POST({ request }) {
+            const data = await request.json()
+            // Process data
+            return json({ success: true })
+          }
+      - label: Dynamic API route
+        command: |
+          // src/routes/api/users/[id]/+server.js
+          export async function GET({ params }) {
+            const user = await db.users.findById(params.id)
+            return json(user)
+          }
+      - label: Error handling
+        command: |
+          import { error } from '@sveltejs/kit'
+          
+          export async function GET({ params }) {
+            const user = await db.users.findById(params.id)
+            if (!user) {
+              throw error(404, 'User not found')
+            }
+            return json(user)
+          }
+      - label: Redirect
+        command: |
+          import { redirect } from '@sveltejs/kit'
+          
+          export function GET() {
+            throw redirect(307, '/new-location')
+          }
+
+  - group: Server-Side Features
+    items:
+      - label: Server-only code
+        command: |
+          // src/lib/server/database.js
+          import { createClient } from '@supabase/supabase-js'
+          
+          // Only accessible on server
+          const supabase = createClient(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_SERVICE_KEY,
+          )
+          
+          export const db = supabase.from('items')
+        notes: "Files in $lib/server/ or with .server suffix are only accessible on server"
+      - label: Server-only pages
+        command: |
+          // src/routes/+page.server.js
+          export async function load({ cookies }) {
+            const session = cookies.get('session')
+            const user = session ? await getUser(session) : null
+            
+            return {
+              user,
+              items: await getItems(user),
+            }
+          }
+      - label: Cookies
+        command: |
+          // Read
+          const value = cookies.get('name')
+          
+          // Write
+          cookies.set('name', 'value', {
+            path: '/',
+            httpOnly: true,
+            secure: true,
+          })
+          
+          // Delete
+          cookies.delete('name', { path: '/' })
+        notes: "Access via cookies in load functions and hooks"
+      - label: Environment variables
+        command: |
+          // .env
+          PRIVATE_DB_PASSWORD=xxx
+          PUBLIC_API_URL=https://api.example.com
+          
+          // Server-side
+          import { env } from '$env/dynamic/private'
+          const password = env.PRIVATE_DB_PASSWORD
+          
+          // Client-side
+          import { env } from '$env/static/public'
+          const apiUrl = env.PUBLIC_API_URL
+        notes: "Files with .server suffix only run on the server. Files with .d.ts suffix are type definitions."
+      - label: Server-only imports
+        command: |
+          // src/lib/auth.server.js
+          import { verify } from 'jsonwebtoken'
+          
+          export function verifyToken(token) {
+            return verify(token, process.env.JWT_SECRET)
+          }
+        notes: "Files with .server suffix cannot be imported by client code"
+
+  - group: Configuration
+    items:
+      - label: Basic config
+        command: |
+          // svelte.config.js
+          import adapter from '@sveltejs/adapter-auto'
+          import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+          
+          export default {
+            preprocess: vitePreprocess(),
+            kit: {
+              adapter: adapter(),
+            },
+          }
+      - label: Adapter options
+        value: |
+          @sveltejs/adapter-auto (default)
+          @sveltejs/adapter-node (Node.js)
+          @sveltejs/adapter-static (static site)
+          @sveltejs/adapter-vercel (Vercel)
+          @sveltejs/adapter-netlify (Netlify)
+          @sveltejs/adapter-cloudflare (Cloudflare)
+      - label: File extensions
+        command: |
+          kit: {
+            alias: {
+              $components: './src/lib/components',
+            },
+          }
+      - label: Type generation
+        command: |
+          kit: {
+            typegen: {
+              config: './svelte.config.js',
+            },
+          }
+        notes: "Generates $types for type-safe access to data and parameters"
+      - label: Vite config
+        command: |
+          // vite.config.js
+          import { sveltekit } from '@sveltejs/kit/vite'
+          import { defineConfig } from 'vite'
+          
+          export default defineConfig({
+            plugins: [sveltekit()],
+          })
+      - label: App.html
+        command: |
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <link rel="icon" href="{% sveltekit.assets %}/favicon.png" />
+              <meta name="viewport" content="width=device-width" />
+              {% sveltekit.head %}
+            </head>
+            <body data-sveltekit-preload-data="hover">
+              <div style="display: contents">{% sveltekit.body %}</div>
+            </body>
+          </html>
+
+  - group: Hooks
+    items:
+      - label: Server hooks
+        command: |
+          // src/hooks.server.js
+          export async function handle({ event, resolve }) {
+            // Before
+            const session = await getSession(event.cookies)
+            event.locals.user = session?.user
+            
+            const response = await resolve(event)
+            
+            // After
+            return response
+          }
+      - label: Universal hooks
+        command: |
+          // src/hooks.js
+          export async function handle({ event, resolve }) {
+            // Runs on both server and client
+            console.log(event.url.pathname)
+            return resolve(event)
+          }
+      - label: Error hooks
+        command: |
+          // src/hooks.server.js
+          export function handleError({ error, event }) {
+            console.error('Error:', error.message)
+            return new Error('Something went wrong')
+          }
+      - label: Sequence hooks
+        command: |
+          import { sequence } from '@sveltejs/kit'
+          import { auth } from './auth.js'
+          import { logging } from './logging.js'
+          
+          export const handle = sequence(auth, logging)
+        notes: "Chain multiple hooks together"
+
+  - group: SEO and Metadata
+    items:
+      - label: Page metadata
+        command: |
+          // src/routes/+page.js
+          export function load() {
+            return {
+              meta: {
+                title: 'Page Title',
+                description: 'Page description',
+              },
+            }
+          }
+        notes: "Access via data in +page.svelte"
+      - label: Dynamic title
+        command: |
+          <svelte:head>
+            <title>{data.title}</title>
+            <meta name="description" content={data.description} />
+          </svelte:head>
+      - label: Canonical URL
+        command: |
+          <svelte:head>
+            <link rel="canonical" href="https://example.com/{data.slug}" />
+          </svelte:head>
+      - label: Open Graph
+        command: |
+          <svelte:head>
+            <meta property="og:title" content={data.title} />
+            <meta property="og:description" content={data.description} />
+            <meta property="og:image" content={data.ogImage} />
+            <meta property="og:url" content={data.canonicalUrl} />
+          </svelte:head>
+
+  - group: Deployment
+    items:
+      - label: Build for production
+        command: npm run build
+      - label: Preview locally
+        command: npm run preview
+      - label: Docker deployment
+        command: |
+          # Dockerfile
+          FROM node:20-alpine
+          WORKDIR /app
+          COPY package*.json ./
+          RUN npm ci
+          COPY . .
+          RUN npm run build
+          CMD ["node", "build"]
+        notes: "Use @sveltejs/adapter-node for Docker deployments"
+      - label: Static export
+        command: |
+          // svelte.config.js
+          import adapter from '@sveltejs/adapter-static'
+          
+          export default {
+            kit: {
+              adapter: adapter({
+                pages: 'build',
+                assets: 'build',
+                fallback: '404.html',
+              }),
+            },
+          }
+        notes: "Export static HTML for hosting on CDN or static servers"
+      - label: Environment for deployment
+        command: |
+          // .env.production
+          NODE_ENV=production
+          PUBLIC_API_URL=https://api.example.com
+        notes: "Set environment variables on your hosting platform"
+
+  - group: Common Patterns
+    items:
+      - label: Authentication pattern
+        command: |
+          // src/lib/auth.server.js
+          import { fail } from '@sveltejs/kit'
+          
+          export async function login({ request, cookies }) {
+            const data = await request.formData()
+            const email = data.get('email')
+            const password = data.get('password')
+            
+            const user = await verifyUser(email, password)
+            if (!user) {
+              return fail(400, { message: 'Invalid credentials' })
+            }
+            
+            const token = generateToken(user)
+            cookies.set('token', token, { httpOnly: true })
+          }
+      - label: Form validation
+        command: |
+          // src/routes/+page.server.js
+          import { superValidate } from 'sveltekit-superforms'
+          import { zod } from 'sveltekit-superforms/adapters'
+          import { z } from 'zod'
+          
+          const schema = z.object({
+            name: z.string().min(1),
+            email: z.string().email(),
+          })
+          
+          export async function load() {
+            return {
+              form: await superValidate(zod(schema)),
+            }
+          }
+      - label: i18n setup
+        command: |
+          // src/lib/i18n.js
+          import { createContext } from 'svelte-i18n'
+          
+          createContext({
+            fallbackLocale: 'en-US',
+          })
+          
+          // In hooks.js
+          import { locale, duration } from 'svelte-i18n'
+          
+          export async function handle({ event, resolve }) {
+            locale.set(event.url.searchParams.get('lang') || 'en-US')
+            return resolve(event)
+          }
+      - label: File uploads
+        command: |
+          // src/routes/upload/+page.server.js
+          export async function actions() {
+            return {
+              upload: async ({ request }) => {
+                const data = await request.formData()
+                const file = data.get('file')
+                
+                if (!file) {
+                  return { success: false }
+                }
+                
+                // Process file
+                await saveFile(file)
+                return { success: true }
+              },
+            }
+          }
+      - label: Performance tips
+        value: |
+          Use server-only code for sensitive operations.
+          Prefer server loads over universal when possible.
+          Use SvelteKit's $types for type safety.
+          Leverage adapters for optimal deployment targets.
+          Use preload strategies for better navigation.
+      - label: Testing
+        command: |
+          // src/routes/__test__/page.test.js
+          import { render } from '@testing-library/svelte'
+          import { expect } from 'vitest'
+          import Page from '../+page.svelte'
+          
+          test('renders correctly', () => {
+            const { getByText } = render(Page, {
+              props: { data: { title: 'Test' } }
+            })
+            expect(getByText('Test')).toBeTruthy()
+          })

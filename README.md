@@ -8,14 +8,14 @@ JustPeek runs in the system tray, listens for a global hotkey, detects the activ
 
 - Tray-first desktop app built with Tauri
 - Global hotkey to toggle the reference panel
-- Active-window matching by process name and optional title pattern
+- Active-window matching by process name, with optional title refinement
 - YAML-based grouped reference files
 - Fuzzy filtering across `keys`, `label`, `value`, and `notes`
 - Dedicated floating panel window with drag and resize support
 - Filesystem watching for live reference reloads
 - Settings window for hotkey, theme, and references directory
 
-## Run
+## Development
 
 Install dependencies and start the app:
 
@@ -49,6 +49,10 @@ If `XDG_CONFIG_HOME` is set, JustPeek uses:
 ```text
 $XDG_CONFIG_HOME/justpeek/references
 ```
+
+After that, start the app, open the panel with the configured global hotkey, and switch between reference packs based on the active app or the manual picker.
+
+If you want a reference pack for JustPeek itself, the repo includes [examples/justpeek.yaml](/home/mike/sellsword/justpeek/examples/justpeek.yaml), which documents the app's own panel, picker, and search shortcuts.
 
 ## Configuration
 
@@ -177,8 +181,8 @@ Supported fields:
 - `name`: display name for the matched reference set
 - `group`: optional picker category used to group reference files in the picker
 - `process`: optional process name or list of process names for contextual matching
-- `title_pattern`: optional regex for window-title matching
-- `title_contains`: optional case-insensitive window-title substring matcher
+- `title_pattern`: optional regex for refining a `process` match by window title
+- `title_contains`: optional case-insensitive window-title substring matcher that also only refines a `process` match
 - `references`: list of groups
 - `group`: section title
 - `items`: list of entries inside the group
@@ -197,13 +201,33 @@ More detailed docs:
 - `docs/reference-schema-proposal.md`: concrete schema improvements and migration direction
 - `oskeys.md`: proposal for OS-specific shortcut variants and display settings
 
+Matching note:
+
+- `process` is what makes a file eligible for automatic active-window matching.
+- `title_pattern` and `title_contains` only refine that contextual match; they do not make a picker-only file auto-match on their own.
+- If a file omits `process`, it is picker-only even if it has `title_pattern` or `title_contains`.
+
 ## Example Files
 
-The repo includes sample reference packs in:
+The repo includes a large set of sample reference packs under `examples/`.
 
-- `examples/vscode.yaml`
-- `examples/git.yaml`
-- `examples/people.yaml`
+High-value starting points:
+
+- `examples/justpeek.yaml`: JustPeek's own shortcuts and panel behavior
+- `examples/editors-and-ides/vscode.yaml`: contextual editor shortcut pack
+- `examples/source-control/git.yaml`: command-heavy source control reference
+- `examples/people.yaml`: picker-only directory-style reference
+
+Examples are grouped by category in subfolders such as:
+
+- `examples/editors-and-ides/`
+- `examples/source-control/`
+- `examples/office-apps/`
+- `examples/database/`
+- `examples/communication-apps/`
+- `examples/gaming-streaming/`
+
+Running `./setup.sh` copies these example packs into your default references directory so you can start from working files instead of writing YAML from scratch.
 
 ## Current Platform Notes
 

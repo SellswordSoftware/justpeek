@@ -1,0 +1,77 @@
+name: GIMP
+group: creative apps
+process:
+  - gimp
+  - gimp-2.10
+  - gimp.exe
+references:
+  - group: File and View
+    items:
+      - label: New image
+        keys: Ctrl+N
+      - label: Open image
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Export as
+        keys: Shift+Ctrl+E
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Y
+      - label: Zoom in or out
+        keys: Plus / Minus
+      - label: Fit image in window
+        keys: Ctrl+Shift+J
+
+  - group: Tools
+    items:
+      - label: Rectangle select
+        keys: R
+      - label: Ellipse select
+        keys: E
+      - label: Free select
+        keys: F
+      - label: Fuzzy select
+        keys: U
+      - label: Move tool
+        keys: M
+      - label: Crop tool
+        keys: Shift+C
+      - label: Paintbrush
+        keys: P
+      - label: Clone tool
+        keys: C
+
+  - group: Layers and Masks
+    items:
+      - label: New layer
+        keys: Shift+Ctrl+N
+      - label: Duplicate layer
+        keys: Shift+Ctrl+D
+      - label: Anchor floating layer
+        keys: Ctrl+H
+      - label: Merge down
+        keys: Ctrl+M
+      - label: Add layer mask
+        notes: Use masks before erasing when the edit may need revision later.
+      - label: Alpha to selection
+        notes: Useful for turning existing transparency into a precise selection.
+
+  - group: Common Workflows
+    items:
+      - label: Heal and clone cleanup
+        value: Use for dust spots, seams, and object removal before heavier color work
+      - label: Levels and curves
+        value: Core tonal correction tools before local detail edits
+      - label: Selection then mask
+        value: Safer than destructive deletion for iterative compositing
+      - label: Export discipline
+        value: Keep XCF as editable master, export PNG or JPEG for delivery
+
+  - group: Common Reference
+    items:
+      - label: Layer masks
+        value: Black conceals, white reveals, gray partially reveals
+      - label: Blend modes
+        value: Multiply darkens, Screen brightens, Overlay mixes contrast
+      - label: Paths
+        value: Use paths for clean vector-like selections before stroking or filling

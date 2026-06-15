@@ -1,0 +1,94 @@
+name: unittest
+group: testing tools
+process:
+  - python
+  - python3
+  - py
+search_terms:
+  - python unittest
+  - mock
+  - setUp
+references:
+  - group: Running Tests
+    items:
+      - label: Discover and run tests
+        command: python -m unittest discover
+      - label: Run one module
+        command: python -m unittest tests.test_app
+      - label: Run one test class
+        command: python -m unittest tests.test_app.AppTest
+      - label: Run one test method
+        command: python -m unittest tests.test_app.AppTest.test_name
+      - label: Verbose
+        command: python -m unittest -v
+      - label: Buffer output
+        command: python -m unittest -b
+      - label: Fail fast
+        command: python -m unittest -f
+
+  - group: TestCase Lifecycle
+    items:
+      - label: Per-test setup
+        value: "`setUp()`"
+      - label: Per-test teardown
+        value: "`tearDown()`"
+      - label: Class setup
+        value: "`setUpClass()`"
+      - label: Class teardown
+        value: "`tearDownClass()`"
+      - label: Skip test
+        value: "`@unittest.skip(\"reason\")`"
+      - label: Expected failure
+        value: "`@unittest.expectedFailure`"
+
+  - group: Assertions and Mocking
+    items:
+      - label: Equality and truth
+        value: assertEqual, assertNotEqual, assertTrue, assertFalse
+      - label: Membership and identity
+        value: assertIn, assertNotIn, assertIs, assertIsNone
+      - label: Exceptions
+        value: assertRaises
+      - label: Patch object or function
+        value: "Use `unittest.mock.patch`"
+      - label: Mock call assertions
+        value: assert_called_once, assert_called_once_with, assert_any_call
+
+  - group: Handy Snippets
+    items:
+      - label: Basic TestCase
+        command: |
+          import unittest
+          
+          class AppTest(unittest.TestCase):
+              def test_add(self):
+                  self.assertEqual(3, 1 + 2)
+      - label: setUp usage
+        command: |
+          class AppTest(unittest.TestCase):
+              def setUp(self):
+                  self.value = 3
+      - label: assertRaises
+        command: |
+          with self.assertRaises(ValueError):
+              int("x")
+      - label: patch
+        command: |
+          from unittest.mock import patch
+          
+          @patch("app.fetch_user")
+          def test_fetch(self, mock_fetch):
+              mock_fetch.return_value = {"id": 1}
+
+  - group: Common Concepts
+    items:
+      - label: Standard library fit
+        value: "`unittest` is built in, so it works well when avoiding third-party dependencies matters"
+      - label: Dotted targets
+        value: Test selection uses module, class, and method dotted paths rather than file-node syntax
+      - label: Mocking model
+        value: Patch where the symbol is looked up, not where it was originally defined
+      - label: xUnit style
+        value: Explicit classes and assertion methods are the default ergonomics, unlike pytest’s freer style
+      - label: Interop
+        value: Many older Python codebases mix `unittest` structure with pytest execution

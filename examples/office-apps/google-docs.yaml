@@ -1,0 +1,103 @@
+name: Google Docs
+group: office apps
+process:
+  - google-chrome
+  - chrome
+  - chrome.exe
+  - firefox
+  - firefox-bin
+  - msedge
+  - msedge.exe
+  - brave
+  - brave-browser
+title_contains: Google Docs
+references:
+  - group: File and Navigation
+    items:
+      - label: Find
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Find and replace
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Shift+H
+      - label: Open menus search
+        keys: Alt+Slash
+        notes: Use this for command discovery when you do not remember a menu path.
+      - label: Word count
+        keys: Ctrl+Shift+C
+        keys_by_os:
+          macos: Cmd+Shift+C
+      - label: Dictionary lookup
+        keys: Ctrl+Shift+Y
+      - label: Insert link
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+
+  - group: Editing and Formatting
+    items:
+      - label: Bold
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Italic
+        keys: Ctrl+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Underline
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Strikethrough
+        keys: Alt+Shift+5
+        keys_by_os:
+          macos: Cmd+Shift+X
+      - label: Paste without formatting
+        keys: Ctrl+Shift+V
+        keys_by_os:
+          macos: Cmd+Shift+V
+      - label: Clear formatting
+        keys: Ctrl+Backslash
+        keys_by_os:
+          macos: Cmd+Backslash
+      - label: Comment on selection
+        keys: Ctrl+Alt+M
+        keys_by_os:
+          macos: Cmd+Option+M
+
+  - group: Document Structure
+    items:
+      - label: Apply normal text
+        keys: Ctrl+Alt+0
+      - label: Heading 1 through 6
+        keys: Ctrl+Alt+1 through Ctrl+Alt+6
+      - label: Bulleted list
+        keys: Ctrl+Shift+7
+      - label: Numbered list
+        keys: Ctrl+Shift+8
+      - label: Checklist
+        notes: Use the toolbar or format menu when collaborative task lists are needed inside a doc.
+      - label: Open outline
+        notes: Heading styles drive the document outline and make long docs much easier to navigate.
+
+  - group: Review and Collaboration
+    items:
+      - label: Suggesting mode
+        notes: Switch from Editing to Suggesting before proposing wording changes in shared docs.
+      - label: Version history
+        keys: Ctrl+Alt+Shift+H
+      - label: Email collaborators
+        notes: Use File > Email when the document needs to be shared as attachment or summary.
+      - label: Pageless mode
+        notes: Pageless is useful for collaborative drafting, but print-sensitive docs should stay paged.
+
+  - group: Common Reference
+    items:
+      - label: Smart chips
+        value: Use `@` to insert people, files, dates, events, and building blocks
+      - label: Building blocks
+        value: Meeting notes, email drafts, review tracker, project assets, and custom templates
+      - label: Voice typing
+        notes: Available in supported browsers and useful for rough drafting or meeting capture.

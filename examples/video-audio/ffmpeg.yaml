@@ -1,0 +1,85 @@
+name: FFmpeg
+group: video / audio
+process:
+  - ffmpeg
+references:
+  - group: Basic Structure
+    items:
+      - label: Show version
+        command: ffmpeg -version
+      - label: Show formats codecs and filters
+        command: |
+          ffmpeg -formats
+          ffmpeg -codecs
+          ffmpeg -filters
+      - label: Basic pattern
+        command: ffmpeg -i input.ext [options] output.ext
+      - label: Probe with ffprobe
+        command: ffprobe -hide_banner input.ext
+      - label: Overwrite output
+        command: ffmpeg -y -i input.ext output.ext
+      - label: No overwrite
+        command: ffmpeg -n -i input.ext output.ext
+
+  - group: Transcoding and Containers
+    items:
+      - label: H.264 encode
+        command: ffmpeg -i input.mov -c:v libx264 -crf 18 -preset medium -c:a aac -b:a 192k output.mp4
+      - label: H.265 encode
+        command: ffmpeg -i input.mov -c:v libx265 -crf 22 -preset medium -c:a aac -b:a 192k output.mp4
+      - label: Remux without re-encode
+        command: ffmpeg -i input.mkv -c copy output.mp4
+      - label: Extract audio only
+        command: ffmpeg -i input.mp4 -vn -c:a libmp3lame -q:a 2 output.mp3
+      - label: Lossless FLAC from WAV
+        command: ffmpeg -i input.wav output.flac
+      - label: Strip video keep audio codec
+        command: ffmpeg -i input.mp4 -vn -c:a copy output.m4a
+
+  - group: Trimming and Selection
+    items:
+      - label: Trim by start and duration
+        command: ffmpeg -ss 00:01:00 -i input.mp4 -t 00:00:30 -c copy output.mp4
+      - label: Trim by start and end
+        command: ffmpeg -ss 00:01:00 -to 00:01:30 -i input.mp4 -c copy output.mp4
+      - label: Grab one frame
+        command: ffmpeg -i input.mp4 -frames:v 1 thumb.png
+      - label: Resize video
+        command: ffmpeg -i input.mp4 -vf scale=1280:-2 output.mp4
+      - label: Crop video
+        command: ffmpeg -i input.mp4 -vf crop=1920:800:0:140 output.mp4
+      - label: Change framerate
+        command: ffmpeg -i input.mp4 -r 30 output.mp4
+
+  - group: Audio Filters and Loudness
+    items:
+      - label: Normalize audio
+        command: ffmpeg -i input.wav -af loudnorm output.wav
+      - label: Convert stereo to mono
+        command: ffmpeg -i input.wav -ac 1 output.wav
+      - label: Resample audio
+        command: ffmpeg -i input.wav -ar 48000 output.wav
+      - label: Volume gain
+        command: ffmpeg -i input.wav -af volume=3dB output.wav
+      - label: Fade in or out
+        command: ffmpeg -i input.wav -af "afade=t=in:st=0:d=2,afade=t=out:st=28:d=2" output.wav
+
+  - group: Subtitles and Stream Mapping
+    items:
+      - label: Burn subtitles
+        command: ffmpeg -i input.mp4 -vf subtitles=subs.srt output.mp4
+      - label: Add soft subtitle track
+        command: ffmpeg -i input.mp4 -i subs.srt -c:v copy -c:a copy -c:s mov_text output.mp4
+      - label: Select specific streams
+        command: ffmpeg -i input.mkv -map 0:v:0 -map 0:a:1 -c copy output.mkv
+      - label: List streams clearly
+        command: ffprobe -v error -show_streams input.mkv
+
+  - group: Common Reference
+    items:
+      - label: CRF
+        value: Lower is higher quality and larger output; around 18 to 23 is a common H.264 range
+      - label: Preset
+        value: Slower presets usually compress better at the cost of encode time
+      - label: Stream copy
+        value: "`-c copy` avoids re-encoding and is ideal for remuxing or fast trims when keyframes cooperate"

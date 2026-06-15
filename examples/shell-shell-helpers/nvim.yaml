@@ -35,19 +35,19 @@ references:
         notes: Jump directly to a specific line number.
       - label: Search in file
         keys: /pattern
-        notes: Use `n` and `N` to move through matches after the initial search.
+        notes: "Use `n` and `N` to move through matches after the initial search."
 
   - group: Editing and Text Objects
     items:
       - label: Delete current line
         keys: D D
-        notes: `dd` deletes the full current line into the default register.
+        notes: "`dd` deletes the full current line into the default register."
       - label: Change inside quotes
         keys: C I "
         notes: Text objects make structural edits faster than character-by-character movement.
       - label: Yank paragraph
         keys: Y A P
-        notes: `yap` copies the current paragraph text object.
+        notes: "`yap` copies the current paragraph text object."
       - label: Paste after cursor
         keys: P
         notes: Paste from the default register after the cursor or line.

@@ -1,0 +1,87 @@
+name: cargo test
+group: testing tools
+process:
+  - cargo
+search_terms:
+  - rust tests
+  - nocapture
+  - ignored
+  - nextest
+references:
+  - group: Running Tests
+    items:
+      - label: Run all tests
+        command: cargo test
+      - label: Run one test by name
+        command: cargo test test_name
+      - label: Run one integration test file
+        command: cargo test --test api_tests
+      - label: Run one package
+        command: cargo test -p my_crate
+      - label: Show test output
+        command: cargo test -- --nocapture
+      - label: One thread
+        command: cargo test -- --test-threads=1
+      - label: Release tests
+        command: cargo test --release
+
+  - group: Selection and Special Modes
+    items:
+      - label: Ignored tests only
+        command: cargo test -- --ignored
+      - label: Include ignored
+        command: cargo test -- --include-ignored
+      - label: Exact test name
+        command: cargo test test_name -- --exact
+      - label: Doc tests
+        command: cargo test --doc
+      - label: Bench-ish workflow
+        notes: "`cargo bench` or Criterion is often used instead of overloading test runs for performance measurement."
+      - label: Nextest
+        command: cargo nextest run
+        notes: If the project uses `cargo-nextest`.
+
+  - group: Handy Snippets
+    items:
+      - label: Unit test
+        command: |
+          #[cfg(test)]
+          mod tests {
+              #[test]
+              fn adds() {
+                  assert_eq!(1 + 2, 3);
+              }
+          }
+      - label: Result-returning test
+        command: |
+          #[test]
+          fn loads() -> anyhow::Result<()> {
+              Ok(())
+          }
+      - label: should_panic
+        command: |
+          #[test]
+          #[should_panic]
+          fn panics() {
+              panic!("boom");
+          }
+      - label: Integration test file
+        command: |
+          // tests/api_tests.rs
+          #[test]
+          fn works() {
+              assert!(true);
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Test layers
+        value: Rust distinguishes unit tests, integration tests, and doctests as separate test surfaces
+      - label: Output capture
+        value: stdout is hidden by default, which surprises people during debugging until `--nocapture` becomes habit
+      - label: Parallel default
+        value: Tests run concurrently by default, so shared state and ports need care
+      - label: ignored tests
+        value: Useful for slow, external, or environment-sensitive cases that should not run every loop
+      - label: Crate boundaries
+        value: Integration tests exercise the public API surface, not private internals

@@ -197,181 +197,156 @@ This plan is the tracking source for that work.
 
 ### office apps
 
-- [ ] `examples/word.yaml` -> `Word`
-- [ ] `examples/excel.yaml` -> `Excel`
-- [ ] `examples/powerpoint.yaml` -> `Powerpoint`
-- [ ] `examples/outlook.yaml` -> `Outlook`
-- [ ] `examples/google-sheets.yaml` -> `Google Sheets`
-- [ ] `examples/libreoffice-calc.yaml` -> `LibreOffice Calc`
-- [ ] `examples/libreoffice-writer.yaml` -> `LibreOffice Writer`
-- [ ] `examples/google-docs.yaml` -> `Google Docs`
-- [ ] `examples/google-slides.yaml` -> `Google Slides`
-- [ ] `examples/thunderbird.yaml` -> `Thunderbird`
-- [ ] `examples/gmail-web.yaml` -> `Gmail Web`
+- [x] `examples/office-apps/word.yaml` -> `Word`
+- [x] `examples/office-apps/excel.yaml` -> `Excel`
+- [x] `examples/office-apps/powerpoint.yaml` -> `Powerpoint`
+- [x] `examples/office-apps/outlook.yaml` -> `Outlook`
+- [x] `examples/office-apps/google-sheets.yaml` -> `Google Sheets`
+- [x] `examples/office-apps/libreoffice-calc.yaml` -> `LibreOffice Calc`
+- [x] `examples/office-apps/libreoffice-writer.yaml` -> `LibreOffice Writer`
+- [x] `examples/office-apps/google-docs.yaml` -> `Google Docs`
+- [x] `examples/office-apps/google-slides.yaml` -> `Google Slides`
+- [x] `examples/office-apps/thunderbird.yaml` -> `Thunderbird`
+- [x] `examples/office-apps/gmail-web.yaml` -> `Gmail Web`
 
 ### creative apps
 
-- [ ] `examples/figma.yaml` -> `Figma`
-- [ ] `examples/inkscape.yaml` -> `Inkscape`
-- [ ] `examples/krita.yaml` -> `Krita`
-- [ ] `examples/affinity-designer.yaml` -> `Affinity Designer`
-- [ ] `examples/affinity-photo.yaml` -> `Affinity Photo`
-- [ ] `examples/photoship.yaml` -> `Photoship`
-- [ ] `examples/illustrator.yaml` -> `Illustrator`
-- [ ] `examples/gimp.yaml` -> `Gimp`
-- [ ] `examples/darktable.yaml` -> `Darktable`
-- [ ] `examples/rawtherapee.yaml` -> `RawTherapee`
-- [ ] `examples/photopea.yaml` -> `Photopea`
+- [x] `examples/creative-apps/figma.yaml` -> `Figma`
+- [x] `examples/creative-apps/inkscape.yaml` -> `Inkscape`
+- [x] `examples/creative-apps/krita.yaml` -> `Krita`
+- [x] `examples/creative-apps/affinity-designer.yaml` -> `Affinity Designer`
+- [x] `examples/creative-apps/affinity-photo.yaml` -> `Affinity Photo`
+- [x] `examples/creative-apps/photoship.yaml` -> `Photoship`
+- [x] `examples/creative-apps/illustrator.yaml` -> `Illustrator`
+- [x] `examples/creative-apps/gimp.yaml` -> `Gimp`
+- [x] `examples/creative-apps/darktable.yaml` -> `Darktable`
+- [x] `examples/creative-apps/rawtherapee.yaml` -> `RawTherapee`
+- [x] `examples/creative-apps/photopea.yaml` -> `Photopea`
 
 ### video / audio
 
-- [ ] `examples/davinci-resolve.yaml` -> `DaVinci Resolve`
-- [ ] `examples/kdenlive.yaml` -> `Kdenlive`
-- [ ] `examples/obs-studio.yaml` -> `OBS Studio`
-- [ ] `examples/audacity.yaml` -> `Audacity`
-- [ ] `examples/reaper.yaml` -> `Reaper`
-- [ ] `examples/fl-studio.yaml` -> `FL Studio`
-- [ ] `examples/ableton-live.yaml` -> `Ableton Live`
-- [ ] `examples/ardour.yaml` -> `Ardour`
-- [ ] `examples/lmms.yaml` -> `LMMS`
-- [ ] `examples/handbrake.yaml` -> `HandBrake`
-- [ ] `examples/ffmpeg.yaml` -> `FFmpeg`
+- [x] `examples/video-audio/davinci-resolve.yaml` -> `DaVinci Resolve`
+- [x] `examples/video-audio/kdenlive.yaml` -> `Kdenlive`
+- [x] `examples/video-audio/obs-studio.yaml` -> `OBS Studio`
+- [x] `examples/video-audio/audacity.yaml` -> `Audacity`
+- [x] `examples/video-audio/reaper.yaml` -> `Reaper`
+- [x] `examples/video-audio/fl-studio.yaml` -> `FL Studio`
+- [x] `examples/video-audio/ableton-live.yaml` -> `Ableton Live`
+- [x] `examples/video-audio/ardour.yaml` -> `Ardour`
+- [x] `examples/video-audio/lmms.yaml` -> `LMMS`
+- [x] `examples/video-audio/handbrake.yaml` -> `HandBrake`
+- [x] `examples/video-audio/ffmpeg.yaml` -> `FFmpeg`
 
 ### cad / 3d / maker tools
 
-- [ ] `examples/freecad.yaml` -> `FreeCAD`
-- [ ] `examples/fusion-360.yaml` -> `Fusion 360`
-- [ ] `examples/openscad.yaml` -> `OpenSCAD`
-- [ ] `examples/kicad.yaml` -> `KiCad`
-- [ ] `examples/prusaslicer.yaml` -> `PrusaSlicer`
-- [ ] `examples/orcaslicer.yaml` -> `OrcaSlicer`
-- [ ] `examples/cura.yaml` -> `Cura`
-- [ ] `examples/meshlab.yaml` -> `MeshLab`
-- [ ] `examples/sweet-home-3d.yaml` -> `Sweet Home 3d`
-- [ ] `examples/blender.yaml` -> `Blender`
-- [ ] `examples/godot.yaml` -> `godot`
-- [ ] `examples/unity.yaml` -> `unity`
+- [x] `examples/cad-3d-maker-tools/freecad.yaml` -> `FreeCAD`
+- [x] `examples/cad-3d-maker-tools/fusion-360.yaml` -> `Fusion 360`
+- [x] `examples/cad-3d-maker-tools/openscad.yaml` -> `OpenSCAD`
+- [x] `examples/cad-3d-maker-tools/kicad.yaml` -> `KiCad`
+- [x] `examples/cad-3d-maker-tools/prusaslicer.yaml` -> `PrusaSlicer`
+- [x] `examples/cad-3d-maker-tools/orcaslicer.yaml` -> `OrcaSlicer`
+- [x] `examples/cad-3d-maker-tools/cura.yaml` -> `Cura`
+- [x] `examples/cad-3d-maker-tools/meshlab.yaml` -> `MeshLab`
+- [x] `examples/cad-3d-maker-tools/sweet-home-3d.yaml` -> `Sweet Home 3d`
+- [x] `examples/cad-3d-maker-tools/blender.yaml` -> `Blender`
+- [x] `examples/cad-3d-maker-tools/godot.yaml` -> `godot`
+- [x] `examples/cad-3d-maker-tools/unity.yaml` -> `unity`
 
 ### programming language / toolchain packs
 
-- [ ] `examples/python.yaml` -> `python`
-- [ ] `examples/go-toolchain.yaml` -> `Go`
-- [ ] `examples/java-toolchain.yaml` -> `java`
-- [ ] `examples/c-cpp-toolchain.yaml` -> `c/c++`
-- [ ] `examples/zig-toolchain.yaml` -> `zig`
-- [ ] `examples/deno.yaml` -> `deno`
-- [ ] `examples/bun-toolchain.yaml` -> `bun`
-- [ ] `examples/php.yaml` -> `php`
-- [ ] `examples/ruby.yaml` -> `ruby`
-- [ ] `examples/elixir.yaml` -> `elixir`
-- [ ] `examples/lua.yaml` -> `lua`
-- [ ] `examples/julia.yaml` -> `julia`
-- [ ] `examples/r.yaml` -> `r`
-- [ ] `examples/haskell.yaml` -> `haskell/cabal/stack`
-- [ ] `examples/kotlin.yaml` -> `kotlin/gradle`
-- [ ] `examples/swift.yaml` -> `swift`
+- [x] `examples/programming-language-toolchain-packs/python.yaml` -> `python`
+- [x] `examples/programming-language-toolchain-packs/go-toolchain.yaml` -> `Go`
+- [x] `examples/programming-language-toolchain-packs/java-toolchain.yaml` -> `java`
+- [x] `examples/programming-language-toolchain-packs/c-cpp-toolchain.yaml` -> `c/c++`
+- [x] `examples/programming-language-toolchain-packs/zig-toolchain.yaml` -> `zig`
+- [x] `examples/programming-language-toolchain-packs/deno.yaml` -> `deno`
+- [x] `examples/programming-language-toolchain-packs/bun-toolchain.yaml` -> `bun`
+- [x] `examples/programming-language-toolchain-packs/php.yaml` -> `php`
+- [x] `examples/programming-language-toolchain-packs/ruby.yaml` -> `ruby`
+- [x] `examples/programming-language-toolchain-packs/elixir.yaml` -> `elixir`
+- [x] `examples/programming-language-toolchain-packs/lua.yaml` -> `lua`
+- [x] `examples/programming-language-toolchain-packs/julia.yaml` -> `julia`
+- [x] `examples/programming-language-toolchain-packs/r.yaml` -> `r`
+- [x] `examples/programming-language-toolchain-packs/haskell.yaml` -> `haskell/cabal/stack`
+- [x] `examples/programming-language-toolchain-packs/kotlin.yaml` -> `kotlin/gradle`
+- [x] `examples/programming-language-toolchain-packs/swift.yaml` -> `swift`
 
 ### testing tools
 
-- [ ] `examples/pytest.yaml` -> `pytest`
-- [ ] `examples/unittest.yaml` -> `unittest`
-- [ ] `examples/jest.yaml` -> `jest`
-- [ ] `examples/vitest.yaml` -> `vitest`
-- [ ] `examples/mocha.yaml` -> `mocha`
-- [ ] `examples/playwright.yaml` -> `playwright`
-- [ ] `examples/cypress.yaml` -> `cypress`
-- [ ] `examples/cargo-test.yaml` -> `cargo test`
-- [ ] `examples/go-test.yaml` -> `go test`
-- [ ] `examples/junit.yaml` -> `junit`
-- [ ] `examples/nunint.yaml` -> `nunint`
-- [ ] `examples/postman-cli.yaml` -> `postman cli`
+- [x] `examples/testing-tools/pytest.yaml` -> `pytest`
+- [x] `examples/testing-tools/unittest.yaml` -> `unittest`
+- [x] `examples/testing-tools/jest.yaml` -> `jest`
+- [x] `examples/testing-tools/vitest.yaml` -> `vitest`
+- [x] `examples/testing-tools/mocha.yaml` -> `mocha`
+- [x] `examples/testing-tools/playwright.yaml` -> `playwright`
+- [x] `examples/testing-tools/cypress.yaml` -> `cypress`
+- [x] `examples/testing-tools/cargo-test.yaml` -> `cargo test`
+- [x] `examples/testing-tools/go-test.yaml` -> `go test`
+- [x] `examples/testing-tools/junit.yaml` -> `junit`
+- [x] `examples/testing-tools/nunint.yaml` -> `nunint`
 
 ### build tools
 
-- [ ] `examples/make.yaml` -> `make`
-- [ ] `examples/cmake.yaml` -> `cmake`
-- [ ] `examples/meson.yaml` -> `meson`
-- [ ] `examples/ninja.yaml` -> `ninja`
-- [ ] `examples/just.yaml` -> `just`
-- [ ] `examples/task.yaml` -> `task`
-- [ ] `examples/bazel.yaml` -> `bazel`
-- [ ] `examples/gradle-build.yaml` -> `gradle`
-- [ ] `examples/maven-build.yaml` -> `maven`
+- [x] `examples/build-tools/make.yaml` -> `make`
+- [x] `examples/build-tools/cmake.yaml` -> `cmake`
+- [x] `examples/build-tools/meson.yaml` -> `meson`
+- [x] `examples/build-tools/ninja.yaml` -> `ninja`
+- [x] `examples/build-tools/just.yaml` -> `just`
+- [x] `examples/build-tools/task.yaml` -> `task`
+- [x] `examples/build-tools/bazel.yaml` -> `bazel`
+- [x] `examples/build-tools/gradle-build.yaml` -> `gradle`
+- [x] `examples/build-tools/maven-build.yaml` -> `maven`
 
 ### web / devops / app tools
 
-- [ ] `examples/vite.yaml` -> `vite`
-- [ ] `examples/nextjs.yaml` -> `next.js`
-- [ ] `examples/react.yaml` -> `react`
-- [ ] `examples/vue.yaml` -> `vue`
-- [ ] `examples/svelte.yaml` -> `svelte`
-- [ ] `examples/sveltekit.yaml` -> `sveltekit`
-- [ ] `examples/astro.yaml` -> `astro`
-- [ ] `examples/angular.yaml` -> `angular`
-- [ ] `examples/express.yaml` -> `express`
-- [ ] `examples/fastify.yaml` -> `fastify`
-- [ ] `examples/django.yaml` -> `django`
-- [ ] `examples/flask.yaml` -> `flask`
-- [ ] `examples/fastapi.yaml` -> `fastAPI`
-- [ ] `examples/rails.yaml` -> `rails`
-- [ ] `examples/laravel.yaml` -> `laravel`
-- [ ] `examples/tauri.yaml` -> `tauri`
-- [ ] `examples/wails.yaml` -> `wails`
-- [ ] `examples/electron.yaml` -> `electron`
-- [ ] `examples/capacitor.yaml` -> `capacitor`
+- [x] `examples/web-devops-app-tools/vite.yaml` -> `vite`
+- [x] `examples/web-devops-app-tools/nextjs.yaml` -> `next.js`
+- [x] `examples/web-devops-app-tools/react.yaml` -> `react`
+- [x] `examples/web-devops-app-tools/vue.yaml` -> `vue`
+- [x] `examples/web-devops-app-tools/svelte.yaml` -> `svelte`
+- [x] `examples/web-devops-app-tools/sveltekit.yaml` -> `sveltekit`
+- [x] `examples/web-devops-app-tools/astro.yaml` -> `astro`
+- [x] `examples/web-devops-app-tools/angular.yaml` -> `angular`
+- [x] `examples/web-devops-app-tools/express.yaml` -> `express`
+- [x] `examples/web-devops-app-tools/fastify.yaml` -> `fastify`
+- [x] `examples/web-devops-app-tools/tauri.yaml` -> `tauri`
+- [x] `examples/web-devops-app-tools/wails.yaml` -> `wails`
+- [x] `examples/web-devops-app-tools/electron.yaml` -> `electron`
 
 ### database
 
-- [ ] `examples/postgres.yaml` -> `postgres`
-- [ ] `examples/sqlite.yaml` -> `sqlite`
-- [ ] `examples/mysql.yaml` -> `mysql`
-- [ ] `examples/redis.yaml` -> `redis`
-- [ ] `examples/mongodb.yaml` -> `mongodb`
-- [ ] `examples/duckdb.yaml` -> `duckdb`
-- [ ] `examples/clickhouse.yaml` -> `clickhouse`
-- [ ] `examples/dbeaver.yaml` -> `dbeaver`
-- [ ] `examples/pgadmin.yaml` -> `pgadmin`
-- [ ] `examples/beekeeper-studio.yaml` -> `beekeeper studio`
-
-### api tools
-
-- [ ] `examples/postman.yaml` -> `Postman`
-- [ ] `examples/insomnia.yaml` -> `Insomnia`
-- [ ] `examples/bruno.yaml` -> `Bruno`
-- [ ] `examples/httpie.yaml` -> `HTTPie`
-- [ ] `examples/curl-api.yaml` -> `Curl`
-- [ ] `examples/grpcurl.yaml` -> `grpcurl`
-- [ ] `examples/openapi-generator.yaml` -> `openapi generator`
+- [x] `examples/database/postgres.yaml` -> `postgres`
+- [x] `examples/database/sqlite.yaml` -> `sqlite`
+- [x] `examples/database/mysql.yaml` -> `mysql`
+- [x] `examples/database/redis.yaml` -> `redis`
+- [x] `examples/database/mongodb.yaml` -> `mongodb`
+- [x] `examples/database/duckdb.yaml` -> `duckdb`
+- [x] `examples/database/clickhouse.yaml` -> `clickhouse`
+- [x] `examples/database/dbeaver.yaml` -> `dbeaver`
+- [x] `examples/database/pgadmin.yaml` -> `pgadmin`
+- [x] `examples/database/beekeeper-studio.yaml` -> `beekeeper studio`
 
 ### communication apps
 
-- [ ] `examples/slack.yaml` -> `Slack`
-- [ ] `examples/discord.yaml` -> `Discord`
-- [ ] `examples/teams.yaml` -> `Teams`
-- [ ] `examples/zoom.yaml` -> `Zoom`
-- [ ] `examples/google-meet.yaml` -> `Google Meet`
-- [ ] `examples/signal-desktop.yaml` -> `Signal Desktop`
-- [ ] `examples/telegram-desktop.yaml` -> `Telegram Desktop`
-- [ ] `examples/mattermost.yaml` -> `Mattermost`
-- [ ] `examples/element.yaml` -> `Element`
-- [ ] `examples/matrix.yaml` -> `Matrix`
-- [ ] `examples/linear.yaml` -> `Linear`
-- [ ] `examples/jira.yaml` -> `Jira`
-- [ ] `examples/trello.yaml` -> `Trello`
-- [ ] `examples/github-projects.yaml` -> `Github Projects`
+- [x] `examples/communication-apps/slack.yaml` -> `Slack`
+- [x] `examples/communication-apps/discord.yaml` -> `Discord`
+- [x] `examples/communication-apps/teams.yaml` -> `Teams`
+- [x] `examples/communication-apps/zoom.yaml` -> `Zoom`
+- [x] `examples/communication-apps/telegram-desktop.yaml` -> `Telegram Desktop`
+- [x] `examples/communication-apps/jira.yaml` -> `Jira`
+- [x] `examples/communication-apps/trello.yaml` -> `Trello`
+- [x] `examples/communication-apps/github-projects.yaml` -> `Github Projects`
 
 ### gaming / streaming
 
-- [ ] `examples/steam.yaml` -> `Steam`
-- [ ] `examples/discord-gaming.yaml` -> `discord`
-- [ ] `examples/obs-studio-streaming.yaml` -> `obs studio`
-- [ ] `examples/prism-launcher.yaml` -> `prism launcher`
-- [ ] `examples/minecraft-launchers.yaml` -> `minecraft launchers`
-- [ ] `examples/retroarch.yaml` -> `retroarch`
-- [ ] `examples/lutris.yaml` -> `lutris`
-- [ ] `examples/heroic-games-launcher.yaml` -> `heroic games launcher`
-- [ ] `examples/mangohud.yaml` -> `mangohud`
-- [ ] `examples/gamemode.yaml` -> `gamemode`
+- [x] `examples/gaming-streaming/steam.yaml` -> `Steam`
+- [x] `examples/gaming-streaming/discord-gaming.yaml` -> `discord`
+- [x] `examples/gaming-streaming/obs-studio-streaming.yaml` -> `obs studio`
+- [x] `examples/gaming-streaming/retroarch.yaml` -> `retroarch`
+- [x] `examples/gaming-streaming/lutris.yaml` -> `lutris`
+- [x] `examples/gaming-streaming/heroic-games-launcher.yaml` -> `heroic games launcher`
+- [x] `examples/gaming-streaming/mangohud.yaml` -> `mangohud`
+- [x] `examples/gaming-streaming/gamemode.yaml` -> `gamemode`
 
 ## Completion Criteria
 

@@ -1,0 +1,106 @@
+name: Illustrator
+group: creative apps
+process:
+  - illustrator
+  - illustrator.exe
+  - Adobe Illustrator
+references:
+  - group: File and View
+    items:
+      - label: New document
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Export
+        keys: Shift+Ctrl+Alt+E
+        keys_by_os:
+          macos: Shift+Cmd+Option+E
+      - label: Zoom in or out
+        keys: Ctrl+Plus / Ctrl+Minus
+        keys_by_os:
+          macos: Cmd+Plus / Cmd+Minus
+      - label: Fit artboard in window
+        keys: Ctrl+0
+        keys_by_os:
+          macos: Cmd+0
+
+  - group: Tools
+    items:
+      - label: Selection tool
+        keys: V
+      - label: Direct selection tool
+        keys: A
+      - label: Pen tool
+        keys: P
+      - label: Type tool
+        keys: T
+      - label: Rectangle tool
+        keys: M
+      - label: Ellipse tool
+        keys: L
+      - label: Eyedropper tool
+        keys: I
+      - label: Shape builder tool
+        keys: Shift+M
+
+  - group: Objects and Paths
+    items:
+      - label: Group
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: Ungroup
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Cmd+Shift+G
+      - label: Lock selection
+        keys: Ctrl+2
+        keys_by_os:
+          macos: Cmd+2
+      - label: Unlock all
+        keys: Ctrl+Alt+2
+        keys_by_os:
+          macos: Cmd+Option+2
+      - label: Hide selection
+        keys: Ctrl+3
+        keys_by_os:
+          macos: Cmd+3
+      - label: Show all
+        keys: Ctrl+Alt+3
+        keys_by_os:
+          macos: Cmd+Option+3
+      - label: Bring to front or send to back
+        keys: Ctrl+Shift+RightBracket / Ctrl+Shift+LeftBracket
+        keys_by_os:
+          macos: Cmd+Shift+RightBracket / Cmd+Shift+LeftBracket
+
+  - group: Common Workflows
+    items:
+      - label: Outline mode
+        keys: Ctrl+Y
+        keys_by_os:
+          macos: Cmd+Y
+        notes: Essential when shapes overlap heavily or clipping masks hide geometry.
+      - label: Expand appearance
+        notes: Use before final vector delivery when live effects need to become explicit paths.
+      - label: Pathfinder
+        notes: Unite, minus front, intersect, and exclude are core for icon and logo construction.
+      - label: Align panel
+        notes: Prefer measured alignment and distribution over visual guessing.
+
+  - group: Common Reference
+    items:
+      - label: Artboards
+        value: Multiple output canvases can live in one file for related assets or sizes
+      - label: Compound path
+        value: Use for knockouts and holes that should behave as one vector object
+      - label: Appearance stack
+        value: Stroke, fill, and effects can layer non-destructively on a single object

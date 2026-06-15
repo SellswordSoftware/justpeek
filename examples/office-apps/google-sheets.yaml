@@ -1,0 +1,117 @@
+name: Google Sheets
+group: office apps
+process:
+  - google-chrome
+  - chrome
+  - chrome.exe
+  - firefox
+  - firefox-bin
+  - msedge
+  - msedge.exe
+  - brave
+  - brave-browser
+title_contains: Google Sheets
+references:
+  - group: File and Navigation
+    items:
+      - label: Find
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Find and replace
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Shift+H
+      - label: Open search menus
+        keys: Alt+Slash
+        notes: Helpful when keyboard discovery matters more than memorizing every shortcut.
+      - label: Go to beginning or end of row
+        keys: Home / End
+        keys_by_os:
+          macos: Fn+LeftArrow / Fn+RightArrow
+      - label: Go to edge of data range
+        keys: Ctrl+Arrow keys
+        keys_by_os:
+          macos: Cmd+Arrow keys
+      - label: Open link in sheet
+        keys: Alt+Enter
+
+  - group: Selection and Editing
+    items:
+      - label: Edit active cell
+        keys: Enter or F2
+      - label: Select row
+        keys: Shift+Space
+      - label: Select column
+        keys: Ctrl+Space
+        keys_by_os:
+          macos: Ctrl+Space
+      - label: Insert current date
+        keys: Ctrl+Semicolon
+        keys_by_os:
+          macos: Cmd+Semicolon
+      - label: Insert current time
+        keys: Ctrl+Shift+Semicolon
+        keys_by_os:
+          macos: Cmd+Shift+Semicolon
+      - label: Fill down
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Fill right
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Show formulas
+        keys: Ctrl+Backtick
+
+  - group: Formatting and Structure
+    items:
+      - label: Bold
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Italic
+        keys: Ctrl+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Strikethrough
+        keys: Alt+Shift+5
+        keys_by_os:
+          macos: Cmd+Shift+X
+      - label: Insert row above
+        keys: Alt+I then R
+      - label: Insert column left
+        keys: Alt+I then C
+      - label: Create filter
+        keys: Ctrl+Shift+L
+        keys_by_os:
+          macos: Cmd+Shift+L
+      - label: Freeze rows or columns
+        notes: Use View > Freeze so headers stay visible in wide or long sheets.
+
+  - group: High-value Functions
+    items:
+      - label: SUM
+        value: "=SUM(range)"
+      - label: AVERAGE
+        value: "=AVERAGE(range)"
+      - label: IF
+        value: "=IF(condition, value_if_true, value_if_false)"
+      - label: XLOOKUP
+        value: "=XLOOKUP(search_key, lookup_range, result_range, [missing_value])"
+      - label: FILTER
+        value: "=FILTER(range, condition1, [condition2, ...])"
+      - label: QUERY
+        value: "=QUERY(range, \"select A, B where C > 10\", 1)"
+      - label: SPLIT
+        value: "=SPLIT(text, delimiter)"
+
+  - group: Common Workflows
+    items:
+      - label: Named ranges
+        notes: Use Data > Named ranges when formulas need stable readable references.
+      - label: Protected ranges
+        notes: Lock formulas or shared summary cells before collaborative editing sessions.
+      - label: Filter views
+        notes: Filter views help when multiple people need different temporary slices of the same sheet.

@@ -5,7 +5,7 @@ references:
     items:
       - label: Jump to best match
         command: z project
-        notes: Shell integration usually exposes `z` as the primary jump command.
+        notes: "Shell integration usually exposes `z` as the primary jump command."
       - label: Interactive jump
         command: zi project
         notes: Opens an interactive selector over ranked directory matches.
@@ -23,10 +23,10 @@ references:
     items:
       - label: Initialize for Bash
         command: eval "$(zoxide init bash)"
-        notes: Add to `.bashrc` for persistent integration.
+        notes: "Add to `.bashrc` for persistent integration."
       - label: Initialize for Zsh
         command: eval "$(zoxide init zsh)"
-        notes: Add to `.zshrc` after completion and prompt setup.
+        notes: "Add to `.zshrc` after completion and prompt setup."
       - label: Initialize for Fish
         command: zoxide init fish | source
         notes: Standard Fish integration pattern.
@@ -35,7 +35,7 @@ references:
         notes: Print the integration snippet for inclusion in Nushell config.
       - label: Replace cd command
         command: eval "$(zoxide init bash --cmd cd)"
-        notes: Optional mode that makes `cd` use zoxide resolution behavior.
+        notes: "Optional mode that makes `cd` use zoxide resolution behavior."
 
   - group: Database and Learning
     items:
@@ -76,7 +76,7 @@ references:
   - group: Environment and Behavior
     items:
       - label: Exclude directories from indexing
-        command: export _ZO_EXCLUDE_DIRS="$HOME:$HOME/private"
+        command: 'export _ZO_EXCLUDE_DIRS="$HOME:$HOME/private"'
         notes: Prevent noisy or sensitive directories from being learned.
       - label: Change data directory
         command: export _ZO_DATA_DIR="$XDG_DATA_HOME/zoxide"
@@ -89,7 +89,7 @@ references:
         notes: Print the resolved destination during shell jumps.
       - label: Use alternate command name
         command: eval "$(zoxide init zsh --cmd j)"
-        notes: Install shortcuts such as `j` and `ji` instead of `z` and `zi`.
+        notes: "Install shortcuts such as `j` and `ji` instead of `z` and `zi`."
 
   - group: Troubleshooting and Discovery
     items:
@@ -105,5 +105,5 @@ references:
         command: zoxide init bash
         notes: Useful when debugging shell hook installation.
       - label: Check shell alias availability
-        value: `z` and `zi` come from shell init, not the standalone `zoxide` binary.
+        value: "`z` and `zi` come from shell init, not the standalone `zoxide` binary."
         notes: Missing aliases usually mean the init snippet is not loaded.

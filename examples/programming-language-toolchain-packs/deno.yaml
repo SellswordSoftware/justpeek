@@ -1,0 +1,98 @@
+name: Deno Toolchain
+group: programming language / toolchain packs
+process:
+  - deno
+  - deno.exe
+search_terms:
+  - deno run
+  - deno test
+  - deno fmt
+  - deno task
+references:
+  - group: Run and Project Basics
+    items:
+      - label: Show version
+        command: deno --version
+      - label: Run script
+        command: deno run main.ts
+      - label: Run with network access
+        command: deno run --allow-net main.ts
+      - label: Run with read and env access
+        command: deno run --allow-read --allow-env main.ts
+      - label: Initialize project
+        command: deno init
+      - label: Use task runner
+        command: deno task dev
+      - label: Add dependency
+        command: deno add jsr:@std/assert
+
+  - group: Testing and Quality
+    items:
+      - label: Run tests
+        command: deno test
+      - label: Run with permissions
+        command: deno test --allow-env --allow-read
+      - label: Filter tests
+        command: deno test --filter user_service
+      - label: Format project
+        command: deno fmt
+      - label: Lint project
+        command: deno lint
+      - label: Type-check project
+        command: deno check main.ts
+      - label: Benchmarks
+        command: deno bench
+
+  - group: Build and Bundle
+    items:
+      - label: Compile to binary
+        command: deno compile --allow-net --output app main.ts
+      - label: Run dev server with watch
+        command: deno run --watch --allow-net server.ts
+      - label: Cache dependencies
+        command: deno cache main.ts
+      - label: Show dependency graph
+        command: deno info main.ts
+      - label: Update lockfile and cache
+        command: deno install
+      - label: Coverage
+        command: |
+          deno test --coverage=coverage
+          deno coverage coverage
+
+  - group: Handy Snippets
+    items:
+      - label: HTTP server
+        command: |
+          Deno.serve(() => new Response("ok"));
+      - label: Read text file
+        command: |
+          const text = await Deno.readTextFile("data.txt");
+      - label: Environment variable
+        command: |
+          const token = Deno.env.get("TOKEN");
+      - label: Test case
+        command: |
+          Deno.test("adds numbers", () => {
+            if (1 + 2 !== 3) throw new Error("bad math");
+          });
+      - label: Task in deno.json
+        command: |
+          {
+            "tasks": {
+              "dev": "deno run --watch --allow-net main.ts"
+            }
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Permission model
+        value: Deno denies most file, network, env, and subprocess access by default unless explicitly granted
+      - label: deno.json
+        value: Primary home for tasks, formatter, linter, compiler, import map, and workspace configuration
+      - label: Built-in toolchain
+        value: Formatting, linting, testing, benchmarking, and compilation are first-party rather than addon defaults
+      - label: npm and jsr
+        value: Modern Deno can use npm packages and JSR packages, but permission and runtime differences still matter
+      - label: TypeScript default
+        value: Deno treats TypeScript as a first-class default rather than a separately configured add-on

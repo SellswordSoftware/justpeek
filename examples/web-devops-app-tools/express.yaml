@@ -1,0 +1,575 @@
+name: Express
+group: web / devops / app tools
+process:
+  - node
+title_contains: express
+search_terms:
+  - expressjs
+  - node.js
+  - web framework
+  - REST API
+  - middleware
+references:
+  - group: Project Setup
+    items:
+      - label: Install Express
+        command: npm install express
+      - label: Create with Express generator
+        command: npx express-generator my-app
+      - label: Create TypeScript project
+        command: |
+          npm install express @types/express typescript ts-node @types/node
+          npx tsc --init
+      - label: Install common middleware
+        command: npm install cors helmet morgan dotenv
+
+  - group: Development
+    items:
+      - label: Start server
+        command: node index.js
+      - label: Start with nodemon
+        command: npx nodemon index.js
+      - label: Start TypeScript project
+        command: npx ts-node src/index.ts
+      - label: Start with PM2
+        command: pm2 start index.js --name "my-app"
+      - label: View PM2 logs
+        command: pm2 logs my-app
+      - label: Monitor PM2
+        command: pm2 monit
+
+  - group: Basic Server
+    items:
+      - label: Minimal server
+        command: |
+          const express = require('express')
+          const app = express()
+          const port = 3000
+          
+          app.get('/', (req, res) => {
+            res.send('Hello World')
+          })
+          
+          app.listen(port, () => {
+            console.log(`Server running on port ${port}`)
+          })
+      - label: TypeScript server
+        command: |
+          import express from 'express'
+          
+          const app = express()
+          const port = 3000
+          
+          app.get('/', (req, res) => {
+            res.send('Hello World')
+          })
+          
+          app.listen(port, () => {
+            console.log(`Server running on port ${port}`)
+          })
+      - label: Environment variables
+        command: |
+          require('dotenv').config()
+          
+          const app = express()
+          const port = process.env.PORT || 3000
+          
+          app.listen(port)
+        notes: "Create .env file with PORT=3000 and other variables"
+      - label: Graceful shutdown
+        command: |
+          const server = app.listen(port)
+          
+          process.on('SIGTERM', () => {
+            console.log('Shutting down...')
+            server.close(() => {
+              console.log('Process terminated')
+              process.exit(0)
+            })
+          })
+
+  - group: Routing
+    items:
+      - label: Basic routes
+        command: |
+          app.get('/', (req, res) => res.send('GET /'))
+          app.post('/', (req, res) => res.send('POST /'))
+          app.put('/:id', (req, res) => res.send(`PUT /${req.params.id}`))
+          app.delete('/:id', (req, res) => res.send(`DELETE /${req.params.id}`))
+      - label: Route parameters
+        command: |
+          app.get('/users/:userId/posts/:postId', (req, res) => {
+            const { userId, postId } = req.params
+            res.send(`User: ${userId}, Post: ${postId}`)
+          })
+      - label: Query parameters
+        command: |
+          app.get('/search', (req, res) => {
+            const { q, page, limit } = req.query
+            res.json({ q, page: Number(page), limit: Number(limit) })
+          })
+        notes: "Access via req.query - all values are strings"
+      - label: Route module
+        command: |
+          // routes/users.js
+          const express = require('express')
+          const router = express.Router()
+          
+          router.get('/', (req, res) => res.send('Users list'))
+          router.get('/:id', (req, res) => res.send(`User ${req.params.id}`))
+          router.post('/', (req, res) => res.send('Create user'))
+          
+          module.exports = router
+          
+          // index.js
+          app.use('/users', require('./routes/users'))
+      - label: Route middleware
+        command: |
+          app.get('/profile',
+            (req, res, next) => {
+              console.log('Logging...')
+              next()
+            },
+            (req, res, next) => {
+              if (!req.user) return next({ status: 401, message: 'Login required' })
+              next()
+            },
+            (req, res) => {
+              res.send('User profile')
+            }
+          )
+      - label: RESTful routes
+        command: |
+          app.get('/api/users', getUsers)
+          app.get('/api/users/:id', getUser)
+          app.post('/api/users', createUser)
+          app.put('/api/users/:id', updateUser)
+          app.delete('/api/users/:id', deleteUser)
+
+  - group: Middleware
+    items:
+      - label: Built-in middleware
+        command: |
+          app.use(express.json())           // Parse JSON bodies
+          app.use(express.urlencoded({ extended: true }))  // Parse URL-encoded bodies
+          app.use(express.static('public'))  // Serve static files
+      - label: Custom middleware
+        command: |
+          function logger(req, res, next) {
+            console.log(`${req.method} ${req.url}`)
+            next()
+          }
+          
+          app.use(logger)
+        notes: "Always call next() to pass control to the next middleware"
+      - label: Error handling middleware
+        command: |
+          app.use((err, req, res, next) => {
+            console.error(err.stack)
+            res.status(err.status || 500).json({
+              error: {
+                message: err.message || 'Internal Server Error',
+              }
+            })
+          })
+        notes: "Error handlers have 4 arguments: (err, req, res, next)"
+      - label: CORS middleware
+        command: |
+          const cors = require('cors')
+          
+          app.use(cors())  // Allow all origins
+          
+          // Or configure
+          app.use(cors({
+            origin: 'https://example.com',
+            methods: ['GET', 'POST'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+          }))
+      - label: Helmet security
+        command: |
+          const helmet = require('helmet')
+          
+          app.use(helmet())
+          
+          // Or configure
+          app.use(helmet({
+            contentSecurityPolicy: false,
+            crossOriginEmbedderPolicy: false,
+          }))
+        notes: "Sets various HTTP headers for security"
+      - label: Request logging
+        command: |
+          const morgan = require('morgan')
+          
+          app.use(morgan('dev'))  // Development format
+          app.use(morgan('combined'))  // Combined format
+        notes: "Formats: dev, combined, common, short, tiny"
+      - label: Body parsing
+        command: |
+          app.use(express.json({ limit: '10mb' }))
+          app.use(express.urlencoded({ extended: true, limit: '10mb' }))
+          
+          // For file uploads
+          const multer = require('multer')
+          app.use(multer({ dest: 'uploads/' }).single('avatar'))
+      - label: Rate limiting
+        command: |
+          const rateLimit = require('express-rate-limit')
+          
+          const limiter = rateLimit({
+            windowMs: 15 * 60 * 1000, // 15 minutes
+            max: 100, // limit each IP to 100 requests per windowMs
+            message: 'Too many requests, please try again later.',
+          })
+          
+          app.use('/api/', limiter)
+
+  - group: Request and Response
+    items:
+      - label: Request properties
+        command: |
+          req.method      // HTTP method
+          req.url         // Request URL
+          req.params      // Route parameters
+          req.query       // Query string parameters
+          req.body        // Request body (needs middleware)
+          req.headers     // Request headers
+          req.ip          // Client IP address
+          req.cookies     // Cookies (needs cookie-parser)
+        notes: "Install cookie-parser for req.cookies"
+      - label: Response methods
+        command: |
+          res.send('text')           // Send string
+          res.json({ key: 'value' }) // Send JSON
+          res.sendFile(path)         // Send file
+          res.redirect('/path')      // Redirect
+          res.status(404).send('Not Found')
+          res.download('/path/to/file')
+      - label: Send JSON response
+        command: |
+          res.status(200).json({
+            success: true,
+            data: { user },
+            message: 'User created',
+          })
+      - label: Send file
+        command: |
+          res.sendFile(path.join(__dirname, 'public', 'index.html'))
+          
+          // Or download
+          res.download('/path/to/file.pdf', 'report.pdf')
+      - label: Set headers
+        command: |
+          res.set('Content-Type', 'application/json')
+          res.set({
+            'Cache-Control': 'no-cache',
+            'X-Custom-Header': 'value',
+          })
+          res.header('X-Response-Time', `${Date.now() - startTime}ms`)
+      - label: Cookies
+        command: |
+          const cookieParser = require('cookie-parser')
+          app.use(cookieParser())
+          
+          // Set cookie
+          res.cookie('sessionId', 'abc123', {
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+          })
+          
+          // Get cookie
+          const sessionId = req.cookies.sessionId
+          
+          // Clear cookie
+          res.clearCookie('sessionId')
+
+  - group: Error Handling
+    items:
+      - label: Throw error
+        command: |
+          app.get('/error', (req, res) => {
+            const err = new Error('Something went wrong')
+            err.status = 500
+            next(err)
+          })
+      - label: Async error handling
+        command: |
+          const { wrap } = require('express-async-handler')
+          
+          app.get('/users', wrap(async (req, res) => {
+            const users = await User.find()
+            res.json(users)
+          }))
+          
+          // Or use try/catch
+          app.get('/users', async (req, res, next) => {
+            try {
+              const users = await User.find()
+              res.json(users)
+            } catch (err) {
+              next(err)
+            }
+          })
+      - label: Custom error class
+        command: |
+          class AppError extends Error {
+            constructor(message, statusCode) {
+              super(message)
+              this.statusCode = statusCode
+              this.isOperational = true
+            }
+          }
+          
+          // Usage
+          throw new AppError('User not found', 404)
+      - label: 404 handler
+        command: |
+          app.use((req, res) => {
+            res.status(404).json({
+              error: 'Not Found',
+              message: `Cannot ${req.method} ${req.url}`,
+            })
+          })
+        notes: "Place this after all routes"
+
+  - group: Database Integration
+    items:
+      - label: MongoDB with Mongoose
+        command: |
+          const mongoose = require('mongoose')
+          
+          mongoose.connect(process.env.MONGODB_URI)
+            .then(() => console.log('Connected to MongoDB'))
+            .catch(err => console.error('MongoDB connection error:', err))
+          
+          // Define schema
+          const userSchema = new mongoose.Schema({
+            name: String,
+            email: { type: String, unique: true },
+            createdAt: { type: Date, default: Date.now },
+          })
+          
+          const User = mongoose.model('User', userSchema)
+      - label: PostgreSQL with pg
+        command: |
+          const { Pool } = require('pg')
+          
+          const pool = new Pool({
+            connectionString: process.env.DATABASE_URL,
+          })
+          
+          app.get('/users', async (req, res) => {
+            const result = await pool.query('SELECT * FROM users')
+            res.json(result.rows)
+          })
+      - label: Sequelize ORM
+        command: |
+          const { Sequelize, DataTypes } = require('sequelize')
+          
+          const sequelize = new Sequelize(process.env.DATABASE_URL)
+          
+          const User = sequelize.define('User', {
+            name: DataTypes.STRING,
+            email: { type: DataTypes.STRING, unique: true },
+          })
+          
+          await sequelize.sync()
+      - label: Prisma ORM
+        command: |
+          // schema.prisma
+          // datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+          // model User { id String @id @default(uuid) name String email String @unique }
+          
+          // index.js
+          import { PrismaClient } from '@prisma/client'
+          const prisma = new PrismaClient()
+          
+          app.get('/users', async (req, res) => {
+            const users = await prisma.user.findMany()
+            res.json(users)
+          })
+
+  - group: Authentication
+    items:
+      - label: JWT authentication
+        command: |
+          const jwt = require('jsonwebtoken')
+          
+          // Generate token
+          function generateToken(user) {
+            return jwt.sign(
+              { id: user.id, email: user.email },
+              process.env.JWT_SECRET,
+              { expiresIn: '24h' }
+            )
+          }
+          
+          // Verify token middleware
+          function authenticate(req, res, next) {
+            const token = req.headers.authorization?.split(' ')[1]
+            if (!token) return res.status(401).json({ error: 'No token' })
+          
+            try {
+              req.user = jwt.verify(token, process.env.JWT_SECRET)
+              next()
+            } catch {
+              res.status(401).json({ error: 'Invalid token' })
+            }
+          }
+      - label: Passport.js setup
+        command: |
+          const passport = require('passport')
+          const Strategy = require('passport-local').Strategy
+          
+          passport.use(new Strategy(
+            (username, password, done) => {
+              User.findOne({ username }).then(user => {
+                if (!user) return done(null, false, { message: 'Unknown user' })
+                user.comparePassword(password, (err, isMatch) => {
+                  if (isMatch) return done(null, user)
+                  done(null, false, { message: 'Wrong password' })
+                })
+              })
+            }
+          ))
+          
+          app.use(passport.initialize())
+          app.post('/login', passport.authenticate('local'), (req, res) => {
+            res.json({ user: req.user })
+          })
+      - label: Session authentication
+        command: |
+          const session = require('express-session')
+          
+          app.use(session({
+            secret: process.env.SESSION_SECRET,
+            resave: false,
+            saveUninitialized: false,
+            cookie: { secure: true, maxAge: 24 * 60 * 60 * 1000 },
+          }))
+          
+          // Check authentication
+          function isAuthenticated(req, res, next) {
+            if (req.isAuthenticated()) return next()
+            res.status(401).json({ error: 'Not authenticated' })
+          }
+
+  - group: Configuration
+    items:
+      - label: Basic config
+        command: |
+          const express = require('express')
+          const app = express()
+          
+          // Trust proxy (behind reverse proxy)
+          app.set('trust proxy', 1)
+          
+          // View engine
+          app.set('view engine', 'pug')
+          app.set('views', './views')
+      - label: Production config
+        command: |
+          if (process.env.NODE_ENV === 'production') {
+            app.use(compression())
+            app.use(helmet())
+            app.disable('x-powered-by')
+          }
+      - label: CORS configuration
+        command: |
+          const corsOptions = {
+            origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+          }
+          app.use(cors(corsOptions))
+      - label: Multiple environments
+        command: |
+          // config/development.js
+          module.exports = {
+            port: 3000,
+            database: 'mongodb://localhost/dev',
+            logLevel: 'debug',
+          }
+          
+          // config/production.js
+          module.exports = {
+            port: process.env.PORT || 8080,
+            database: process.env.DATABASE_URL,
+            logLevel: 'error',
+          }
+          
+          // index.js
+          const config = require(`./config/${process.env.NODE_ENV || 'development'}`)
+
+  - group: Common Patterns
+    items:
+      - label: API versioning
+        command: |
+          app.use('/api/v1/users', require('./routes/v1/users'))
+          app.use('/api/v2/users', require('./routes/v2/users'))
+      - label: File upload
+        command: |
+          const multer = require('multer')
+          const upload = multer({
+            dest: 'uploads/',
+            limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+            fileFilter: (req, file, cb) => {
+              if (file.mimetype.startsWith('image/')) {
+                cb(null, true)
+              } else {
+                cb(new Error('Only image files allowed'))
+              }
+            },
+          })
+          
+          app.post('/upload', upload.single('avatar'), (req, res) => {
+            res.json({ file: req.file })
+          })
+      - label: API response wrapper
+        command: |
+          function success(res, data, message = 'Success') {
+            res.json({ success: true, data, message })
+          }
+          
+          function error(res, message, statusCode = 400) {
+            res.status(statusCode).json({ success: false, error: message })
+          }
+          
+          // Usage
+          app.get('/users', (req, res) => {
+            User.find().then(users => success(res, users))
+          })
+      - label: Performance tips
+        value: |
+          Use compression middleware in production.
+          Enable caching headers for static assets.
+          Use clustering for multi-core utilization.
+          Implement rate limiting for public APIs.
+          Use connection pooling for databases.
+          Monitor with health check endpoints.
+      - label: Health check
+        command: |
+          app.get('/health', (req, res) => {
+            res.json({
+              status: 'ok',
+              timestamp: new Date().toISOString(),
+              uptime: process.uptime(),
+            })
+          })
+      - label: Testing
+        command: |
+          const request = require('supertest')
+          const app = require('../app')
+          
+          describe('GET /users', () => {
+            it('should return users', async () => {
+              const res = await request(app)
+                .get('/users')
+                .expect(200)
+              
+              expect(res.body).toBeInstanceOf(Array)
+            })
+          })

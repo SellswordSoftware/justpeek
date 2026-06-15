@@ -1,0 +1,81 @@
+name: MeshLab
+group: cad / 3d / maker tools
+process:
+  - meshlab
+  - MeshLab
+  - meshlab.exe
+references:
+  - group: File and Project
+    items:
+      - label: New project
+        keys: Ctrl+N
+      - label: Open mesh
+        keys: Ctrl+O
+      - label: Import mesh into project
+        keys: Ctrl+I
+      - label: Save project
+        keys: Ctrl+S
+      - label: Export mesh
+        keys: Ctrl+E
+      - label: Reload current mesh
+        notes: Useful after external edits or when testing cleanup pipelines repeatedly.
+      - label: Close current mesh
+        keys: Ctrl+W
+
+  - group: View and Navigation
+    items:
+      - label: Rotate view
+        keys: LeftMouse drag
+      - label: Pan view
+        keys: Shift+LeftMouse drag or MiddleMouse drag
+      - label: Zoom
+        keys: MouseWheel or RightMouse drag
+      - label: Fit model in view
+        keys: Shift+C
+      - label: Reset trackball
+        notes: Helpful when navigation drifts after aggressive orbit or clipping work.
+      - label: Toggle orthographic perspective
+        notes: Switch when checking shape fidelity versus presentation.
+      - label: Show or hide layer dialog
+        notes: Layer visibility is critical when comparing scans, registrations, or cleanup stages.
+
+  - group: Selection and Editing
+    items:
+      - label: Rectangular selection
+        keys: S
+      - label: Select connected component
+        notes: Good for isolating shells, scan fragments, or floating artifacts.
+      - label: Invert selection
+        keys: Ctrl+Shift+I
+      - label: Delete selected faces or vertices
+        keys: Delete
+      - label: Move transform manipulator
+        keys: T
+      - label: Freeze current transform
+        notes: Apply transforms intentionally before export so downstream tools receive stable geometry.
+      - label: Toggle render modes
+        value: Points, wireframe, flat, smooth, textured
+
+  - group: Filters and Cleanup
+    items:
+      - label: Compute normals
+        notes: High-value first fix when shading looks wrong after import or cleanup.
+      - label: Remove duplicated vertices
+        notes: Common early cleanup step for messy scans and merged assets.
+      - label: Remove isolated pieces
+        notes: Good for scan debris and tiny disconnected artifacts.
+      - label: Simplification quadric edge collapse
+        notes: Standard path for reducing polygon count while preserving overall form.
+      - label: Poisson reconstruction
+        notes: Useful when turning point clouds or partial scans into watertight surfaces.
+      - label: Laplacian smoothing
+        notes: Apply conservatively so detail is not destroyed.
+
+  - group: Common Reference
+    items:
+      - label: Typical workflow
+        value: Import, inspect normals, clean isolated parts, repair topology, simplify, export
+      - label: Best fit
+        value: Mesh cleanup, scan processing, simplification, repair, and format conversion
+      - label: Export discipline
+        value: Confirm scale, orientation, normals, and watertightness before sending meshes to slicers or DCC tools

@@ -1,0 +1,97 @@
+name: MangoHud
+group: gaming / streaming
+process:
+  - mangohud
+search_terms:
+  - mangohud
+  - fps overlay
+  - vkbasalt
+  - launch prefix
+  - mangohud config
+references:
+  - group: Launch Patterns
+    items:
+      - label: Prefix a game launch
+        command: mangohud %command%
+      - label: Prefix native executable
+        command: mangohud ./game-binary
+      - label: Prefix with env override
+        command: MANGOHUD=1 mangohud ./game-binary
+      - label: Vulkan loader style
+        command: "MANGOHUD=1 %command%"
+      - label: Flatpak or launcher use
+        value: MangoHud is often enabled through launcher command prefixes rather than being run directly by hand
+      - label: Gamescope combo
+        command: mangohud gamescope -f -- %command%
+
+  - group: Config and Common Paths
+    items:
+      - label: User config file
+        value: ~/.config/MangoHud/MangoHud.conf
+      - label: Per-app config
+        value: ~/.config/MangoHud/<app-name>.conf
+      - label: Basic config example
+        command: |
+          fps
+          frametime
+          cpu_stats
+          gpu_stats
+          ram
+          vram
+      - label: Common toggle binding
+        notes: Toggle and position controls are usually configured in MangoHud config rather than remembered as universal built-in defaults.
+      - label: Steam launch option
+        notes: "UI path: `Steam -> Game Properties -> Launch Options`, then prepend `mangohud %command%`."
+      - label: Lutris or Heroic use
+        notes: "UI path: per-game launch command, system options, or compatibility settings depending on launcher."
+
+  - group: High-Value Options
+    items:
+      - label: Show FPS only
+        command: |
+          fps_only
+      - label: Position top right
+        command: |
+          position=top-right
+      - label: Frame time graph
+        command: |
+          frame_timing=1
+      - label: Benchmark logging
+        command: |
+          output_folder=/tmp/mangohud
+          log_duration=30
+      - label: CPU GPU temps and power
+        command: |
+          cpu_temp
+          gpu_temp
+          gpu_power
+      - label: Wine or Proton applicability
+        value: MangoHud is commonly used with native Linux titles, Wine, Proton, and Gamescope-based sessions
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Blacklist or no-display cases
+        value: Not every title, compositor, or graphics stack behaves the same, so overlay failures are often environment or hook related
+      - label: Logging location
+        notes: "UI path in config: set `output_folder` and benchmark logging options in `MangoHud.conf`."
+      - label: Toggle visibility
+        notes: "UI path in config: assign a toggle key in the config file or launcher integration where supported."
+      - label: Hud position and scale
+        notes: "UI path in config: `position`, `font_size`, and other layout keys in `MangoHud.conf`."
+      - label: vkBasalt combination
+        value: MangoHud is often used alongside Gamescope and vkBasalt, so launch prefixes can stack in nontrivial ways
+      - label: Troubleshooting first pass
+        value: Start by simplifying the launch prefix, removing extra wrappers, and confirming the overlay works on a known-good title
+
+  - group: Common Concepts
+    items:
+      - label: Overlay tool not launcher
+        value: MangoHud is mainly a launch wrapper and config-driven overlay, not a standalone app workflow
+      - label: Prefix memory
+        value: The single most useful thing to remember is how to prepend it correctly in Steam, Lutris, Heroic, or direct shell launches
+      - label: Config-driven behavior
+        value: Nearly all meaningful customization comes from `MangoHud.conf` and per-app configs rather than GUI controls
+      - label: Linux performance context
+        value: MangoHud is one of the highest-value Linux gaming tools for fast sanity checks on FPS, frame pacing, thermals, and GPU load
+      - label: Common lookup
+        value: Launch prefixes, config paths, FPS-only mode, logging, and Gamescope combinations are the most frequently revisited basics

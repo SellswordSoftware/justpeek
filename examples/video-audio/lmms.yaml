@@ -1,0 +1,78 @@
+name: LMMS
+group: video / audio
+process:
+  - lmms
+  - lmms.exe
+references:
+  - group: Transport and Global
+    items:
+      - label: Play or stop
+        keys: Space
+      - label: Record automation or live input
+        keys: Ctrl+R
+      - label: Save project
+        keys: Ctrl+S
+      - label: Open project
+        keys: Ctrl+O
+      - label: New project
+        keys: Ctrl+N
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Y
+      - label: Piano roll
+        keys: F7
+      - label: Song editor
+        keys: F5
+
+  - group: Windows and Core Surfaces
+    items:
+      - label: Beat and bassline editor
+        keys: F6
+      - label: FX mixer
+        keys: F9
+      - label: Automation editor
+        notes: Automation is usually created from knob or control context menus rather than a single universal shortcut.
+      - label: Sidebar and browser
+        notes: Samples, presets, and instruments are normally dragged from the sidebar into the project.
+      - label: Rename selected item
+        keys: F2
+      - label: Delete selected item
+        keys: Delete
+
+  - group: Editing and Arrangement
+    items:
+      - label: Cut copy paste
+        keys: Ctrl+X / Ctrl+C / Ctrl+V
+      - label: Duplicate selection
+        keys: Ctrl+D
+      - label: Select all
+        keys: Ctrl+A
+      - label: Draw notes or blocks
+        notes: LMMS uses paint-like placement in several editors, similar to clip and step workflows in other DAWs.
+      - label: Zoom in or out
+        keys: Ctrl+MouseWheel
+      - label: Snap awareness
+        notes: Grid resolution strongly changes note entry and arrangement speed.
+
+  - group: Piano Roll
+    items:
+      - label: Draw note
+        keys: Mouse draw with pencil tool
+      - label: Erase note
+        keys: RightClick or erase tool
+      - label: Select notes
+        keys: Box select or select tool
+      - label: Transpose selected notes
+        keys: UpArrow / DownArrow
+      - label: Move notes in time
+        keys: LeftArrow / RightArrow
+      - label: Quantize-like cleanup
+        notes: Use snapping and manual note alignment; exact tooling varies by plugin and version.
+
+  - group: Common Reference
+    items:
+      - label: Core model
+        value: Song Editor, Beat+Bassline Editor, Piano Roll, FX Mixer, sidebar browser
+      - label: Workflow fit
+        value: Strong for pattern-based composition, chiptune, EDM sketching, and lightweight beat production
+      - label: Routing habit
+        value: Assign instruments to mixer channels early to keep effects and gain staging manageable

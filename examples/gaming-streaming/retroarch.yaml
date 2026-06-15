@@ -1,0 +1,91 @@
+name: RetroArch
+group: gaming / streaming
+process:
+  - retroarch
+  - retroarch.exe
+search_terms:
+  - retroarch hotkeys
+  - cores
+  - shaders
+  - runahead
+  - playlists
+references:
+  - group: Core Hotkeys
+    items:
+      - label: Open menu
+        keys: F1
+      - label: Exit emulator
+        keys: Esc
+      - label: Save state
+        keys: F2
+      - label: Load state
+        keys: F4
+      - label: State slot minus
+        keys: F6
+      - label: State slot plus
+        keys: F7
+      - label: Pause or unpause
+        keys: P
+      - label: Fast forward hold
+        keys: Space
+
+  - group: Playback and Visual Controls
+    items:
+      - label: Rewind
+        keys: R
+        notes: Requires rewind support to be enabled
+      - label: Frame advance
+        keys: K
+      - label: Next shader preset
+        keys: M
+      - label: Screenshot
+        keys: F8
+      - label: Toggle fullscreen
+        keys: F
+      - label: Mute audio
+        keys: F9
+      - label: Netplay
+        notes: "UI path: `Main Menu -> Netplay`."
+
+  - group: Menus and Common UI Paths
+    items:
+      - label: Load core
+        notes: "UI path: `Main Menu -> Load Core`."
+      - label: Load content
+        notes: "UI path: `Main Menu -> Load Content`."
+      - label: Import content or scan directory
+        notes: "UI path: `Import Content`."
+      - label: Video shaders
+        notes: "UI path: `Quick Menu -> Shaders`."
+      - label: Latency and runahead
+        notes: "UI path: `Settings -> Latency`."
+      - label: Input hotkeys
+        notes: "UI path: `Settings -> Input -> Hotkeys`."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Save override
+        notes: "UI path: `Quick Menu -> Overrides` for core, content directory, or game overrides."
+      - label: Achievements
+        notes: "UI path: `Settings -> Achievements`."
+      - label: Core options
+        notes: "UI path: `Quick Menu -> Core Options`."
+      - label: Playlist thumbnails
+        notes: "UI path: `Online Updater` and playlist settings depending on current setup."
+      - label: Controller remap
+        notes: "UI path: `Quick Menu -> Controls` and then remap save actions."
+      - label: Shader preset save
+        notes: "UI path: `Quick Menu -> Shaders -> Save`."
+
+  - group: Common Concepts
+    items:
+      - label: Core-centric design
+        value: RetroArch behavior depends heavily on the loaded core, so video, input, and option expectations can vary per system
+      - label: Quick Menu matters
+        value: Once content is loaded, the Quick Menu is the main surface for save states, overrides, shaders, controls, and core-specific options
+      - label: Hotkey recall
+        value: F1, save state, load state, slot changes, fast forward, and rewind are the highest-value shortcuts to keep nearby
+      - label: Overrides are key
+        value: Content, directory, and core overrides are often the difference between a stable setup and endlessly redoing settings
+      - label: Shortcut density
+        value: RetroArch is unusually hotkey-heavy compared with most launcher-style apps, especially once you tailor the hotkey map

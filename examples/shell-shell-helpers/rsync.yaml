@@ -5,19 +5,19 @@ references:
     items:
       - label: Archive copy directory
         command: rsync -a src/ dest/
-        notes: `-a` preserves permissions, times, symlinks, and recursion in one common flag set.
+        notes: "`-a` preserves permissions, times, symlinks, and recursion in one common flag set."
       - label: Verbose archive copy
         command: rsync -av src/ dest/
         notes: Add progress visibility during normal sync operations.
       - label: Copy local directory to remote host
-        command: rsync -av ./project/ user@host:/srv/project/
+        command: "rsync -av ./project/ user@host:/srv/project/"
         notes: Trailing slash on the source means copy contents, not the parent directory itself.
       - label: Copy remote directory locally
-        command: rsync -av user@host:/srv/project/ ./project/
+        command: "rsync -av user@host:/srv/project/ ./project/"
         notes: Pull data from a remote system over SSH.
       - label: Preserve hard links too
         command: rsync -aH src/ dest/
-        notes: `-H` is useful for backup-style syncs where hard-link structure matters.
+        notes: "`-H` is useful for backup-style syncs where hard-link structure matters."
 
   - group: Safety and Preview
     items:
@@ -29,13 +29,13 @@ references:
         notes: Per-file progress is useful for large files or slow links.
       - label: Show human-readable totals
         command: rsync -avh src/ dest/
-        notes: `-h` makes sizes easier to interpret while reviewing output.
+        notes: "`-h` makes sizes easier to interpret while reviewing output."
       - label: Itemize changes
         command: rsync -avi src/ dest/
-        notes: `-i` shows what changed and why for each file.
+        notes: "`-i` shows what changed and why for each file."
       - label: Protect newer destination files
         command: rsync -avu src/ dest/
-        notes: `-u` skips destination files that are newer than the source.
+        notes: "`-u` skips destination files that are newer than the source."
 
   - group: Deletes, Excludes, and Filtering
     items:
@@ -53,24 +53,24 @@ references:
         notes: Include rules are processed before later excludes.
       - label: Prune empty dirs
         command: rsync -avm --include '*/' --include '*.log' --exclude '*' src/ dest/
-        notes: `-m` omits empty directories created only by filter traversal.
+        notes: "`-m` omits empty directories created only by filter traversal."
 
   - group: Remote Transport and Performance
     items:
       - label: Use custom SSH port
-        command: rsync -av -e 'ssh -p 2222' src/ user@host:/dest/
-        notes: Pass remote-shell transport options with `-e`.
+        command: "rsync -av -e 'ssh -p 2222' src/ user@host:/dest/"
+        notes: "Pass remote-shell transport options with `-e`."
       - label: Compress during transfer
-        command: rsync -avz src/ user@host:/dest/
+        command: "rsync -avz src/ user@host:/dest/"
         notes: Helpful over slower networks, less so on very fast local links.
       - label: Limit bandwidth
-        command: rsync -av --bwlimit=5m src/ user@host:/dest/
+        command: "rsync -av --bwlimit=5m src/ user@host:/dest/"
         notes: Throttle transfers so they do not saturate shared connections.
       - label: Partial transfers
-        command: rsync -av --partial src/ user@host:/dest/
+        command: "rsync -av --partial src/ user@host:/dest/"
         notes: Keep partially transferred files when an interrupted transfer resumes later.
       - label: In-place updates
-        command: rsync -av --inplace bigfile.img user@host:/dest/
+        command: "rsync -av --inplace bigfile.img user@host:/dest/"
         notes: Useful for very large files but changes how rsync writes data on the target.
 
   - group: Backup and Snapshot Patterns
@@ -86,7 +86,7 @@ references:
         notes: Foundation for efficient hard-link based snapshot backups.
       - label: Sync one filesystem only
         command: rsync -avx / /backup/root/
-        notes: `-x` avoids crossing filesystem boundaries during full-tree syncs.
+        notes: "`-x` avoids crossing filesystem boundaries during full-tree syncs."
       - label: Preserve numeric IDs
         command: rsync -a --numeric-ids src/ dest/
         notes: Important when user or group names differ across systems.

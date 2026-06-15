@@ -14,7 +14,7 @@ references:
         notes: Select a non-default SSH key for the session.
       - label: Use SSH config alias
         command: sftp prod-web
-        notes: Reuse connection details from `~/.ssh/config`.
+        notes: "Reuse connection details from `~/.ssh/config`."
       - label: Connect through jump host
         command: sftp -J bastion user@private-host
         notes: Route the session through an SSH jump host.
@@ -23,7 +23,7 @@ references:
     items:
       - label: Show remote working directory
         command: pwd
-        notes: Interactive `sftp` command once connected.
+        notes: "Interactive `sftp` command once connected."
       - label: List remote files
         command: ls -lah
         notes: Interactive remote listing with details and hidden files.
@@ -41,7 +41,7 @@ references:
     items:
       - label: Show local working directory
         command: lpwd
-        notes: `l*` commands operate on the local machine from inside `sftp`.
+        notes: "`l*` commands operate on the local machine from inside `sftp`."
       - label: List local files
         command: lls -lah
         notes: Inspect local paths without leaving the session.
@@ -52,8 +52,8 @@ references:
         command: lmkdir ./downloads
         notes: Make a local directory from within interactive SFTP.
       - label: Run local shell command
-        command: !pwd
-        notes: Prefix with `!` to execute a local shell command temporarily.
+        command: "!pwd"
+        notes: "Prefix with `!` to execute a local shell command temporarily."
 
   - group: Transfers
     items:
@@ -89,7 +89,7 @@ references:
         notes: Reduce progress chatter in automation logs.
       - label: Limit bandwidth
         command: sftp -l 5000 user@host
-        notes: Bandwidth limit is in Kbit/s, similar to `scp`.
+        notes: "Bandwidth limit is in Kbit/s, similar to `scp`."
       - label: Preserve attributes on upload
         command: put -P file.txt
         notes: Preserve permissions and access or modification times when supported.
@@ -103,10 +103,10 @@ references:
         command: sftp -h
         notes: Quick flag reference for the installed client.
       - label: Prefer sftp over scp for browsing
-        value: `sftp` is better when you need remote navigation before transfer.
+        value: "`sftp` is better when you need remote navigation before transfer."
         notes: It combines inspection and copy operations in one session.
       - label: Prefer rsync for large repeated syncs
-        value: `rsync` is better for mirroring, deletes, filters, and incremental transfer.
+        value: "`rsync` is better for mirroring, deletes, filters, and incremental transfer."
         notes: SFTP is not a directory synchronization tool.
       - label: Host alias and key behavior
         value: SFTP inherits SSH config, host keys, agent use, and jump-host behavior.

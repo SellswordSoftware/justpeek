@@ -1,0 +1,115 @@
+name: bazel
+group: build tools
+process:
+  - bazel
+  - bazelisk
+search_terms:
+  - bazel build
+  - bazel test
+  - query
+  - remote cache
+references:
+  - group: Build and Run
+    items:
+      - label: Build target
+        command: bazel build //app:server
+      - label: Build everything under package tree
+        command: bazel build //...
+      - label: Run target
+        command: bazel run //app:server
+      - label: Clean outputs
+        command: bazel clean
+      - label: Expunge output base
+        command: bazel clean --expunge
+      - label: Show version
+        command: bazel version
+      - label: Use Bazelisk
+        value: "Many repos rely on `bazelisk` to pin the right Bazel version automatically"
+
+  - group: Testing
+    items:
+      - label: Run tests
+        command: bazel test //...
+      - label: Run one test target
+        command: bazel test //app:server_test
+      - label: Verbose failures
+        command: bazel test //... --test_output=errors
+      - label: Stream all output
+        command: bazel test //... --test_output=all
+      - label: Filter tests
+        command: bazel test //... --test_filter=UserFlow
+      - label: Keep sandbox for debugging
+        command: bazel test //app:server_test --sandbox_debug
+      - label: Rerun strategy
+        value: Use flags deliberately because caching and sandboxing change the debugging shape compared with simpler runners
+
+  - group: Query and Introspection
+    items:
+      - label: Query dependency graph
+        command: bazel query 'deps(//app:server)'
+      - label: Reverse dependencies
+        command: bazel query 'rdeps(//..., //lib:core)'
+      - label: cquery configured graph
+        command: bazel cquery //app:server
+      - label: aquery actions
+        command: bazel aquery //app:server
+      - label: Explain rebuilds
+        command: bazel build //app:server --explain=explain.log --verbose_explanations
+      - label: Print action graph hints
+        value: "`aquery` is high value when you need to know what exact actions a target expands into"
+
+  - group: Caching and Remote Execution
+    items:
+      - label: Disk cache
+        command: bazel build //... --disk_cache=/tmp/bazel-cache
+      - label: Remote cache
+        command: bazel build //... --remote_cache=grpc://cache.example.com
+      - label: Remote execution
+        value: Large Bazel shops often combine remote cache and remote execution for reproducibility and scale
+      - label: Action environment
+        value: Hermeticity depends on controlling what env vars and tools leak into actions
+      - label: Sandbox mindset
+        value: Sandboxing catches undeclared inputs that looser build systems often hide
+
+  - group: Handy Snippets
+    items:
+      - label: cc_binary
+        command: |
+          cc_binary(
+              name = "app",
+              srcs = ["main.cc"],
+          )
+      - label: py_test
+        command: |
+          py_test(
+              name = "app_test",
+              srcs = ["app_test.py"],
+              deps = [":app"],
+          )
+      - label: filegroup
+        command: |
+          filegroup(
+              name = "configs",
+              srcs = glob(["config/*.yaml"]),
+          )
+      - label: genrule
+        command: |
+          genrule(
+              name = "generated",
+              srcs = ["schema.sql"],
+              outs = ["generated.txt"],
+              cmd = "cp $(location schema.sql) $@",
+          )
+
+  - group: Common Concepts
+    items:
+      - label: Labels
+        value: "Bazel targets are addressed by labels like `//pkg:target`, not by filenames or shell paths alone"
+      - label: Hermetic builds
+        value: Bazel’s real promise is reproducibility through declared inputs, sandboxing, and cacheable actions
+      - label: Query family
+        value: "`query`, `cquery`, and `aquery` answer different graph questions and are worth learning separately"
+      - label: BUILD plus WORKSPACE or MODULE.bazel
+        value: Repo structure and dependency management depend on the Bazel generation and whether bzlmod is enabled
+      - label: Best fit
+        value: Large multi-language monorepos where reproducibility, caching, and graph-scale correctness matter

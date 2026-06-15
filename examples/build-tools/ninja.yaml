@@ -1,0 +1,104 @@
+name: ninja
+group: build tools
+process:
+  - ninja
+search_terms:
+  - ninja build
+  - ninja explain
+  - ninja graph
+  - compile_commands
+references:
+  - group: Running Builds
+    items:
+      - label: Default build
+        command: ninja
+      - label: One target
+        command: ninja app
+      - label: Parallel build
+        command: ninja -j 8
+      - label: Dry run
+        command: ninja -n
+      - label: Keep going after failures
+        command: ninja -k 5
+      - label: Change directory
+        command: ninja -C build
+      - label: Quiet or verbose
+        command: ninja -v
+
+  - group: Diagnostics and Introspection
+    items:
+      - label: Explain rebuilds
+        command: ninja -d explain
+      - label: Show commands without running
+        command: ninja -n -v
+      - label: Stats
+        command: ninja -d stats
+      - label: Why dependency logs matter
+        value: Ninja relies on generated dependency information and build logs to keep incremental rebuilds correct and fast
+      - label: List targets
+        command: ninja -t targets
+      - label: Show commands for target
+        command: ninja -t commands app
+      - label: Browse dependency graph
+        command: ninja -t browse
+      - label: Emit graphviz
+        command: ninja -t graph app > graph.dot
+
+  - group: Cleaning and Maintenance
+    items:
+      - label: Clean all
+        command: ninja -t clean
+      - label: Clean one target
+        command: ninja -t clean app
+      - label: Recompact build log
+        command: ninja -t recompact
+      - label: Restat
+        notes: Generator correctness matters more than manual tinkering; if Ninja behaves strangely, inspect the generating tool first.
+      - label: Compilation database
+        command: ninja -t compdb cxx cc > compile_commands.json
+      - label: Multi-config caveat
+        value: Ninja itself is low-level; higher-level tools like CMake or Meson usually decide structure and config layout
+
+  - group: Ninja File Concepts
+    items:
+      - label: Rule
+        value: Defines the command template and depfile behavior used to build edges
+      - label: Build edge
+        value: Connects outputs, rule, explicit inputs, implicit deps, and order-only deps
+      - label: Pool
+        value: Limits concurrency for expensive steps such as linking or code generation
+      - label: Default target
+        value: Controls what plain `ninja` builds when no target is specified
+      - label: Generator fit
+        value: Most teams consume Ninja via Meson, CMake, GN, or similar rather than hand-authoring large files
+
+  - group: Handy Snippets
+    items:
+      - label: Minimal rule and build
+        command: |
+          rule cc
+            command = cc -c $in -o $out
+          
+          build main.o: cc main.c
+      - label: Link target
+        command: |
+          rule link
+            command = cc $in -o $out
+          
+          build app: link main.o util.o
+      - label: Default
+        command: |
+          default app
+
+  - group: Common Concepts
+    items:
+      - label: Speed model
+        value: Ninja is optimized for fast incremental execution, not for high-level project description ergonomics
+      - label: Generator responsibility
+        value: If the build graph is wrong, the real fix usually belongs in CMake, Meson, GN, or the generator upstream
+      - label: depfiles
+        value: Correct header dependency emission is essential for reliable incremental C and C++ rebuilds
+      - label: Tool mode
+        value: "`ninja -t ...` subcommands are the highest-signal introspection surface when debugging builds"
+      - label: Best fit
+        value: Backend executor for generated native builds where startup and incremental latency matter

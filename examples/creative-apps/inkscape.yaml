@@ -1,0 +1,80 @@
+name: Inkscape
+group: creative apps
+process:
+  - inkscape
+  - inkscape.exe
+references:
+  - group: File and View
+    items:
+      - label: New document
+        keys: Ctrl+N
+      - label: Open
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Import
+        keys: Ctrl+I
+      - label: Export
+        keys: Shift+Ctrl+E
+      - label: Zoom to drawing
+        keys: "5"
+      - label: Zoom to selection
+        keys: "3"
+
+  - group: Tools
+    items:
+      - label: Select tool
+        keys: S or F1
+      - label: Node tool
+        keys: N or F2
+      - label: Rectangle tool
+        keys: R or F4
+      - label: Ellipse tool
+        keys: E or F5
+      - label: Star or polygon tool
+        keys: A or Shift+F9
+      - label: Pen or bezier tool
+        keys: B or Shift+F6
+      - label: Text tool
+        keys: T or F8
+      - label: Fill and stroke dialog
+        keys: Shift+Ctrl+F
+
+  - group: Objects and Paths
+    items:
+      - label: Group selection
+        keys: Ctrl+G
+      - label: Ungroup selection
+        keys: Ctrl+Shift+G
+      - label: Duplicate
+        keys: Ctrl+D
+      - label: Raise or lower selection
+        keys: PageUp / PageDown
+      - label: Raise to top or lower to bottom
+        keys: Home / End
+      - label: Object to path
+        keys: Shift+Ctrl+C
+      - label: Union
+        keys: Ctrl+Plus
+      - label: Difference
+        keys: Ctrl+Minus
+
+  - group: Alignment and Editing
+    items:
+      - label: Align and distribute dialog
+        keys: Shift+Ctrl+A
+      - label: Clone
+        keys: Alt+D
+      - label: Edit path by nodes
+        notes: Node editing is the core path-cleanup workflow for logos, icons, and SVG illustration.
+      - label: Snap controls
+        notes: Turn snapping on intentionally when precision matters and off when freeform editing gets blocked.
+
+  - group: Common Reference
+    items:
+      - label: Fill vs stroke
+        value: Fill colors the interior, stroke controls the outline, width, dashes, and joins
+      - label: Boolean workflow
+        value: Convert objects to paths before boolean operations when results seem inconsistent
+      - label: SVG strength
+        value: Best fit for icons, diagrams, UI assets, and print-safe vector export

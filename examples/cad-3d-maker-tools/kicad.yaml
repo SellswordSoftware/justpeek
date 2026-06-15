@@ -1,0 +1,82 @@
+name: KiCad
+group: cad / 3d / maker tools
+process:
+  - kicad
+  - kicad.exe
+references:
+  - group: Project and Navigation
+    items:
+      - label: New project
+        keys: Ctrl+N
+      - label: Open project
+        keys: Ctrl+O
+      - label: Save
+        keys: Ctrl+S
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Shift+Z
+      - label: Pan
+        keys: MiddleMouse drag
+      - label: Zoom in or out
+        keys: MouseWheel
+      - label: Search
+        keys: Ctrl+F
+
+  - group: Schematic Editor
+    items:
+      - label: Place symbol
+        keys: A
+      - label: Place power symbol
+        keys: P
+      - label: Draw wire
+        keys: W
+      - label: Bus
+        keys: B
+      - label: Label
+        keys: L
+      - label: Junction
+        keys: J
+      - label: No connect
+        keys: Q
+      - label: Annotate schematic
+        notes: Run annotation before footprint assignment and PCB transfer.
+      - label: Electrical rules check
+        keys: Ctrl+Shift+E
+
+  - group: PCB Editor
+    items:
+      - label: Route tracks
+        keys: X
+      - label: Via while routing
+        keys: V
+      - label: Drag track
+        keys: G
+      - label: Move item
+        keys: M
+      - label: Delete item
+        keys: Delete
+      - label: Measure tool
+        keys: Ctrl+Shift+M
+      - label: Fill zones
+        keys: B
+      - label: Design rules checker
+        notes: Run DRC before Gerber export, not just at the end of a long layout session.
+
+  - group: Footprints and Libraries
+    items:
+      - label: Assign footprints
+        notes: Keep symbol-to-footprint mapping explicit before board layout starts.
+      - label: Update PCB from schematic
+        keys: F8
+      - label: Update schematic from PCB
+        notes: Use carefully and understand source of truth before back-annotation.
+      - label: Library management
+        value: Global and project libraries should be kept intentional to avoid broken symbol or footprint resolution
+
+  - group: Common Reference
+    items:
+      - label: Main flow
+        value: Schematic capture, annotation, ERC, footprint assignment, PCB layout, DRC, fabrication outputs
+      - label: Net classes
+        value: Use for width, clearance, via size, and class-based routing discipline
+      - label: Output habit
+        value: Generate Gerbers, drill files, BOM, and pick-and-place only after final rule checks

@@ -25,10 +25,10 @@ references:
         command: cd -
       - label: Use named directory hash
         command: hash -d proj=~/src/project
-        notes: Enables shortcuts like `cd ~proj`.
+        notes: "Enables shortcuts like `cd ~proj`."
       - label: Recursive glob
         command: print -l **/*.md
-        notes: `**` is a powerful built-in recursive glob in Zsh.
+        notes: "`**` is a powerful built-in recursive glob in Zsh."
       - label: Qualifier for directories only
         command: print -l *(/)
         notes: Glob qualifiers filter matches by type, permissions, age, and more.
@@ -40,16 +40,16 @@ references:
     items:
       - label: Set an array
         command: plugins=(git docker kubectl)
-        notes: Arrays are first-class and are frequently used in `.zshrc`.
+        notes: "Arrays are first-class and are frequently used in `.zshrc`."
       - label: Join array values
-        command: print -r -- "${(j:,:)plugins}"
+        command: 'print -r -- "${(j:,:)plugins}"'
         notes: Zsh expansion flags can transform arrays inline.
       - label: Lowercase a variable
         command: print -r -- "${(L)NAME}"
         notes: Expansion flags can case-transform values without an external command.
       - label: Split into lines
         command: print -l "${(@f)content}"
-        notes: `(@f)` splits a scalar on newlines into array elements.
+        notes: "`(@f)` splits a scalar on newlines into array elements."
       - label: Substitute text globally
         command: print -r -- "${NAME//old/new}"
         notes: Replace every matching substring in the parameter expansion.
@@ -70,7 +70,7 @@ references:
         notes: Common completion widget binding in many Zsh setups.
       - label: Edit current command in editor
         keys: Ctrl+X Ctrl+E
-        notes: Open the current multiline buffer in `$EDITOR`.
+        notes: "Open the current multiline buffer in `$EDITOR`."
 
   - group: Options and Safety
     items:
@@ -82,7 +82,7 @@ references:
         notes: Append commands immediately and import from other shells.
       - label: Prevent accidental overwrite
         command: setopt noclobber
-        notes: Stops `>` from overwriting files unless you use `>|`.
+        notes: "Stops `>` from overwriting files unless you use `>|`."
       - label: Correct mistyped commands
         command: setopt correct
         notes: Prompts for confirmation before running a guessed correction.

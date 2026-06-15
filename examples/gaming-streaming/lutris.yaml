@@ -1,0 +1,84 @@
+name: Lutris
+group: gaming / streaming
+process:
+  - lutris
+  - lutris.exe
+search_terms:
+  - lutris wine
+  - runners
+  - prefix
+  - proton
+  - install scripts
+references:
+  - group: Navigation and Library
+    items:
+      - label: Search games
+        keys: Ctrl+F
+      - label: Preferences
+        keys: Ctrl+P
+      - label: Refresh library
+        keys: F5
+      - label: Quit app
+        keys: Ctrl+Q
+      - label: Add locally installed game
+        notes: "UI path: `Plus button -> Add locally installed game`."
+      - label: Import games
+        notes: "UI path: `Plus button` and source integration flows depending on service."
+
+  - group: Game and Runner Management
+    items:
+      - label: Configure selected game
+        notes: "UI path: right click game -> `Configure`."
+      - label: Run selected game
+        notes: Double click the game or use the `Play` button.
+      - label: Stop running game
+        notes: "UI path: game details or library item while the game is active."
+      - label: Show logs
+        notes: "UI path: game context menu or running game details -> `Show logs`."
+      - label: Wine version or runner
+        notes: "UI path: `Configure -> Runner options`."
+      - label: Prefix path
+        notes: "UI path: `Configure -> Game options` for executable, working directory, arguments, and wine prefix."
+
+  - group: Installers Runners and Sources
+    items:
+      - label: Browse community installers
+        notes: "UI path: `Lutris website integration` or search/install flows from within the app."
+      - label: Manage runners
+        notes: "UI path: `Preferences -> Runners`."
+      - label: Enable source integrations
+        notes: "UI path: `Preferences -> Sources`."
+      - label: System options
+        notes: "UI path: `Configure -> System options`."
+      - label: Environment variables
+        notes: "UI path: `System options` or runner-specific options in the game configuration."
+      - label: Gamescope and MangoHud
+        notes: "UI path: often configured via system options, command prefixes, or environment variables for the game."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Install DXVK VKD3D or Esync/Fsync
+        notes: "UI path: runner options and install script defaults depending on the game and runner."
+      - label: Separate prefixes
+        value: Keeping each game in its own prefix is often the safer default for troubleshooting and reproducibility
+      - label: Open install directory
+        notes: "UI path: game configuration paths or game files location from the library item."
+      - label: Custom launch arguments
+        notes: "UI path: `Configure -> Game options` or `System options`."
+      - label: Proton versus Wine choice
+        value: Different games can behave better under Wine builds, Proton variants, or specific runners, so runner selection is a common recall item
+      - label: Installer script caveat
+        value: Community install scripts save time, but you still need to verify prefix location, runner, and launch executable when troubleshooting
+
+  - group: Common Concepts
+    items:
+      - label: Runner-centric design
+        value: Lutris is built around runners and per-game configuration, so troubleshooting usually starts with the runner, prefix, and system options
+      - label: Prefix hygiene
+        value: Wine prefix location, environment variables, and per-game overrides are some of the most important practical details to remember
+      - label: Logs first
+        value: Show logs is one of the highest-value actions when a game fails to launch or a runner setup regresses
+      - label: Integration tool
+        value: Lutris is strongest as a hub for Wine, retro, native, and launcher-managed games rather than as a single-store client
+      - label: Shortcut density
+        value: Lutris has a few useful desktop shortcuts, but most of the real value is in remembered config paths and runner concepts

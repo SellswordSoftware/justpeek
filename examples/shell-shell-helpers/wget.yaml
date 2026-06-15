@@ -14,7 +14,7 @@ references:
         notes: Resume partial downloads when the server supports range requests.
       - label: Download in background
         command: wget -b https://example.com/backup.sql.gz
-        notes: Background the transfer and log progress to `wget-log`.
+        notes: "Background the transfer and log progress to `wget-log`."
       - label: Show response headers
         command: wget --server-response --spider https://example.com
         notes: Inspect response metadata without saving the body.
@@ -41,9 +41,9 @@ references:
     items:
       - label: Basic auth
         command: wget --user=user --password=secret https://example.com/private.tar.gz
-        notes: Credentials can also come from `.netrc` for less exposure in shell history.
+        notes: "Credentials can also come from `.netrc` for less exposure in shell history."
       - label: Add authorization header
-        command: wget --header='Authorization: Bearer '$TOKEN https://api.example.com/export
+        command: "wget --header='Authorization: Bearer '$TOKEN https://api.example.com/export"
         notes: Useful for APIs and authenticated artifact downloads.
       - label: Save cookies
         command: wget --save-cookies cookies.txt --keep-session-cookies https://example.com/login
@@ -86,7 +86,7 @@ references:
         notes: Pull supporting assets such as images and stylesheets for one page.
       - label: Read URLs from stdin
         command: printf '%s\n' 'https://example.com/a' 'https://example.com/b' | wget -i -
-        notes: Treat stdin as the input list by passing `-` to `-i`.
+        notes: "Treat stdin as the input list by passing `-` to `-i`."
       - label: Log to chosen file
         command: wget -o fetch.log https://example.com/archive.tar.gz
         notes: Separate diagnostic logs from stdout and stderr in automation.

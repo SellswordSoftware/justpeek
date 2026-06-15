@@ -1,0 +1,94 @@
+name: cmake
+group: build tools
+process:
+  - cmake
+  - ctest
+search_terms:
+  - configure
+  - presets
+  - ctest
+  - generator
+references:
+  - group: Configure and Build
+    items:
+      - label: Configure out-of-tree build
+        command: cmake -S . -B build
+      - label: Debug configure
+        command: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+      - label: Release configure
+        command: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - label: Select generator
+        command: cmake -S . -B build -G Ninja
+      - label: Build configured tree
+        command: cmake --build build
+      - label: Build one target
+        command: cmake --build build --target app
+      - label: Parallel build
+        command: cmake --build build --parallel
+
+  - group: Testing and Install
+    items:
+      - label: Run tests
+        command: ctest --test-dir build --output-on-failure
+      - label: Run one test by regex
+        command: ctest --test-dir build -R api
+      - label: Verbose test output
+        command: ctest --test-dir build -V
+      - label: Repeat until fail
+        command: ctest --test-dir build --repeat until-fail:20
+      - label: Install
+        command: cmake --install build
+      - label: Install with prefix
+        command: cmake --install build --prefix /tmp/app
+
+  - group: Diagnostics and Presets
+    items:
+      - label: Trace configure execution
+        command: cmake -S . -B build --trace-expand
+      - label: List presets
+        command: cmake --list-presets
+      - label: Configure with preset
+        command: cmake --preset debug
+      - label: Build with preset
+        command: cmake --build --preset debug
+      - label: Graphviz dependency graph
+        command: cmake --graphviz=graph.dot build
+      - label: Cache entries
+        command: cmake -LAH -S . -B build
+
+  - group: Handy Snippets
+    items:
+      - label: Minimal project
+        command: |
+          cmake_minimum_required(VERSION 3.25)
+          project(app LANGUAGES CXX)
+          
+          add_executable(app src/main.cpp)
+      - label: Set standard
+        command: |
+          set(CMAKE_CXX_STANDARD 20)
+          set(CMAKE_CXX_STANDARD_REQUIRED ON)
+      - label: Add include path and library
+        command: |
+          target_include_directories(app PRIVATE include)
+          target_link_libraries(app PRIVATE mylib)
+      - label: Add test
+        command: |
+          enable_testing()
+          add_test(NAME app_tests COMMAND app_tests)
+      - label: Option flag
+        command: |
+          option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
+
+  - group: Common Concepts
+    items:
+      - label: Configure vs build
+        value: CMake first generates the build system, then a backend tool such as Ninja or Make performs the actual build
+      - label: Out-of-tree builds
+        value: "Keep generated artifacts in `build/` rather than polluting the source tree"
+      - label: Cache
+        value: "`CMakeCache.txt` stores configuration choices and can preserve surprising values between runs"
+      - label: Targets-first style
+        value: Modern CMake favors target-specific include paths, compile options, and links over global variables
+      - label: Presets
+        value: "`CMakePresets.json` is the cleanest way to standardize common configure and build workflows"

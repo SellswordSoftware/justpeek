@@ -1,0 +1,84 @@
+name: make
+group: build tools
+process:
+  - make
+  - gmake
+search_terms:
+  - makefile
+  - phony
+  - variables
+  - parallel build
+references:
+  - group: Running Targets
+    items:
+      - label: Default target
+        command: make
+      - label: Run one target
+        command: make test
+      - label: Parallel build
+        command: make -j8
+      - label: Dry run
+        command: make -n
+      - label: Print commands
+        command: make --debug=v
+      - label: Keep going after errors
+        command: make -k
+      - label: Override variable
+        command: make CFLAGS="-O0 -g"
+
+  - group: File and Dependency Behavior
+    items:
+      - label: Rebuild regardless of timestamps
+        command: make -B
+      - label: Touch targets
+        command: make -t
+      - label: Print database
+        command: make -p
+      - label: Change directory
+        command: make -C subdir
+      - label: Warn on undefined vars
+        command: make --warn-undefined-variables
+      - label: Ignore built-ins
+        command: make -rR
+
+  - group: Handy Snippets
+    items:
+      - label: Basic Makefile
+        command: |
+          app: main.o util.o
+          	cc main.o util.o -o app
+          
+          main.o: main.c util.h
+          	cc -c main.c
+          
+          util.o: util.c util.h
+          	cc -c util.c
+      - label: Phony target
+        command: |
+          .PHONY: test clean
+          
+          test:
+          	pytest
+      - label: Variables
+        command: |
+          CC := gcc
+          CFLAGS := -Wall -Wextra -O2
+      - label: Pattern rule
+        command: |
+          %.o: %.c
+          	$(CC) $(CFLAGS) -c $< -o $@
+      - label: Auto variables
+        value: "$@ target, $< first prerequisite, $^ all prerequisites"
+
+  - group: Common Concepts
+    items:
+      - label: Tabs matter
+        value: Recipe lines must start with a tab unless the file changes the recipe prefix explicitly
+      - label: Phony targets
+        value: Use `.PHONY` for commands like clean, test, format, and dev that are not real files
+      - label: Timestamp model
+        value: make decides whether to rebuild by comparing target and prerequisite modification times
+      - label: Variable style
+        value: "`:=` expands now, `=` expands later; using the wrong one can create confusing behavior"
+      - label: Best fit
+        value: Thin orchestration layer for builds and dev tasks, especially in mixed-language repos

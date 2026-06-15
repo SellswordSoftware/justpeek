@@ -1,0 +1,124 @@
+name: SQLite
+group: database
+process:
+  - sqlite3
+search_terms:
+  - sqlite
+  - sqlite3
+  - pragma
+  - .schema
+  - .mode
+references:
+  - group: Open and Session
+    items:
+      - label: Open database file
+        command: sqlite3 app.db
+      - label: Open in-memory database
+        command: "sqlite3 :memory:"
+      - label: Show help
+        command: .help
+      - label: Show database list
+        command: .databases
+      - label: Quit shell
+        command: .quit
+      - label: Show SQLite version
+        command: SELECT sqlite_version();
+      - label: Enable headers
+        command: .headers on
+
+  - group: Shell Commands
+    items:
+      - label: Show schema
+        command: .schema
+      - label: Show one table schema
+        command: .schema users
+      - label: List tables
+        command: .tables
+      - label: Change output mode to column
+        command: .mode column
+      - label: Change output mode to box
+        command: .mode box
+      - label: Time queries
+        command: .timer on
+      - label: Read SQL from file
+        command: .read schema.sql
+      - label: Show indexes
+        command: .indexes users
+
+  - group: Schema and Data Basics
+    items:
+      - label: Create table
+        command: |
+          CREATE TABLE users (
+              id INTEGER PRIMARY KEY,
+              email TEXT NOT NULL UNIQUE,
+              created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+          );
+      - label: Add column
+        command: ALTER TABLE users ADD COLUMN name TEXT;
+      - label: Rename table
+        command: ALTER TABLE users RENAME TO app_users;
+      - label: Insert row
+        command: |
+          INSERT INTO users (email) VALUES ('sam@example.com');
+      - label: Upsert
+        command: |
+          INSERT INTO users (email)
+          VALUES ('sam@example.com')
+          ON CONFLICT(email) DO UPDATE SET email = excluded.email;
+      - label: Transaction
+        command: |
+          BEGIN;
+          UPDATE users SET name = 'Sam' WHERE id = 1;
+          COMMIT;
+      - label: Foreign keys on
+        command: PRAGMA foreign_keys = ON;
+
+  - group: Import Export and Files
+    items:
+      - label: Import CSV
+        command: |
+          .mode csv
+          .import users.csv users
+      - label: Export query to CSV
+        command: |
+          .headers on
+          .mode csv
+          .once users.csv
+          SELECT * FROM users ORDER BY id;
+      - label: Backup database
+        command: .backup app-backup.db
+      - label: Restore from backup file copy
+        value: SQLite databases are single files, so backup and restore can often be handled as file-copy operations when the DB is closed
+      - label: Vacuum file
+        command: VACUUM;
+      - label: Integrity check
+        command: PRAGMA integrity_check;
+
+  - group: Pragmas and Introspection
+    items:
+      - label: Show table info
+        command: PRAGMA table_info(users);
+      - label: Show foreign keys
+        command: PRAGMA foreign_key_list(users);
+      - label: Show journal mode
+        command: PRAGMA journal_mode;
+      - label: Enable WAL mode
+        command: PRAGMA journal_mode = WAL;
+      - label: Show cache size
+        command: PRAGMA cache_size;
+      - label: Analyze query plan
+        command: EXPLAIN QUERY PLAN SELECT * FROM users WHERE email = 'sam@example.com';
+
+  - group: Common Concepts
+    items:
+      - label: Serverless database
+        value: SQLite is a library and file format, not a client-server database, so deployment and concurrency assumptions differ from Postgres or MySQL
+      - label: INTEGER PRIMARY KEY
+        value: "`INTEGER PRIMARY KEY` is special and aliases the internal rowid unless the table is created `WITHOUT ROWID`"
+      - label: Pragmas
+        value: "`PRAGMA` statements control many operational behaviors such as foreign keys, journal mode, cache settings, and integrity checks"
+      - label: WAL mode
+        value: Write-ahead logging usually improves read concurrency, but it changes file behavior and operational expectations
+      - label: Shell dot commands
+        value: "`.schema`, `.tables`, `.mode`, `.import`, `.backup`, and `.read` are the highest-value interactive shell commands"

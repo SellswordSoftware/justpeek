@@ -1,0 +1,106 @@
+name: PowerPoint
+group: office apps
+process:
+  - POWERPNT.EXE
+  - powerpnt.exe
+  - powerpnt
+  - Microsoft PowerPoint
+references:
+  - group: Files and Deck Management
+    items:
+      - label: New presentation
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open presentation
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Save as
+        keys: F12
+        keys_by_os:
+          macos: Cmd+Shift+S
+      - label: Print
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Start presentation from beginning
+        keys: F5
+      - label: Start presentation from current slide
+        keys: Shift+F5
+
+  - group: Slides and Layout
+    items:
+      - label: New slide
+        keys: Ctrl+M
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: Duplicate selected object or slide
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Change slide layout
+        keys: Alt+H then L
+      - label: Promote or demote bullet level
+        keys: Alt+Shift+LeftArrow / Alt+Shift+RightArrow
+      - label: Move slide up or down in outline
+        keys: Ctrl+Up / Ctrl+Down
+      - label: Open presenter view
+        notes: Presenter View is the default fit for notes, timer, and next-slide preview on dual displays.
+
+  - group: Formatting and Objects
+    items:
+      - label: Bold
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Italic
+        keys: Ctrl+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Group selected objects
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: Ungroup selected objects
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Cmd+Shift+G
+      - label: Align objects
+        notes: Use Shape Format > Align for slide-safe distribution and edge alignment.
+      - label: Nudge selected object
+        keys: Arrow keys
+      - label: Fine nudge selected object
+        keys: Ctrl+Arrow keys
+        keys_by_os:
+          macos: Cmd+Arrow keys
+
+  - group: Presentation Delivery
+    items:
+      - label: Next animation or slide
+        keys: N or Space or RightArrow
+      - label: Previous animation or slide
+        keys: P or Backspace or LeftArrow
+      - label: Black screen toggle
+        keys: B
+      - label: White screen toggle
+        keys: W
+      - label: Pen tool
+        keys: Ctrl+P
+      - label: Laser pointer
+        keys: Ctrl+L
+      - label: End slide show
+        keys: Escape
+
+  - group: Common Reference
+    items:
+      - label: Presenter notes fit
+        value: Use notes for speaker prompts, links, and timings that should not appear on slides
+      - label: Slide size check
+        value: Confirm aspect ratio before heavy layout work to avoid late-stage resizing
+      - label: Export options
+        value: PDF for distribution, video for passive playback, PPTX for live editing

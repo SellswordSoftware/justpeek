@@ -29,7 +29,7 @@ references:
         notes: Change directories while saving the previous location on the directory stack.
       - label: Pop directory from stack
         command: popd
-        notes: Return to the most recent `pushd` location.
+        notes: "Return to the most recent `pushd` location."
       - label: Show directory stack
         command: dirs -v
         notes: List indexed stack entries for quick stack navigation.
@@ -41,7 +41,7 @@ references:
     items:
       - label: Set a shell variable
         command: name="value"
-        notes: No spaces around `=` for shell assignment syntax.
+        notes: "No spaces around `=` for shell assignment syntax."
       - label: Export a variable
         command: export NAME=value
         notes: Make the variable available to child processes.
@@ -68,7 +68,7 @@ references:
           for file in "${files[@]}"; do
             echo "$file"
           done
-        notes: Quoted `"${files[@]}"` preserves array element boundaries.
+        notes: "Quoted `\"${files[@]}\"` preserves array element boundaries."
       - label: Iterate command output safely
         command: |
           while IFS= read -r line; do
@@ -88,16 +88,16 @@ references:
             n|N) echo "no" ;;
             *) echo "unknown" ;;
           esac
-        notes: Clear pattern-matching alternative to long `if` chains.
+        notes: "Clear pattern-matching alternative to long `if` chains."
 
   - group: Conditionals and Tests
     items:
       - label: Test file existence
         command: '[ -f "$path" ]'
-        notes: Use `-d` for directories and `-e` for any path.
+        notes: "Use `-d` for directories and `-e` for any path."
       - label: String comparison
         command: '[[ "$left" == "$right" ]]'
-        notes: `[[ ... ]]` is safer than `[` for pattern matching and quoting edge cases.
+        notes: "`[[ ... ]]` is safer than `[` for pattern matching and quoting edge cases."
       - label: Numeric comparison
         command: '(( count > 10 ))'
         notes: Arithmetic contexts avoid quoting noise for integer comparisons.
@@ -115,13 +115,13 @@ references:
           greet() {
             echo "hello $1"
           }
-        notes: `$1`, `$2`, and `$@` expose positional parameters inside functions.
+        notes: "`$1`, `$2`, and `$@` expose positional parameters inside functions."
       - label: Return an error from a function
         command: |
           do_work() {
             [[ -f "$1" ]] || return 1
           }
-        notes: `return` sets the function exit status without leaving the shell.
+        notes: "`return` sets the function exit status without leaving the shell."
       - label: Trap on shell exit
         command: trap 'rm -f "$tmpfile"' EXIT
         notes: Reliable cleanup pattern for temporary files.

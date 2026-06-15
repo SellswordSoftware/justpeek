@@ -1,0 +1,94 @@
+name: Gmail Web
+group: office apps
+process:
+  - google-chrome
+  - chrome
+  - chrome.exe
+  - firefox
+  - firefox-bin
+  - msedge
+  - msedge.exe
+  - brave
+  - brave-browser
+title_contains: Gmail
+references:
+  - group: Keyboard Shortcut Setup
+    items:
+      - label: Enable shortcuts
+        notes: Gmail shortcuts only work fully after enabling Keyboard shortcuts in Settings.
+      - label: Show shortcut help
+        keys: Shift+QuestionMark
+      - label: Open search
+        keys: Slash
+        notes: Focus the search box from almost anywhere in Gmail.
+
+  - group: Mail Triage
+    items:
+      - label: Compose
+        keys: C
+      - label: Reply
+        keys: R
+      - label: Reply all
+        keys: A
+      - label: Forward
+        keys: F
+      - label: Archive
+        keys: E
+      - label: Delete
+        keys: Hash
+      - label: Mark unread
+        keys: Shift+U
+      - label: Snooze
+        keys: B
+
+  - group: Navigation and Conversation
+    items:
+      - label: Newer or older conversation
+        keys: K / J
+      - label: Next or previous inbox section
+        keys: Grave / Tilde then Tab behavior depends on layout
+        notes: For most users, `j` and `k` are the reliable movement keys inside message lists.
+      - label: Open conversation
+        keys: Enter or O
+      - label: Back to thread list
+        keys: U
+      - label: Go to inbox
+        keys: G then I
+      - label: Go to sent
+        keys: G then T
+      - label: Go to drafts
+        keys: G then D
+
+  - group: Search Operators
+    items:
+      - label: From sender
+        value: "from:name@example.com"
+      - label: To recipient
+        value: "to:name@example.com"
+      - label: Subject contains
+        value: "subject:(quarterly review)"
+      - label: Has attachment
+        value: has:attachment
+      - label: Before or after date
+        value: before:2026/06/01 after:2026/06/01
+      - label: Category or label
+        value: "category:updates or label:finance"
+      - label: Unread high signal search
+        value: "is:unread newer_than:7d -category:promotions"
+
+  - group: Common Workflows
+    items:
+      - label: Star conversation
+        keys: S
+      - label: Mute thread
+        keys: M
+      - label: Add or remove label
+        keys: V
+      - label: Move conversation
+        keys: Y
+      - label: Insert link in compose
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Schedule send
+        notes: Use the send dropdown when delivery timing matters across time zones or working hours.

@@ -8,7 +8,7 @@ references:
         notes: Canonical fuzzy selector pattern for choosing from command output.
       - label: Multi-select results
         command: find . -type f | fzf -m
-        notes: `-m` enables tab-select and returns multiple lines.
+        notes: "`-m` enables tab-select and returns multiple lines."
       - label: Reverse layout
         command: find . -type f | fzf --layout=reverse
         notes: Common layout that keeps the prompt near the bottom of the terminal.
@@ -81,16 +81,16 @@ references:
         notes: Dynamic reload turns fzf into an interactive frontend for another tool.
       - label: Open selected file in editor
         command: fzf --bind 'enter:become(nvim {})'
-        notes: `become(...)` replaces fzf with another process directly.
+        notes: "`become(...)` replaces fzf with another process directly."
       - label: Execute action without leaving
         command: fzf --bind 'ctrl-o:execute(code {})'
-        notes: `execute(...)` runs a command and returns to the selector afterward.
+        notes: "`execute(...)` runs a command and returns to the selector afterward."
       - label: Print selected field
         command: ps -ef | fzf --with-nth=8.. --delimiter=' ' 
         notes: Narrow the visible match region to more meaningful columns.
       - label: Use fzf as a walker
         command: fzf --walker=file,dir,follow,hidden
-        notes: Newer built-in walker mode can replace external `find` for many cases.
+        notes: "Newer built-in walker mode can replace external `find` for many cases."
 
   - group: Environment Variables and Defaults
     items:

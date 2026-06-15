@@ -1,0 +1,97 @@
+name: Jest
+group: testing tools
+process:
+  - jest
+  - node
+  - npm
+  - pnpm
+  - yarn
+search_terms:
+  - jest watch
+  - mock
+  - snapshot
+  - coverage
+references:
+  - group: Running Tests
+    items:
+      - label: Run all tests
+        command: npx jest
+      - label: Watch mode
+        command: npx jest --watch
+      - label: Coverage
+        command: npx jest --coverage
+      - label: Run one file
+        command: npx jest src/app.test.ts
+      - label: Filter by test name
+        command: npx jest -t "user flow"
+      - label: Update snapshots
+        command: npx jest -u
+      - label: Run serially
+        command: npx jest --runInBand
+
+  - group: Selection and Debugging
+    items:
+      - label: Only changed files
+        command: npx jest -o
+      - label: Related tests
+        command: npx jest --findRelatedTests src/app.ts
+      - label: List tests
+        command: npx jest --listTests
+      - label: Detect open handles
+        command: npx jest --detectOpenHandles
+      - label: Log heap usage
+        command: npx jest --logHeapUsage
+      - label: Clear cache
+        command: npx jest --clearCache
+      - label: Debug in Node inspector
+        command: node --inspect-brk ./node_modules/.bin/jest --runInBand
+
+  - group: Mocks and Timers
+    items:
+      - label: Mock one function
+        value: "`jest.fn()`"
+      - label: Mock one module
+        value: "`jest.mock(\"./api\")`"
+      - label: Fake timers
+        value: "`jest.useFakeTimers()`"
+      - label: Advance timers
+        value: "`jest.advanceTimersByTime(ms)`"
+      - label: Clear mocks
+        value: "`jest.clearAllMocks()`"
+      - label: Reset modules
+        value: "`jest.resetModules()`"
+
+  - group: Handy Snippets
+    items:
+      - label: Basic test
+        command: |
+          test("adds numbers", () => {
+            expect(1 + 2).toBe(3);
+          });
+      - label: Async test
+        command: |
+          test("loads data", async () => {
+            const data = await loadData();
+            expect(data.ok).toBe(true);
+          });
+      - label: Mock function
+        command: |
+          const fn = jest.fn();
+          fn("x");
+          expect(fn).toHaveBeenCalledWith("x");
+      - label: Snapshot
+        command: |
+          expect(rendered).toMatchSnapshot();
+
+  - group: Common Concepts
+    items:
+      - label: watch mode
+        value: One of Jest’s strongest loops for large JS repos, especially with changed-file filtering
+      - label: jsdom vs node
+        value: Test environment changes what globals and browser APIs exist
+      - label: Mocking breadth
+        value: Jest provides first-party mocks, spies, timers, and module interception in one tool
+      - label: Snapshot testing
+        value: Useful, but only when snapshot scope stays intentionally small and reviewable
+      - label: Ecosystem fit
+        value: Jest is common in React and Node projects, but newer repos may prefer Vitest for speed and Vite alignment

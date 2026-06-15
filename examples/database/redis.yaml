@@ -1,0 +1,126 @@
+name: Redis
+group: database
+process:
+  - redis-cli
+  - redis-server
+search_terms:
+  - redis
+  - redis-cli
+  - scan
+  - pubsub
+  - ttl
+references:
+  - group: Connect and Session
+    items:
+      - label: Connect local
+        command: redis-cli
+      - label: Connect remote host
+        command: redis-cli -h localhost -p 6379
+      - label: Connect with auth
+        command: redis-cli -h localhost -p 6379 -a secret
+      - label: Connect with URI
+        command: "redis-cli -u redis://default:secret@localhost:6379/0"
+      - label: Ping server
+        command: PING
+      - label: Show selected database
+        command: CLIENT INFO
+      - label: Select database
+        command: SELECT 1
+
+  - group: Key and Value Basics
+    items:
+      - label: Set key
+        command: SET app:name justpeek
+      - label: Get key
+        command: GET app:name
+      - label: Delete key
+        command: DEL app:name
+      - label: Set with expiration
+        command: SET session:123 payload EX 3600
+      - label: Show TTL
+        command: TTL session:123
+      - label: Increment counter
+        command: INCR page:views
+      - label: Check existence
+        command: EXISTS app:name
+
+  - group: Common Data Structures
+    items:
+      - label: Hash set field
+        command: HSET user:1 name Sam email sam@example.com
+      - label: Hash get all fields
+        command: HGETALL user:1
+      - label: Push to list
+        command: LPUSH jobs pending
+      - label: Range from list
+        command: LRANGE jobs 0 -1
+      - label: Add to set
+        command: SADD tags red blue green
+      - label: Show set members
+        command: SMEMBERS tags
+      - label: Sorted set add score
+        command: ZADD leaderboard 100 sam
+      - label: Sorted set range with scores
+        command: ZRANGE leaderboard 0 -1 WITHSCORES
+
+  - group: Search Scan and Keyspace
+    items:
+      - label: Find keys by pattern
+        command: KEYS user:*
+      - label: Safer production scan
+        command: SCAN 0 MATCH user:* COUNT 100
+      - label: Type of key
+        command: TYPE user:1
+      - label: Database size
+        command: DBSIZE
+      - label: Info memory
+        command: INFO memory
+      - label: Info persistence
+        command: INFO persistence
+      - label: Monitor live commands
+        command: MONITOR
+
+  - group: Pub Sub and Streams
+    items:
+      - label: Publish message
+        command: PUBLISH events.sync done
+      - label: Subscribe channel
+        command: SUBSCRIBE events.sync
+      - label: Pattern subscribe
+        command: PSUBSCRIBE events.*
+      - label: Add stream entry
+        command: XADD mystream * event sync status done
+      - label: Read stream
+        command: XREAD COUNT 10 STREAMS mystream 0-0
+      - label: Create consumer group
+        command: XGROUP CREATE mystream workers 0 MKSTREAM
+
+  - group: Persistence Backup and Admin
+    items:
+      - label: Save snapshot
+        command: SAVE
+      - label: Background save
+        command: BGSAVE
+      - label: Rewrite AOF
+        command: BGREWRITEAOF
+      - label: Last save time
+        command: LASTSAVE
+      - label: Config get one setting
+        command: CONFIG GET maxmemory
+      - label: Slow log get
+        command: SLOWLOG GET 10
+      - label: Flush current database
+        command: FLUSHDB
+
+  - group: Common Concepts
+    items:
+      - label: KEYS versus SCAN
+        value: "`KEYS` is convenient for development, but `SCAN` is the safer default for larger or production datasets."
+      - label: Expiration habit
+        value: TTL-bearing keys are central to sessions, rate limits, caches, and background coordination patterns
+      - label: Data structure fit
+        value: Redis value choice matters because strings, hashes, lists, sets, sorted sets, and streams are optimized for different access patterns
+      - label: Persistence modes
+        value: Snapshotting and append-only file persistence trade off durability, write amplification, and recovery behavior
+      - label: Operational smell
+        value: If Redis is acting like a primary relational database, the data model is usually fighting the tool

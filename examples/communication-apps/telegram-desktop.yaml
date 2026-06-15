@@ -1,0 +1,102 @@
+name: Telegram Desktop
+group: communication apps
+process:
+  - telegram-desktop
+  - Telegram
+  - telegram
+search_terms:
+  - telegram desktop
+  - saved messages
+  - telegram search
+  - folders
+  - archived chats
+references:
+  - group: Navigation and Chat List
+    items:
+      - label: Search
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: New message
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Next chat
+        keys: Ctrl+Tab
+      - label: Previous chat
+        keys: Ctrl+Shift+Tab
+      - label: Open settings
+        keys: Ctrl+Comma
+        keys_by_os:
+          macos: Cmd+Comma
+      - label: Archive selected chat
+        keys: Ctrl+Shift+A
+        keys_by_os:
+          macos: Cmd+Shift+A
+      - label: Jump to Saved Messages
+        notes: "UI path: main menu -> `Saved Messages`."
+
+  - group: Messaging and Media
+    items:
+      - label: Send message
+        keys: Enter
+      - label: New line without sending
+        keys: Shift+Enter
+      - label: Edit last outgoing message
+        keys: Up
+        notes: Works when the compose field is empty
+      - label: Reply to selected message
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Forward message
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+      - label: Attach file or media
+        notes: "UI path: compose row attachment button or drag and drop into the chat."
+      - label: Record voice message
+        notes: "UI path: microphone button in the compose row."
+
+  - group: Search and Common Filters
+    items:
+      - label: Search current chat
+        notes: "UI path: in-chat search icon after opening global search."
+      - label: Find media links docs
+        notes: "UI path: chat header -> `Shared Media` for media, files, links, and music."
+      - label: Jump to date
+        notes: "UI path: in-chat search results date picker when available."
+      - label: Filter by sender
+        notes: "UI path: search within a chat or group and narrow through available result filters."
+      - label: Search operators caveat
+        value: Telegram search is more UI-driven than operator-driven, so people usually need feature paths more than query grammar
+      - label: Mention navigation
+        notes: "UI path: unread mentions and replies are usually surfaced from the chat list and in-chat indicators."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Create folder
+        notes: "UI path: `Settings -> Folders`."
+      - label: Proxy settings
+        notes: "UI path: `Settings -> Advanced -> Connection type / Proxy` depending on build."
+      - label: Downloads location
+        notes: "UI path: `Settings -> Advanced -> Download path`."
+      - label: Auto-lock and passcode
+        notes: "UI path: `Settings -> Privacy and Security`."
+      - label: Archived chats
+        notes: "UI path: top of the chat list when archive is enabled."
+      - label: Mute chat
+        notes: "UI path: chat header or right click chat -> mute notifications."
+
+  - group: Common Concepts
+    items:
+      - label: Desktop plus phone parity
+        value: Telegram Desktop shares most core chat behavior with mobile, but settings and media management paths often differ
+      - label: Search behavior
+        value: Search is good for recall, but a lot of discovery still happens through shared media panels, folders, and pinned content
+      - label: Saved Messages
+        value: Saved Messages acts like a personal scratchpad and is one of the most frequently used built-in workflows
+      - label: Folders and archive
+        value: Folder setup and archiving matter a lot once chat volume becomes high
+      - label: Shortcut density
+        value: Telegram Desktop has solid everyday navigation shortcuts, but many admin and privacy features are still menu-driven

@@ -1,0 +1,106 @@
+name: OBS Studio Streaming
+group: gaming / streaming
+process:
+  - obs
+  - obs64.exe
+  - obs-studio
+search_terms:
+  - obs streaming
+  - replay buffer
+  - scene hotkeys
+  - bitrate
+  - studio mode
+references:
+  - group: High-Value Hotkeys
+    items:
+      - label: Start or stop streaming
+        notes: Configure a deliberate hotkey in `Settings -> Hotkeys`; there is no safe universal default to assume.
+      - label: Start or stop recording
+        notes: Configure separately from stream control if local recording runs in parallel.
+      - label: Pause or resume recording
+        notes: Available when recording format and workflow support pausing.
+      - label: Start save or stop replay buffer
+        notes: Replay buffer hotkeys are some of the highest-value streaming bindings for clip capture.
+      - label: Push-to-talk or push-to-mute
+        notes: Configure before live sessions if game audio and room noise compete.
+      - label: Scene switch hotkeys
+        notes: Scene hotkeys are per scene and worth setting intentionally for live switching.
+
+  - group: Studio and Scene Control
+    items:
+      - label: Toggle Studio Mode
+        keys: Ctrl+Shift+S
+      - label: Transition preview to program
+        keys: Space
+        notes: In Studio Mode, this triggers the current transition when the main window has focus
+      - label: Duplicate scene
+        keys: Ctrl+D
+      - label: Rename selected item
+        keys: F2
+      - label: Remove selected source
+        keys: Delete
+      - label: Full-screen projector
+        notes: "UI path: source, preview, or scene context menu -> `Fullscreen Projector`."
+
+  - group: Sources Layout and Capture
+    items:
+      - label: Copy source
+        keys: Ctrl+C
+      - label: Paste source
+        keys: Ctrl+V
+      - label: Paste reference copy
+        keys: Ctrl+Alt+V
+        notes: Useful when one source instance should update everywhere
+      - label: Nudge selected source
+        keys: Arrow keys
+      - label: Fine nudge selected source
+        keys: Ctrl+Arrow keys
+      - label: Fit to screen
+        keys: Ctrl+F
+      - label: Stretch to screen
+        keys: Ctrl+S
+      - label: Center to screen
+        keys: Ctrl+D
+
+  - group: Streaming Settings and Common UI Paths
+    items:
+      - label: Stream key and service
+        notes: "UI path: `Settings -> Stream`."
+      - label: Encoder bitrate and keyframe
+        notes: "UI path: `Settings -> Output -> Streaming`."
+      - label: Canvas and output resolution
+        notes: "UI path: `Settings -> Video`."
+      - label: Audio tracks and monitoring
+        notes: "UI path: mixer gear -> `Advanced Audio Properties`."
+      - label: Recordings path and format
+        notes: "UI path: `Settings -> Output -> Recording`."
+      - label: Dock layout
+        notes: "UI path: `Docks` menu for chat, stats, audio mixer, and custom browser docks."
+
+  - group: Commonly Looked Up Streaming Features
+    items:
+      - label: Replay buffer
+        notes: "UI path: `Settings -> Output -> Replay Buffer`."
+      - label: Automatic reconnect
+        notes: "UI path: `Settings -> Advanced -> Network`."
+      - label: Dynamic bitrate
+        notes: "UI path: `Settings -> Advanced -> Network`."
+      - label: Stats panel
+        notes: "UI path: `View -> Stats`."
+      - label: Audio sync offset
+        notes: "UI path: mixer gear -> `Advanced Audio Properties`."
+      - label: Multitrack streaming caveat
+        value: Service support and plugin setup affect whether multitrack audio or advanced stream routing is available in practice
+
+  - group: Common Concepts
+    items:
+      - label: Streaming differs from recording
+        value: Bitrate stability, reconnect behavior, dropped frames, replay buffer setup, and chat or dock layout matter more in stream workflows than in local recording only
+      - label: Hotkey discipline
+        value: Start stream, mute, push-to-talk, scene switching, and replay buffer bindings are worth standardizing before going live
+      - label: Studio mode utility
+        value: Studio Mode is one of the highest-value safety features because it lets you stage changes before viewers see them
+      - label: Capture validation
+        value: Before going live, validate audio meters, monitoring, scene visibility, output target, and recording path
+      - label: Shortcut density
+        value: OBS supports plenty of direct manipulation shortcuts, but the most important streaming controls are often configured custom hotkeys

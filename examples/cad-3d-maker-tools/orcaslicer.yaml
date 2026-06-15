@@ -1,0 +1,77 @@
+name: OrcaSlicer
+group: cad / 3d / maker tools
+process:
+  - orca-slicer
+  - OrcaSlicer
+  - orcaslicer.exe
+references:
+  - group: File and Workspace
+    items:
+      - label: Add model
+        keys: Ctrl+I
+      - label: Save project
+        keys: Ctrl+S
+      - label: Export plate sliced file
+        keys: Ctrl+G
+      - label: Slice plate
+        keys: Ctrl+R
+      - label: Search settings
+        keys: Ctrl+F
+      - label: Switch device filament process presets
+        notes: Keep all three aligned before assuming a setting change did not apply.
+      - label: Multi-plate awareness
+        value: OrcaSlicer workflows often use multiple plates for print batching or printer-specific splits
+
+  - group: Object Manipulation
+    items:
+      - label: Move
+        keys: M
+      - label: Scale
+        keys: S
+      - label: Rotate
+        keys: R
+      - label: Lay on face
+        keys: F
+      - label: Cut
+        keys: C
+      - label: Arrange all
+        keys: A
+      - label: Delete selection
+        keys: Delete
+      - label: Duplicate selection
+        keys: Ctrl+D
+
+  - group: View and Preview
+    items:
+      - label: Orbit pan zoom
+        keys: LeftMouse drag / Shift+LeftMouse drag / MouseWheel
+      - label: Preview toolpaths
+        notes: Inspect seam placement, travel, sparse infill, bridges, and support contact before exporting.
+      - label: Layer scrub
+        value: Check first layer, internal cavities, top surfaces, and bridging layers
+      - label: Speed and flow preview
+        value: Useful when tuning acceleration, volumetric flow, and input shaping-sensitive prints
+
+  - group: High-value Settings
+    items:
+      - label: Layer height
+        value: Major driver of detail, speed, and print time
+      - label: Wall loops
+        value: Equivalent to perimeter count and strongly affects part strength
+      - label: Infill pattern and density
+        value: Tune for structural needs rather than defaults alone
+      - label: Pressure advance and flow ratio
+        value: Important for dimensionally accurate and clean-extrusion tuning
+      - label: Support type
+        value: Tree or normal support choice changes cleanup, access, and print stability
+      - label: Bridge settings
+        value: Key for long spans, openings, and top-surface cleanliness
+
+  - group: Common Reference
+    items:
+      - label: Calibration focus
+        value: Temperature, flow, pressure advance, max volumetric speed, and retraction are common tuning targets
+      - label: Preview discipline
+        value: Toolpath preview catches many failures earlier than machine-side troubleshooting
+      - label: Plate workflow
+        value: Separate fragile, tall, or material-specific parts into different plates when print risk differs

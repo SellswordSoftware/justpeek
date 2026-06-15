@@ -1,0 +1,115 @@
+name: Lua Toolchain
+group: programming language / toolchain packs
+process:
+  - lua
+  - lua.exe
+  - luajit
+  - luarocks
+search_terms:
+  - luarocks
+  - busted
+  - luacheck
+  - luajit
+references:
+  - group: Runtime and Package Basics
+    items:
+      - label: Show version
+        command: lua -v
+      - label: Run script
+        command: lua main.lua
+      - label: Start REPL
+        command: lua
+      - label: Run with LuaJIT
+        command: luajit main.lua
+      - label: Install package with LuaRocks
+        command: luarocks install luafilesystem
+      - label: Search packages
+        command: luarocks search json
+      - label: Show installed rocks
+        command: luarocks list
+
+  - group: Testing and Quality
+    items:
+      - label: Run Busted tests
+        command: busted
+      - label: Run one test file
+        command: busted spec/app_spec.lua
+      - label: Lint with Luacheck
+        command: luacheck .
+      - label: Format with StyLua
+        command: stylua .
+      - label: Bytecode compile check
+        command: luac -p main.lua
+      - label: Profile with LuaJIT
+        notes: Profiling workflows depend heavily on runtime and embedding environment.
+
+  - group: Modules and Execution
+    items:
+      - label: Require module
+        command: |
+          local util = require("util")
+      - label: Add current dir to package path
+        command: |
+          package.path = package.path .. ";./?.lua"
+      - label: Return module table
+        command: |
+          local M = {}
+          
+          function M.hello()
+            print("hello")
+          end
+          
+          return M
+      - label: Run script with arguments
+        command: lua tool.lua arg1 arg2
+      - label: Iterate args
+        command: |
+          for i, arg in ipairs(arg) do
+            print(i, arg)
+          end
+
+  - group: Handy Snippets
+    items:
+      - label: Function
+        command: |
+          local function add(a, b)
+            return a + b
+          end
+      - label: Table loop
+        command: |
+          for key, value in pairs(tbl) do
+            print(key, value)
+          end
+      - label: Protected call
+        command: |
+          local ok, result = pcall(function()
+            return risky()
+          end)
+      - label: Metatable method style
+        command: |
+          local User = {}
+          User.__index = User
+          
+          function User.new(name)
+            return setmetatable({ name = name }, User)
+          end
+          
+          function User:greet()
+            print("hello " .. self.name)
+          end
+      - label: File read
+        command: |
+          local text = assert(io.open("data.txt", "r")):read("*a")
+
+  - group: Common Concepts
+    items:
+      - label: Tables
+        value: Core data structure for arrays, maps, objects, and modules
+      - label: Metatables
+        value: Enable operator behavior, method dispatch, inheritance-like patterns, and table customization
+      - label: Embedded runtime fit
+        value: Lua is often used inside larger apps or game engines rather than as a standalone deployment target
+      - label: Package ecosystem
+        value: LuaRocks helps, but project conventions still vary more than in heavier ecosystems
+      - label: Lua vs LuaJIT
+        value: LuaJIT can be much faster but has ecosystem and version tradeoffs relative to stock Lua

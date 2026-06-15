@@ -40,10 +40,10 @@ references:
   - group: Objects and Reshaping
     items:
       - label: Build a new object
-        command: jq '{name: .user.name, email: .user.email}' data.json
+        command: "jq '{name: .user.name, email: .user.email}' data.json"
         notes: Construct a new JSON shape from selected source fields.
       - label: Rename keys while projecting
-        command: jq '{id: .user_id, login: .username}' data.json
+        command: "jq '{id: .user_id, login: .username}' data.json"
         notes: Common API normalization pattern.
       - label: Delete a field
         command: jq 'del(.debug)' data.json
@@ -97,7 +97,7 @@ references:
         command: jq '.items | group_by(.team)' data.json
         notes: Input should generally be pre-sorted by the grouping key.
       - label: Reduce to summary object
-        command: jq 'reduce .items[] as $i ({}; .[$i.status] += 1)' data.json
+        command: "jq 'reduce .items[] as $i ({}; .[$i.status] += 1)' data.json"
         notes: Build aggregate objects programmatically from a stream of values.
       - label: Join strings from array
         command: jq -r '.tags | join(", ")' data.json

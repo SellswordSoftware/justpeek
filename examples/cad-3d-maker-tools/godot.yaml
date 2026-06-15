@@ -1,0 +1,205 @@
+name: Godot
+group: cad / 3d / maker tools
+process:
+  - godot
+  - godot4
+  - godot.exe
+  - Godot
+search_terms:
+  - gdscript
+  - scene tree
+  - signals
+  - input map
+references:
+  - group: Project and Global
+    items:
+      - label: New scene
+        keys: Ctrl+N
+      - label: Open scene or resource
+        keys: Ctrl+O
+      - label: Save scene
+        keys: Ctrl+S
+      - label: Save all
+        keys: Ctrl+Shift+S
+      - label: Quick open
+        keys: Ctrl+K
+      - label: Command palette
+        keys: Ctrl+Shift+P
+      - label: Search help
+        keys: Shift+F1
+      - label: Editor settings
+        notes: "UI path: `Editor > Editor Settings`."
+
+  - group: Running and Debugging
+    items:
+      - label: Play current scene
+        keys: F6
+      - label: Play main project
+        keys: F5
+      - label: Stop running scene
+        keys: F8
+      - label: Step through debugger
+        notes: "UI path: Debugger panel during a running session."
+      - label: Set breakpoints
+        notes: Click gutter in script editor or use the script context menu.
+      - label: Remote scene tree
+        notes: "UI path: Scene dock > switch from `Local` to `Remote` while the game is running."
+      - label: Output and debugger panels
+        notes: Watch errors, prints, warnings, stack traces, and monitors while iterating.
+
+  - group: Scene and Node Editing
+    items:
+      - label: Add child node
+        keys: Ctrl+A
+        notes: "UI path: Scene dock > plus button > `Add Child Node`."
+      - label: Instance scene
+        keys: Ctrl+Shift+A
+        notes: "UI path: Scene dock > chain-link icon > `Instantiate Child Scene`."
+      - label: Rename node
+        keys: F2
+      - label: Duplicate node
+        keys: Ctrl+D
+      - label: Reparent node
+        keys: Ctrl+Shift+R
+      - label: Move node up or down
+        keys: Ctrl+UpArrow / Ctrl+DownArrow
+      - label: Expand or collapse branches
+        keys: Shift+LeftArrow / Shift+RightArrow
+      - label: Make node root of edited scene
+        notes: "UI path: Scene dock context menu > `Make Scene Root` when reorganizing scene structure."
+
+  - group: 2D and 3D Viewport
+    items:
+      - label: Move rotate scale
+        keys: W / E / R
+      - label: Focus selection
+        keys: F
+      - label: Pan viewport
+        keys: MiddleMouse drag
+      - label: Zoom
+        keys: MouseWheel
+      - label: Snap toggle
+        keys: Y
+      - label: Use local space
+        keys: T
+      - label: Smart snap grid options
+        notes: "UI path: top toolbar of 2D or 3D viewport > snap magnet and grid controls."
+      - label: 2D anchors and layout presets
+        notes: "UI path: toolbar above 2D viewport or Control node toolbar for anchors, offsets, and container-friendly layout."
+
+  - group: Script Editor
+    items:
+      - label: Search in file
+        keys: Ctrl+F
+      - label: Search across files
+        keys: Ctrl+Shift+F
+      - label: Replace in file
+        keys: Ctrl+R
+      - label: Go to line
+        keys: Ctrl+L
+      - label: Toggle comment
+        keys: Ctrl+Slash
+      - label: Auto-indent
+        keys: Ctrl+I
+      - label: Format or cleanup
+        notes: Use built-in formatting support or project tooling if configured.
+      - label: Script templates
+        notes: "UI path: create or attach script > template chooser in the script creation dialog."
+
+  - group: Inspector and Common UI Paths
+    items:
+      - label: Connect signal
+        notes: "UI path: select node > Node dock > Signals tab > double-click signal or press `Connect`."
+      - label: Groups
+        notes: "UI path: select node > Node dock > Groups tab."
+      - label: Input actions
+        notes: "UI path: `Project > Project Settings > Input Map`."
+      - label: Autoload singleton
+        notes: "UI path: `Project > Project Settings > Globals > Autoload`."
+      - label: Export presets
+        notes: "UI path: `Project > Export`."
+      - label: Physics layers and masks
+        notes: Inspector on physics bodies and areas; frequently paired with project-wide collision debugging.
+      - label: TileMap and TileSet editing
+        notes: "UI path: select `TileMap` node > bottom panel editors and TileSet resource inspector."
+
+  - group: GDScript Snippets
+    items:
+      - label: Node ready and process
+        command: |
+          extends Node
+          
+          func _ready() -> void:
+              print("Ready")
+          
+          func _process(delta: float) -> void:
+              pass
+      - label: Input action check
+        command: |
+          func _physics_process(delta: float) -> void:
+              var direction := Input.get_axis("move_left", "move_right")
+              position.x += direction * 200.0 * delta
+      - label: Signal connection in code
+        command: |
+          func _ready() -> void:
+              $Button.pressed.connect(_on_button_pressed)
+          
+          func _on_button_pressed() -> void:
+              print("Pressed")
+      - label: Await timer
+        command: |
+          func flash() -> void:
+              visible = false
+              await get_tree().create_timer(0.1).timeout
+              visible = true
+      - label: Load and instantiate scene
+        command: |
+          var packed_scene := preload("res://enemy.tscn")
+          
+          func spawn_enemy() -> void:
+              var enemy := packed_scene.instantiate()
+              add_child(enemy)
+      - label: Exported variables
+        command: |
+          @export var speed: float = 250.0
+          @export var target: NodePath
+
+  - group: Common Concepts
+    items:
+      - label: Scene and node model
+        value: Scenes are reusable node trees; composition is the core architectural pattern.
+      - label: Signals
+        value: Preferred decoupling mechanism for UI, gameplay events, and editor-friendly event wiring.
+      - label: Physics process vs process
+        value: Use `_physics_process` for fixed-step motion and collision-sensitive logic; `_process` for frame-rate-driven updates.
+      - label: PackedScene
+        value: Reusable serialized scene resource used for instancing gameplay objects and UI.
+      - label: Autoloads
+        value: Project-wide singletons for state, services, event buses, or save systems when used carefully.
+      - label: Resources
+        value: Serializable data containers useful for configs, items, stats, dialog data, and authored content.
+
+  - group: Handy Snippets
+    items:
+      - label: Basic CharacterBody2D movement
+        command: |
+          extends CharacterBody2D
+          
+          @export var speed: float = 250.0
+          
+          func _physics_process(delta: float) -> void:
+              var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+              velocity = input_vector * speed
+              move_and_slide()
+      - label: Save JSON to user data
+        command: |
+          func save_settings(data: Dictionary) -> void:
+              var file := FileAccess.open("user://settings.json", FileAccess.WRITE)
+              file.store_string(JSON.stringify(data))
+      - label: Read JSON from user data
+        command: |
+          func load_settings() -> Dictionary:
+              if not FileAccess.file_exists("user://settings.json"):
+                  return {}
+              var text := FileAccess.get_file_as_string("user://settings.json")
+              return JSON.parse_string(text) if text != "" else {}

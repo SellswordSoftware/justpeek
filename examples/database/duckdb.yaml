@@ -1,0 +1,137 @@
+name: DuckDB
+group: database
+process:
+  - duckdb
+search_terms:
+  - duckdb
+  - parquet
+  - read_csv_auto
+  - read_parquet
+  - copy
+references:
+  - group: Open and Session
+    items:
+      - label: Open database file
+        command: duckdb analytics.duckdb
+      - label: Open in-memory session
+        command: duckdb
+      - label: Run one query
+        command: "duckdb analytics.duckdb -c \"SELECT 1;\""
+      - label: Read SQL file
+        command: duckdb analytics.duckdb < queries.sql
+      - label: Show help
+        command: .help
+      - label: Show tables
+        command: .tables
+      - label: Quit shell
+        command: .quit
+
+  - group: File-Centric Analytics
+    items:
+      - label: Query CSV directly
+        command: |
+          SELECT *
+          FROM read_csv_auto('events.csv')
+          LIMIT 20;
+      - label: Query Parquet directly
+        command: |
+          SELECT *
+          FROM read_parquet('events.parquet')
+          LIMIT 20;
+      - label: Query many Parquet files
+        command: |
+          SELECT count(*)
+          FROM read_parquet('data/*.parquet');
+      - label: Create table from CSV
+        command: |
+          CREATE TABLE events AS
+          SELECT *
+          FROM read_csv_auto('events.csv');
+      - label: Create table from Parquet
+        command: |
+          CREATE TABLE events AS
+          SELECT *
+          FROM read_parquet('events.parquet');
+      - label: Describe inferred schema
+        command: DESCRIBE SELECT * FROM read_csv_auto('events.csv');
+
+  - group: Table and Query Basics
+    items:
+      - label: Create table
+        command: |
+          CREATE TABLE users (
+            id BIGINT,
+            email VARCHAR,
+            created_at TIMESTAMP
+          );
+      - label: Insert rows
+        command: |
+          INSERT INTO users VALUES
+            (1, 'sam@example.com', now()),
+            (2, 'lee@example.com', now());
+      - label: Create index
+        command: CREATE INDEX idx_users_email ON users(email);
+      - label: Order and limit
+        command: SELECT * FROM users ORDER BY created_at DESC LIMIT 20;
+      - label: Group and aggregate
+        command: |
+          SELECT date_trunc('day', created_at) AS day, count(*) AS total
+          FROM users
+          GROUP BY 1
+          ORDER BY 1;
+      - label: Window function
+        command: |
+          SELECT
+            email,
+            row_number() OVER (ORDER BY created_at DESC) AS rn
+          FROM users;
+
+  - group: Import Export and Interop
+    items:
+      - label: Export query to Parquet
+        command: |
+          COPY (
+            SELECT * FROM users
+          ) TO 'users.parquet' (FORMAT PARQUET);
+      - label: Export query to CSV
+        command: |
+          COPY (
+            SELECT * FROM users
+          ) TO 'users.csv' (HEADER, DELIMITER ',');
+      - label: Import CSV into table
+        command: |
+          COPY users FROM 'users.csv' (AUTO_DETECT TRUE, HEADER TRUE);
+      - label: Attach another database
+        command: ATTACH 'other.duckdb' AS otherdb;
+      - label: Query attached database
+        command: SELECT * FROM otherdb.main.users LIMIT 10;
+      - label: Install extension
+        command: INSTALL httpfs;
+
+  - group: Introspection and Performance
+    items:
+      - label: Load extension
+        command: LOAD httpfs;
+      - label: Show schema
+        command: DESCRIBE users;
+      - label: Show create-like metadata
+        command: PRAGMA table_info('users');
+      - label: Explain plan
+        command: EXPLAIN SELECT * FROM users WHERE email = 'sam@example.com';
+      - label: Analyze query
+        command: EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'sam@example.com';
+      - label: Summarize table
+        command: SUMMARIZE users;
+
+  - group: Common Concepts
+    items:
+      - label: OLAP-first fit
+        value: DuckDB is optimized for local analytics and columnar query workloads rather than high-concurrency transactional serving
+      - label: Query files directly
+        value: CSV, Parquet, and other file formats can often be queried without an explicit load step, which is one of DuckDB's biggest strengths
+      - label: Extension habit
+        value: "Extensions such as `httpfs` are common when reading remote files, object storage paths, or broader ecosystem formats"
+      - label: Embedded analytics
+        value: DuckDB fits well inside scripts, notebooks, apps, and local pipelines where shipping a separate server would be unnecessary overhead
+      - label: Common lookup
+        value: "`read_csv_auto`, `read_parquet`, `COPY`, `ATTACH`, `SUMMARIZE`, and `EXPLAIN ANALYZE` are some of the highest-value commands to keep nearby"

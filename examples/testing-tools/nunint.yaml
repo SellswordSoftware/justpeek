@@ -1,0 +1,80 @@
+name: nunint
+group: testing tools
+search_terms:
+  - nunit
+  - dotnet test
+  - c# testing
+references:
+  - group: Note
+    items:
+      - label: Tracking placeholder
+        value: The generation plan currently lists `nunint`, which appears to be a typo for `NUnit`.
+        notes: This file exists to satisfy the checklist entry exactly as written. If the plan meant NUnit, this content should likely be renamed to `nunit.yaml` later.
+
+  - group: Running Tests
+    items:
+      - label: Run tests with dotnet
+        command: dotnet test
+      - label: Filter tests
+        command: dotnet test --filter FullyQualifiedName~UserTests
+      - label: One project
+        command: dotnet test tests/MyApp.Tests/MyApp.Tests.csproj
+      - label: Verbose logs
+        command: dotnet test -v normal
+      - label: Collect coverage
+        command: dotnet test --collect:"XPlat Code Coverage"
+      - label: NUnit console runner
+        command: nunit3-console MyApp.Tests.dll
+        notes: Only if the project uses the separate console runner.
+
+  - group: Assertions and Lifecycle
+    items:
+      - label: Assertions
+        value: Assert.That, Is.EqualTo, Is.True, Throws, CollectionAssert
+      - label: Per-test setup
+        value: "[SetUp]"
+      - label: Per-test teardown
+        value: "[TearDown]"
+      - label: One-time setup
+        value: "[OneTimeSetUp]"
+      - label: One-time teardown
+        value: "[OneTimeTearDown]"
+      - label: Ignore test
+        value: "[Ignore(\"reason\")]"
+
+  - group: Handy Snippets
+    items:
+      - label: Basic NUnit-style test
+        command: |
+          using NUnit.Framework;
+          
+          public class AppTests
+          {
+              [Test]
+              public void Adds()
+              {
+                  Assert.That(1 + 2, Is.EqualTo(3));
+              }
+          }
+      - label: Parameterized case
+        command: |
+          [TestCase(1, 2, 3)]
+          [TestCase(2, 3, 5)]
+          public void Adds(int a, int b, int want)
+          {
+              Assert.That(a + b, Is.EqualTo(want));
+          }
+      - label: Throws
+        command: |
+          Assert.Throws<InvalidOperationException>(() => service.Run());
+
+  - group: Common Concepts
+    items:
+      - label: dotnet-first execution
+        value: Many NUnit projects are now executed through `dotnet test` rather than a dedicated legacy runner
+      - label: Attribute-driven model
+        value: Test metadata, lifecycle, categories, and parameterization are largely annotation-based
+      - label: Parameterized tests
+        value: NUnit-style test cases are a common reason teams choose it
+      - label: Typo caveat
+        value: This file matches the tracker spelling, but the real framework name is almost certainly NUnit

@@ -1,0 +1,593 @@
+name: Svelte
+group: web / devops / app tools
+process:
+  - node
+title_contains: svelte
+search_terms:
+  - sveltejs
+  - svelte 5
+  - runes
+  - sveltekit
+  - compile-time
+references:
+  - group: Project Setup
+    items:
+      - label: Create new project
+        command: npm create svelte@latest my-app
+      - label: Create with SvelteKit
+        command: npm create svelte@latest my-app -- --template sveltekit
+      - label: Create with minimal template
+        command: npm create svelte@latest my-app -- --template minimal
+      - label: Create with TypeScript
+        command: npm create svelte@latest my-app -- --template typescript
+      - label: Create with everything
+        command: npm create svelte@latest my-app -- --template everything
+
+  - group: Development
+    items:
+      - label: Start dev server
+        command: npm run dev
+      - label: Start on specific port
+        command: npm run dev -- --port 3000
+      - label: Open browser automatically
+        command: npm run dev -- --open
+      - label: Production build
+        command: npm run build
+      - label: Preview production build
+        command: npm run preview
+      - label: Check types (Svelte 5)
+        command: npx svelte-check
+      - label: Lint
+        command: npm run lint
+
+  - group: Svelte 5 Runes
+    items:
+      - label: $state
+        command: |
+          <script>
+          let count = $state(0)
+          let name = $state('Svelte')
+          </script>
+          
+          <button onclick={() => count++}>
+            Count: {count}
+          </button>
+        notes: "Fine-grained reactivity. Replaces `let x = writable()` from Svelte 4."
+      - label: $derived
+        command: |
+          <script>
+          let count = $state(0)
+          let double = $derived(count * 2)
+          let message = $derived(count > 0 ? 'Active' : 'Idle')
+          </script>
+        notes: "Replaces Svelte 4 derived syntax"
+      - label: $derived.by
+        command: |
+          <script>
+          let items = $state([])
+          const counts = $derived.by(() => {
+            const result = {}
+            for (const item of items) {
+              result[item.category] = (result[item.category] || 0) + 1
+            }
+            return result
+          })
+          </script>
+        notes: "For complex derived values with side-effect-free transformations"
+      - label: $effect
+        command: |
+          <script>
+          let count = $state(0)
+          
+          $effect(() => {
+            document.title = `Count: ${count}`
+            return () => console.log('Cleanup')
+          })
+          </script>
+        notes: "Replaces afterUpdate/beforeUpdate. Runs after DOM update."
+      - label: $effect.pre
+        command: |
+          <script>
+          let value = $state(0)
+          
+          $effect.pre(() => {
+            console.log('Value is now:', value)
+          })
+          </script>
+        notes: "Runs BEFORE DOM update, unlike $effect"
+      - label: $inspect
+        command: |
+          <script>
+          let count = $state(0)
+          $inspect(count)
+          </script>
+        notes: "Development-only debugging. Logs reactive changes to browser console."
+      - label: $props
+        command: |
+          <script>
+          let { name, count = 0 } = $props()
+          </script>
+        notes: "Replaces `export let` from Svelte 4"
+      - label: $bindable
+        command: |
+          <!-- Parent -->
+          <script>
+          let value = $state('hello')
+          </script>
+          <Child bind:value />
+          
+          <!-- Child -->
+          <script>
+          let { value = $bindable('default') } = $props()
+          </script>
+          <input bind:value />
+      - label: $state.frozen
+        command: |
+          <script>
+          let state = $state.frozen({ user: null, loading: true })
+          
+          // Must replace entire state
+          state = { user: { name: 'Alice' }, loading: false }
+          </script>
+        notes: "Immutable state that must be replaced entirely. Enables optimizations."
+
+  - group: Template Syntax
+    items:
+      - label: Text interpolation
+        command: |
+          <h1>Hello, {name}!</h1>
+      - label: If blocks
+        command: |
+          {#if condition}
+            <p>True</p>
+          {:else if other}
+            <p>Other</p>
+          {:else}
+            <p>False</p>
+          {/if}
+      - label: Each blocks
+        command: |
+          {#each items as item, index}
+            <li key={item.id}>{index}: {item.name}</li>
+          {:else}
+            <li>No items</li>
+          {/each}
+        notes: "Always provide a key for list items to help Svelte track DOM updates"
+      - label: Await blocks
+        command: |
+          {#await promise then value}
+            <p>Got: {value}</p>
+          {:error error}
+            <p>Error: {error}</p>
+          {:then value}
+            <p>Got: {value}</p>
+          {/await}
+      - label: Key blocks
+        command: |
+          {#key value}
+            <Component data={value} />
+          {/key}
+        notes: "Re-creates child elements when key value changes"
+      - label: Const blocks
+        command: |
+          {#const result = compute(x, y)}
+            <p>{result}</p>
+          {/const}
+        notes: "Assigns a variable in template scope. Re-derives when dependencies change."
+      - label: Event handling
+        command: |
+          <button onclick={() => count++}>
+            Click me
+          </button>
+          <input onkeydown={(e) => { if (e.key === 'Enter') submit() }} />
+        notes: "Event modifiers: once, passive, nonpassive, capture, self"
+      - label: Event modifiers
+        command: |
+          <form submit|prevent={(e) => handleSubmit()}>
+          <div click|once={() => handleClick()}>
+          <div click|stop|prevent={(e) => handleClick()}>
+        notes: "Modifiers: prevent, stop, once, capture, self, passive, nonpassive"
+      - label: Class binding
+        command: |
+          <div class:active={isActive} class:disabled>
+            Content
+          </div>
+      - label: Style binding
+        command: |
+          <div style:color={color} style:background-color>
+            Content
+          </div>
+          <div style="width: {size}px">
+            Dynamic inline style
+          </div>
+      - label: Spread attributes
+        command: |
+          <input {...props} />
+          <button {...{ class: 'btn', disabled: isDisabled }}>
+            Click
+          </button>
+
+  - group: Reactivity (Svelte 4)
+    items:
+      - label: Reactive declarations
+        command: |
+          <script>
+          let count = 0
+          $: double = count * 2
+          $: console.log('Count changed:', count)
+          </script>
+        notes: "Svelte 4 syntax. Use $state/$derived in Svelte 5 instead."
+      - label: Reactive statements
+        command: |
+          $: if (count > 10) {
+            alert('Too high!')
+          }
+        notes: "Reactive statements can trigger side effects. Use sparingly."
+      - label: Store subscriptions
+        command: |
+          import { writable } from 'svelte/store'
+          
+          const count = writable(0)
+          
+          // In component:
+          $: current = $count
+        notes: "The $ prefix auto-subscribes to stores. Replaced by $state in Svelte 5."
+
+  - group: SvelteKit
+    items:
+      - label: Page component
+        command: |
+          <!-- src/routes/+page.svelte -->
+          <script>
+          export let data
+          </script>
+          
+          <h1>{data.title}</h1>
+      - label: Page data function
+        command: |
+          // src/routes/+page.js
+          export async function load({ fetch }) {
+            const res = await fetch('/api/data')
+            return {
+              title: await res.json(),
+            }
+          }
+      - label: API route
+        command: |
+          // src/routes/api/hello/+server.js
+          export function GET() {
+            return new Response(JSON.stringify({ message: 'Hello' }))
+          }
+      - label: Server endpoint
+        command: |
+          // src/routes/api/users/+server.ts
+          import { json } from '@sveltejs/kit'
+          
+          export async function GET() {
+            const users = await db.users.findMany()
+            return json(users)
+          }
+          
+          export async function POST({ request }) {
+            const user = await request.json()
+            await db.users.create(user)
+            return json(user, { status: 201 })
+          }
+      - label: Layout component
+        command: |
+          <!-- src/routes/+layout.svelte -->
+          <script>
+          export let data
+          </script>
+          
+          <nav>Navigation</nav>
+          <main>{@render $page.data.children}</main>
+          <footer>Footer</footer>
+      - label: Layout data
+        command: |
+          // src/routes/+layout.js
+          export async function load() {
+            return {
+              siteName: 'My App',
+            }
+          }
+      - label: Server-only page
+        command: |
+          // src/routes/admin/+page.server.js
+          export async function load({ cookies }) {
+            const session = cookies.get('session')
+            return { user: session ? await getUser(session) : null }
+          }
+        notes: "Files with .server suffix only run on the server"
+      - label: Action
+        command: |
+          // src/routes/+page.server.js
+          export async function actions() {
+            return {
+              create: async ({ request }) => {
+                const data = await request.formData()
+                // Process form data
+                return { success: true }
+              },
+            }
+          }
+        notes: "Form actions enable server-side form handling without API routes"
+
+  - group: SvelteKit Configuration
+    items:
+      - label: Basic config
+        command: |
+          // svelte.config.js
+          import adapter from '@sveltejs/adapter-auto'
+          import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+          
+          export default {
+            preprocess: vitePreprocess(),
+            kit: {
+              adapter: adapter(),
+            },
+          }
+      - label: Adapter options
+        value: |
+          @sveltejs/adapter-auto (default)
+          @sveltejs/adapter-node (Node.js)
+          @sveltejs/adapter-static (static site)
+          @sveltejs/adapter-vercel (Vercel)
+          @sveltejs/adapter-netlify (Netlify)
+          @sveltejs/adapter-cloudflare (Cloudflare)
+      - label: Hooks
+        command: |
+          // src/hooks.server.js
+          export async function handle({ event, resolve }) {
+            const session = await getSession(event.cookies)
+            event.locals.user = session?.user
+            return resolve(event)
+          }
+      - label: Env variables
+        command: |
+          // .env
+          PRIVATE_API_SECRET=xxx
+          PUBLIC_API_URL=https://api.example.com
+          
+          // Access server-side
+          import { env } from '$env/dynamic/private'
+          const secret = env.PRIVATE_API_SECRET
+          
+          // Access client-side
+          import { env } from '$env/static/public'
+          const url = env.PUBLIC_API_URL
+        notes: |
+          $env/dynamic/* for runtime values
+          $env/static/* for build-time values
+
+  - group: Transitions and Animations
+    items:
+      - label: in:fade
+        command: |
+          <script>
+          import { fade } from 'svelte/transition'
+          </script>
+          
+          {#if visible}
+            <div transition:fade={{ duration: 300 }}>
+              Content
+            </div>
+          {/if}
+      - label: in:fly
+        command: |
+          import { fly } from 'svelte/transition'
+          
+          {#if visible}
+            <div transition:fly={{ y: 200, duration: 300 }}>
+              Content
+            </div>
+          {/if}
+      - label: in:slide
+        command: |
+          import { slide } from 'svelte/transition'
+          
+          {#if visible}
+            <div transition:slide={{ duration: 300 }}>
+              Content
+            </div>
+          {/if}
+      - label: Custom transition
+        command: |
+          import { createTransition } from 'svelte/transition'
+          
+          const myTransition = createTransition((node, { duration }) => {
+            return {
+              css: t => `opacity: ${t}; transform: scale(${t})`,
+              duration,
+            }
+          })
+      - label: animate
+        command: |
+          <script>
+          import { flip } from 'svelte/transition'
+          </script>
+          
+          {#each items as item (item.id)}
+            <div transition:flip={{ duration: 200 }}>
+              {item.name}
+            </div>
+          {/each}
+        notes: "flip handles list reordering animations"
+
+  - group: Actions
+    items:
+      - label: Basic action
+        command: |
+          <script>
+          function focus(node) {
+            node.focus()
+            return {
+              destroy() {
+                node.blur()
+              },
+            }
+          }
+          </script>
+          
+          <input use:focus />
+      - label: Action with parameters
+        command: |
+          function tooltip(node, text) {
+            const tip = document.createElement('div')
+            tip.textContent = text
+            
+            return {
+              update(newText) {
+                tip.textContent = newText
+              },
+              destroy() {
+                tip.remove()
+              },
+            }
+          }
+          
+          <button use:tooltip={'Hover me!'}>
+            Button
+          </button>
+      - label: Common actions
+        command: |
+          // Click outside
+          function clickOutside(node, callback) {
+            const handler = (e) => {
+              if (!node.contains(e.target)) {
+                callback(e)
+              }
+            }
+            document.addEventListener('click', handler, true)
+            return {
+              destroy() {
+                document.removeEventListener('click', handler, true)
+              },
+            }
+          }
+
+  - group: Stores
+    items:
+      - label: Writable store
+        command: |
+          import { writable } from 'svelte/store'
+          
+          const count = writable(0)
+          count.set(42)
+          count.update(n => n + 1)
+          count.subscribe(console.log)
+      - label: Readable store
+        command: |
+          import { readable } from 'svelte/store'
+          
+          const time = readable(null, (set) => {
+            const timer = setInterval(() => {
+              set(new Date())
+            }, 1000)
+            return () => clearInterval(timer)
+          })
+      - label: Derived store
+        command: |
+          import { derived } from 'svelte/store'
+          
+          const doubled = derived(count, $count => $count * 2)
+          const combined = derived([a, b], ([$a, $b]) => $a + $b)
+      - label: get() and set()
+        command: |
+          import { get, set } from 'svelte/store'
+          
+          const value = get(count) // Get without subscribing
+          set(count, 42) // Set from outside component
+      - label: Custom store
+        command: |
+          function toggle(initial = false) {
+            const { subscribe, set, update } = writable(initial)
+            return {
+              subscribe,
+              toggle() {
+                update(v => !v)
+              },
+            }
+          }
+          
+          const darkMode = toggle()
+          darkMode.toggle()
+
+  - group: TypeScript
+    items:
+      - label: Typed runes
+        command: |
+          <script lang="ts">
+          let count: number = $state(0)
+          let items: string[] = $state([])
+          
+          interface Props {
+            name: string
+            age?: number
+          }
+          let { name, age = 0 } = $props<Props>()
+          </script>
+      - label: Typed events
+        command: |
+          <script lang="ts">
+          const emit = $props<{
+            onChange: (value: string) => void
+          }>()
+          </script>
+      - label: Typed stores
+        command: |
+          import { writable } from 'svelte/store'
+          
+          interface User {
+            name: string
+            email: string
+          }
+          
+          const user = writable<User | null>(null)
+
+  - group: Common Patterns
+    items:
+      - label: Immutable data
+        value: |
+          Svelte 5 with $state.frozen() provides immutable state.
+          Prefer immutable patterns for predictable updates.
+          Use $state for mutable fine-grained reactivity.
+      - label: Event forwarding
+        command: |
+          <script>
+          let { on: forward } = $props()
+          </script>
+          
+          <input oninput={(e) => forward('input', e)} />
+        notes: "Forward child events to parent"
+      - label: Component composition
+        command: |
+          <!-- Slot content -->
+          <ChildComponent>
+            <p>Default slot</p>
+          </ChildComponent>
+          
+          <ChildComponent>
+            <p slot="header">Header</p>
+            <p>Default</p>
+            <p slot="footer">Footer</p>
+          </ChildComponent>
+        notes: "Use slot prop or slot directive for named slots"
+      - label: Performance tips
+        value: |
+          Use $state.frozen() for immutable data.
+          Prefer $derived over manual computations.
+          Use key blocks for conditional re-rendering.
+          Minimize DOM operations in $effect.
+          Use fine-grained reactivity instead of reactivity triggers.
+      - label: Testing
+        command: |
+          // Component.test.ts
+          import { render } from '@testing-library/svelte'
+          import { expect } from 'vitest'
+          import MyComponent from './MyComponent.svelte'
+          
+          test('renders correctly', () => {
+            const { getByText } = render(MyComponent, { props: { name: 'World' } })
+            expect(getByText('Hello, World!')).toBeTruthy()
+          })

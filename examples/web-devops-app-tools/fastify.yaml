@@ -1,0 +1,537 @@
+name: Fastify
+group: web / devops / app tools
+process:
+  - node
+title_contains: fastify
+search_terms:
+  - fastify
+  - node.js
+  - web framework
+  - json schema
+  - plugins
+references:
+  - group: Project Setup
+    items:
+      - label: Install Fastify
+        command: npm install fastify
+      - label: Create project with generator
+        command: npm init fastify
+      - label: Install TypeScript support
+        command: npm install @fastify/type-provider-typebox @sinclair/typebox
+      - label: Install common plugins
+        command: npm install @fastify/cors @fastify/helmet @fastify/swagger
+      - label: Install for production
+        command: npm install --production
+
+  - group: Development
+    items:
+      - label: Start server
+        command: node server.js
+      - label: Start with fastify-cli
+        command: fastify start -w app.js
+      - label: Start TypeScript project
+        command: fastify start -w -P app.ts
+      - label: Ignore plugin files
+        command: fastify start -w -I app.js
+      - label: Generate plugin
+        command: fastify generate my-plugin
+      - label: Print schema
+        command: fastify print-routes app.js
+
+  - group: Basic Server
+    items:
+      - label: Minimal server
+        command: |
+          const fastify = require('fastify')()
+          
+          fastify.get('/', async (request, reply) => {
+            return { hello: 'world' }
+          })
+          
+          fastify.listen({ port: 3000 }, (err, address) => {
+            if (err) throw err
+            console.log(`Server listening at ${address}`)
+          })
+      - label: TypeScript server
+        command: |
+          import Fastify from 'fastify'
+          
+          const fastify = Fastify({ logger: true })
+          
+          fastify.get('/', async (request, reply) => {
+            return { hello: 'world' }
+          })
+          
+          fastify.listen({ port: 3000 })
+      - label: With logger
+        command: |
+          const fastify = require('fastify')({
+            logger: true,
+          })
+          
+          // Or with custom configuration
+          const fastify = require('fastify')({
+            logger: {
+              level: 'info',
+              serializers: {
+                req: require('pino-http').standardSerializers.req,
+              },
+            },
+          })
+        notes: "Fastify uses Pino for logging - one of the fastest Node.js loggers"
+      - label: Graceful shutdown
+        command: |
+          const server = await fastify.listen({ port: 3000 })
+          
+          process.on('SIGTERM', async () => {
+            await fastify.close()
+            process.exit(0)
+          })
+
+  - group: Routing
+    items:
+      - label: Basic routes
+        command: |
+          fastify.get('/', handler)
+          fastify.post('/', handler)
+          fastify.put('/:id', handler)
+          fastify.delete('/:id', handler)
+          fastify.patch('/:id', handler)
+          fastify.head('/')
+          fastify.options('/')
+      - label: Route parameters
+        command: |
+          fastify.get('/users/:userId/posts/:postId', async (request) => {
+            const { userId, postId } = request.params
+            return { userId, postId }
+          })
+      - label: Query parameters
+        command: |
+          fastify.get('/search', async (request) => {
+            const { q, page, limit } = request.query
+            return { q, page: Number(page), limit: Number(limit) }
+          })
+        notes: "Access via request.query - validated against schema"
+      - label: Route with schema
+        command: |
+          fastify.get('/users/:id', {
+            schema: {
+              params: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' }
+                },
+                required: ['id']
+              },
+              response: {
+                200: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string' },
+                    name: { type: 'string' },
+                  }
+                }
+              }
+            }
+          }, async (request, reply) => {
+            return { id: request.params.id, name: 'John' }
+          })
+        notes: "Schema validation is automatic - returns 400 on invalid input"
+      - label: Route prefix
+        command: |
+          const router = require('fastify')()
+          
+          router.get('/users', handler)
+          router.get('/posts', handler)
+          
+          fastify.register(router, { prefix: '/api/v1' })
+          // Routes become /api/v1/users and /api/v1/posts
+      - label: Route constraints
+        command: |
+          fastify.get('/version', {
+            constraints: {
+              version: '1.0.0'
+            }
+          }, handler)
+          
+          // Access with Accept-Version header
+          fastify.get('/version', {
+            constraints: {
+              version: '2.0.0'
+            }
+          }, handler)
+        notes: "Constraints support: version, host, protocol, etc."
+
+  - group: Plugins
+    items:
+      - label: Register plugin
+        command: |
+          fastify.register(require('@fastify/cors'))
+          fastify.register(require('@fastify/helmet'))
+          fastify.register(require('@fastify/jwt'))
+      - label: Plugin with options
+        command: |
+          fastify.register(require('@fastify/cors'), {
+            origin: 'https://example.com',
+            methods: ['GET', 'POST'],
+          })
+      - label: Scoped plugin
+        command: |
+          fastify.register(async function (fastify, options) {
+            fastify.decorate('utility', function () {
+              return 'hello'
+            })
+          })
+        notes: "Plugins can encapsulate scope - decorators only available within plugin scope"
+      - label: Custom plugin
+        command: |
+          async function myPlugin(fastify, options) {
+            fastify.addHook('onRequest', async (request, reply) => {
+              console.log('Request received')
+            })
+            
+            fastify.decorate('myUtility', function () {
+              return 'value'
+            })
+          }
+          
+          fastify.register(myPlugin)
+      - label: Popular plugins
+        value: |
+          @fastify/cors - CORS support
+          @fastify/helmet - Security headers
+          @fastify/jwt - JWT authentication
+          @fastify/swagger - OpenAPI documentation
+          @fastify/static - Static file serving
+          @fastify/session - Session support
+          @fastify/rate-limit - Rate limiting
+          @fastify/multipart - File uploads
+          @fastify/compress - Response compression
+          @fastify/autoload - Auto-load routes/plugins
+
+  - group: Validation and Serialization
+    items:
+      - label: JSON Schema validation
+        command: |
+          fastify.post('/user', {
+            schema: {
+              body: {
+                type: 'object',
+                properties: {
+                  username: { type: 'string', minLength: 3 },
+                  password: { type: 'string', minLength: 8 },
+                  email: { type: 'string', format: 'email' },
+                },
+                required: ['username', 'password', 'email']
+              }
+            }
+          }, async (request, reply) => {
+            const { username, password, email } = request.body
+            return { created: true }
+          })
+        notes: "Fastify validates automatically using Ajv by default"
+      - label: TypeBox provider
+        command: |
+          import { Type } from '@sinclair/typebox'
+          import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
+          
+          const fastify = Fastify().withTypeProvider<TypeBoxTypeProvider>()
+          
+          fastify.post('/users', {
+            schema: {
+              body: Type.Object({
+                username: Type.String({ minLength: 3 }),
+                email: Type.String({ format: 'email' }),
+              })
+            }
+          }, async (request) => {
+            return { id: '123' }
+          })
+        notes: "TypeBox provides TypeScript type inference"
+      - label: Custom validator
+        command: |
+          const Ajv = require('ajv')
+          
+          const ajv = new Ajv({
+            coerceTypes: true,
+            removeAdditional: true,
+          })
+          
+          fastify.setValidatorCompiler(({ schema }) => {
+            return ajv.compile(schema)
+          })
+      - label: Response serialization
+        command: |
+          fastify.setSerializerCompiler(({ schema, url, httpPart }) => {
+            // Custom serializer
+            return require('fast-json-stringify')(schema)
+          })
+        notes: "Fastify uses fast-json-stringify for response serialization"
+      - label: Schema examples
+        command: |
+          // Common schema patterns
+          const schemas = {
+            user: {
+              type: 'object',
+              properties: {
+                id: { type: 'string', format: 'uuid' },
+                name: { type: 'string' },
+                email: { type: 'string', format: 'email' },
+                createdAt: { type: 'string', format: 'date-time' },
+              }
+            },
+            pagination: {
+              type: 'object',
+              properties: {
+                page: { type: 'integer', minimum: 1, default: 1 },
+                limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
+              }
+            }
+          }
+
+  - group: Hooks
+    items:
+      - label: Lifecycle hooks
+        value: |
+          onRequest - First hook called in request lifecycle
+          preParsing - Called before parsing request body
+          preValidation - Called before validating request
+          preHandler - Called before handler
+          preSerialization - Called before serializing response
+          onError - Called when error occurs
+          onSend - Called before sending response
+          onResponse - Last hook called
+          onTimeout - Called when request times out
+      - label: Route hook
+        command: |
+          fastify.get('/users', {
+            preHandler: async (request, reply) => {
+              // Authentication check
+              if (!request.user) {
+                throw new Error('Unauthorized')
+              }
+            }
+          }, handler)
+      - label: Global hook
+        command: |
+          fastify.addHook('onRequest', async (request, reply) => {
+            console.log('Request received')
+          })
+          
+          fastify.addHook('preHandler', async (request, reply) => {
+            // Shared authentication logic
+            if (!request.headers.authorization) {
+              throw new Error('No authorization header')
+            }
+          })
+      - label: Application hooks
+        command: |
+          fastify.addHook('onClose', async (fastify) => {
+            // Called when fastify.close() is called
+            await closeDatabaseConnection()
+          })
+          
+          fastify.addHook('onListen', async (fastify) => {
+            // Called when fastify.listen() is called
+            console.log('Server is listening')
+          })
+        notes: "onClose is useful for cleanup - closing connections, clearing timers"
+      - label: Plugin hook
+        command: |
+          fastify.register(async function (fastify, options) {
+            fastify.addHook('onReady', async () => {
+              // Called when plugin is ready
+              console.log('Plugin is ready')
+            })
+          })
+
+  - group: Error Handling
+    items:
+      - label: Throw error
+        command: |
+          fastify.get('/error', async (request, reply) => {
+            throw new Error('Something went wrong')
+          })
+        notes: "Fastify catches and formats errors automatically"
+      - label: Custom error handler
+        command: |
+          fastify.setErrorHandler(function (error, request, reply) {
+            this.log.error(error)
+            reply.code(500).send({
+              error: 'Internal Server Error',
+              message: error.message,
+            })
+          })
+      - label: HTTP error
+        command: |
+          const { HTTPError } = require('fastify')
+          
+          fastify.get('/not-found', async (request) => {
+            throw new HTTPError(404, 'Resource not found')
+          })
+          
+          // Or using reply
+          fastify.get('/not-found', async (request, reply) => {
+            reply.code(404).send({ error: 'Not found' })
+          })
+      - label: Validation error
+        command: |
+          // Fastify automatically returns 400 for validation errors
+          // Custom format:
+          fastify.setValidatorCompiler(({ schema }) => {
+            return (data) => {
+              const valid = ajv.validate(schema, data)
+              if (!valid) {
+                throw new Error({
+                  validation: ajv.errors,
+                })
+              }
+              return valid
+            }
+          })
+
+  - group: Configuration
+    items:
+      - label: Basic config
+        command: |
+          const fastify = require('fastify')({
+            logger: true,
+            bodyLimit: 1024 * 1024, // 1MB
+            caseSensitive: true,
+            disableCacheControl: false,
+          })
+      - label: Production config
+        command: |
+          const fastify = require('fastify')({
+            logger: {
+              level: process.env.LOG_LEVEL || 'info',
+            },
+            trustProxy: true, // Behind reverse proxy
+            // Enable compression
+            // Enable rate limiting
+            // Enable security headers
+          })
+          
+          fastify.register(require('@fastify/compress'))
+          fastify.register(require('@fastify/helmet'))
+          fastify.register(require('@fastify/rate-limit'))
+      - label: TypeScript config
+        command: |
+          import Fastify, { FastifyInstance } from 'fastify'
+          import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
+          
+          const server: FastifyInstance = Fastify({
+            logger: true,
+          }).withTypeProvider<TypeBoxTypeProvider>()
+          
+          export default server
+      - label: Environment config
+        command: |
+          require('dotenv').config()
+          
+          const fastify = require('fastify')({
+            logger: true,
+          })
+          
+          const port = process.env.PORT || 3000
+          const host = process.env.HOST || '127.0.0.1'
+          
+          fastify.listen({ port, host })
+
+  - group: Common Patterns
+    items:
+      - label: Authentication middleware
+        command: |
+          async function authenticate(fastify, options) {
+            fastify.addHook('onRequest', async (request, reply) => {
+              const token = request.headers.authorization?.split(' ')[1]
+              if (!token) {
+                throw new Error('Unauthorized')
+              }
+              try {
+                request.user = await verifyToken(token)
+              } catch {
+                throw new Error('Invalid token')
+              }
+            })
+          }
+          
+          fastify.register(authenticate)
+      - label: Database connection
+        command: |
+          const fp = require('fastify-plugin')
+          
+          module.exports = fp(async function dbPlugin(fastify, options) {
+            const mongoose = require('mongoose')
+            await mongoose.connect(options.uri)
+            fastify.decorate('db', mongoose)
+            
+            fastify.addHook('onClose', async () => {
+              await mongoose.connection.close()
+            })
+          })
+          
+          fastify.register(dbPlugin, { uri: process.env.MONGODB_URI })
+      - label: API versioning
+        command: |
+          // Option 1: Route prefix
+          fastify.register(require('./routes/v1'), { prefix: '/api/v1' })
+          fastify.register(require('./routes/v2'), { prefix: '/api/v2' })
+          
+          // Option 2: Route constraints
+          fastify.register(require('./routes/users'), {
+            constraints: { version: '1.0.0' }
+          })
+      - label: Swagger documentation
+        command: |
+          fastify.register(require('@fastify/swagger'), {
+            openapi: {
+              info: {
+                title: 'My API',
+                version: '1.0.0',
+              },
+            },
+          })
+          
+          fastify.register(require('@fastify/swagger-ui'), {
+            routePrefix: '/docs',
+          })
+          
+          // Access at /docs
+      - label: File upload
+        command: |
+          fastify.register(require('@fastify/multipart'))
+          
+          fastify.post('/upload', async (request) => {
+            const data = await request.file()
+            const buffer = await data.file.toBuffer()
+            // Process file...
+            return { filename: data.filename }
+          })
+        notes: "Supports multiple files with request.files()"
+      - label: Performance tips
+        value: |
+          Use schema validation - it's fast and secure.
+          Enable reply serialization for better performance.
+          Use hooks wisely - they add overhead.
+          Leverage encapsulation for plugin isolation.
+          Use fastify-cli for production deployment.
+          Enable logging with Pino for observability.
+      - label: Testing
+        command: |
+          const Fastify = require('fastify')
+          const test = require('tap').test
+          
+          test('root route', async (t) => {
+            const fastify = Fastify()
+            fastify.get('/', async () => 'hello')
+          
+            const response = await fastify.inject({
+              method: 'GET',
+              url: '/',
+            })
+          
+            t.equal(response.statusCode, 200)
+            t.equal(response.body, 'hello')
+          })
+        notes: "Use inject() for testing - no need to start server"

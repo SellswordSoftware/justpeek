@@ -1,0 +1,94 @@
+name: FL Studio
+group: video / audio
+process:
+  - FL64
+  - FL.exe
+  - flstudio
+  - FL Studio
+references:
+  - group: Transport and Recording
+    items:
+      - label: Play or stop
+        keys: Space
+      - label: Record
+        keys: R
+      - label: Metronome
+        keys: Ctrl+M
+      - label: Countdown before recording
+        keys: Ctrl+P
+      - label: Wait for input to start playback
+        keys: Ctrl+T
+      - label: Tap tempo
+        keys: T
+      - label: Song or pattern mode
+        keys: L
+
+  - group: Channel Rack and Pattern Work
+    items:
+      - label: Open channel rack
+        keys: F6
+      - label: Step sequencer focus
+        notes: Channel Rack remains the core drum and pattern entry surface.
+      - label: Piano roll
+        keys: F7
+      - label: Playlist
+        keys: F5
+      - label: Mixer
+        keys: F9
+      - label: Browser
+        keys: Alt+F8
+      - label: Add new pattern
+        keys: Ctrl+Insert
+      - label: Clone pattern
+        keys: Ctrl+Shift+C
+
+  - group: Editing and Navigation
+    items:
+      - label: Undo or redo
+        keys: Ctrl+Alt+Z / Ctrl+Alt+Y
+      - label: Cut copy paste
+        keys: Ctrl+X / Ctrl+C / Ctrl+V
+      - label: Delete selection
+        keys: Delete
+      - label: Zoom horizontally in playlist
+        keys: Ctrl+MouseWheel
+      - label: Snap settings
+        keys: Shift+Q
+      - label: Draw tool
+        keys: P
+      - label: Paint workflow
+        notes: Painting clips is the default arranging habit in the Playlist.
+      - label: Slice tool
+        keys: C
+
+  - group: Piano Roll and Notes
+    items:
+      - label: Stamp tool
+        keys: B
+      - label: Mute notes
+        keys: T
+      - label: Quantize
+        keys: Alt+Q
+      - label: Quick legato
+        keys: Ctrl+L
+      - label: Quick chop
+        keys: Alt+U
+      - label: Arpeggiate
+        keys: Alt+A
+      - label: Strum
+        keys: Alt+S
+      - label: Flam
+        keys: Alt+F
+      - label: Randomize
+        keys: Alt+R
+      - label: Humanize via randomizer
+        notes: Use with restraint for velocity and timing variation.
+
+  - group: Common Reference
+    items:
+      - label: Core windows
+        value: Browser, Channel Rack, Piano Roll, Playlist, Mixer
+      - label: Pattern vs song
+        value: Pattern mode previews current pattern, song mode plays the playlist arrangement
+      - label: Routing habit
+        value: Assign every important channel to a mixer insert early before deep sound design or automation

@@ -1,0 +1,103 @@
+name: Bun Toolchain
+group: programming language / toolchain packs
+process:
+  - bun
+  - bun.exe
+search_terms:
+  - bun run
+  - bun test
+  - bun install
+  - bun build
+references:
+  - group: Project and Package Basics
+    items:
+      - label: Show version
+        command: bun --version
+      - label: Initialize project
+        command: bun init
+      - label: Install dependencies
+        command: bun install
+      - label: Add dependency
+        command: bun add zod
+      - label: Add dev dependency
+        command: bun add -d typescript
+      - label: Remove dependency
+        command: bun remove zod
+      - label: Run package script
+        command: bun run dev
+
+  - group: Run Build and Bundle
+    items:
+      - label: Run TypeScript directly
+        command: bun run src/index.ts
+      - label: Start file with watch
+        command: bun --watch src/index.ts
+      - label: Build app
+        command: bun build ./src/index.ts --outdir dist
+      - label: Build for browser
+        command: bun build ./src/index.ts --target browser --outdir dist
+      - label: Build executable
+        command: bun build ./src/index.ts --compile --outfile app
+      - label: Run shell command via bunx
+        command: bunx tsc --noEmit
+
+  - group: Testing and Quality
+    items:
+      - label: Run tests
+        command: bun test
+      - label: Watch tests
+        command: bun test --watch
+      - label: Run one test file
+        command: bun test test/app.test.ts
+      - label: Filter tests
+        command: bun test --filter user
+      - label: Coverage
+        command: bun test --coverage
+      - label: Type-check with TypeScript
+        command: bunx tsc --noEmit
+      - label: Format or lint
+        notes: Bun does not replace every formatter or linter; pair it with Biome, ESLint, or Prettier as needed.
+
+  - group: Handy Snippets
+    items:
+      - label: Simple server
+        command: |
+          Bun.serve({
+            port: 3000,
+            fetch() {
+              return new Response("ok");
+            },
+          });
+      - label: Read text file
+        command: |
+          const text = await Bun.file("data.txt").text();
+      - label: SQLite query
+        command: |
+          import { Database } from "bun:sqlite";
+          
+          const db = new Database("app.db");
+          const row = db.query("select 1 as value").get();
+      - label: Spawn subprocess
+        command: |
+          const proc = Bun.spawn(["git", "status"]);
+          await proc.exited;
+      - label: Script in package.json
+        command: |
+          {
+            "scripts": {
+              "dev": "bun --watch src/index.ts"
+            }
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Bun fit
+        value: Fast JS and TS runtime plus package manager, bundler, test runner, and utility APIs in one tool
+      - label: Node compatibility
+        value: Bun aims for high Node compatibility, but edge-case runtime differences still matter
+      - label: bunfig.toml
+        value: Project-level Bun configuration surface for installs and runtime behavior
+      - label: Built-in APIs
+        value: File handling, SQLite, server primitives, and subprocess utilities are first-party strengths
+      - label: Runtime choice
+        value: Validate third-party package compatibility before assuming Bun can replace Node everywhere

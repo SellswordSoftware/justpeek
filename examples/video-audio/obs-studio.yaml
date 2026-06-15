@@ -1,0 +1,75 @@
+name: OBS Studio
+group: video / audio
+process:
+  - obs
+  - obs64.exe
+  - obs-studio
+references:
+  - group: Global Hotkeys to Configure
+    items:
+      - label: Start or stop streaming
+        notes: Usually bound manually in Settings > Hotkeys because there is no universal default on all installs.
+      - label: Start or stop recording
+        notes: Set an intentional recording hotkey before any capture-heavy workflow.
+      - label: Pause or resume recording
+        notes: Available when the selected recording format and workflow support pausing.
+      - label: Push-to-talk or push-to-mute
+        notes: High-value for live sessions where open-mic discipline matters.
+      - label: Replay buffer controls
+        notes: Configure start, save, and stop replay buffer hotkeys if clip capture is part of the workflow.
+
+  - group: Studio and Scene Control
+    items:
+      - label: Switch scenes
+        notes: Scene hotkeys are per scene and worth configuring for live switching.
+      - label: Toggle Studio Mode
+        keys: Ctrl+Shift+S
+      - label: Transition
+        keys: Space
+        notes: In Studio Mode, this triggers the current transition when focus is on the main window.
+      - label: Duplicate scene
+        keys: Ctrl+D
+      - label: Rename selected item
+        keys: F2
+      - label: Remove selected source
+        keys: Delete
+
+  - group: Sources and Layout
+    items:
+      - label: Copy source
+        keys: Ctrl+C
+      - label: Paste source
+        keys: Ctrl+V
+      - label: Paste reference copy
+        keys: Ctrl+Alt+V
+        notes: Useful when one source instance should update everywhere.
+      - label: Nudge selected source
+        keys: Arrow keys
+      - label: Fine nudge selected source
+        keys: Ctrl+Arrow keys
+      - label: Fit to screen
+        keys: Ctrl+F
+      - label: Stretch to screen
+        keys: Ctrl+S
+      - label: Center to screen
+        keys: Ctrl+D
+
+  - group: Audio and Monitoring
+    items:
+      - label: Mute selected audio source
+        notes: Commonly assigned as a custom hotkey rather than relying on mixer mouse interaction.
+      - label: Monitor and output routing
+        value: Use advanced audio properties for sync offset, mono, monitoring, and track routing
+      - label: Audio sync offset
+        value: Adjust per source when microphones or capture cards drift from picture
+      - label: Push-to-talk setup
+        value: Configure in source filters or hotkeys before going live
+
+  - group: Common Reference
+    items:
+      - label: Scene collections
+        value: Separate different production setups such as streaming, recording, meetings, or podcast capture
+      - label: Profiles
+        value: Store output bitrate, encoder, audio, and video settings for different targets
+      - label: Capture discipline
+        value: Validate source visibility, audio meters, monitoring, and recording path before a live or one-take session

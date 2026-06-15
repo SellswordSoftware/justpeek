@@ -1,0 +1,100 @@
+name: Cypress
+group: testing tools
+process:
+  - cypress
+  - node
+  - npm
+  - pnpm
+  - yarn
+search_terms:
+  - cypress open
+  - cypress run
+  - cy intercept
+  - retries
+references:
+  - group: Running Tests
+    items:
+      - label: Open interactive runner
+        command: npx cypress open
+      - label: Run headless
+        command: npx cypress run
+      - label: Run one spec
+        command: npx cypress run --spec cypress/e2e/app.cy.ts
+      - label: Run one browser
+        command: npx cypress run --browser chrome
+      - label: Open component tests
+        command: npx cypress open --component
+      - label: Open e2e tests
+        command: npx cypress open --e2e
+      - label: Record run
+        command: npx cypress run --record
+
+  - group: Debugging and Selection
+    items:
+      - label: Grep plugin workflow
+        notes: "Test-name filtering often relies on `cypress-grep` or project-specific setup rather than first-party defaults."
+      - label: Screenshots on failure
+        value: Enabled automatically in run mode by default
+      - label: Video recording
+        value: "Controlled by config such as `video: true`"
+      - label: Retries
+        value: "Configure `retries` in `cypress.config`"
+      - label: Browser devtools
+        notes: Interactive mode plus browser devtools is often the fastest way to inspect DOM and network state.
+      - label: Command log
+        value: Core debugging surface for seeing each step, assertion, and resolved subject
+
+  - group: Network and State
+    items:
+      - label: Intercept request
+        command: |
+          cy.intercept("GET", "/api/users").as("users");
+      - label: Wait on alias
+        command: |
+          cy.wait("@users");
+      - label: Seed session
+        value: "Use `cy.session()` for login reuse across tests where appropriate"
+      - label: Visit page
+        command: |
+          cy.visit("/");
+      - label: Set viewport
+        command: |
+          cy.viewport(1280, 720);
+      - label: Task bridge to Node
+        value: "Use `cy.task()` for server-side setup or teardown work outside the browser"
+
+  - group: Handy Snippets
+    items:
+      - label: Basic test
+        command: |
+          describe("home", () => {
+            it("loads", () => {
+              cy.visit("/");
+              cy.contains("Home");
+            });
+          });
+      - label: Get and click
+        command: |
+          cy.get("[data-testid=save]").click();
+      - label: Role-like content check
+        command: |
+          cy.contains("button", "Save").click();
+      - label: Form fill
+        command: |
+          cy.get("input[name=email]").type("user@example.com");
+      - label: URL assertion
+        command: |
+          cy.url().should("include", "/dashboard");
+
+  - group: Common Concepts
+    items:
+      - label: Command queue
+        value: Cypress commands are queued and retried; they do not behave like raw synchronous JS calls
+      - label: Retry-ability
+        value: Built-in retries are a major strength, so explicit waits are usually a smell
+      - label: Interactive runner
+        value: The desktop-like runner view is central to fast feedback during test authoring
+      - label: Network control
+        value: "`cy.intercept()` is often the lever that makes tests stable and debuggable"
+      - label: App-in-browser fit
+        value: Cypress is strongest for browser app flows where same-tab control and rich retry semantics matter

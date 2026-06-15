@@ -1,0 +1,83 @@
+name: Reaper
+group: video / audio
+process:
+  - reaper
+  - reaper.exe
+  - REAPER
+references:
+  - group: Transport and Recording
+    items:
+      - label: Play or stop
+        keys: Space
+      - label: Pause
+        keys: Ctrl+Space
+      - label: Record
+        keys: Ctrl+R
+      - label: Repeat toggle
+        keys: R
+      - label: Go to project start or end
+        keys: W
+        notes: "`W` returns to project start; use End for project end in many layouts."
+      - label: Move play cursor by grid
+        keys: LeftArrow / RightArrow
+      - label: Set loop points to time selection
+        notes: Time selection and loop points are central to editing and comping speed.
+
+  - group: Timeline and Items
+    items:
+      - label: Split items at cursor
+        keys: S
+      - label: Delete selected items
+        keys: Delete
+      - label: Nudge item position
+        keys: Numpad 1 / 3 or action list variants
+        notes: Exact nudge bindings often vary, but nudging is a core workflow worth customizing.
+      - label: Glue items
+        keys: Ctrl+Shift+G
+      - label: Trim item edges
+        notes: Dragging edges is the default trim habit; combine with snap and ripple modes intentionally.
+      - label: Toggle snapping
+        keys: Alt+S
+      - label: Ripple editing per track or all tracks
+        keys: Alt+P / Alt+Shift+P
+
+  - group: Tracks and Mixer
+    items:
+      - label: Insert new track
+        keys: Ctrl+T
+      - label: Duplicate tracks
+        keys: Ctrl+D
+      - label: Arm selected track
+        keys: Alt+R
+      - label: Solo selected track
+        keys: Alt+S
+      - label: Mute selected track
+        keys: Alt+M
+      - label: Open FX chain
+        keys: F
+      - label: Render project
+        keys: Ctrl+Alt+R
+
+  - group: Navigation and Editing Views
+    items:
+      - label: Zoom horizontally
+        keys: Plus / Minus
+      - label: Vertical zoom selected track
+        notes: Reaper view management is heavily customizable and worth tailoring early.
+      - label: Toggle mixer
+        keys: Ctrl+M
+      - label: Toggle routing matrix
+        keys: Alt+R
+        notes: In some setups this may differ from track-arm customizations.
+      - label: Action list
+        keys: QuestionMark
+        notes: Reaper strength comes from action search and custom bindings.
+
+  - group: Common Reference
+    items:
+      - label: Comping mindset
+        value: Record takes into lanes, then promote the best phrases into the final performance
+      - label: Routing power
+        value: Tracks can act as audio buses, folders, instruments, or effect returns
+      - label: Customization habit
+        value: Reaper rewards early setup of actions, toolbars, mouse modifiers, and templates

@@ -1,0 +1,90 @@
+name: Jira
+group: communication apps
+process:
+  - firefox
+  - chromium
+  - google-chrome
+  - brave
+  - microsoft-edge
+title_contains: jira
+search_terms:
+  - jira board
+  - jira issue
+  - jql
+  - sprint
+  - backlog
+references:
+  - group: Navigation and Keyboard Shortcuts
+    items:
+      - label: Show shortcuts
+        keys: "?"
+      - label: Search issues
+        keys: "/"
+      - label: Create issue
+        keys: C
+      - label: Open issue actions
+        keys: Period
+      - label: Edit issue
+        keys: E
+      - label: Comment on issue
+        keys: M
+      - label: Assign to me
+        keys: I
+
+  - group: Boards Backlog and Sprint Work
+    items:
+      - label: Open board
+        notes: "UI path: top navigation `Projects` or `Your work`, then board view."
+      - label: Backlog
+        notes: "UI path: project sidebar `Backlog`."
+      - label: Active sprint
+        notes: "UI path: project sidebar `Board` or `Active sprint` depending on project type."
+      - label: Move issue across columns
+        notes: Drag issue cards between workflow columns on the board.
+      - label: Sprint planning
+        notes: "UI path: `Backlog` with sprint creation and issue drag ordering."
+      - label: Releases
+        notes: "UI path: project sidebar `Releases` in projects that expose versions."
+
+  - group: JQL and Search Patterns
+    items:
+      - label: Assigned to me open issues
+        value: "assignee = currentUser() AND resolution = Unresolved ORDER BY updated DESC"
+      - label: Current sprint
+        value: "sprint in openSprints() ORDER BY Rank ASC"
+      - label: Updated recently
+        value: "updated >= -7d ORDER BY updated DESC"
+      - label: By project and status
+        value: "project = APP AND status in (\"In Progress\", \"Review\")"
+      - label: By label
+        value: "labels = onboarding"
+      - label: Saved filters
+        notes: "UI path: issue search -> `Save as` to reuse JQL results."
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Create subtask
+        notes: "UI path: issue view -> add child issue or subtask action depending on project type."
+      - label: Link issues
+        notes: "UI path: issue view -> `Link issue` from actions or field panels."
+      - label: Change workflow status
+        notes: "UI path: issue view status dropdown or board drag-and-drop."
+      - label: Sprint settings
+        notes: "UI path: board `More` menu -> board settings, columns, swimlanes, quick filters, and estimation."
+      - label: Automation
+        notes: "UI path: project settings -> `Automation`."
+      - label: Issue type schemes and fields
+        notes: "UI path: project settings or global Jira admin settings depending on permissions."
+
+  - group: Common Concepts
+    items:
+      - label: JQL matters
+        value: JQL is one of Jira's highest-value reference surfaces because filtering and saved searches are central to real daily use
+      - label: Project type variance
+        value: Team-managed and company-managed projects move settings and issue actions around
+      - label: Board versus issue view
+        value: Many workflows switch constantly between board drag-and-drop and the issue detail view rather than living in one screen
+      - label: Permission-heavy tool
+        value: What you can edit, automate, or reconfigure depends heavily on project and global permissions
+      - label: Shortcut density
+        value: Jira has useful issue shortcuts, but a large share of actual project configuration still depends on menus and settings pages

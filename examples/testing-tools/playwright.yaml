@@ -1,0 +1,97 @@
+name: Playwright
+group: testing tools
+process:
+  - playwright
+  - node
+  - npm
+  - pnpm
+  - yarn
+search_terms:
+  - playwright test
+  - codegen
+  - trace
+  - ui mode
+references:
+  - group: Running Tests
+    items:
+      - label: Run all tests
+        command: npx playwright test
+      - label: Run headed
+        command: npx playwright test --headed
+      - label: UI mode
+        command: npx playwright test --ui
+      - label: Debug mode
+        command: npx playwright test --debug
+      - label: Run one file
+        command: npx playwright test tests/example.spec.ts
+      - label: Run one test by grep
+        command: npx playwright test --grep "checkout flow"
+      - label: Run one project
+        command: npx playwright test --project=chromium
+
+  - group: Debugging and Artifacts
+    items:
+      - label: Codegen recorder
+        command: npx playwright codegen https://example.com
+      - label: Show trace
+        command: npx playwright show-trace trace.zip
+      - label: Save trace on retry
+        value: "Configure `trace: \"on-first-retry\"` in `playwright.config`"
+      - label: Screenshot on failure
+        value: "Configure `screenshot: \"only-on-failure\"` in config"
+      - label: Video on failure or retry
+        value: "Configure `video: \"retain-on-failure\"` or similar in config"
+      - label: Inspector
+        notes: "`--debug` opens the inspector and slows execution for step-through investigation."
+
+  - group: Selection and Quality
+    items:
+      - label: List tests
+        command: npx playwright test --list
+      - label: Last failed
+        notes: Use reporters or focused grep workflows; Playwright itself is less centered on changed-file loops than unit-test runners.
+      - label: Retries
+        value: "Configure `retries` in config or CI-specific config"
+      - label: Workers
+        command: npx playwright test --workers=4
+      - label: Reporter
+        command: npx playwright test --reporter=list
+      - label: Update snapshots
+        command: npx playwright test --update-snapshots
+
+  - group: Handy Snippets
+    items:
+      - label: Basic test
+        command: |
+          import { expect, test } from "@playwright/test";
+          
+          test("home page", async ({ page }) => {
+            await page.goto("/");
+            await expect(page).toHaveTitle(/Home/);
+          });
+      - label: Locator click
+        command: |
+          await page.getByRole("button", { name: "Save" }).click();
+      - label: Fill form
+        command: |
+          await page.getByLabel("Email").fill("user@example.com");
+      - label: Wait for response
+        command: |
+          const response = await page.waitForResponse(/api\/users/);
+      - label: API request
+        command: |
+          const response = await request.get("/api/health");
+          expect(response.ok()).toBeTruthy();
+
+  - group: Common Concepts
+    items:
+      - label: Browser contexts
+        value: Isolation model for auth state, cookies, storage, and multi-user flows
+      - label: Auto-waiting
+        value: Locator actions and assertions wait automatically, so explicit sleeps are usually the wrong fix
+      - label: Trace-first debugging
+        value: Trace viewer is often the fastest route to understanding flaky end-to-end failures
+      - label: Locators
+        value: Prefer semantic locators like role, label, and test id over brittle CSS-only selectors
+      - label: Test runner split
+        value: Playwright covers browser E2E, component, and API-adjacent flows, not just page clicking

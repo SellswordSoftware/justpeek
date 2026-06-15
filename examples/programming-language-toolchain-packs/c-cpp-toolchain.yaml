@@ -1,0 +1,124 @@
+name: C and C++ Toolchain
+group: programming language / toolchain packs
+process:
+  - gcc
+  - g++
+  - clang
+  - clang++
+  - cmake
+  - make
+  - gdb
+  - lldb
+search_terms:
+  - gcc
+  - clang
+  - cmake
+  - make
+  - gdb
+  - lldb
+references:
+  - group: Compile and Link
+    items:
+      - label: Compile C file with gcc
+        command: gcc -Wall -Wextra -Werror -O2 -o app main.c
+      - label: Compile C++ file with g++
+        command: g++ -std=c++20 -Wall -Wextra -Werror -O2 -o app main.cpp
+      - label: Compile with clang++
+        command: clang++ -std=c++20 -Wall -Wextra -Werror -O2 -o app main.cpp
+      - label: Debug build
+        command: g++ -std=c++20 -g -O0 -o app main.cpp
+      - label: Separate compile and link
+        command: |
+          g++ -c main.cpp -o main.o
+          g++ main.o -o app
+      - label: Include and library paths
+        command: g++ main.cpp -Iinclude -Llib -lmylib -o app
+      - label: Preprocess only
+        command: g++ -E main.cpp > main.i
+
+  - group: CMake and Build Systems
+    items:
+      - label: Configure build directory
+        command: cmake -S . -B build
+      - label: Debug configure
+        command: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+      - label: Release configure
+        command: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - label: Build project
+        command: cmake --build build
+      - label: Run tests with ctest
+        command: ctest --test-dir build --output-on-failure
+      - label: Plain make build
+        command: make
+      - label: Verbose make build
+        command: make VERBOSE=1
+
+  - group: Debugging and Diagnostics
+    items:
+      - label: Launch gdb
+        command: gdb ./app
+      - label: Launch lldb
+        command: lldb ./app
+      - label: Run with AddressSanitizer
+        command: g++ -fsanitize=address -g -O1 main.cpp -o app && ./app
+      - label: Run with UndefinedBehaviorSanitizer
+        command: g++ -fsanitize=undefined -g -O1 main.cpp -o app && ./app
+      - label: Backtrace in gdb
+        command: bt
+      - label: Breakpoint and continue in gdb
+        command: |
+          break main
+          run
+          continue
+      - label: Valgrind memory check
+        command: valgrind --leak-check=full ./app
+
+  - group: Handy Snippets
+    items:
+      - label: Minimal C main
+        command: |
+          #include <stdio.h>
+          
+          int main(void) {
+              puts("hello");
+              return 0;
+          }
+      - label: Minimal C++ main
+        command: |
+          #include <iostream>
+          
+          int main() {
+              std::cout << "hello\n";
+              return 0;
+          }
+      - label: RAII file handling
+        command: |
+          #include <fstream>
+          
+          int main() {
+              std::ofstream out("data.txt");
+              out << "hello\n";
+          }
+      - label: Vector iteration
+        command: |
+          #include <vector>
+          
+          for (const auto& item : items) {
+              // use item
+          }
+      - label: Smart pointer
+        command: |
+          auto ptr = std::make_unique<MyType>();
+
+  - group: Common Concepts
+    items:
+      - label: Compile vs link
+        value: Compilation turns source into objects; linking resolves symbols into the final binary
+      - label: Headers and translation units
+        value: Declarations live in headers; definitions and compile boundaries live in source files
+      - label: Debug vs release
+        value: Debug favors observability, release favors optimization and realistic performance
+      - label: Sanitizers
+        value: ASan, UBSan, and related tools catch memory and UB issues earlier than post-crash debugging alone
+      - label: CMake habit
+        value: Prefer out-of-tree builds and explicit targets over ad hoc compiler command drift

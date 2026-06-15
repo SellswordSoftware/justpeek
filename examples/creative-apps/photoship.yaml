@@ -1,0 +1,34 @@
+name: Photoship
+group: creative apps
+search_terms:
+  - photoshop
+  - raster editor
+  - photo retouching
+references:
+  - group: Note
+    items:
+      - label: Tracking placeholder
+        value: The generation plan currently lists `Photoship` rather than `Photoshop`.
+        notes: This file exists to satisfy the current checklist entry exactly as written. If the plan meant Adobe Photoshop, the file should likely be renamed and replaced with a Photoshop-specific reference pack.
+
+  - group: Common Raster Editing Concepts
+    items:
+      - label: Layers
+        value: Stack visual elements non-destructively instead of painting everything onto one base layer
+      - label: Masks
+        value: Black conceals, white reveals, gray partially reveals
+      - label: Adjustment layers
+        value: Prefer non-destructive tone and color changes before flattening or exporting
+      - label: Blend modes
+        value: Multiply darkens, Screen brightens, Overlay mixes contrast, Soft Light is gentler
+      - label: Smart object style workflow
+        value: Preserve reusable or transform-heavy content in a protected container when the tool supports it
+
+  - group: Common Workflows
+    items:
+      - label: Retouching flow
+        value: Duplicate base layer, clean distractions, then apply tonal and color adjustments
+      - label: Export targets
+        value: PSD or native layered file for editing, PNG for transparency, JPEG for compressed delivery, TIFF for high-fidelity print workflows
+      - label: Color management
+        value: Keep destination in mind before choosing profile, bit depth, and export settings

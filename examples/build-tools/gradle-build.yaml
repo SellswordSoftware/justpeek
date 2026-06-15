@@ -1,0 +1,105 @@
+name: gradle
+group: build tools
+process:
+  - gradle
+  - gradlew
+search_terms:
+  - gradle build
+  - tasks
+  - dependencies
+  - daemon
+references:
+  - group: Core Commands
+    items:
+      - label: Build project
+        command: ./gradlew build
+      - label: Clean build
+        command: ./gradlew clean build
+      - label: Run tests
+        command: ./gradlew test
+      - label: Run app
+        command: ./gradlew run
+      - label: List tasks
+        command: ./gradlew tasks
+      - label: Show help
+        command: ./gradlew help
+      - label: Wrapper first
+        value: Prefer `./gradlew` so plugin and Gradle versions match the project exactly
+
+  - group: Selection and Introspection
+    items:
+      - label: Run one task
+        command: ./gradlew jar
+      - label: Run one test
+        command: ./gradlew test --tests ExampleTest
+      - label: Dependency tree
+        command: ./gradlew dependencies
+      - label: One configuration insight
+        command: ./gradlew dependencyInsight --dependency guava --configuration runtimeClasspath
+      - label: Build scan
+        command: ./gradlew build --scan
+      - label: Dry run task graph
+        command: ./gradlew build --dry-run
+      - label: Task graph details
+        command: ./gradlew build --info
+
+  - group: Debugging and Performance
+    items:
+      - label: Stack traces
+        command: ./gradlew build --stacktrace
+      - label: Full stack traces
+        command: ./gradlew build --full-stacktrace
+      - label: Debug logging
+        command: ./gradlew build --debug
+      - label: Refresh dependencies
+        command: ./gradlew build --refresh-dependencies
+      - label: Stop daemon
+        command: ./gradlew --stop
+      - label: Profile build
+        command: ./gradlew build --profile
+      - label: Configuration cache
+        value: Modern Gradle performance often depends heavily on whether configuration cache is supported and enabled
+
+  - group: Handy Snippets
+    items:
+      - label: Kotlin DSL plugin block
+        command: |
+          plugins {
+              kotlin("jvm") version "2.0.0"
+          }
+      - label: Java plugin
+        command: |
+          plugins {
+              id("java")
+          }
+      - label: Dependency
+        command: |
+          dependencies {
+              implementation("com.google.guava:guava:33.0.0-jre")
+              testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+          }
+      - label: Test task config
+        command: |
+          tasks.test {
+              useJUnitPlatform()
+          }
+      - label: Custom task
+        command: |
+          tasks.register("hello") {
+              doLast {
+                  println("hello")
+              }
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Build lifecycle
+        value: Initialization, configuration, and execution are distinct phases that explain a lot of Gradle surprises
+      - label: Wrapper
+        value: "`gradlew` is the project-controlled entry point; global Gradle installs are often the wrong tool"
+      - label: Task graph
+        value: Tasks are lazily wired with dependencies and inputs or outputs, not just executed top to bottom
+      - label: Kotlin DSL vs Groovy DSL
+        value: Both exist in the wild, and command behavior is similar even when build-script syntax differs
+      - label: Best fit
+        value: Large JVM and Android builds where incremental task execution and plugin ecosystems matter

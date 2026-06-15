@@ -1,0 +1,111 @@
+name: task
+group: build tools
+process:
+  - task
+search_terms:
+  - Taskfile
+  - variables
+  - deps
+  - dotenv
+references:
+  - group: Running Tasks
+    items:
+      - label: Default task
+        command: task
+      - label: Run one task
+        command: task test
+      - label: List tasks
+        command: task --list
+      - label: Show summaries
+        command: task --summary
+      - label: Run in verbose mode
+        command: task --verbose test
+      - label: Dry run
+        command: task --dry test
+      - label: Pick a Taskfile
+        command: task --taskfile Taskfile.yml test
+
+  - group: Variables and Environment
+    items:
+      - label: Set variable on command line
+        command: task build TARGET=linux
+      - label: dotenv support
+        value: "Use `dotenv:` in the Taskfile or task-level env loading when projects rely on `.env`"
+      - label: Export environment
+        value: "Use `env:` blocks for task or global environment values"
+      - label: Task dependencies
+        value: "Use `deps:` for prerequisite tasks that should run before the current task"
+      - label: Internal tasks
+        value: "Mark helper tasks with `internal: true` to hide them from normal listings"
+      - label: Includes
+        value: "Use `includes:` to split large Taskfiles across directories or domains"
+
+  - group: Execution and Files
+    items:
+      - label: Run from specific directory
+        value: "Use task-level `dir:` to change the working directory for commands"
+      - label: Silent commands
+        value: "Use `silent: true` to reduce command echo noise"
+      - label: Skip when sources unchanged
+        value: "Use `sources:` and `generates:` for fingerprint-based up-to-date skipping"
+      - label: Platform-specific commands
+        value: Use shell scripts carefully or branch by OS in task design when workflows diverge
+      - label: Status checks
+        value: "Use `status:` commands to skip a task when a condition is already satisfied"
+      - label: Precondition checks
+        value: "Use `preconditions:` to fail early with clearer messages when prerequisites are missing"
+
+  - group: Handy Snippets
+    items:
+      - label: Minimal Taskfile
+        command: |
+          version: '3'
+          
+          tasks:
+            default:
+              cmds:
+                - task --list
+      - label: Variable and command
+        command: |
+          version: '3'
+          
+          tasks:
+            build:
+              vars:
+                TARGET: '{{default "linux" .TARGET}}'
+              cmds:
+                - echo "building {{.TARGET}}"
+      - label: Dependencies
+        command: |
+          tasks:
+            check:
+              deps: [fmt, lint, test]
+              cmds:
+                - echo done
+      - label: Up-to-date task
+        command: |
+          tasks:
+            gen:
+              sources:
+                - schema.sql
+              generates:
+                - generated.go
+              cmds:
+                - sqlc generate
+      - label: dotenv load
+        command: |
+          version: '3'
+          dotenv: ['.env']
+
+  - group: Common Concepts
+    items:
+      - label: Task vs make
+        value: Task is a task runner first, with optional file-change skipping, not a classic timestamp-based build engine
+      - label: YAML-first ergonomics
+        value: Taskfiles trade Make’s terse DSL for clearer structured config and easier variable handling
+      - label: deps vs cmds
+        value: "`deps:` models task relationships, while `cmds:` is the imperative body for the current task"
+      - label: Up-to-date model
+        value: "`sources`, `generates`, `status`, and `preconditions` together shape when tasks run or skip"
+      - label: Best fit
+        value: Developer and CI task orchestration where readability and cross-team discoverability matter more than shell minimalism

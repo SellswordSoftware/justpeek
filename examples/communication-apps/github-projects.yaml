@@ -1,0 +1,91 @@
+name: GitHub Projects
+group: communication apps
+process:
+  - firefox
+  - chromium
+  - google-chrome
+  - brave
+  - microsoft-edge
+  - vivaldi
+title_contains: github
+search_terms:
+  - github projects
+  - project board
+  - project views
+  - roadmap
+  - issue automation
+references:
+  - group: Navigation and Keyboard Shortcuts
+    items:
+      - label: Show shortcuts
+        keys: Shift+Slash
+      - label: Global search
+        keys: Slash
+      - label: Open command palette
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Open issue or PR in new tab
+        notes: Use normal browser tab modifiers from the project table or board.
+      - label: Filter items
+        notes: "UI path: project toolbar `Filter by keyword or by field`."
+      - label: Switch view
+        notes: "UI path: project view tabs across table, board, roadmap, and custom views."
+
+  - group: Core Project Views
+    items:
+      - label: Table view
+        notes: "UI path: project header view tabs -> `Table`."
+      - label: Board view
+        notes: "UI path: project header view tabs -> `Board`."
+      - label: Roadmap view
+        notes: "UI path: project header view tabs -> `Roadmap`."
+      - label: Group by field
+        notes: "UI path: view controls -> `Group by`."
+      - label: Sort and slice fields
+        notes: "UI path: view controls for sort, fields, layout, and conditional formatting where available."
+      - label: Add custom field
+        notes: "UI path: project settings or field controls -> `New field`."
+
+  - group: Filters and Search Patterns
+    items:
+      - label: Assigned to me
+        value: "assignee:@me"
+      - label: Is open issue
+        value: "is:issue is:open"
+      - label: By label
+        value: "label:bug"
+      - label: By milestone
+        value: "milestone:\"M1\""
+      - label: By repository
+        value: "repo:owner/repo"
+      - label: By status field
+        notes: Use project field filters in the toolbar for `Status`, iteration, assignee, and custom fields.
+
+  - group: Commonly Looked Up Features
+    items:
+      - label: Add issue or PR to project
+        notes: "UI path: issue or PR sidebar `Projects`, or project `Add items`."
+      - label: Iteration fields
+        notes: "UI path: project fields -> create or edit an `Iteration` field."
+      - label: Automation workflows
+        notes: "UI path: project workflows or built-in automation settings for item added, status change, and archive behavior."
+      - label: Draft issues
+        notes: "UI path: project `Add item` -> draft issue."
+      - label: Insights and charts
+        notes: "UI path: project insights or view reporting surfaces depending on current GitHub rollout."
+      - label: Project access
+        notes: "UI path: project settings -> visibility, collaborators, and linked repositories."
+
+  - group: Common Concepts
+    items:
+      - label: New projects model
+        value: Modern GitHub Projects is field- and view-driven rather than the older classic Kanban board model
+      - label: Fields are the schema
+        value: Status, iteration, date, assignee, labels, and custom fields define most of the project workflow shape
+      - label: Cross-repo planning
+        value: GitHub Projects is strongest when planning work across issues and pull requests from multiple repositories
+      - label: Search plus views
+        value: The real power comes from combining GitHub search filters with project-specific views, grouping, and fields
+      - label: Shortcut density
+        value: GitHub itself has useful navigation shortcuts, but most project customization and reporting flows remain UI-driven

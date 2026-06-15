@@ -1,0 +1,257 @@
+name: Electron
+group: web / devops / app tools
+search_terms:
+  - electron desktop app
+  - browserwindow ipc
+  - electron forge
+  - electron builder
+  - preload contextbridge
+references:
+  - group: Project Setup
+    items:
+      - label: Create app with Forge
+        command: npm init electron-app@latest myapp
+      - label: Add Electron to project
+        command: npm install --save-dev electron
+      - label: Run app directly
+        command: npx electron .
+      - label: Start via package script
+        command: npm start
+      - label: Package app
+        command: npm run make
+      - label: Build distributables
+        command: npm run package
+      - label: Install Builder
+        command: npm install --save-dev electron-builder
+
+  - group: Core CLI and Workflow
+    items:
+      - label: Main process entry
+        value: main.js, main.cjs, or src/main/index.ts depending on project setup
+      - label: Renderer app
+        value: BrowserWindow content can be a local HTML file or a dev server from React, Vue, Svelte, or another frontend stack
+      - label: Preload bridge
+        value: preload.js or preload.ts exposes a safe API surface from the isolated world to the renderer
+      - label: Dev loop
+        value: Common flow is frontend dev server plus Electron restart or live-reload tooling for the main process
+      - label: Logs and diagnostics
+        notes: Run Electron from a terminal when you need Chromium console output, crash messages, or main-process stack traces.
+      - label: Open Chromium devtools
+        notes: "UI path in code: `mainWindow.webContents.openDevTools()` or the View menu in development builds."
+
+  - group: Main Process and Windows
+    items:
+      - label: Create BrowserWindow
+        command: |
+          const { app, BrowserWindow } = require("electron");
+          
+          function createWindow() {
+            const win = new BrowserWindow({
+              width: 1280,
+              height: 800,
+              webPreferences: {
+                preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+              },
+            });
+          
+            win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+          }
+      - label: Wait for ready
+        command: |
+          app.whenReady().then(() => {
+            createWindow();
+          });
+      - label: Reopen on macOS activate
+        command: |
+          app.on("activate", () => {
+            if (BrowserWindow.getAllWindows().length === 0) {
+              createWindow();
+            }
+          });
+      - label: Quit when all windows close
+        command: |
+          app.on("window-all-closed", () => {
+            if (process.platform !== "darwin") {
+              app.quit();
+            }
+          });
+      - label: Frameless or transparent window
+        notes: "UI path in code: `new BrowserWindow({ frame: false, transparent: true })` and related window options."
+      - label: Always on top and sizing
+        notes: "UI path in code: BrowserWindow options such as `alwaysOnTop`, `resizable`, `minWidth`, `maxHeight`, and runtime window instance methods."
+
+  - group: IPC and Secure Preload
+    items:
+      - label: Expose API with contextBridge
+        command: |
+          const { contextBridge, ipcRenderer } = require("electron");
+          
+          contextBridge.exposeInMainWorld("desktop", {
+            pickFile: () => ipcRenderer.invoke("dialog:openFile"),
+            ping: () => ipcRenderer.invoke("app:ping"),
+          });
+      - label: Handle invoke in main
+        command: |
+          const { ipcMain, dialog } = require("electron");
+          
+          ipcMain.handle("dialog:openFile", async () => {
+            const result = await dialog.showOpenDialog({
+              properties: ["openFile"],
+            });
+            return result.filePaths;
+          });
+      - label: Send event to renderer
+        command: |
+          win.webContents.send("sync-complete", payload);
+      - label: Listen in renderer
+        command: |
+          window.electronAPI.onSyncComplete((payload) => {
+            console.log(payload);
+          });
+      - label: Security baseline
+        value: "Prefer `contextIsolation: true`, `nodeIntegration: false`, and a minimal preload API instead of exposing raw Node access to the renderer"
+      - label: IPC fit
+        value: Use invoke-handle for request-response flows and send-on for one-way event delivery
+
+  - group: Menus Tray and App Surfaces
+    items:
+      - label: Application menu
+        command: |
+          const { Menu } = require("electron");
+          
+          const menu = Menu.buildFromTemplate([
+            { label: "File", submenu: [{ role: "quit" }] },
+          ]);
+          
+          Menu.setApplicationMenu(menu);
+      - label: Context menu
+        command: |
+          win.webContents.on("context-menu", () => {
+            menu.popup();
+          });
+      - label: System tray
+        command: |
+          const { Tray, Menu } = require("electron");
+          
+          const tray = new Tray("iconTemplate.png");
+          tray.setContextMenu(Menu.buildFromTemplate([
+            { label: "Show", click: () => win.show() },
+            { label: "Quit", click: () => app.quit() },
+          ]));
+      - label: Native notifications
+        command: |
+          const { Notification } = require("electron");
+          
+          new Notification({ title: "Done", body: "Sync complete" }).show();
+      - label: Global shortcuts
+        command: |
+          const { globalShortcut } = require("electron");
+          
+          app.whenReady().then(() => {
+            globalShortcut.register("CommandOrControl+Shift+Y", () => {
+              win.show();
+            });
+          });
+      - label: Common UI locations
+        notes: "UI path in code: menus use `Menu` templates, tray behavior uses `Tray`, and dock or taskbar integrations are platform-specific APIs in the main process."
+
+  - group: Dialogs Files and Shell
+    items:
+      - label: Open file dialog
+        command: |
+          const { dialog } = require("electron");
+          
+          const result = await dialog.showOpenDialog(win, {
+            properties: ["openFile", "multiSelections"],
+          });
+      - label: Save dialog
+        command: |
+          const { dialog } = require("electron");
+          
+          const result = await dialog.showSaveDialog(win, {
+            defaultPath: "report.txt",
+          });
+      - label: Open external URL
+        command: |
+          const { shell } = require("electron");
+          
+          await shell.openExternal("https://www.electronjs.org");
+      - label: Reveal file in folder
+        command: |
+          const { shell } = require("electron");
+          
+          shell.showItemInFolder("/path/to/file.txt");
+      - label: User data path
+        command: |
+          const { app } = require("electron");
+          
+          const userDataDir = app.getPath("userData");
+      - label: Common lookup
+        value: Dialogs, shell integration, clipboard, and OS path locations are some of the most frequently revisited Electron APIs
+
+  - group: Packaging Config and Important Paths
+    items:
+      - label: package.json
+        value: Holds scripts, main entry, build tooling config, and often Forge or Builder settings
+      - label: Forge config
+        notes: "UI path in repo: `forge.config.js` or package.json Forge section."
+      - label: Builder config
+        notes: "UI path in repo: `electron-builder.yml`, `electron-builder.json`, or package.json build section."
+      - label: App icons
+        notes: "UI path in repo: build assets or maker-specific icon files such as `.icns`, `.ico`, and Linux PNG variants."
+      - label: Preload file
+        notes: "UI path in repo: preload script referenced from `webPreferences.preload`."
+      - label: Auto updater
+        value: Usually configured with electron-updater or Forge-compatible publishing flows rather than raw Electron itself
+
+  - group: Handy Snippets
+    items:
+      - label: Renderer call through preload
+        command: |
+          const files = await window.desktop.pickFile();
+      - label: Basic ping handler
+        command: |
+          ipcMain.handle("app:ping", async () => "pong");
+      - label: Listen for second instance
+        command: |
+          const gotLock = app.requestSingleInstanceLock();
+          
+          if (!gotLock) {
+            app.quit();
+          } else {
+            app.on("second-instance", () => {
+              if (win) {
+                if (win.isMinimized()) win.restore();
+                win.focus();
+              }
+            });
+          }
+      - label: Intercept external links
+        command: |
+          win.webContents.setWindowOpenHandler(({ url }) => {
+            shell.openExternal(url);
+            return { action: "deny" };
+          });
+      - label: Read app version
+        command: |
+          const version = app.getVersion();
+      - label: Toggle devtools
+        command: |
+          if (win.webContents.isDevToolsOpened()) {
+            win.webContents.closeDevTools();
+          } else {
+            win.webContents.openDevTools();
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Process split
+        value: Electron separates the privileged main process from renderer windows, with preload scripts used as the safe bridge layer
+      - label: Chromium plus Node tradeoff
+        value: Electron is productive and ecosystem-rich, but memory footprint and bundle size are usually higher than Tauri or Wails
+      - label: Security posture
+        value: Most Electron hardening comes from minimizing renderer privileges, validating IPC, and avoiding direct Node exposure in untrusted content
+      - label: Packaging ecosystem
+        value: Electron Forge is common for scaffolding and makers, while electron-builder is common for broader distribution and update workflows
+      - label: Best fit
+        value: Desktop apps that benefit from mature web tooling, Chromium compatibility, and extensive native desktop integrations through JavaScript

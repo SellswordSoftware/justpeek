@@ -1,0 +1,84 @@
+name: Kotlin Toolchain
+group: programming language / toolchain packs
+process:
+  - kotlin
+  - kotlinc
+  - gradle
+  - java
+search_terms:
+  - kotlinc
+  - gradle
+  - junit
+  - coroutines
+references:
+  - group: Compiler and Runtime
+    items:
+      - label: Show compiler version
+        command: kotlinc -version
+      - label: Run script
+        command: kotlinc -script script.kts
+      - label: Compile JVM app
+        command: kotlinc Main.kt -include-runtime -d app.jar
+      - label: Run jar
+        command: java -jar app.jar
+      - label: Run with kotlin launcher
+        command: kotlin MainKt
+      - label: REPL
+        command: kotlinc-jvm
+      - label: Gradle wrapper tasks
+        command: ./gradlew tasks
+
+  - group: Gradle Workflows
+    items:
+      - label: Build
+        command: ./gradlew build
+      - label: Test
+        command: ./gradlew test
+      - label: Run app
+        command: ./gradlew run
+      - label: One test
+        command: ./gradlew test --tests ExampleTest
+      - label: Dependency tree
+        command: ./gradlew dependencies
+      - label: Kotlin lint with ktlint
+        command: ./gradlew ktlintCheck
+      - label: Static analysis with detekt
+        command: ./gradlew detekt
+
+  - group: Handy Snippets
+    items:
+      - label: Main function
+        command: |
+          fun main() {
+              println("hello")
+          }
+      - label: Data class
+        command: |
+          data class User(
+              val name: String,
+              val active: Boolean = true
+          )
+      - label: Null-safe access
+        command: |
+          val length = user?.name?.length ?: 0
+      - label: Sealed class
+        command: |
+          sealed interface Result
+          data class Success(val value: String) : Result
+          data class Failure(val message: String) : Result
+      - label: Coroutine
+        command: |
+          suspend fun load(): String = "ok"
+
+  - group: Common Concepts
+    items:
+      - label: Kotlin plus Gradle
+        value: Most Kotlin JVM projects are effectively Gradle projects first and language projects second
+      - label: Null safety
+        value: Kotlin’s type system pushes null handling into normal code structure instead of leaving it implicit
+      - label: Data classes and sealed types
+        value: High-value constructs for everyday modeling and result-state design
+      - label: Coroutines
+        value: Preferred async model for many Kotlin codebases, especially server and Android work
+      - label: Wrapper habit
+        value: Prefer `./gradlew` so plugin and Gradle versions match the project

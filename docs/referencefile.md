@@ -59,8 +59,8 @@ The current schema supports these fields.
 - `name`: required display name for the reference set
 - `group`: optional picker category used to group files in the manual reference picker
 - `process`: optional process name or list of process names used for contextual matching
-- `title_pattern`: optional regex for narrowing the match by window title
-- `title_contains`: optional simpler substring matcher for the window title
+- `title_pattern`: optional regex for narrowing a `process` match by window title
+- `title_contains`: optional simpler substring matcher for narrowing a `process` match by window title
 - `references`: required list of reference groups
 - `shortcuts`: compatibility alias for `references`
 
@@ -82,12 +82,18 @@ The current schema supports these fields.
 
 ## How Matching Works
 
-JustPeek first tries to match a file by process name. You can further narrow the match with either:
+JustPeek first tries to match a file by process name. You can further narrow that process match with either:
 
 - `title_pattern` for regex matching
 - `title_contains` for a simpler case-insensitive substring match
 
 If both are present, both must match.
+
+Important:
+
+- `title_pattern` and `title_contains` do not create an automatic match by themselves.
+- They only refine a file that already has `process`.
+- If `process` is omitted, the file is picker-only even when a window title would otherwise match.
 
 Example:
 
@@ -118,7 +124,7 @@ references:
       - label: Create review
 ```
 
-If a file has no `process`, it is treated as picker-only content. It can still be opened manually from the picker, but it will not be selected automatically from the active window.
+If a file has no `process`, it is treated as picker-only content. It can still be opened manually from the picker, but it will not be selected automatically from the active window. In that case, `title_pattern` and `title_contains` have no effect on auto-selection.
 
 ## How Picker Grouping Works
 
@@ -169,7 +175,7 @@ process:
 
 Keep the list focused. Only add variants that you know are real matches for the same app.
 
-If the file is not meant to contextually match any app, omit `process` entirely.
+If the file is not meant to contextually match any app, omit `process` entirely. Do not rely on `title_pattern` or `title_contains` alone for contextual matching, because they only refine files that already declare `process`.
 
 ## How to Structure Good Entries
 

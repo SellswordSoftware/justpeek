@@ -1,0 +1,83 @@
+name: Julia Toolchain
+group: programming language / toolchain packs
+process:
+  - julia
+  - julia.exe
+search_terms:
+  - pkg
+  - repl
+  - test
+  - environment
+references:
+  - group: Runtime and REPL
+    items:
+      - label: Show version
+        command: julia --version
+      - label: Start REPL
+        command: julia
+      - label: Run script
+        command: julia script.jl
+      - label: Run one-liner
+        command: julia -e 'println("hello")'
+      - label: Activate project on start
+        command: julia --project=.
+      - label: Threads
+        command: JULIA_NUM_THREADS=8 julia
+      - label: Package REPL mode
+        value: Press `]` inside the REPL to enter Pkg mode
+
+  - group: Packages and Environments
+    items:
+      - label: Activate environment
+        command: julia --project=.
+      - label: Add package
+        command: julia -e 'using Pkg; Pkg.add("DataFrames")'
+      - label: Instantiate environment
+        command: julia -e 'using Pkg; Pkg.instantiate()'
+      - label: Update packages
+        command: julia -e 'using Pkg; Pkg.update()'
+      - label: Precompile
+        command: julia -e 'using Pkg; Pkg.precompile()'
+      - label: Status
+        command: julia -e 'using Pkg; Pkg.status()'
+      - label: Test package
+        command: julia -e 'using Pkg; Pkg.test()'
+
+  - group: Handy Snippets
+    items:
+      - label: Function
+        command: |
+          function add(a, b)
+              a + b
+          end
+      - label: Struct
+        command: |
+          struct User
+              name::String
+              active::Bool
+          end
+      - label: DataFrame load
+        command: |
+          using DataFrames, CSV
+          df = CSV.read("data.csv", DataFrame)
+      - label: Dictionary default
+        command: |
+          counts = Dict{String, Int}()
+          counts["a"] = get(counts, "a", 0) + 1
+      - label: Broadcast
+        command: |
+          xs = [1, 2, 3]
+          ys = xs .* 2
+
+  - group: Common Concepts
+    items:
+      - label: Project.toml and Manifest.toml
+        value: Environment manifest pair for dependencies and exact resolution
+      - label: Multiple dispatch
+        value: Core design model where behavior is chosen by the types of all arguments
+      - label: REPL workflow
+        value: Julia development is highly REPL-driven for exploration, profiling, and iteration
+      - label: Dot broadcasting
+        value: Dotted operators and calls apply elementwise and fuse efficiently
+      - label: Environment habit
+        value: Activate the intended project explicitly so package resolution stays predictable

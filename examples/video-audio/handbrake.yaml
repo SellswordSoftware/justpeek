@@ -1,0 +1,70 @@
+name: HandBrake
+group: video / audio
+process:
+  - HandBrake
+  - handbrake
+  - HandBrake.exe
+references:
+  - group: Queue and Source Workflow
+    items:
+      - label: Open source
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Start or pause encode
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Add to queue
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Show queue
+        keys: Ctrl+Q
+        keys_by_os:
+          macos: Cmd+Q
+      - label: Browse destination
+        notes: Confirm the output path before queueing multiple titles or presets.
+      - label: Preset panel
+        notes: Start with a near-fit preset, then override only the settings that materially matter.
+
+  - group: Navigation and Tabs
+    items:
+      - label: Next or previous field
+        keys: Tab / Shift+Tab
+      - label: Move between major controls
+        notes: Keyboard navigation is more about form traversal than rich editor-style commands.
+      - label: Chapters tab
+        value: Set chapter names or ranges when the source includes structured titles
+      - label: Dimensions tab
+        value: Control crop, scale, anamorphic behavior, and resolution
+      - label: Filters tab
+        value: Detelecine, deinterlace, denoise, sharpen, and colorspace-related cleanup
+      - label: Video tab
+        value: Codec, framerate, quality mode, bitrate, encoder preset, and tune
+      - label: Audio tab
+        value: Track selection, codecs, bitrate, mixdown, gain, and DRC
+
+  - group: High-value Encoding Reference
+    items:
+      - label: Constant quality
+        value: RF-based encoding mode that targets visual quality instead of fixed bitrate
+      - label: Average bitrate
+        value: Better when size targets are strict and predictable delivery matters more than adaptive quality
+      - label: H.264 vs H.265
+        value: H.265 compresses better but is slower and sometimes less compatible
+      - label: Framerate choice
+        value: Same as source is safest unless a deliberate conversion is needed
+      - label: Deinterlace need
+        value: Required for interlaced sources before modern playback delivery
+      - label: Crop discipline
+        value: Confirm auto-crop did not remove wanted picture information
+
+  - group: Common Workflows
+    items:
+      - label: DVD or Blu-ray rip transcode
+        value: Pick title, confirm audio and subtitle tracks, set crop, then queue
+      - label: Batch queue
+        value: Build multiple titles or files before launching long overnight encodes
+      - label: Delivery check
+        value: Verify codec, container, subtitle behavior, and output path before starting large jobs

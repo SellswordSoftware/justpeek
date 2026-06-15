@@ -1,0 +1,85 @@
+name: JUnit
+group: testing tools
+process:
+  - java
+  - javac
+  - mvn
+  - gradle
+search_terms:
+  - junit 5
+  - assertions
+  - parameterized
+  - lifecycle
+references:
+  - group: Running Tests
+    items:
+      - label: Maven tests
+        command: mvn test
+      - label: One Maven test
+        command: mvn -Dtest=ClassNameTest test
+      - label: Gradle tests
+        command: ./gradlew test
+      - label: One Gradle test
+        command: ./gradlew test --tests ClassNameTest
+      - label: IDE workflow
+        value: IDE-backed runs are common, but build-tool-backed runs are safer when classpath and plugins matter
+      - label: Failures with stack traces
+        notes: Use build-tool verbose or IDE stack inspection when assertion output alone is too thin.
+
+  - group: Assertions and Lifecycle
+    items:
+      - label: Assertions
+        value: assertEquals, assertTrue, assertFalse, assertThrows, assertAll
+      - label: Per-test setup
+        value: "@BeforeEach"
+      - label: Per-test teardown
+        value: "@AfterEach"
+      - label: Class setup
+        value: "@BeforeAll"
+      - label: Class teardown
+        value: "@AfterAll"
+      - label: Disable test
+        value: "@Disabled"
+
+  - group: Handy Snippets
+    items:
+      - label: Basic test
+        command: |
+          import static org.junit.jupiter.api.Assertions.assertEquals;
+          import org.junit.jupiter.api.Test;
+          
+          class AppTest {
+              @Test
+              void adds() {
+                  assertEquals(3, 1 + 2);
+              }
+          }
+      - label: Throws assertion
+        command: |
+          assertThrows(IllegalArgumentException.class, () -> service.load(null));
+      - label: Parameterized test
+        command: |
+          @ParameterizedTest
+          @CsvSource({"1,2,3", "2,3,5"})
+          void adds(int a, int b, int want) {
+              assertEquals(want, a + b);
+          }
+      - label: beforeEach
+        command: |
+          @BeforeEach
+          void setUp() {
+              service = new Service();
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Jupiter
+        value: JUnit 5 usually means the Jupiter programming model and annotations
+      - label: Parameterized tests
+        value: High-value for compactly covering many similar cases without repetitive methods
+      - label: Extension model
+        value: JUnit 5 extensions replace much of the older rule-runner customization model
+      - label: Build integration
+        value: Maven Surefire and Gradle test tasks are often the real execution environment even when IDEs trigger runs
+      - label: Assertions vs matchers
+        value: Teams often mix JUnit assertions with AssertJ or Hamcrest for richer readability

@@ -1,0 +1,113 @@
+name: DaVinci Resolve
+group: video / audio
+process:
+  - resolve
+  - Resolve.exe
+  - DaVinci Resolve
+search_terms:
+  - davinci shortcuts
+  - color grading
+  - edit page
+references:
+  - group: Playback and Timeline
+    items:
+      - label: Play or pause
+        keys: Space
+      - label: Play around current frame
+        keys: Slash
+      - label: Stop
+        keys: K
+      - label: Shuttle backward or forward
+        keys: J / L
+      - label: Faster shuttle
+        keys: Press J or L repeatedly
+      - label: Step one frame left or right
+        keys: LeftArrow / RightArrow
+      - label: Jump to previous or next edit
+        keys: UpArrow / DownArrow
+      - label: Go to start or end of timeline
+        keys: Home / End
+      - label: Mark in or out
+        keys: I / O
+      - label: Clear in and out
+        keys: Alt+X
+
+  - group: Edit Page Core
+    items:
+      - label: Insert edit
+        keys: F9
+      - label: Overwrite edit
+        keys: F10
+      - label: Replace edit
+        keys: F11
+      - label: Place on top
+        keys: F12
+      - label: Razor blade at playhead
+        keys: Ctrl+Backslash
+        keys_by_os:
+          macos: Cmd+Backslash
+      - label: Delete selection
+        keys: Delete
+      - label: Ripple delete
+        keys: Shift+Backspace
+      - label: Split clip
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Snapping
+        keys: N
+      - label: Link or unlink selection
+        keys: Ctrl+Shift+L
+        keys_by_os:
+          macos: Cmd+Shift+L
+
+  - group: Selection and Trimming
+    items:
+      - label: Selection mode
+        keys: A
+      - label: Trim edit mode
+        keys: T
+      - label: Dynamic trim mode
+        keys: W
+      - label: Blade edit mode
+        keys: B
+      - label: Hand mode
+        keys: H
+      - label: Zoom in or out on timeline
+        keys: Ctrl+Plus / Ctrl+Minus
+        keys_by_os:
+          macos: Cmd+Plus / Cmd+Minus
+      - label: Fit timeline
+        keys: Shift+Z
+      - label: Nudge clip one frame left or right
+        keys: Comma / Period
+      - label: Nudge clip one second left or right
+        keys: Shift+Comma / Shift+Period
+      - label: Slip source inside clip
+        notes: Use trim tools when timing changes but clip placement should stay fixed.
+
+  - group: Markers and Navigation
+    items:
+      - label: Add marker
+        keys: M
+      - label: Open marker edit
+        keys: M twice
+      - label: Next or previous marker
+        keys: Shift+UpArrow / Shift+DownArrow
+      - label: Match frame
+        keys: F
+      - label: Source and timeline viewer focus
+        notes: Keep track of viewer focus when transport or trim commands seem inconsistent.
+      - label: Full screen viewer
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+
+  - group: Common Reference
+    items:
+      - label: Page flow
+        value: Media, Cut, Edit, Fusion, Color, Fairlight, Deliver
+      - label: Trim mindset
+        value: Use selection for clip moves, trim mode for edit points, dynamic trim for playback-assisted timing
+      - label: Deliver habit
+        value: Confirm timeline range, preset, codec, destination, and render queue before export

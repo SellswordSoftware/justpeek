@@ -1,0 +1,393 @@
+name: Next.js
+group: web / devops / app tools
+process:
+  - node
+title_contains: next
+search_terms:
+  - nextjs
+  - app router
+  - pages router
+  - server components
+  - ssg
+  - ssr
+references:
+  - group: Project Setup
+    items:
+      - label: Create new project
+        command: npx create-next-app@latest my-app
+      - label: Create with TypeScript
+        command: npx create-next-app@latest my-app --ts
+      - label: Create with App Router
+        command: npx create-next-app@latest my-app --app
+      - label: Create with Tailwind CSS
+        command: npx create-next-app@latest my-app --tailwind
+      - label: Create with ESLint
+        command: npx create-next-app@latest my-app --eslint
+      - label: Skip installation (faster)
+        command: npx create-next-app@latest my-app --skip-install
+      - label: Use specific framework
+        command: npx create-next-app@latest my-app --framework tailwindcss
+
+  - group: Development
+    items:
+      - label: Start dev server
+        command: npm run dev
+      - label: Start on specific port
+        command: npm run dev -- -p 3001
+      - label: Turbopack dev server (faster)
+        command: npm run dev -- --turbo
+      - label: Turbopack with specific port
+        command: npm run dev -- --turbo -p 3001
+      - label: Open browser automatically
+        command: npm run dev -- --open
+
+  - group: Build and Deploy
+    items:
+      - label: Production build
+        command: npm run build
+      - label: Start production server
+        command: npm start
+      - label: Preview production build
+        command: npm run start
+      - label: Build and export static site
+        command: next build
+        notes: |
+          Requires output: export in next.config.js.
+          Only works with static pages.
+      - label: Analyze bundle size
+        command: npm i -D @next/bundle-analyzer && npm run build
+        notes: Add bundleAnalyzer to next.config.js to enable visualization
+      - label: Build with standalone output
+        command: next build
+        notes: |
+          Set output: standalone in next.config.js for Docker deployment.
+
+  - group: App Router
+    items:
+      - label: Page component (App Router)
+        command: |
+          // app/page.tsx
+          export default function Home() {
+            return <h1>Hello</h1>
+          }
+      - label: Server Component
+        command: |
+          // app/page.tsx (default is Server Component)
+          export default async function Page() {
+            const data = await fetch('https://api.example.com/data')
+            return <div>{data}</div>
+          }
+      - label: Client Component
+        command: |
+          'use client'
+          
+          import { useState } from 'react'
+          
+          export default function Counter() {
+            const [count, setCount] = useState(0)
+            return <button onClick={() => setCount(c => c + 1)}>{count}</button>
+          }
+      - label: Layout component
+        command: |
+          // app/layout.tsx
+          export default function RootLayout({ children }) {
+            return (
+              <html lang="en">
+                <body>{children}</body>
+              </html>
+            )
+          }
+      - label: Route segment
+        command: |
+          // app/blog/[slug]/page.tsx
+          export default function Page({ params }) {
+            return <article>Post: {params.slug}</article>
+          }
+      - label: Parallel routes
+        value: |
+          Create @folder directories under app/ for parallel route segments.
+          Render with {children} and {@slotname}.
+      - label: Intercepting routes
+        command: |
+          // app/(main)/@(blog)/[slug]/page.tsx
+          // Intercepts navigation within the (main) layout
+          export default function InterceptedPage({ params }) {
+            return <article>Intercepted: {params.slug}</article>
+          }
+      - label: Loading UI
+        command: |
+          // app/loading.tsx
+          export default function Loading() {
+            return <div>Loading...</div>
+          }
+      - label: Error boundary
+        command: |
+          // app/error.tsx
+          'use client'
+          
+          export default function Error({ error, reset }) {
+            return (
+              <div>
+                <h2>Something went wrong!</h2>
+                <button onClick={reset}>Try again</button>
+              </div>
+            )
+          }
+      - label: not-found
+        command: |
+          import { notFound } from 'next/navigation'
+          
+          export default function Page({ params }) {
+            if (!params.slug) notFound()
+            return <div>Content</div>
+          }
+      - label: Metadata (SEO)
+        command: |
+          // app/layout.tsx
+          export const metadata = {
+            title: 'My App',
+            description: 'A Next.js app',
+            openGraph: {
+              images: ['/og-image.png'],
+            },
+          }
+      - label: Dynamic metadata
+        command: |
+          // app/[slug]/page.tsx
+          export async function generateMetadata({ params }) {
+            return {
+              title: await getPostTitle(params.slug),
+            }
+          }
+
+  - group: Data Fetching
+    items:
+      - label: Server-side fetch (App Router)
+        command: |
+          export default async function Page() {
+            const res = await fetch('https://api.example.com/data', {
+              next: { revalidate: 60 }, // ISR
+            })
+            const data = await res.json()
+            return <div>{JSON.stringify(data)}</div>
+          }
+      - label: Static generation
+        command: |
+          export const revalidate = 3600 // Revalidate every hour
+          
+          export default async function Page() {
+            const data = await fetch('https://api.example.com/data')
+            return <div>{data}</div>
+          }
+      - label: On-demand revalidation
+        command: |
+          import { revalidatePath } from 'next/cache'
+          
+          export default async function Page({ searchParams }) {
+            if (searchParams.revalidate) {
+              revalidatePath('/blog')
+              return <div>Revalidated!</div>
+            }
+          }
+      - label: generateStaticParams
+        command: |
+          export async function generateStaticParams() {
+            return [
+              { slug: 'post-1' },
+              { slug: 'post-2' },
+            ]
+          }
+
+  - group: Routing
+    items:
+      - label: Programmatic navigation
+        command: |
+          import { useRouter } from 'next/navigation'
+          
+          export default function Component() {
+            const router = useRouter()
+            return (
+              <button onClick={() => router.push('/dashboard')}>
+                Go to Dashboard
+              </button>
+            )
+          }
+      - label: Redirect
+        command: |
+          import { redirect } from 'next/navigation'
+          
+          export default function Page() {
+            if (!isLoggedIn) {
+              redirect('/login')
+            }
+          }
+      - label: Middleware
+        command: |
+          // middleware.ts
+          import { NextResponse } from 'next/server'
+          
+          export function middleware(request) {
+            if (!request.cookies.get('session')) {
+              return NextResponse.redirect(new URL('/login', request.url))
+            }
+          }
+          
+          export const config = {
+            matcher: '/dashboard/:path*',
+          }
+
+  - group: API Routes
+    items:
+      - label: GET handler (App Router)
+        command: |
+          // app/api/users/route.ts
+          import { NextResponse } from 'next/server'
+          
+          export async function GET() {
+            return NextResponse.json({ users: [] })
+          }
+      - label: POST handler
+        command: |
+          export async function POST(request) {
+            const body = await request.json()
+            // Handle data
+            return NextResponse.json({ success: true })
+          }
+      - label: DELETE handler
+        command: |
+          export async function DELETE(request) {
+            const { searchParams } = new URL(request.url)
+            const id = searchParams.get('id')
+            return NextResponse.json({ deleted: id })
+          }
+      - label: Pages Router API route
+        command: |
+          // pages/api/hello.ts
+          export default function handler(req, res) {
+            res.status(200).json({ name: 'Hello' })
+          }
+
+  - group: Configuration
+    items:
+      - label: Basic next.config.js
+        command: |
+          /** @type {import('next').NextConfig} */
+          const nextConfig = {
+            reactStrictMode: true,
+            swcMinify: true,
+          }
+          
+          export default nextConfig
+      - label: Custom redirects
+        command: |
+          async redirects() {
+            return [
+              {
+                source: '/old',
+                destination: '/new',
+                permanent: true,
+              },
+            ]
+          }
+      - label: Custom rewrites
+        command: |
+          async rewrites() {
+            return [
+              {
+                source: '/api/:path*',
+                destination: 'https://api.example.com/:path*',
+              },
+            ]
+          }
+      - label: Image domains
+        command: |
+          images: {
+            domains: ['example.com', 'images.example.com'],
+          }
+      - label: Env variables
+        command: |
+          // .env.local
+          NEXT_PUBLIC_API_URL=https://api.example.com
+          DATABASE_URL=postgresql://...
+        notes: |
+          Prefix with NEXT_PUBLIC_ for client-side access
+          via process.env.NEXT_PUBLIC_*
+      - label: Custom webpack config
+        command: |
+          webpack: (config, { isServer }) => {
+            if (!isServer) {
+              config.resolve.fallback = { fs: false }
+            }
+            return config
+          }
+
+  - group: Common Patterns
+    items:
+      - label: Protected route pattern
+        command: |
+          // middleware.ts
+          import { NextResponse } from 'next/server'
+          import { getToken } from 'next-auth/jwt'
+          
+          export async function middleware(request) {
+            const token = await getToken({ req: request })
+            if (!token) {
+              return NextResponse.redirect(new URL('/login', request.url))
+            }
+          }
+          
+          export const config = {
+            matcher: ['/dashboard/:path*', '/settings/:path*'],
+          }
+      - label: Image optimization
+        command: |
+          import Image from 'next/image'
+          
+          export default function Component() {
+            return (
+              <Image
+                src="/hero.png"
+                alt="Hero"
+                width={800}
+                height={400}
+                priority
+              />
+            )
+          }
+      - label: Font optimization
+        command: |
+          import { Inter } from 'next/font/google'
+          
+          const inter = Inter({ subsets: ['latin'] })
+          
+          export default function Layout({ children }) {
+            return (
+              <html lang="en">
+                <body className={inter.className}>{children}</body>
+              </html>
+            )
+          }
+      - label: Script loading
+        command: |
+          import Script from 'next/script'
+          
+          export default function Page() {
+            return (
+              <>
+                <Script
+                  src="https://example.com/analytics.js"
+                  strategy="afterInteractive"
+                />
+              </>
+            )
+          }
+        notes: "Strategies: beforeInteractive, afterInteractive, lazyOnload"
+      - label: Caching strategies
+        value: |
+          Next.js caches data by default. Use fetch options for ISR,
+          no-store for fresh data, or revalidateTag/revalidatePath for
+          on-demand invalidation.
+      - label: Deployment targets
+        value: |
+          Vercel (recommended), Docker with standalone output, Node.js server,
+          static export, edge runtime, or custom server.

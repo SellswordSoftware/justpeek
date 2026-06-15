@@ -1,0 +1,198 @@
+name: Unity
+group: cad / 3d / maker tools
+process:
+  - Unity
+  - Unity.exe
+  - unity-editor
+search_terms:
+  - unity shortcuts
+  - inspector
+  - prefab
+  - c#
+references:
+  - group: Project and Global
+    items:
+      - label: New scene
+        keys: Ctrl+N
+      - label: Open scene
+        keys: Ctrl+O
+      - label: Save scene
+        keys: Ctrl+S
+      - label: Save project
+        keys: Ctrl+Shift+S
+      - label: Undo or redo
+        keys: Ctrl+Z / Ctrl+Y
+      - label: Search or command search
+        keys: Ctrl+K
+      - label: Preferences
+        notes: "UI path: `Edit > Preferences` on Windows/Linux or `Unity > Settings` on macOS."
+
+  - group: Play Mode and Testing
+    items:
+      - label: Play or stop
+        keys: Ctrl+P
+      - label: Pause
+        keys: Ctrl+Shift+P
+      - label: Step one frame
+        keys: Ctrl+Alt+P
+      - label: Maximize on play
+        notes: "UI path: Game view toolbar > `Maximize On Play`."
+      - label: Stats overlay
+        notes: "UI path: Game view > `Stats`."
+      - label: Gizmos toggle
+        notes: "UI path: Scene or Game view top-right > `Gizmos`."
+      - label: Console inspection
+        notes: Use Console for logs, stack traces, collapse, filtering, and error navigation during iteration.
+
+  - group: Scene View and Transforms
+    items:
+      - label: Hand tool
+        keys: Q
+      - label: Move tool
+        keys: W
+      - label: Rotate tool
+        keys: E
+      - label: Scale tool
+        keys: R
+      - label: Rect tool
+        keys: T
+      - label: Universal tool
+        keys: Y
+      - label: Focus selection
+        keys: F
+      - label: Vertex snap
+        keys: Hold V while dragging
+      - label: Pivot or center toggle
+        notes: "UI path: Scene view toolbar > `Pivot/Center`."
+      - label: Local or global toggle
+        notes: "UI path: Scene view toolbar > `Local/Global`."
+
+  - group: Hierarchy and Selection
+    items:
+      - label: Duplicate selection
+        keys: Ctrl+D
+      - label: Delete selection
+        keys: Delete
+      - label: Rename
+        keys: F2
+      - label: Frame selected in hierarchy
+        notes: Use search plus frame focus when working in deep scene trees.
+      - label: Create empty object
+        keys: Ctrl+Shift+N
+        notes: "UI path: `GameObject > Create Empty`."
+      - label: Set parent and child relationships
+        notes: Drag in Hierarchy or use context menus carefully to avoid breaking world-space assumptions.
+      - label: Multi-select
+        keys: Ctrl+Click or Shift+Click
+
+  - group: GameObjects Components and Prefabs
+    items:
+      - label: Create 3D object
+        notes: "UI path: `GameObject > 3D Object`."
+      - label: Create UI element
+        notes: "UI path: `GameObject > UI`."
+      - label: Add component
+        notes: "UI path: Inspector > `Add Component`."
+      - label: Reset transform
+        notes: "UI path: Transform component gear menu > `Reset`."
+      - label: Create prefab
+        notes: Drag GameObject from Hierarchy into Project window.
+      - label: Open prefab mode
+        notes: Double-click prefab asset or click the arrow breadcrumb in Inspector.
+      - label: Apply or revert prefab overrides
+        notes: "UI path: Inspector > `Overrides` dropdown."
+
+  - group: Project Window and Assets
+    items:
+      - label: Search assets
+        keys: Ctrl+F
+      - label: Create C# script
+        notes: "UI path: Project window > right-click > `Create > C# Script`."
+      - label: Create material
+        notes: "UI path: Project window > right-click > `Create > Material`."
+      - label: Import package
+        notes: "UI path: `Assets > Import Package` or Package Manager for modern packages."
+      - label: Package Manager
+        notes: "UI path: `Window > Package Manager`."
+      - label: Build settings
+        keys: Ctrl+Shift+B
+        notes: "UI path: `File > Build Profiles` or `File > Build Settings` depending on version."
+      - label: Addressables or asset pipeline
+        notes: Check project package setup before assuming runtime asset loading APIs are available.
+
+  - group: Animation and Timeline
+    items:
+      - label: Animation window
+        notes: "UI path: `Window > Animation > Animation`."
+      - label: Animator window
+        notes: "UI path: `Window > Animation > Animator`."
+      - label: Timeline window
+        notes: "UI path: `Window > Sequencing > Timeline`."
+      - label: Record animation changes
+        notes: Use the red record button in Animation workflows to key properties on the selected object.
+      - label: Keyframe workflow
+        value: Select object, open Animation window, create clip, enable record, modify keyed properties
+
+  - group: Common Scripting Snippets
+    items:
+      - label: MonoBehaviour basics
+        command: |
+          using UnityEngine;
+          
+          public class Spinner : MonoBehaviour
+          {
+              [SerializeField] private float speed = 90f;
+          
+              private void Update()
+              {
+                  transform.Rotate(Vector3.up, speed * Time.deltaTime);
+              }
+          }
+      - label: Get component safely
+        command: |
+          private Rigidbody rb;
+          
+          private void Awake()
+          {
+              rb = GetComponent<Rigidbody>();
+          }
+      - label: Input axis movement
+        command: |
+          private void Update()
+          {
+              float x = Input.GetAxis("Horizontal");
+              float z = Input.GetAxis("Vertical");
+              transform.Translate(new Vector3(x, 0f, z) * Time.deltaTime * 5f);
+          }
+      - label: Instantiate prefab
+        command: |
+          [SerializeField] private GameObject enemyPrefab;
+          [SerializeField] private Transform spawnPoint;
+          
+          public void Spawn()
+          {
+              Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+          }
+      - label: Coroutines
+        command: |
+          private IEnumerator Flash()
+          {
+              gameObject.SetActive(false);
+              yield return new WaitForSeconds(0.1f);
+              gameObject.SetActive(true);
+          }
+
+  - group: Common Concepts
+    items:
+      - label: Scene vs prefab
+        value: Scenes hold arranged instances; prefabs define reusable authored object hierarchies
+      - label: Component model
+        value: GameObjects are containers; behavior and data live in attached components
+      - label: Update vs FixedUpdate
+        value: Use `Update` for frame-driven logic and input polling, `FixedUpdate` for physics interactions
+      - label: SerializeField
+        value: Exposes private fields in Inspector while keeping code encapsulated
+      - label: Script execution order
+        value: Matters when initialization dependencies become implicit or fragile
+      - label: Prefab overrides
+        value: Instance-level changes should be applied intentionally to avoid confusing divergence from the source prefab

@@ -22,10 +22,10 @@ references:
   - group: Images, Profiles, and Configuration
     items:
       - label: List images
-        command: lxc image list images:
+        command: "lxc image list images:"
         notes: Browse available images from a configured remote.
       - label: Copy image locally
-        command: lxc image copy images:ubuntu/24.04 local: --alias ubuntu2404
+        command: "lxc image copy images:ubuntu/24.04 local: --alias ubuntu2404"
         notes: Cache a remote image locally under a friendlier alias.
       - label: List profiles
         command: lxc profile list

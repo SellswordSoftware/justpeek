@@ -1,0 +1,84 @@
+name: Discord Gaming
+group: gaming / streaming
+process:
+  - Discord
+  - discord
+search_terms:
+  - discord overlay
+  - push to talk
+  - streamer mode
+  - game activity
+  - keybinds
+references:
+  - group: Voice and Streamer Shortcuts
+    items:
+      - label: Mute or unmute
+        keys: Ctrl+Shift+M
+      - label: Deafen or undeafen
+        keys: Ctrl+Shift+D
+      - label: Push to talk
+        notes: Configure in keybinds for game-friendly voice control instead of relying only on UI mute toggles.
+      - label: Start Go Live
+        notes: "UI path: voice channel controls or screen share button in a call."
+      - label: Toggle overlay lock
+        notes: "UI path: set a custom keybind in `User Settings -> Game Overlay / Keybinds`."
+      - label: Toggle stream or camera
+        notes: "UI path: active call controls at the bottom left or in the stream panel."
+
+  - group: Gaming-Focused Features
+    items:
+      - label: Game activity
+        notes: "UI path: `User Settings -> Activity Privacy` or game activity surfaces depending on build."
+      - label: Registered games
+        notes: "UI path: `User Settings -> Registered Games` when available."
+      - label: Stream quality
+        notes: "UI path: Go Live stream setup panel before starting a stream."
+      - label: Clip sharing
+        notes: "UI path: stream and voice panel actions depending on current Discord rollout."
+      - label: Soundboard
+        notes: "UI path: voice controls and server permissions where supported."
+      - label: Activities
+        notes: "UI path: voice channel activity launcher for watch-together and embedded activities."
+
+  - group: Overlay and Performance
+    items:
+      - label: Overlay settings
+        notes: "UI path: `User Settings -> Game Overlay`."
+      - label: Keybind settings
+        notes: "UI path: `User Settings -> Keybinds`."
+      - label: Streamer Mode
+        notes: "UI path: `User Settings -> Streamer Mode`."
+      - label: Hardware acceleration
+        notes: "UI path: `User Settings -> Advanced`."
+      - label: Voice processing
+        notes: "UI path: `User Settings -> Voice & Video` for noise suppression, echo cancellation, and input mode."
+      - label: Notifications while gaming
+        notes: "UI path: per-server notification settings plus Streamer Mode suppression controls."
+
+  - group: Search and Social Triage
+    items:
+      - label: Quick switcher
+        keys: Ctrl+K
+      - label: Search current channel
+        keys: Ctrl+F
+      - label: Search all
+        keys: Ctrl+Shift+F
+      - label: Open inbox
+        notes: "UI path: top right `Inbox`."
+      - label: DMs while playing
+        value: Use quick switcher and mute/deafen shortcuts together so chat triage does not interrupt game control flow
+      - label: Common lookup
+        value: Overlay, Streamer Mode, push-to-talk, hardware acceleration, and Go Live setup are the highest-value gaming-specific settings
+
+  - group: Common Concepts
+    items:
+      - label: Gaming Discord differs from chat Discord
+        value: The important settings shift from text productivity to voice quality, overlay behavior, Go Live streaming, and interruption control
+      - label: Overlay can conflict
+        value: Overlay behavior depends on the game, window mode, GPU stack, and anti-cheat context, so it is often the first troubleshooting surface
+      - label: Voice discipline
+        value: Push-to-talk, input sensitivity, and noise suppression usually matter more than cosmetic settings in real gaming sessions
+      - label: Streamer mode utility
+        value: Streamer Mode is one of the most useful recall items because it reduces accidental leakage of invites, notifications, and personal details on stream
+      - label: Shortcut density
+        value: Discord has a few critical gaming shortcuts, but a lot of the real value comes from configured keybinds and settings panels

@@ -1,0 +1,109 @@
+name: LibreOffice Writer
+group: office apps
+process:
+  - soffice
+  - soffice.bin
+  - libreoffice
+  - swriter
+title_contains: Writer
+references:
+  - group: File and Document
+    items:
+      - label: New document
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open document
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Save as
+        keys: Ctrl+Shift+S
+        keys_by_os:
+          macos: Cmd+Shift+S
+      - label: Print
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Export as PDF
+        keys: Ctrl+Alt+Shift+E
+
+  - group: Navigation and Search
+    items:
+      - label: Find
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Find and replace
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Shift+H
+      - label: Go to page
+        keys: Ctrl+G
+      - label: Start or end of document
+        keys: Ctrl+Home / Ctrl+End
+      - label: Move one word left or right
+        keys: Ctrl+LeftArrow / Ctrl+RightArrow
+      - label: Navigator
+        keys: F5
+        notes: Fast jump surface for headings, tables, images, references, and bookmarks.
+
+  - group: Formatting
+    items:
+      - label: Bold
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Italic
+        keys: Ctrl+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Underline
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Superscript
+        keys: Ctrl+Shift+P
+      - label: Subscript
+        keys: Ctrl+Shift+B
+      - label: Clear direct formatting
+        keys: Ctrl+M
+      - label: Default paragraph style
+        keys: Ctrl+0
+      - label: Heading 1 through 5
+        keys: Ctrl+1 through Ctrl+5
+
+  - group: Structure and Review
+    items:
+      - label: Insert hyperlink
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Insert comment
+        keys: Ctrl+Alt+C
+      - label: Word count
+        keys: Ctrl+Shift+C
+      - label: Spelling
+        keys: F7
+      - label: Manage styles
+        keys: F11
+      - label: Show formatting marks
+        keys: Ctrl+F10
+      - label: Page break
+        keys: Ctrl+Enter
+
+  - group: Common Reference
+    items:
+      - label: Nonbreaking space
+        keys: Ctrl+Shift+Space
+      - label: Nonbreaking hyphen
+        keys: Ctrl+Shift+Minus
+      - label: Manual line break
+        keys: Shift+Enter
+      - label: Field update
+        keys: F9
+        notes: Useful when references, indexes, or fields need refreshing before export.

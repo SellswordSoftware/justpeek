@@ -1,0 +1,607 @@
+name: Angular
+group: web / devops / app tools
+process:
+  - node
+title_contains: angular
+search_terms:
+  - angularjs
+  - ng
+  - typescript
+  - rxjs
+  - standalone components
+references:
+  - group: Project Setup
+    items:
+      - label: Install Angular CLI
+        command: npm install -g @angular/cli
+      - label: Create new project
+        command: ng new my-app
+      - label: Create with standalone components
+        command: ng new my-app --standalone
+      - label: Create with routing
+        command: ng new my-app --routing
+      - label: Create with stylesheet format
+        command: ng new my-app --style=scss
+      - label: Create with strict mode
+        command: ng new my-app --strict
+
+  - group: Development
+    items:
+      - label: Start dev server
+        command: ng serve
+      - label: Start on specific port
+        command: ng serve --port 3000
+      - label: Open browser automatically
+        command: ng serve --open
+      - label: Watch for changes
+        command: ng serve --watch
+      - label: Production build
+        command: ng build --configuration production
+      - label: Build with AOT compilation
+        command: ng build --aot
+      - label: Analyze bundle
+        command: ng build --stats-json
+      - label: Run tests
+        command: ng test
+      - label: Run linting
+        command: ng lint
+      - label: Generate component
+        command: ng generate component my-component
+      - label: Generate service
+        command: ng generate service my-service
+      - label: Generate module
+        command: ng generate module my-module
+      - label: Generate directive
+        command: ng generate directive my-directive
+      - label: Generate pipe
+        command: ng generate pipe my-pipe
+
+  - group: Components
+    items:
+      - label: Basic component
+        command: |
+          import { Component } from '@angular/core'
+          
+          @Component({
+            selector: 'app-hero',
+            template: `<h1>{{ title }}</h1>`,
+            styles: [`h1 { color: blue; }`]
+          })
+          export class HeroComponent {
+            title = 'My Hero'
+          }
+      - label: Standalone component
+        command: |
+          import { Component } from '@angular/core'
+          import { CommonModule } from '@angular/common'
+          
+          @Component({
+            standalone: true,
+            imports: [CommonModule],
+            selector: 'app-hero',
+            template: `<h1>{{ title }}</h1>`
+          })
+          export class HeroComponent {
+            title = 'My Hero'
+          }
+        notes: "Standalone components don't need to be declared in a NgModule"
+      - label: Component with input
+        command: |
+          import { Component, Input } from '@angular/core'
+          
+          @Component({
+            selector: 'app-user-card',
+            template: `
+              <div>
+                <h2>{{ user.name }}</h2>
+                <p>{{ user.email }}</p>
+              </div>
+            `
+          })
+          export class UserCardComponent {
+            @Input() user: User
+          }
+      - label: Component with output
+        command: |
+          import { Component, Output, EventEmitter } from '@angular/core'
+          
+          @Component({
+            selector: 'app-search-box',
+            template: `
+              <input (input)="onSearch($event.target.value)" />
+            `
+          })
+          export class SearchBoxComponent {
+            @Output() search = new EventEmitter<string>()
+            
+            onSearch(term: string) {
+              this.search.emit(term)
+            }
+          }
+      - label: Component lifecycle
+        command: |
+          import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core'
+          
+          @Component({
+            selector: 'app-subscription',
+            template: `<p>{{ data }}</p>`
+          })
+          export class SubscriptionComponent implements OnInit, OnDestroy {
+            data: string
+            private subscription: Subscription
+          
+            constructor(private cd: ChangeDetectorRef) {}
+          
+            ngOnInit() {
+              this.subscription = this.service.getData().subscribe(d => {
+                this.data = d
+                this.cd.markForCheck()
+              })
+            }
+          
+            ngOnDestroy() {
+              this.subscription?.unsubscribe()
+            }
+          }
+        notes: "Common hooks: ngOnInit, ngOnDestroy, ngOnChanges, ngAfterViewInit"
+
+  - group: Templates
+    items:
+      - label: Interpolation
+        command: |
+          <h1>Hello, {{ name }}!</h1>
+          <p>{{ 2 + 2 }}</p>
+          <p>{{ user?.name }}</p>
+      - label: Property binding
+        command: |
+          <img [src]="imageUrl" [alt]="altText" />
+          <button [disabled]="isDisabled">Click</button>
+          <input [value]="defaultValue" />
+      - label: Event binding
+        command: |
+          <button (click)="handleClick()">Click</button>
+          <input (keyup.enter)="submit()" />
+          <input (input)="onInput($event)" />
+      - label: Two-way binding
+        command: |
+          <input [(ngModel)]="username" />
+          <p>Username: {{ username }}</p>
+        notes: "Requires FormsModule import"
+      - label: "*ngIf"
+        command: |
+          <div *ngIf="isLoggedIn">
+            Welcome, {{ username }}!
+          </div>
+          <div *ngIf="isLoading; else loading">
+            Content
+          </div>
+          <ng-template #loading>Loading...</ng-template>
+      - label: "*ngFor"
+        command: |
+          <ul>
+            <li *ngFor="let item of items; let i = index; let first = first">
+              {{ i + 1 }}: {{ item.name }}
+              {{ first ? '(first)' : '' }}
+            </li>
+          </ul>
+      - label: "ngSwitch"
+        command: |
+          <div [ngSwitch]="status">
+            <div *ngSwitchCase="'loading'">Loading...</div>
+            <div *ngSwitchCase="'success'">Success!</div>
+            <div *ngSwitchDefault>Unknown status</div>
+          </div>
+      - label: Class binding
+        command: |
+          <div [class.active]="isActive" [class.disabled]="isDisabled">
+            Content
+          </div>
+          <div [ngClass]="{ active: isActive, disabled: isDisabled }">
+            Content
+          </div>
+      - label: Style binding
+        command: |
+          <div [style.color]="color" [style.font-size.px]="fontSize">
+            Content
+          </div>
+          <div [ngStyle]="{ color: color, fontSize: fontSize + 'px' }">
+            Content
+          </div>
+
+  - group: Directives
+    items:
+      - label: Structural directives
+        value: "*ngIf, *ngFor, *ngSwitch, ngTemplateOutlet, ngComponentOutlet"
+      - label: Attribute directives
+        value: "ngClass, ngStyle"
+      - label: Custom directive
+        command: |
+          import { Directive, ElementRef, Renderer2 } from '@angular/core'
+          
+          @Directive({
+            selector: '[appHighlight]'
+          })
+          export class HighlightDirective {
+            constructor(el: ElementRef, renderer: Renderer2) {
+              renderer.setStyle(el.nativeElement, 'backgroundColor', 'yellow')
+            }
+          }
+      - label: Host listener
+        command: |
+          @Directive({
+            selector: '[appClickOutside]'
+          })
+          export class ClickOutsideDirective {
+            @HostListener('document:click', ['$event'])
+            onClickOutside(event: Event) {
+              if (!this.element.nativeElement.contains(event.target)) {
+                this.clickOutside.emit(event)
+              }
+            }
+          }
+
+  - group: Services and Dependency Injection
+    items:
+      - label: Basic service
+        command: |
+          import { Injectable } from '@angular/core'
+          
+          @Injectable({ providedIn: 'root' })
+          export class UserService {
+            getUsers() {
+              return this.http.get<User[]>('/api/users')
+            }
+          }
+        notes: "providedIn: 'root' makes it a singleton"
+      - label: Service with HTTP
+        command: |
+          import { Injectable } from '@angular/core'
+          import { HttpClient } from '@angular/common/http'
+          
+          @Injectable({ providedIn: 'root' })
+          export class DataService {
+            constructor(private http: HttpClient) {}
+          
+            getData() {
+              return this.http.get<Data>('/api/data')
+            }
+          
+            createData(data: Data) {
+              return this.http.post<Data>('/api/data', data)
+            }
+          }
+      - label: Service injection
+        command: |
+          @Component({...})
+          export class MyComponent {
+            constructor(private userService: UserService) {}
+          
+            ngOnInit() {
+              this.userService.getUsers().subscribe(users => {
+                this.users = users
+              })
+            }
+          }
+      - label: Hierarchical injection
+        command: |
+          @Injectable()
+          export class ThemeService {
+            theme = 'light'
+          }
+          
+          @Component({
+            providers: [ThemeService],
+            template: '...'
+          })
+          export class DialogComponent {
+            constructor(private theme: ThemeService) {}
+          }
+        notes: "Without providedIn: 'root', service is created per component that provides it"
+
+  - group: RxJS
+    items:
+      - label: Create observable
+        command: |
+          import { Observable } from 'rxjs'
+          
+          const data$ = new Observable(subscriber => {
+            setTimeout(() => {
+              subscriber.next('data')
+              subscriber.complete()
+            }, 1000)
+          })
+      - label: HTTP observable
+        command: |
+          // HttpClient returns observables
+          this.http.get<User[]>('/api/users').subscribe({
+            next: users => this.users = users,
+            error: err => console.error(err),
+            complete: () => console.log('Done')
+          })
+      - label: async pipe
+        command: |
+          // In component
+          users$ = this.userService.getUsers()
+          
+          // In template
+          <li *ngFor="let user of users$ | async">
+            {{ user.name }}
+          </li>
+        notes: "async pipe automatically unsubscribes - no manual cleanup needed"
+      - label: Common operators
+        command: |
+          import { map, filter, catchError, retry, tap } from 'rxjs/operators'
+          
+          data$.pipe(
+            filter(d => d != null),
+            map(d => transform(d)),
+            tap(d => console.log(d)),
+            retry(3),
+            catchError(err => of([]))
+          )
+        notes: "Import operators from 'rxjs/operators'"
+      - label: Subjects
+        command: |
+          import { BehaviorSubject, Subject } from 'rxjs'
+          
+          // BehaviorSubject has a current value
+          private state$ = new BehaviorSubject<State>(initialState)
+          state$ = this.state$.asObservable()
+          
+          updateState(newState: State) {
+            this.state$.next(newState)
+          }
+        notes: "BehaviorSubject requires initial value. Subject doesn't."
+      - label: Combine observables
+        command: |
+          import { combineLatest, forkJoin } from 'rxjs'
+          
+          // combineLatest - emits when any source emits
+          const combined$ = combineLatest([users$, posts$])
+          
+          // forkJoin - emits when all sources complete
+          const results$ = forkJoin({
+            users: this.userService.getUsers(),
+            posts: this.postService.getPosts()
+          })
+
+  - group: Routing
+    items:
+      - label: Define routes
+        command: |
+          import { Routes } from '@angular/router'
+          
+          export const routes: Routes = [
+            { path: '', component: HomeComponent },
+            { path: 'about', component: AboutComponent },
+            { path: 'users/:id', component: UserComponent },
+            { path: '**', component: PageNotFoundComponent },
+          ]
+      - label: Router module
+        command: |
+          import { provideRouter } from '@angular/router'
+          import { routes } from './app.routes'
+          
+          bootstrapApplication(AppComponent, {
+            providers: [provideRouter(routes)]
+          })
+        notes: "For standalone apps. For NgModule apps, use RouterModule.forRoot()"
+      - label: Router outlet
+        command: |
+          <!-- app.component.html -->
+          <nav>
+            <a routerLink="/" routerLinkActive="active">Home</a>
+            <a routerLink="/about" routerLinkActive="active">About</a>
+          </nav>
+          <router-outlet></router-outlet>
+      - label: Route parameters
+        command: |
+          import { ActivatedRoute } from '@angular/router'
+          import { Params } from '@angular/router'
+          
+          export class UserComponent {
+            userId: string
+          
+            constructor(route: ActivatedRoute) {
+              route.params.subscribe((params: Params) => {
+                this.userId = params['id']
+              })
+            }
+          }
+      - label: Route guards
+        command: |
+          import { Injectable } from '@angular/core'
+          import { CanActivate, Router } from '@angular/router'
+          
+          @Injectable()
+          export class AuthGuard implements CanActivate {
+            constructor(private router: Router) {}
+          
+            canActivate() {
+              if (this.authService.isLoggedIn()) {
+                return true
+              }
+              this.router.navigate(['/login'])
+              return false
+            }
+          }
+      - label: Lazy loading
+        command: |
+          {
+            path: 'admin',
+            loadComponent: () => import('./admin/admin.module')
+              .then(m => m.AdminComponent)
+          }
+        notes: "Split your app into smaller chunks loaded on demand"
+      - label: Router events
+        command: |
+          import { Router, NavigationEnd } from '@angular/router'
+          
+          constructor(router: Router) {
+            router.events.subscribe(event => {
+              if (event instanceof NavigationEnd) {
+                console.log('Navigated to:', event.url)
+              }
+            })
+          }
+
+  - group: Forms
+    items:
+      - label: Template-driven form
+        command: |
+          <form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+            <input name="name" ngModel required />
+            <input name="email" ngModel required email />
+            <button type="submit">Submit</button>
+          </form>
+        notes: "Requires FormsModule import"
+      - label: Reactive form
+        command: |
+          import { ReactiveFormsModule } from '@angular/forms'
+          
+          @Component({...})
+          export class MyComponent {
+            form = this.fb.group({
+              name: ['', [Validators.required]],
+              email: ['', [Validators.required, Validators.email]],
+              age: [null, [Validators.min(18)]]
+            })
+          
+            constructor(private fb: FormBuilder) {}
+          
+            onSubmit() {
+              if (this.form.valid) {
+                console.log(this.form.value)
+              }
+            }
+          }
+        notes: "Requires ReactiveFormsModule import"
+      - label: Form validation
+        command: |
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <input formControlName="name" />
+            <div *ngIf="form.get('name')?.errors?.required">
+              Name is required
+            </div>
+            <div *ngIf="form.get('name')?.touched && form.get('name')?.errors">
+              Invalid input
+            </div>
+            <button type="submit" [disabled]="form.invalid">
+              Submit
+            </button>
+          </form>
+      - label: Custom validator
+        command: |
+          import { AbstractControl, ValidationErrors } from '@angular/forms'
+          
+          export function passwordMatch(control: AbstractControl): ValidationErrors | null {
+            const password = control.get('password')
+            const confirm = control.get('confirmPassword')
+            return password && confirm && password.value !== confirm.value
+              ? { passwordMismatch: true }
+              : null
+          }
+        notes: "Use with formGroup: this.fb.group({}, { validators: passwordMatch })"
+
+  - group: Pipes
+    items:
+      - label: Built-in pipes
+        command: |
+          <p>{{ date | date:'medium' }}</p>
+          <p>{{ price | currency:'USD' }}</p>
+          <p>{{ text | uppercase }}</p>
+          <p>{{ text | lowercase }}</p>
+          <p>{{ value | percentage:'1.2-2' }}</p>
+          <p>{{ json | json }}</p>
+          <p>{{ slice | slice:0:10 }}</p>
+      - label: Custom pipe
+        command: |
+          import { Pipe, PipeTransform } from '@angular/core'
+          
+          @Pipe({ name: 'filter' })
+          export class FilterPipe implements PipeTransform {
+            transform(items: any[], query: string): any[] {
+              return items.filter(item =>
+                item.name.toLowerCase().includes(query.toLowerCase())
+              )
+            }
+          }
+        notes: "Pipes are pure by default - they only run when input reference changes"
+      - label: Pipe chaining
+        command: |
+          <p>{{ date | date:'medium' | uppercase }}</p>
+          <p>{{ price | currency:'USD' | async }}</p>
+
+  - group: Common Patterns
+    items:
+      - label: HTTP interceptor
+        command: |
+          import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http'
+          
+          @Injectable()
+          export class AuthInterceptor implements HttpInterceptor {
+            intercept(req: HttpRequest<any>, next: HttpHandler) {
+              const token = localStorage.getItem('token')
+              if (token) {
+                req = req.clone({
+                  setHeaders: { Authorization: `Bearer ${token}` }
+                })
+              }
+              return next.handle(req)
+            }
+          }
+      - label: Environment configuration
+        command: |
+          // src/environments/environment.ts
+          export const environment = {
+            production: false,
+            apiUrl: 'http://localhost:3000/api'
+          }
+          
+          // src/environments/environment.prod.ts
+          export const environment = {
+            production: true,
+            apiUrl: 'https://api.example.com'
+          }
+        notes: "Angular swaps environment files during build"
+      - label: Change detection
+        command: |
+          import { ChangeDetectionStrategy } from '@angular/core'
+          
+          @Component({
+            changeDetection: ChangeDetectionStrategy.OnPush
+          })
+          export class OptimizedComponent {}
+        notes: "OnPush only checks when inputs change, events fire, or async pipe emits"
+      - label: Performance tips
+        value: |
+          Use OnPush change detection strategy.
+          Prefer standalone components for tree-shaking.
+          Use trackBy with *ngFor for list performance.
+          Use async pipe instead of manual subscriptions.
+          Lazy-load feature modules.
+          Use pure pipes for expensive computations.
+          Avoid creating new objects/arrays in templates.
+      - label: Testing
+        command: |
+          import { ComponentFixture, TestBed } from '@angular/core/testing'
+          import { MyComponent } from './my.component'
+          
+          describe('MyComponent', () => {
+            let component: MyComponent
+            let fixture: ComponentFixture<MyComponent>
+          
+            beforeEach(async () => {
+              await TestBed.configureTestingModule({
+                imports: [MyComponent]
+              }).compileComponents()
+          
+              fixture = TestBed.createComponent(MyComponent)
+              component = fixture.componentInstance
+              fixture.detectChanges()
+            })
+          
+            it('should create', () => {
+              expect(component).toBeTruthy()
+            })
+          })

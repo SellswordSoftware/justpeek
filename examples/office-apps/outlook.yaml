@@ -1,0 +1,98 @@
+name: Outlook
+group: office apps
+process:
+  - OUTLOOK.EXE
+  - outlook.exe
+  - outlook
+  - olk.exe
+  - Microsoft Outlook
+references:
+  - group: Mail Triage
+    items:
+      - label: New email
+        keys: Ctrl+Shift+M
+        keys_by_os:
+          macos: Cmd+N
+      - label: Reply
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Reply all
+        keys: Ctrl+Shift+R
+        keys_by_os:
+          macos: Cmd+Shift+R
+      - label: Forward
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+J
+      - label: Send message
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Return
+      - label: Archive
+        keys: Backspace
+        notes: Common in classic Outlook; web and new Outlook builds may expose archive through ribbon or toolbar instead.
+      - label: Delete message
+        keys: Delete
+
+  - group: Search and Navigation
+    items:
+      - label: Search current mailbox
+        keys: Ctrl+E
+        keys_by_os:
+          macos: Option+Cmd+F
+      - label: Go to mail
+        keys: Ctrl+1
+      - label: Go to calendar
+        keys: Ctrl+2
+      - label: Go to contacts or people
+        keys: Ctrl+3
+      - label: Go to tasks
+        keys: Ctrl+4
+      - label: Go to notes
+        keys: Ctrl+5
+      - label: Next item
+        keys: Ctrl+Period
+      - label: Previous item
+        keys: Ctrl+Comma
+
+  - group: Calendar and Meetings
+    items:
+      - label: New meeting request
+        keys: Ctrl+Shift+Q
+      - label: New appointment
+        keys: Ctrl+Shift+A
+      - label: Today in calendar
+        keys: Alt+Home
+      - label: Day week and month views
+        keys: Alt+1 / Alt+2 / Alt+3
+      - label: Accept meeting
+        keys: Alt+C
+      - label: Tentative meeting response
+        keys: Alt+T
+      - label: Decline meeting
+        keys: Alt+D
+
+  - group: Search Operators and Filters
+    items:
+      - label: From sender
+        value: "from:\"name@example.com\""
+      - label: To recipient
+        value: "to:\"name@example.com\""
+      - label: Subject contains
+        value: "subject:\"quarterly review\""
+      - label: Has attachment
+        value: hasattachments:yes
+      - label: Category filter
+        value: category:red
+      - label: Date filter
+        value: received:today or received:last week
+
+  - group: Common Reference
+    items:
+      - label: Delay delivery
+        notes: Use Options > Delay Delivery when you need send-later behavior in classic Outlook.
+      - label: Conversation cleanup
+        notes: Cleanup is useful for noisy threads but should be used carefully on compliance-sensitive mailboxes.
+      - label: Focused Inbox caveat
+        notes: Focused Inbox changes triage behavior; verify whether the mailbox uses it before relying on inbox order.

@@ -1,0 +1,122 @@
+name: MySQL
+group: database
+process:
+  - mysql
+  - mysqld
+search_terms:
+  - mysql
+  - mysqldump
+  - mysql client
+  - show grants
+  - explain analyze
+references:
+  - group: Connect and Session
+    items:
+      - label: Connect local
+        command: mysql -u root -p
+      - label: Connect remote database
+        command: mysql -h localhost -P 3306 -u appuser -p appdb
+      - label: Connect with URL-style env workflow
+        value: MySQL CLI most commonly uses flags rather than a single URL string, so host, port, user, and database are usually passed separately
+      - label: Show current user and database
+        command: SELECT CURRENT_USER(), DATABASE();
+      - label: Show version
+        command: SELECT VERSION();
+      - label: Exit client
+        command: exit
+      - label: Source SQL file
+        command: source schema.sql;
+
+  - group: Database and User Admin
+    items:
+      - label: Show databases
+        command: SHOW DATABASES;
+      - label: Use database
+        command: USE appdb;
+      - label: Create database
+        command: CREATE DATABASE appdb CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+      - label: Create user
+        command: CREATE USER 'appuser'@'%' IDENTIFIED BY 'secret';
+      - label: Grant privileges
+        command: GRANT ALL PRIVILEGES ON appdb.* TO 'appuser'@'%';
+      - label: Show grants
+        command: SHOW GRANTS FOR 'appuser'@'%';
+      - label: Flush privileges
+        command: FLUSH PRIVILEGES;
+
+  - group: Schema and Table Work
+    items:
+      - label: Show tables
+        command: SHOW TABLES;
+      - label: Describe table
+        command: DESCRIBE users;
+      - label: Show create table
+        command: SHOW CREATE TABLE users;
+      - label: Create table
+        command: |
+          CREATE TABLE users (
+              id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+              email VARCHAR(255) NOT NULL,
+              created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (id),
+              UNIQUE KEY uq_users_email (email)
+          );
+      - label: Add column
+        command: ALTER TABLE users ADD COLUMN name VARCHAR(255) NULL;
+      - label: Add index
+        command: CREATE INDEX idx_users_created_at ON users (created_at);
+      - label: Upsert
+        command: |
+          INSERT INTO users (email)
+          VALUES ('sam@example.com')
+          ON DUPLICATE KEY UPDATE email = VALUES(email);
+
+  - group: Querying and Diagnostics
+    items:
+      - label: Explain query
+        command: EXPLAIN SELECT * FROM users WHERE email = 'sam@example.com';
+      - label: Explain analyze query
+        command: EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'sam@example.com';
+      - label: Show process list
+        command: SHOW PROCESSLIST;
+      - label: Kill connection
+        command: KILL 12345;
+      - label: Show engine status
+        command: SHOW ENGINE INNODB STATUS\G
+      - label: Vertical output
+        command: SELECT * FROM users WHERE id = 1\G
+      - label: Time zone check
+        command: SELECT @@global.time_zone, @@session.time_zone;
+
+  - group: Backup Restore and Import Export
+    items:
+      - label: Dump database
+        command: mysqldump -u root -p --databases appdb > appdb.sql
+      - label: Dump one table
+        command: mysqldump -u root -p appdb users > users.sql
+      - label: Restore dump
+        command: mysql -u root -p appdb < appdb.sql
+      - label: Import CSV with load data
+        command: |
+          LOAD DATA LOCAL INFILE 'users.csv'
+          INTO TABLE users
+          FIELDS TERMINATED BY ','
+          IGNORE 1 LINES
+          (email);
+      - label: Export query from shell
+        value: Query export is often handled with client flags, batch mode, or external shell redirection rather than an in-client meta-command system
+      - label: mysqlpump note
+        value: "Some environments use `mysqlpump` or physical backup tools, but `mysqldump` is still the most commonly looked up logical backup tool"
+
+  - group: Common Concepts
+    items:
+      - label: InnoDB default
+        value: Modern MySQL deployments typically assume InnoDB for transactions, row-level locking, and foreign key support
+      - label: Character set habit
+        value: "`utf8mb4` should generally be the default choice for full Unicode support"
+      - label: Show create table
+        value: "`SHOW CREATE TABLE` is often more useful than `DESCRIBE` when you need the exact table definition, indexes, and engine options"
+      - label: Grants and host scopes
+        value: MySQL users are scoped by both username and host, which is one of the most common sources of confusion when auth works in one place and fails in another
+      - label: Explain before indexing
+        value: Read the execution plan before changing indexes so you can tune the query shape intentionally instead of guessing
