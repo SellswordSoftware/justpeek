@@ -1,4 +1,6 @@
-use tauri::{AppHandle, Emitter};
+#[cfg(target_os = "linux")]
+use tauri::Emitter;
+use tauri::AppHandle;
 
 #[cfg(target_os = "linux")]
 use ashpd::desktop::global_shortcuts::{GlobalShortcuts, NewShortcut};
@@ -7,11 +9,13 @@ use futures_util::StreamExt;
 
 const TOGGLE_SHORTCUT_ID: &str = "toggle-panel";
 
+#[cfg(target_os = "linux")]
 pub fn install_hotkey_listener(app: &AppHandle, hotkey: &str) {
-    #[cfg(target_os = "linux")]
-    {
-        install_linux_hotkey_listener(app.clone(), hotkey.to_string());
-    }
+    install_linux_hotkey_listener(app.clone(), hotkey.to_string());
+}
+
+#[cfg(not(target_os = "linux"))]
+pub fn install_hotkey_listener(_app: &AppHandle, _hotkey: &str) {
 }
 
 #[cfg(target_os = "linux")]

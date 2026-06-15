@@ -4,7 +4,7 @@ use std::path::Path;
 use windows::core::PWSTR;
 use windows::Win32::Foundation::{CloseHandle, HANDLE};
 use windows::Win32::System::Threading::{
-    OpenProcess, QueryFullProcessImageNameW, PROCESS_QUERY_INFORMATION,
+    OpenProcess, QueryFullProcessImageNameW, PROCESS_NAME_FORMAT, PROCESS_QUERY_INFORMATION,
     PROCESS_QUERY_LIMITED_INFORMATION, PROCESS_VM_READ,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
@@ -66,7 +66,13 @@ fn query_process_name(process: HANDLE) -> Option<String> {
     let mut buffer = vec![0u16; 1024];
     let mut size = buffer.len() as u32;
     unsafe {
-        QueryFullProcessImageNameW(process, 0, PWSTR(buffer.as_mut_ptr()), &mut size).ok()?;
+        QueryFullProcessImageNameW(
+            process,
+            PROCESS_NAME_FORMAT(0),
+            PWSTR(buffer.as_mut_ptr()),
+            &mut size,
+        )
+        .ok()?;
     }
 
     let full_path = String::from_utf16_lossy(&buffer[..size as usize]);
