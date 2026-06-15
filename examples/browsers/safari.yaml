@@ -1,0 +1,85 @@
+name: Safari
+group: browsers
+process:
+  - Safari
+  - safari
+references:
+  - group: Tabs and Windows
+    items:
+      - label: New tab
+        keys: Cmd+T
+      - label: Reopen last closed tab
+        keys: Cmd+Shift+T
+      - label: New window
+        keys: Cmd+N
+      - label: New private window
+        keys: Cmd+Shift+N
+      - label: Show tab overview
+        notes: Safari's tab overview is useful when browsing is spread across many windows or tab groups.
+
+  - group: Navigation
+    items:
+      - label: Focus smart search field
+        keys: Cmd+L
+      - label: Reload page
+        keys: Cmd+R
+      - label: Back
+        keys: Cmd+LeftBracket
+      - label: Forward
+        keys: Cmd+RightBracket
+      - label: Find in page
+        keys: Cmd+F
+
+  - group: Reading and Page Tools
+    items:
+      - label: Reader mode
+        keys: Shift+Cmd+R
+        notes: Strip clutter and reformat supported articles for easier reading.
+      - label: Save page
+        keys: Cmd+S
+      - label: Print page
+        keys: Cmd+P
+      - label: Add bookmark
+        keys: Cmd+D
+      - label: Add to reading list
+        keys: Shift+Cmd+D
+        notes: Useful for deferred reading without full bookmark organization overhead.
+
+  - group: Privacy, Profiles, and Session
+    items:
+      - label: Open history
+        keys: Cmd+Y
+      - label: Clear history
+        notes: Use Safari history controls carefully because they can affect cookies and session continuity.
+      - label: Open downloads
+        notes: Downloads are accessible from the toolbar button rather than always from a strong keyboard-first flow.
+      - label: Use profiles or tab groups
+        notes: Tab Groups and profiles help separate projects, clients, or personal contexts.
+      - label: Open privacy report
+        notes: Safari's privacy report helps inspect cross-site tracker blocking behavior.
+
+  - group: DevTools and Web Inspection
+    items:
+      - label: Enable Develop menu
+        notes: Turn on the Develop menu in Safari settings before using Web Inspector features heavily.
+      - label: Show Web Inspector
+        keys: Cmd+Option+I
+      - label: Inspect page element
+        notes: Use Web Inspector once the Develop menu is enabled for DOM and style debugging.
+      - label: Show JavaScript console
+        keys: Cmd+Option+C
+      - label: Disable caches from Develop menu
+        notes: Useful when validating frontend assets or service worker behavior.
+
+  - group: Common Workflows
+    items:
+      - label: Use tab groups for projects
+        notes: Safari feels much better when tab groups are used intentionally instead of one flat session.
+      - label: Favor Reader for docs and articles
+        notes: Especially useful when reviewing long vendor docs or blog posts without ad clutter.
+      - label: Review extension permissions
+        notes: Keep extensions lean; Safari's value often comes from a cleaner, lower-overhead baseline.
+      - label: Test Apple-platform behavior
+        notes: Safari is often the browser you need when validating WebKit-specific rendering or platform integration.
+      - label: Show help
+        notes: Safari's strongest workflows are often around Reader, privacy reporting, tab groups, and Web Inspector on Apple platforms.

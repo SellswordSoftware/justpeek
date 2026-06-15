@@ -1,0 +1,110 @@
+name: dnf
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Refresh metadata
+        command: sudo dnf makecache
+        notes: Preload repository metadata for faster later operations.
+      - label: Upgrade system packages
+        command: sudo dnf upgrade
+        notes: Update installed packages to the newest available versions.
+      - label: Install a package
+        command: sudo dnf install ripgrep
+        notes: Install one or more packages by name from enabled repos.
+      - label: Remove a package
+        command: sudo dnf remove ripgrep
+        notes: Uninstall the package and resolve dependent package consequences.
+      - label: Reinstall a package
+        command: sudo dnf reinstall ripgrep
+        notes: Replace package files without changing the version when possible.
+
+  - group: Search and Information
+    items:
+      - label: Search packages
+        command: dnf search ripgrep
+        notes: Search package names and descriptions.
+      - label: Show package info
+        command: dnf info ripgrep
+        notes: Print version, repo, architecture, and description details.
+      - label: List installed packages
+        command: dnf list installed
+        notes: Enumerate packages currently installed through the RPM database.
+      - label: List available updates
+        command: dnf check-update
+        notes: Show upgrade candidates without applying them.
+      - label: Find provider of file
+        command: dnf provides /usr/bin/rg
+        notes: Map a path or capability back to the package that supplies it.
+
+  - group: Groups, History, and Rollback
+    items:
+      - label: List package groups
+        command: dnf group list
+        notes: Show environment groups and software collections exposed by repos.
+      - label: Install a group
+        command: sudo dnf group install 'Development Tools'
+        notes: Install a named package group in one step.
+      - label: View transaction history
+        command: dnf history
+        notes: Review past installs, removals, and upgrades by transaction ID.
+      - label: Inspect one transaction
+        command: dnf history info 42
+        notes: Show what a specific transaction changed.
+      - label: Undo a transaction
+        command: sudo dnf history undo 42
+        notes: Attempt to reverse one prior transaction when packages are still available.
+
+  - group: Repositories and Modules
+    items:
+      - label: List repositories
+        command: dnf repolist
+        notes: Show enabled repositories and package counts.
+      - label: List all repos
+        command: dnf repolist --all
+        notes: Include disabled repositories for audit and troubleshooting.
+      - label: Enable repository
+        command: sudo dnf config-manager --set-enabled crb
+        notes: Turn on an optional repository such as CodeReady Builder or similar.
+      - label: Disable repository
+        command: sudo dnf config-manager --set-disabled crb
+        notes: Disable a repository without deleting its definition.
+      - label: List module streams
+        command: dnf module list
+        notes: Inspect available modular content where the distro uses DNF modules.
+
+  - group: Cleanup and Cache
+    items:
+      - label: Clean all cached metadata
+        command: sudo dnf clean all
+        notes: Remove cached packages and metadata for a fresh resolver view.
+      - label: Remove unneeded dependencies
+        command: sudo dnf autoremove
+        notes: Delete packages that were installed as dependencies and are no longer needed.
+      - label: Download package only
+        command: sudo dnf download ripgrep
+        notes: Requires the download plugin on some systems.
+      - label: Simulate transaction
+        command: sudo dnf upgrade --assumeno
+        notes: Preview the proposed actions and abort before execution.
+      - label: Check distro release version
+        command: rpm -E %fedora
+        notes: Useful when repo behavior depends on the current distro release.
+
+  - group: Common Workflows
+    items:
+      - label: Refresh metadata then upgrade
+        command: sudo dnf makecache && sudo dnf upgrade
+        notes: Common maintenance cycle on Fedora-family systems.
+      - label: Install build tooling
+        command: sudo dnf group install 'Development Tools'
+        notes: Fast way to provision compilers and basic developer packages.
+      - label: Query installed package owner
+        command: rpm -qf /usr/bin/bash
+        notes: Use RPM directly for owner lookups on installed files.
+      - label: Check config-manager help
+        command: dnf config-manager --help
+        notes: Repo enable or disable flows often depend on the config-manager plugin.
+      - label: Show help
+        command: dnf --help
+        notes: Good top-level reference because DNF has a broad plugin-driven command surface.

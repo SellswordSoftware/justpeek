@@ -1,0 +1,110 @@
+name: eza
+group: shell / shell helpers
+references:
+  - group: Core Listing
+    items:
+      - label: Basic directory listing
+        command: eza
+        notes: Modern `ls` replacement with colors, icons, and better defaults.
+      - label: Long listing
+        command: eza -l
+        notes: Show permissions, ownership, size, and timestamps.
+      - label: Show all files
+        command: eza -a
+        notes: Include dotfiles except `.` and `..`.
+      - label: Almost all files
+        command: eza -A
+        notes: Include dotfiles while still hiding `.` and `..`.
+      - label: Human-readable sizes
+        command: eza -lh
+        notes: Combine long format with readable size units.
+
+  - group: Tree and Recursion
+    items:
+      - label: Tree view
+        command: eza --tree
+        notes: Render directories hierarchically instead of as a flat list.
+      - label: Tree with depth limit
+        command: eza --tree --level=2
+        notes: Keep recursion readable in larger projects.
+      - label: Recurse flat listing
+        command: eza -R
+        notes: Recursively list contents without using tree layout.
+      - label: Tree directories only
+        command: eza --tree -D
+        notes: Show just directory structure for navigation or planning.
+      - label: Show hidden files in tree
+        command: eza --tree -a
+        notes: Include dotfiles and dot-directories in tree output.
+
+  - group: Metadata and Sorting
+    items:
+      - label: Sort by modified time
+        command: eza -l --sort=modified
+        notes: Good default when reviewing recent work.
+      - label: Reverse sort
+        command: eza -l --sort=size --reverse
+        notes: Flip ordering after applying another sort field.
+      - label: Show inode and blocks
+        command: eza -liS
+        notes: Surface filesystem-level details for debugging storage behavior.
+      - label: Show extended metadata
+        command: eza -l --header --git
+        notes: Include column headers and git-aware status info together.
+      - label: Use custom time style
+        command: eza -l --time-style=long-iso
+        notes: Stable timestamp format for logs, screenshots, and docs.
+
+  - group: Git and VCS Context
+    items:
+      - label: Show git status in listing
+        command: eza -l --git
+        notes: Add file-level git indicators alongside standard metadata.
+      - label: Recurse with git info
+        command: eza -lR --git
+        notes: Audit repo state across nested directories.
+      - label: Show git ignore status
+        command: eza -la --git-ignore
+        notes: Surface ignored files rather than hiding them entirely.
+      - label: Show changed files tree
+        command: eza --tree --git
+        notes: Good for scanning repo structure and status together.
+      - label: Long list with icons and git
+        command: eza -l --icons --git
+        notes: Useful when visual scanning matters more than minimal output.
+
+  - group: Filtering and Presentation
+    items:
+      - label: Directories only
+        command: eza -D
+        notes: Restrict output to directories.
+      - label: Files only
+        command: eza -f
+        notes: Restrict output to files and omit directories from the listing.
+      - label: One entry per line
+        command: eza -1
+        notes: Cleaner for piping or scripts.
+      - label: Absolute paths
+        command: eza --absolute=on
+        notes: Print full paths instead of relative names.
+      - label: Disable icons
+        command: eza --icons=never
+        notes: Useful in minimal terminals or plain-text logging.
+
+  - group: Common Workflows
+    items:
+      - label: Large files first
+        command: eza -l --sort=size --reverse
+        notes: Quick disk triage within the current directory.
+      - label: Recent work tree
+        command: eza --tree --sort=modified
+        notes: Combine structure and recency when browsing active projects.
+      - label: Dotfiles with metadata
+        command: eza -la --header
+        notes: Common home-directory inspection pattern.
+      - label: Preview project root
+        command: eza --tree --level=2 --icons
+        notes: Good high-level overview before deeper navigation.
+      - label: Show help
+        command: eza --help
+        notes: eza has a broad flag surface worth checking for less common output controls.

@@ -1,0 +1,218 @@
+name: Obsidian
+group: notetaking and knowledge tools
+process:
+  - obsidian
+  - Obsidian
+search_terms:
+  - markdown vault
+  - personal knowledge base
+  - wiki links
+  - obsidian uri
+references:
+  - group: Core Navigation and Hotkeys
+    items:
+      - label: Quick Switcher
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+        notes: Search notes by title or alias, open with Enter, create exact match with Shift+Enter.
+      - label: Open selected note in new tab
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Enter
+        notes: Works from Quick Switcher.
+      - label: Command Palette
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+        notes: Fuzzy-search commands, inspect hotkeys, and pin high-frequency commands.
+      - label: Pinned commands
+        value: Settings > Command palette > Pinned commands
+        notes: Good for recurring workflows you do not want to memorize as hotkeys.
+      - label: Search all notes
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+        notes: High-value default for finding text anywhere in the vault.
+      - label: Common editing toggle
+        keys: Ctrl+E
+        keys_by_os:
+          macos: Cmd+E
+        notes: Common default for switching editing mode depending on current editor setup.
+
+  - group: Linking Search and Knowledge Graph
+    items:
+      - label: Wiki links
+        value: "[[Note Name]]"
+        notes: Core note-link syntax.
+      - label: Embed note or media
+        value: "![[Note Name]]"
+      - label: Heading link
+        value: "[[Note#Heading]]"
+      - label: Block link
+        value: "[[Note#^block-id]]"
+      - label: Backlinks pane
+        value: Incoming links to the current note
+        notes: Essential for Zettelkasten-style note networks and relationship discovery.
+      - label: Graph View
+        value: Visual note relationship map
+      - label: Aliases
+        value: Frontmatter `aliases` improves Quick Switcher and link discovery
+      - label: Large vault caveat
+        value: Quick Switcher uses a simpler result algorithm after 10,000 items
+
+  - group: Daily Notes Templates and Structured Notes
+    items:
+      - label: Open today's daily note
+        command: "Command palette: Open today's daily note"
+        notes: Daily notes core plugin creates or opens the note for the current day.
+      - label: Daily note folder
+        value: Daily notes > New file location
+      - label: Daily note date format
+        value: Daily notes > Date format
+        notes: Can create nested folders such as `YYYY/MMMM/YYYY-MM-DD`.
+      - label: Template folder
+        value: Templates > Template folder location
+      - label: Insert template
+        command: "Templates: Insert template"
+      - label: Insert current date
+        command: "Templates: Insert current date"
+      - label: Insert current time
+        command: "Templates: Insert current time"
+      - label: Template variable title
+        value: "{{title}}"
+      - label: Template variable date
+        value: "{{date}} or {{date:YYYY-MM-DD}}"
+      - label: Template variable time
+        value: "{{time}} or {{time:HH:mm}}"
+      - label: Properties overwrite caveat
+        value: Edit templates in Source mode when properties contain template variables
+        notes: Live Preview can overwrite unquoted template variables in properties.
+
+  - group: Canvas Visual Thinking
+    items:
+      - label: Create new canvas
+        command: "Canvas: Create new canvas"
+      - label: Canvas file format
+        value: .canvas
+        notes: Stored as open JSON Canvas format.
+      - label: Add text card quickly
+        value: Double-click blank canvas
+      - label: Stop editing a card
+        keys: Escape
+      - label: Delete selected cards or edges
+        keys: Backspace
+        keys_by_os:
+          macos: Delete
+      - label: Select all cards
+        keys: Ctrl+A
+        keys_by_os:
+          macos: Cmd+A
+      - label: Duplicate while dragging
+        keys: Alt+drag
+        keys_by_os:
+          macos: Option+drag
+      - label: Pan canvas
+        keys: Space+drag
+      - label: Zoom to fit
+        keys: Shift+1
+      - label: Zoom to selection
+        keys: Shift+2
+      - label: Backlinks caveat
+        value: Text-only cards do not appear in backlinks until converted to files
+
+  - group: URI Automation and Cross App Workflows
+    items:
+      - label: Open vault or note
+        command: obsidian://open?vault=my%20vault&file=path%2Fto%2Fnote
+      - label: Open by absolute path
+        command: obsidian://open?path=%2Fhome%2Fuser%2Fvault%2Fpath%2Fto%2Fnote.md
+      - label: Open heading or block
+        command: obsidian://open?vault=my%20vault&file=Note%23Heading
+        notes: Use `%23%5EBlock` for a block reference target.
+      - label: Create note
+        command: obsidian://new?vault=my%20vault&file=inbox%2Fidea&content=Hello%20world
+      - label: Silent capture without opening
+        command: obsidian://new?vault=my%20vault&file=inbox%2Fidea&content=Hello&silent=true
+      - label: Create or append
+        command: obsidian://new?vault=my%20vault&file=inbox%2Flog&append=true&content=New%20entry
+      - label: Open daily note
+        command: obsidian://daily?vault=my%20vault
+      - label: Create unique note
+        command: obsidian://unique?vault=my%20vault&content=Scratch
+        notes: Requires Unique note creator plugin.
+      - label: Run search
+        command: obsidian://search?vault=my%20vault&query=atomic%20habits
+      - label: Open vault chooser
+        command: obsidian://choose-vault
+      - label: x-callback-url support
+        value: x-success and x-error supported on selected URI actions
+      - label: Linux URI registration caveat
+        value: Desktop entry must use `Exec=executable %u`
+
+  - group: Plugin API and Scripting
+    items:
+      - label: Main plugin manifest file
+        value: manifest.json
+      - label: Main plugin entry file
+        value: main.js
+      - label: Required manifest fields
+        value: id, name, author, version, minAppVersion, description
+      - label: Desktop-only plugin flag
+        value: isDesktopOnly
+        notes: Use when the plugin depends on Node.js or Electron APIs.
+      - label: Main plugin class rule
+        value: main.js must export a default class extending Plugin
+      - label: Add command from plugin
+        command: this.addCommand(...)
+      - label: Add ribbon icon
+        command: this.addRibbonIcon(...)
+      - label: Add settings tab
+        command: this.addSettingTab(...)
+      - label: Save plugin state
+        command: this.loadData() / this.saveData()
+      - label: Register app events safely
+        command: this.registerEvent(app.on('event-name', callback))
+      - label: Register DOM events safely
+        command: this.registerDomEvent(element, 'click', callback)
+      - label: Register intervals safely
+        command: this.registerInterval(setInterval(callback, 1000))
+      - label: Core app surfaces
+        value: App, Vault, Workspace, MetadataCache
+      - label: Sample plugin template
+        value: github.com/obsidianmd/obsidian-sample-plugin
+
+  - group: Vault Layout Config and Customization
+    items:
+      - label: Vault config folder
+        value: .obsidian/
+      - label: Community plugins folder
+        value: .obsidian/plugins/
+      - label: Themes and snippets area
+        value: .obsidian/themes/ and .obsidian/snippets/
+      - label: CSS snippets
+        value: Small interface overrides layered on top of a theme
+      - label: Community plugins
+        value: User-installed extensions for workflows, automation, and integrations
+      - label: Core plugins
+        value: Built-in features that can be enabled or disabled individually
+      - label: Local-first note repo
+        value: Obsidian works well with Git, Syncthing, and external editors because notes stay as files on disk
+      - label: Common vault hygiene
+        value: Keep templates, attachments, inbox, daily, projects, and archive folders explicit
+
+  - group: Add on Services and Adjacent Tools
+    items:
+      - label: Sync
+        value: Official encrypted cross-device sync service
+      - label: Publish
+        value: Publish notes as docs, wiki, or digital garden
+      - label: Web Clipper
+        value: Save web content into vault notes from the browser
+      - label: CLI
+        value: Official terminal control surface exists
+        notes: Use the Help docs for current command syntax if you need exact flags.
+      - label: Developer docs
+        value: docs.obsidian.md
+      - label: Official help
+        value: obsidian.md/help

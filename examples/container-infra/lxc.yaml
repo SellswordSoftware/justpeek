@@ -1,0 +1,109 @@
+name: LXC
+group: container / infra
+references:
+  - group: Core Container Lifecycle
+    items:
+      - label: List containers
+        command: lxc list
+        notes: Show local system containers and VMs managed by LXD or Incus-style LXC tooling.
+      - label: Launch container from image
+        command: lxc launch images:ubuntu/24.04 web01
+        notes: Create and start a container from a remote image alias.
+      - label: Start container
+        command: lxc start web01
+        notes: Boot a stopped container or VM.
+      - label: Stop container
+        command: lxc stop web01
+        notes: Gracefully shut down a running instance.
+      - label: Delete container
+        command: lxc delete web01
+        notes: Remove an instance after it has been stopped.
+
+  - group: Images, Profiles, and Configuration
+    items:
+      - label: List images
+        command: lxc image list images:
+        notes: Browse available images from a configured remote.
+      - label: Copy image locally
+        command: lxc image copy images:ubuntu/24.04 local: --alias ubuntu2404
+        notes: Cache a remote image locally under a friendlier alias.
+      - label: List profiles
+        command: lxc profile list
+        notes: Show reusable configuration profiles for instances.
+      - label: Show instance config
+        command: lxc config show web01 --expanded
+        notes: Print effective instance config including inherited profile settings.
+      - label: Edit instance config
+        command: lxc config edit web01
+        notes: Open the live instance configuration in an editor.
+
+  - group: Exec, Files, and Inspection
+    items:
+      - label: Open shell in instance
+        command: lxc exec web01 -- bash
+        notes: Start an interactive shell inside the running container.
+      - label: Run one command
+        command: lxc exec web01 -- systemctl status nginx
+        notes: Execute a one-off administrative command inside the instance.
+      - label: Copy file into instance
+        command: lxc file push nginx.conf web01/etc/nginx/nginx.conf
+        notes: Transfer a local file directly into the instance filesystem.
+      - label: Copy file out of instance
+        command: lxc file pull web01/var/log/nginx/access.log ./access.log
+        notes: Retrieve logs or artifacts from the instance.
+      - label: Show instance info
+        command: lxc info web01
+        notes: Inspect runtime state, resources, and IP addresses.
+
+  - group: Snapshots, Publish, and Migration
+    items:
+      - label: Create snapshot
+        command: lxc snapshot web01 pre-upgrade
+        notes: Save an instance checkpoint before risky changes.
+      - label: Restore snapshot
+        command: lxc restore web01 pre-upgrade
+        notes: Revert the instance filesystem and config to a snapshot.
+      - label: Publish instance as image
+        command: lxc publish web01 --alias web01-golden
+        notes: Turn an instance into a reusable image artifact.
+      - label: Copy instance to remote
+        command: lxc copy web01 remote:web01
+        notes: Move or duplicate instances between servers or clusters.
+      - label: Move instance to remote
+        command: lxc move web01 remote:web01
+        notes: Relocate an instance rather than duplicating it.
+
+  - group: Networking and Storage
+    items:
+      - label: List networks
+        command: lxc network list
+        notes: Show managed bridges and network devices.
+      - label: Create bridge network
+        command: lxc network create br0 ipv4.address=10.10.10.1/24 ipv4.nat=true
+        notes: Define a managed bridge for instance connectivity.
+      - label: List storage pools
+        command: lxc storage list
+        notes: Show available storage backends and pools.
+      - label: Create storage pool
+        command: lxc storage create fastpool zfs
+        notes: Provision a new storage backend pool for instances or images.
+      - label: Attach disk device
+        command: lxc config device add web01 data disk source=/srv/data path=/mnt/data
+        notes: Mount host data into the instance as a managed device.
+
+  - group: Common Workflows
+    items:
+      - label: Launch then shell into instance
+        command: lxc launch images:debian/12 devbox && lxc exec devbox -- bash
+        notes: Common local or lab bootstrap path.
+      - label: Snapshot before config change
+        command: lxc snapshot web01 before-nginx && lxc exec web01 -- bash
+        notes: Cheap rollback insurance before risky in-instance work.
+      - label: Use profiles for consistency
+        notes: Put common networking, limits, and devices in profiles instead of one-off instance config.
+      - label: Compare expanded config
+        command: lxc config show web01 --expanded
+        notes: First stop when profile inheritance creates surprising behavior.
+      - label: Show help
+        command: lxc --help
+        notes: LXC or LXD-style tooling spans instances, images, profiles, storage, and networking in one CLI.

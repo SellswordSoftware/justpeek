@@ -1,0 +1,56 @@
+name: gitui
+group: source control
+process:
+  - wezterm
+  - alacritty
+  - gnome-terminal
+  - kitty
+  - ghostty
+title_contains: gitui
+references:
+  - group: Navigation
+    items:
+      - label: Move up
+        keys: K
+      - label: Move down
+        keys: J
+      - label: Next panel
+        keys: Tab
+      - label: Previous panel
+        keys: Shift+Tab
+
+  - group: Status and Staging
+    items:
+      - label: Stage or unstage selection
+        keys: Space
+        notes: Toggle staged state for the highlighted entry.
+      - label: Discard changes
+        keys: D
+        notes: Remove the selected working tree change with care.
+      - label: Open diff view
+        keys: Enter
+        notes: Inspect patch details for the selected file or hunk.
+      - label: Refresh state
+        keys: R
+        notes: Reload repository state when external commands changed it.
+
+  - group: Commits and Branches
+    items:
+      - label: Commit staged changes
+        keys: C
+      - label: Amend last commit
+        keys: A
+        notes: Reuse the last commit with updated staged content.
+      - label: Fetch remotes
+        keys: F
+      - label: Push branch
+        keys: P
+      - label: Branch actions
+        notes: Use the branches panel for checkout, create, rename, and delete flows.
+
+  - group: Help
+    items:
+      - label: Show keybindings
+        keys: QuestionMark
+      - label: Quit gitui
+        keys: Q

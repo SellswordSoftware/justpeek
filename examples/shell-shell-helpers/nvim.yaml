@@ -1,0 +1,110 @@
+name: nvim
+group: shell / shell helpers
+references:
+  - group: Startup and Files
+    items:
+      - label: Open file
+        command: nvim file.txt
+        notes: Start Neovim editing a specific file.
+      - label: Open directory explorer
+        command: nvim .
+        notes: Open the current directory for project navigation, often through netrw or a plugin.
+      - label: Start with no config
+        command: nvim -u NONE
+        notes: Useful for isolating plugin or config-related problems.
+      - label: Read from stdin
+        command: git show HEAD~1 | nvim -
+        notes: Open piped content in a temporary buffer.
+      - label: Show version and runtime
+        command: nvim --version
+        notes: Includes build metadata and runtime features.
+
+  - group: Core Modes and Movement
+    items:
+      - label: Enter insert mode
+        keys: I
+        notes: Switch from normal mode into text insertion.
+      - label: Return to normal mode
+        keys: Escape
+        notes: Fundamental mode transition used constantly.
+      - label: Move by words
+        keys: W / B / E
+        notes: Jump across words efficiently in normal mode.
+      - label: Go to line
+        keys: :42
+        notes: Jump directly to a specific line number.
+      - label: Search in file
+        keys: /pattern
+        notes: Use `n` and `N` to move through matches after the initial search.
+
+  - group: Editing and Text Objects
+    items:
+      - label: Delete current line
+        keys: D D
+        notes: `dd` deletes the full current line into the default register.
+      - label: Change inside quotes
+        keys: C I "
+        notes: Text objects make structural edits faster than character-by-character movement.
+      - label: Yank paragraph
+        keys: Y A P
+        notes: `yap` copies the current paragraph text object.
+      - label: Paste after cursor
+        keys: P
+        notes: Paste from the default register after the cursor or line.
+      - label: Undo and redo
+        keys: U / Ctrl+R
+        notes: Navigate edit history in both directions.
+
+  - group: Buffers, Windows, and Tabs
+    items:
+      - label: Save file
+        keys: :w
+        notes: Write the current buffer to disk.
+      - label: Quit current window
+        keys: :q
+        notes: Close the current window, prompting if there are unsaved changes.
+      - label: Save and quit
+        keys: :wq
+        notes: Common combined write-and-exit command.
+      - label: Split window horizontally
+        keys: :split
+        notes: Open another view in a horizontal split.
+      - label: Split window vertically
+        keys: :vsplit
+        notes: Open another view side by side.
+
+  - group: Configuration and Plugins
+    items:
+      - label: Main config path
+        value: ~/.config/nvim/init.lua
+        notes: Default Lua-based configuration entrypoint.
+      - label: Reload current Lua config
+        command: :source ~/.config/nvim/init.lua
+        notes: Re-read the main config file without restarting the editor.
+      - label: Check health
+        command: :checkhealth
+        notes: Built-in diagnostics for providers, plugins, and environment issues.
+      - label: Open plugin manager sync
+        command: :Lazy sync
+        notes: Example command if using Lazy.nvim; actual manager command depends on setup.
+      - label: Show current mappings
+        command: :map
+        notes: Inspect effective key mappings when behavior is surprising.
+
+  - group: LSP, Search, and Common Workflows
+    items:
+      - label: Find files with Telescope
+        keys: <leader> f f
+        notes: Common plugin-based picker flow in modern Neovim setups.
+      - label: Search project text
+        keys: <leader> f g
+        notes: Often wired to Telescope live grep or a similar grep picker.
+      - label: Go to definition
+        keys: G D
+        notes: Usually mapped to LSP definition lookup in code-focused configs.
+      - label: Rename symbol
+        command: :lua vim.lsp.buf.rename()
+        notes: Built-in Lua call for LSP rename when no custom mapping exists.
+      - label: Format buffer
+        command: :lua vim.lsp.buf.format()
+        notes: Invoke attached formatter support through the built-in LSP client.

@@ -1,0 +1,125 @@
+name: systemd timers
+group: shell / shell helpers
+references:
+  - group: Core Timer Lifecycle
+    items:
+      - label: Start a timer
+        command: sudo systemctl start backup.timer
+        notes: Activate the timer immediately for the current boot session.
+      - label: Stop a timer
+        command: sudo systemctl stop backup.timer
+        notes: Prevent further scheduled activations until restarted.
+      - label: Enable timer at boot
+        command: sudo systemctl enable backup.timer
+        notes: Persist the timer so it activates automatically on future boots.
+      - label: Enable and start now
+        command: sudo systemctl enable --now backup.timer
+        notes: Common workflow after creating a new timer and service pair.
+      - label: Check timer status
+        command: systemctl status backup.timer
+        notes: Show current state, trigger time, and related unit metadata.
+
+  - group: Listing and Inspection
+    items:
+      - label: List all timers
+        command: systemctl list-timers
+        notes: Show next trigger time, last run, and associated service units.
+      - label: List active timers only
+        command: systemctl list-timers --all
+        notes: Include inactive timers too when debugging why something is not scheduled.
+      - label: Show timer properties
+        command: systemctl show backup.timer
+        notes: Dump resolved unit properties for scripting or deeper inspection.
+      - label: Show associated service file
+        command: systemctl cat backup.service
+        notes: Timers trigger service units, so both files matter during debugging.
+      - label: Show merged timer unit
+        command: systemctl cat backup.timer
+        notes: Print the timer plus any drop-ins in the order systemd loads them.
+
+  - group: Unit File Structure
+    items:
+      - label: Basic timer example
+        command: |
+          [Unit]
+          Description=Run backup job
+
+          [Timer]
+          OnCalendar=daily
+          Persistent=true
+
+          [Install]
+          WantedBy=timers.target
+        notes: Minimal timer unit that triggers the same-named service unit.
+      - label: Matching service example
+        command: |
+          [Unit]
+          Description=Backup job
+
+          [Service]
+          Type=oneshot
+          ExecStart=/usr/local/bin/backup.sh
+        notes: Timers usually trigger `Type=oneshot` services for batch tasks.
+      - label: Re-read unit files
+        command: sudo systemctl daemon-reload
+        notes: Required after editing timer or service unit files on disk.
+      - label: Edit timer override
+        command: sudo systemctl edit backup.timer
+        notes: Create a drop-in override without modifying the vendor unit file.
+      - label: Revert timer overrides
+        command: sudo systemctl revert backup.timer
+        notes: Remove local overrides and return to the packaged definition.
+
+  - group: Scheduling Semantics
+    items:
+      - label: Calendar schedule
+        command: OnCalendar=Mon..Fri 09:00
+        notes: Supports expressive calendar syntax for wall-clock schedules.
+      - label: Delay after boot
+        command: OnBootSec=10min
+        notes: Run relative to system boot rather than a fixed clock time.
+      - label: Delay after unit activation
+        command: OnUnitActiveSec=1h
+        notes: Repeat relative to the last successful activation of the triggered unit.
+      - label: Startup jitter
+        command: RandomizedDelaySec=5min
+        notes: Spread load when many hosts share the same nominal schedule.
+      - label: Missed-run catchup
+        command: Persistent=true
+        notes: Run missed scheduled jobs after boot if the machine was down at trigger time.
+
+  - group: Validation and Testing
+    items:
+      - label: Validate calendar expression
+        command: systemd-analyze calendar 'Mon..Fri 09:00'
+        notes: Show the normalized form and next trigger times.
+      - label: Trigger service manually
+        command: sudo systemctl start backup.service
+        notes: Test the job logic independently of the timer schedule.
+      - label: Verify next timer run
+        command: systemctl list-timers backup.timer
+        notes: Confirm that the computed trigger matches expectations.
+      - label: Check unit syntax
+        command: systemd-analyze verify /etc/systemd/system/backup.timer /etc/systemd/system/backup.service
+        notes: Catch malformed unit definitions before relying on them.
+      - label: Tail timer-related logs
+        command: journalctl -u backup.timer -u backup.service -f
+        notes: Follow both the scheduling and execution sides together.
+
+  - group: Common Workflows
+    items:
+      - label: Replace a cron daily job
+        command: OnCalendar=daily
+        notes: Straightforward conversion target for once-per-day cron tasks.
+      - label: Hourly recurring job
+        command: OnUnitActiveSec=1h
+        notes: Better than wall-clock scheduling when you care about interval spacing.
+      - label: Run shortly after boot
+        command: OnBootSec=2min
+        notes: Common for warm-up tasks that should not block the boot sequence.
+      - label: Keep job off exact hour
+        command: RandomizedDelaySec=15min
+        notes: Avoid synchronized spikes across many systems.
+      - label: Show help
+        command: systemctl --help
+        notes: Timer work spans `systemctl`, `systemd-analyze`, and journal inspection.

@@ -1,0 +1,85 @@
+name: Edge
+group: browsers
+process:
+  - msedge
+  - microsoft-edge
+  - msedge.exe
+references:
+  - group: Tabs and Windows
+    items:
+      - label: New tab
+        keys: Ctrl+T
+      - label: Reopen closed tab
+        keys: Ctrl+Shift+T
+      - label: New window
+        keys: Ctrl+N
+      - label: New InPrivate window
+        keys: Ctrl+Shift+N
+      - label: Open tab search
+        keys: Ctrl+Shift+A
+        notes: Quick way to recover buried tabs across large sessions.
+
+  - group: Navigation and Page
+    items:
+      - label: Focus address bar
+        keys: Ctrl+L
+      - label: Reload page
+        keys: Ctrl+R
+      - label: Hard reload
+        keys: Ctrl+Shift+R
+      - label: Back
+        keys: Alt+LeftArrow
+      - label: Forward
+        keys: Alt+RightArrow
+
+  - group: Productivity Features
+    items:
+      - label: Use collections
+        notes: Collections are useful for research, shopping comparisons, and issue triage notes.
+      - label: Use workspaces
+        notes: Shared or local workspaces can group tabs by project or team context.
+      - label: Sidebar apps
+        notes: Edge sidebar can host search, tools, and app shortcuts without leaving the page.
+      - label: Vertical tabs
+        notes: Vertical tab mode helps when tab counts are high.
+      - label: Read aloud or immersive reading
+        notes: Built-in reading tools can make documentation review easier on long pages.
+
+  - group: Privacy, Profiles, and Sync
+    items:
+      - label: Open history
+        keys: Ctrl+H
+      - label: Open downloads
+        keys: Ctrl+J
+      - label: Clear browsing data
+        keys: Ctrl+Shift+Delete
+      - label: Switch profiles
+        notes: Separate work and personal Microsoft identities or tenants through profiles.
+      - label: Use sleeping tabs
+        notes: Sleeping tabs reduce memory usage in large persistent sessions.
+
+  - group: DevTools and Inspection
+    items:
+      - label: Toggle DevTools
+        keys: F12
+      - label: Inspect element
+        keys: Ctrl+Shift+C
+      - label: Open console
+        keys: Ctrl+Shift+J
+      - label: View page source
+        keys: Ctrl+U
+      - label: Network and performance tools
+        notes: Edge inherits the Chromium DevTools model for modern web debugging.
+
+  - group: Common Workflows
+    items:
+      - label: Pin important tabs
+        notes: Good for dashboards, ticket queues, mail, and docs that should stay stable.
+      - label: Save browsing session to collection
+        notes: Use collections instead of ad hoc bookmark clutter for short-lived research groupings.
+      - label: Mute a noisy tab
+        notes: Right-click and mute site when media tabs interrupt work.
+      - label: Restore startup pages intentionally
+        notes: Avoid reopening stale tab debt unless the session genuinely represents active work.
+      - label: Show help
+        notes: Edge's real differentiators are collections, workspaces, sidebar integration, and enterprise profile handling.

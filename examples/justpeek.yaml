@@ -1,0 +1,53 @@
+name: JustPeek
+group: App
+references:
+  - group: Global
+    items:
+      - keys: CommandOrControl+Alt+Slash
+        label: Toggle Panel
+        notes: Default global hotkey. This can be changed in Settings.
+
+  - group: Contextual View
+    items:
+      - keys: ArrowDown
+        label: Move highlight down
+      - keys: ArrowUp
+        label: Move highlight up
+      - keys: Enter
+        label: Copy selected item
+        notes: Copies `command` when present, otherwise copies `value`.
+      - keys: O
+        label: Open selected item link
+        notes: Opens the highlighted item's `url` when one is available.
+      - keys: Space
+        label: Toggle current group
+      - keys: ArrowLeft
+        label: Open reference picker
+      - keys: Escape
+        label: Open reference picker
+
+  - group: Picker View
+    items:
+      - keys: ArrowDown
+        label: Move highlight down
+      - keys: ArrowUp
+        label: Move highlight up
+      - keys:
+          - Enter
+          - ArrowRight
+        label: Load selected reference file
+      - keys: Space
+        label: Toggle current group
+      - keys: Escape
+        label: Close panel
+
+  - group: Search
+    items:
+      - keys: Slash
+        label: Focus search
+        notes: Focuses the search field when text input is not already focused.
+      - keys:
+          - ArrowUp
+          - ArrowDown
+        label: Leave search and return to list navigation
+        notes: Applies when the search field is focused.

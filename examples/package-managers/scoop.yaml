@@ -1,0 +1,110 @@
+name: scoop
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Search packages
+        command: scoop search ripgrep
+        notes: Search available apps across configured buckets.
+      - label: Install a package
+        command: scoop install ripgrep
+        notes: Install a package into Scoop's user-space directory structure.
+      - label: Update scoop itself
+        command: scoop update
+        notes: Refresh Scoop and configured bucket metadata.
+      - label: Update one package
+        command: scoop update ripgrep
+        notes: Upgrade one installed app to the newest bucket version.
+      - label: Update everything
+        command: scoop update *
+        notes: Upgrade all installed Scoop-managed packages.
+
+  - group: Discovery and Inventory
+    items:
+      - label: List installed packages
+        command: scoop list
+        notes: Show installed apps and their current versions.
+      - label: Show package info
+        command: scoop info ripgrep
+        notes: Print homepage, versions, bucket, and install details.
+      - label: Check status
+        command: scoop status
+        notes: Show which installed apps have updates available.
+      - label: Find package bucket
+        command: scoop which rg
+        notes: Show the executable path for an installed command.
+      - label: Show scoop home
+        command: scoop prefix ripgrep
+        notes: Print the install directory prefix for one package.
+
+  - group: Buckets and Sources
+    items:
+      - label: List buckets
+        command: scoop bucket list
+        notes: Show configured repositories of app manifests.
+      - label: Add extras bucket
+        command: scoop bucket add extras
+        notes: Enable a broader catalog of desktop and supplemental apps.
+      - label: Add custom bucket
+        command: scoop bucket add internal https://github.com/contoso/scoop-internal
+        notes: Register a private manifest repository.
+      - label: Remove a bucket
+        command: scoop bucket rm extras
+        notes: Remove a configured manifest source.
+      - label: Search one bucket only
+        command: scoop search git
+        notes: Scoop searches across all buckets; use manifest paths when you need tighter control.
+
+  - group: Maintenance and Cleanup
+    items:
+      - label: Uninstall package
+        command: scoop uninstall ripgrep
+        notes: Remove the app and its shims from Scoop management.
+      - label: Hold package version
+        command: scoop hold nodejs
+        notes: Prevent a package from being upgraded during bulk updates.
+      - label: Remove hold
+        command: scoop unhold nodejs
+        notes: Allow upgrades again for the held package.
+      - label: Cleanup old versions
+        command: scoop cleanup *
+        notes: Delete stale package versions and reduce disk usage.
+      - label: Check health
+        command: scoop checkup
+        notes: Diagnose missing dependencies, path issues, and environment problems.
+
+  - group: Cache, Reset, and Variants
+    items:
+      - label: Show download cache
+        command: scoop cache show ripgrep
+        notes: Inspect cached archives for one package.
+      - label: Remove cached archive
+        command: scoop cache rm ripgrep
+        notes: Delete cached downloads when retrying or reclaiming space.
+      - label: Reset package shims
+        command: scoop reset ripgrep
+        notes: Repoint shims to the current version after manual tampering or version confusion.
+      - label: Install global package
+        command: sudo scoop install --global git
+        notes: Install for all users when the environment is configured for global Scoop usage.
+      - label: Install alternate version
+        command: scoop install python@3.11
+        notes: Many manifests expose versioned variants as separate package names.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap common CLI tools
+        command: scoop install git ripgrep fd bat jq
+        notes: Common developer provisioning pattern on Windows.
+      - label: Refresh manifests then upgrade
+        command: scoop update && scoop update *
+        notes: Standard maintenance loop.
+      - label: Export app list
+        command: scoop export > scoop-apps.json
+        notes: Snapshot installed apps for migration or backup.
+      - label: Import app list
+        command: scoop import scoop-apps.json
+        notes: Recreate an environment from an exported manifest.
+      - label: Show help
+        command: scoop help
+        notes: Scoop's command set is compact but still worth checking for exact subcommand syntax.

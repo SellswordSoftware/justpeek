@@ -1,0 +1,110 @@
+name: brew
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Update brew metadata
+        command: brew update
+        notes: Fetch the latest Homebrew formula and cask definitions.
+      - label: Upgrade installed packages
+        command: brew upgrade
+        notes: Upgrade installed formulae and casks to their latest versions.
+      - label: Install formula
+        command: brew install ripgrep
+        notes: Install a CLI package from a Homebrew formula.
+      - label: Install cask app
+        command: brew install --cask firefox
+        notes: Install GUI apps or other cask-distributed software.
+      - label: Uninstall package
+        command: brew uninstall ripgrep
+        notes: Remove a formula or cask from the system.
+
+  - group: Search and Information
+    items:
+      - label: Search formulae and casks
+        command: brew search ripgrep
+        notes: Search by package name across the available catalog.
+      - label: Show package details
+        command: brew info ripgrep
+        notes: Print version, caveats, install path, and dependency information.
+      - label: List installed packages
+        command: brew list
+        notes: Show installed formulae and casks.
+      - label: List only casks
+        command: brew list --cask
+        notes: Restrict output to GUI or cask-installed packages.
+      - label: Find provider of command
+        command: brew which-formula rg
+        notes: Identify the formula that supplies a given installed executable.
+
+  - group: Cleanup and Maintenance
+    items:
+      - label: Remove old versions
+        command: brew cleanup
+        notes: Delete outdated package versions and old downloads.
+      - label: Diagnose brew setup
+        command: brew doctor
+        notes: Check for common Homebrew environment and permission issues.
+      - label: Show config summary
+        command: brew config
+        notes: Print platform, compiler, prefix, and environment information.
+      - label: Pin a formula
+        command: brew pin node
+        notes: Prevent a formula from being upgraded during `brew upgrade`.
+      - label: Unpin a formula
+        command: brew unpin node
+        notes: Allow the formula to upgrade again.
+
+  - group: Dependencies, Leaves, and Paths
+    items:
+      - label: Show direct dependencies
+        command: brew deps ripgrep
+        notes: Print the dependency tree roots for a formula.
+      - label: Show reverse dependencies
+        command: brew uses --installed openssl@3
+        notes: Identify installed packages that depend on a given formula.
+      - label: List leaf packages
+        command: brew leaves
+        notes: Show top-level installed formulae not required by other formulae.
+      - label: Show install prefix
+        command: brew --prefix ripgrep
+        notes: Print the installation directory for one formula.
+      - label: Open formula homepage
+        command: brew home ripgrep
+        notes: Jump to the package homepage in a browser.
+
+  - group: Taps, Services, and Advanced Workflows
+    items:
+      - label: List tapped repos
+        command: brew tap
+        notes: Show extra formula repositories currently configured.
+      - label: Add a tap
+        command: brew tap hashicorp/tap
+        notes: Register an additional formula source repository.
+      - label: Start a service
+        command: brew services start postgresql@16
+        notes: Manage launchd or service-backed daemons installed by Homebrew.
+      - label: Stop a service
+        command: brew services stop postgresql@16
+        notes: Stop a Homebrew-managed background service.
+      - label: Extract old formula version
+        command: brew extract --version=1.2.3 package user/tap
+        notes: Copy an older formula definition into a custom tap for version pinning.
+
+  - group: Common Workflows
+    items:
+      - label: Update then upgrade
+        command: brew update && brew upgrade
+        notes: Standard interactive maintenance cycle.
+      - label: Install from Brewfile
+        command: brew bundle --file Brewfile
+        notes: Reproduce a defined workstation or project package set.
+      - label: Generate Brewfile
+        command: brew bundle dump --force
+        notes: Snapshot current installed packages into a Brewfile.
+      - label: Simulate package provenance
+        command: brew list --versions
+        notes: Quick inventory view with installed versions.
+      - label: Show help
+        command: brew help
+        notes: Homebrew has many subcommands beyond install or upgrade, especially around services and bundles.

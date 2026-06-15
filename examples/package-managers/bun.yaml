@@ -1,0 +1,110 @@
+name: bun
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Install project deps
+        command: bun install
+        notes: Resolve and install dependencies from `package.json` and `bun.lockb` or lock state.
+      - label: Add dependency
+        command: bun add axios
+        notes: Add a runtime dependency to the current project.
+      - label: Add dev dependency
+        command: bun add -d typescript vitest
+        notes: Record development-only dependencies.
+      - label: Remove dependency
+        command: bun remove axios
+        notes: Remove a dependency from project metadata and lock state.
+      - label: Upgrade dependency
+        command: bun update axios
+        notes: Refresh one dependency to a newer compatible version.
+
+  - group: Scripts and Execution
+    items:
+      - label: Run package script
+        command: bun run build
+        notes: Execute a script from `package.json`.
+      - label: Run TypeScript directly
+        command: bun run src/index.ts
+        notes: Bun can execute TS or JS files directly in many workflows.
+      - label: Execute one-off package
+        command: bunx cowsay hello
+        notes: Run an npm package temporarily without adding it to dependencies.
+      - label: Create starter app
+        command: bun create vite
+        notes: Scaffold projects from supported package create flows.
+      - label: Run tests
+        command: bun test
+        notes: Use Bun's built-in test runner where the project is compatible.
+
+  - group: Lockfiles, Caches, and Installs
+    items:
+      - label: Frozen lockfile install
+        command: bun install --frozen-lockfile
+        notes: Fail if dependency resolution would change the lockfile.
+      - label: Production-only install
+        command: bun install --production
+        notes: Skip dev dependencies for leaner deploy environments.
+      - label: Force reinstall
+        command: bun install --force
+        notes: Re-resolve and reinstall dependencies even if they appear satisfied.
+      - label: Show bun version
+        command: bun --version
+        notes: Important because Bun's package manager and runtime behavior evolve quickly.
+      - label: Clear install artifacts manually
+        command: rm -rf node_modules bun.lockb && bun install
+        notes: Common brute-force recovery path when install state gets confused.
+
+  - group: Monorepos and Workspaces
+    items:
+      - label: Install workspace deps
+        command: bun install
+        notes: Bun recognizes workspace configuration from project metadata.
+      - label: Filter script to one package
+        command: bun run --filter web build
+        notes: Target one workspace package in a monorepo.
+      - label: Add dep to filtered package
+        command: bun add react --filter web
+        notes: Install a dependency into one workspace member.
+      - label: Run test in filtered package
+        command: bun run --filter api test
+        notes: Narrow command execution to one workspace project.
+      - label: Inspect workspace package manifest
+        command: cat package.json
+        notes: Workspace behavior depends on the repo's package manager fields and workspaces layout.
+
+  - group: Inspection and Troubleshooting
+    items:
+      - label: Show outdated dependencies
+        command: bun outdated
+        notes: Compare installed and latest available versions.
+      - label: Explain package install source
+        command: bun pm ls
+        notes: Inspect the current dependency tree from Bun's package manager perspective.
+      - label: Print cache or PM help
+        command: bun pm --help
+        notes: Bun exposes package-manager-specific subcommands under `bun pm`.
+      - label: Run package audit-like review externally
+        value: Bun does not replace every npm ecosystem audit workflow; pair with registry or external scanning as needed.
+        notes: Security review sometimes still relies on adjacent tooling.
+      - label: Verify command support
+        command: bun --help
+        notes: Bun's CLI surface changes relatively quickly across releases.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap JS project
+        command: bun install && bun run dev
+        notes: Typical first-run workflow in Bun-managed frontend or server projects.
+      - label: Add lint and test tooling
+        command: bun add -d eslint prettier vitest typescript
+        notes: Common project toolchain setup path.
+      - label: CI install
+        command: bun install --frozen-lockfile
+        notes: Reproducible dependency install mode for CI.
+      - label: Try temporary CLI tool
+        command: bunx cowsay hello
+        notes: Bun's equivalent to `npx` or `pnpm dlx`.
+      - label: Show help
+        command: bun --help
+        notes: Bun spans runtime, package management, bundling, and testing in one CLI.

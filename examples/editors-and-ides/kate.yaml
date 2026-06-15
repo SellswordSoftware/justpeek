@@ -1,0 +1,77 @@
+name: Kate
+group: editors and ides
+process:
+  - kate
+search_terms:
+  - kde kate
+references:
+  - group: Files and Sessions
+    items:
+      - label: New file
+        keys: Ctrl+N
+      - label: Open file
+        keys: Ctrl+O
+      - label: Quick Open
+        keys: Ctrl+Alt+O
+        notes: Fast file switching within a project or session.
+      - label: Save all
+        keys: Ctrl+L
+      - label: New session
+        command: Sessions > New Session
+      - label: Open last session
+        value: Sessions restore window state, files, and projects.
+
+  - group: Navigation and Search
+    items:
+      - label: Search in file
+        keys: Ctrl+F
+      - label: Replace in file
+        keys: Ctrl+R
+      - label: Search in files
+        keys: Ctrl+Shift+F
+      - label: Go to line
+        keys: Ctrl+G
+      - label: Go to matching bracket
+        keys: Ctrl+6
+      - label: Symbol outline
+        value: Use the symbol tree / outline panel for structure navigation.
+
+  - group: Editing and Selection
+    items:
+      - label: Toggle comment
+        keys: Ctrl+D
+      - label: Duplicate lines up or down
+        command: Edit > Selection > Duplicate Selected Lines Up or Down
+      - label: Move lines up or down
+        command: Edit > Selection > Move Lines Up or Down
+      - label: Dynamic word wrap
+        command: View > Dynamic Word Wrap
+      - label: Block selection mode
+        command: Toggle block selection
+        notes: Column edits are tucked away but very useful for aligned text work.
+      - label: Format with external tools
+        value: Use plugins or LSP formatting depending language support.
+
+  - group: Projects, Terminal, and Tools
+    items:
+      - label: Open terminal panel
+        value: Terminal tool view
+      - label: Open project plugin
+        value: Projects panel
+      - label: Diagnostics panel
+        value: LSP diagnostics or diagnostics plugin output
+      - label: Command bar
+        value: Many workflows are available through tools and plugins rather than a single palette.
+      - label: Plugin manager
+        command: Settings > Configure Kate > Plugins
+
+  - group: Config and Recovery
+    items:
+      - label: Main config area
+        value: Settings > Configure Kate
+      - label: Session management
+        value: Sessions can be saved and switched explicitly.
+      - label: Restore defaults
+        command: Settings > Configure Kate > reset sections selectively
+      - label: Check syntax highlighting mode
+        value: Bottom status bar or Tools > Highlighting

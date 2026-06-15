@@ -1,0 +1,113 @@
+name: Compose
+group: container / infra
+process:
+  - docker-compose
+  - docker compose
+references:
+  - group: Core Lifecycle
+    items:
+      - label: Start services in foreground
+        command: docker compose up
+        notes: Build or pull images as needed and stream service logs.
+      - label: Start services detached
+        command: docker compose up -d
+        notes: Launch the application stack in the background.
+      - label: Stop and remove stack
+        command: docker compose down
+        notes: Stop services and remove their containers and default network.
+      - label: Restart one service
+        command: docker compose restart web
+        notes: Bounce a service without tearing down the entire stack.
+      - label: List services and state
+        command: docker compose ps
+        notes: Show containers created by the current Compose project.
+
+  - group: Builds and Images
+    items:
+      - label: Build all services
+        command: docker compose build
+        notes: Build images defined by `build:` sections in the compose file.
+      - label: Build one service
+        command: docker compose build web
+        notes: Restrict builds to the selected service.
+      - label: Pull service images
+        command: docker compose pull
+        notes: Fetch remote images without starting containers.
+      - label: Force recreate after build
+        command: docker compose up -d --build
+        notes: Rebuild and restart services in one step.
+      - label: Push built images
+        command: docker compose push
+        notes: Publish images with configured `image:` tags to registries.
+
+  - group: Logs, Exec, and Debugging
+    items:
+      - label: Follow all logs
+        command: docker compose logs -f
+        notes: Stream logs from every service in the project.
+      - label: Follow one service logs
+        command: docker compose logs -f web
+        notes: Narrow log output to one service.
+      - label: Exec shell in service
+        command: docker compose exec web sh
+        notes: Open an interactive shell inside a running service container.
+      - label: Run one-off command
+        command: docker compose run --rm web pytest
+        notes: Start a temporary container for an ad hoc command.
+      - label: Show effective config
+        command: docker compose config
+        notes: Render merged and interpolated Compose configuration for inspection.
+
+  - group: Files, Profiles, and Environment
+    items:
+      - label: Use alternate compose file
+        command: docker compose -f compose.yaml -f compose.prod.yaml up -d
+        notes: Merge multiple files for environment-specific configuration.
+      - label: Use project name
+        command: docker compose -p myapp up -d
+        notes: Override the default project name derived from the directory.
+      - label: Use profile
+        command: docker compose --profile dev up
+        notes: Start optional services only when the named profile is enabled.
+      - label: Load env file explicitly
+        command: docker compose --env-file .env.prod up -d
+        notes: Select a different environment file than the default `.env`.
+      - label: Validate config
+        command: docker compose config --quiet
+        notes: Check configuration validity without rendering the full output.
+
+  - group: Data and Cleanup
+    items:
+      - label: Stop without removing
+        command: docker compose stop
+        notes: Halt containers but keep them for later restart.
+      - label: Remove stopped service containers
+        command: docker compose rm
+        notes: Delete stopped containers created by the Compose project.
+      - label: Down with volumes
+        command: docker compose down -v
+        notes: Remove named and anonymous project volumes as well.
+      - label: Remove orphan containers
+        command: docker compose down --remove-orphans
+        notes: Clean up containers no longer present in the current config.
+      - label: Inspect project volume usage
+        command: docker volume ls
+        notes: Compose volumes are still normal Docker volumes underneath.
+
+  - group: Common Workflows
+    items:
+      - label: Local dev app start
+        command: docker compose up -d --build
+        notes: Common local bootstrap after source or Dockerfile changes.
+      - label: Rebuild one service only
+        command: docker compose up -d --build web
+        notes: Faster iteration when only one service changed.
+      - label: Database migration command
+        command: docker compose run --rm web alembic upgrade head
+        notes: Typical one-off administrative task against a running service stack.
+      - label: Stream app logs during startup
+        command: docker compose up
+        notes: Foreground mode is often best the first time through a config or after major changes.
+      - label: Show help
+        command: docker compose --help
+        notes: Compose usage spans lifecycle, file merging, profiles, and debug-oriented one-off commands.

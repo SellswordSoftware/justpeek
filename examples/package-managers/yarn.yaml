@@ -1,0 +1,110 @@
+name: yarn
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Install project deps
+        command: yarn install
+        notes: Resolve and install dependencies from project metadata and lockfile.
+      - label: Add dependency
+        command: yarn add axios
+        notes: Add a runtime dependency to the current package.
+      - label: Add dev dependency
+        command: yarn add -D vitest typescript
+        notes: Record development dependencies separately.
+      - label: Remove dependency
+        command: yarn remove axios
+        notes: Delete a dependency from project metadata and lock state.
+      - label: Upgrade dependency
+        command: yarn up axios
+        notes: Update one dependency using modern Yarn workflows.
+
+  - group: Scripts and Execution
+    items:
+      - label: Run package script
+        command: yarn build
+        notes: Run a script from `package.json`; `run` is often optional in modern Yarn.
+      - label: Execute binary
+        command: yarn eslint .
+        notes: Run a dependency-provided binary through Yarn's command resolution.
+      - label: Create app from package
+        command: yarn create vite
+        notes: Scaffold projects through package-provided create flows.
+      - label: Run one-off package
+        command: yarn dlx cowsay hello
+        notes: Execute a temporary package without adding it to dependencies.
+      - label: Explain script command
+        command: yarn run env
+        notes: Helpful for understanding PATH and environment inside script execution.
+
+  - group: Lockfiles, Policies, and Installs
+    items:
+      - label: Immutable install
+        command: yarn install --immutable
+        notes: Fail if the lockfile would need modification, common in CI.
+      - label: Refresh lockfile only
+        command: yarn install --mode=skip-build
+        notes: One way to control install behavior while avoiding some expensive steps.
+      - label: Explain lockfile source
+        command: cat yarn.lock
+        notes: The lockfile is central to reproducible installs across Yarn versions.
+      - label: Set Yarn version in repo
+        command: yarn set version stable
+        notes: Pin the Yarn release used by the repository.
+      - label: Enable Corepack-managed Yarn
+        command: corepack enable
+        notes: Common modern path for making the desired Yarn version available.
+
+  - group: Workspaces and Monorepos
+    items:
+      - label: List workspaces
+        command: yarn workspaces list
+        notes: Show all workspace packages in the current monorepo.
+      - label: Run script in one workspace
+        command: yarn workspace web test
+        notes: Target a named workspace package directly.
+      - label: Run command in all workspaces
+        command: yarn workspaces foreach run build
+        notes: Execute a script across the workspace graph.
+      - label: Add dep to one workspace
+        command: yarn workspace web add react
+        notes: Add a dependency to one package instead of the repo root.
+      - label: Focus install on one workspace
+        command: yarn workspaces focus web
+        notes: Narrow installs for more targeted local or CI workflows.
+
+  - group: Inspection and Troubleshooting
+    items:
+      - label: Show why package exists
+        command: yarn why react
+        notes: Trace dependency provenance in the install graph.
+      - label: Check outdated deps
+        command: yarn outdated
+        notes: Compare installed packages with available newer versions.
+      - label: Explain peer requirements
+        command: yarn explain peer-requirements
+        notes: Useful for debugging peer dependency conflicts in modern Yarn.
+      - label: Inspect Yarn config
+        command: yarn config -v
+        notes: Review the active configuration and Yarn version context.
+      - label: Clean cache
+        command: yarn cache clean
+        notes: Clear cached package artifacts when troubleshooting fetch or integrity issues.
+
+  - group: Common Workflows
+    items:
+      - label: CI install with lock guarantee
+        command: yarn install --immutable
+        notes: Standard reproducible install mode in CI for modern Yarn repos.
+      - label: Bootstrap monorepo
+        command: yarn install && yarn workspaces foreach run build
+        notes: Typical initial setup and build loop in a workspace repo.
+      - label: Add frontend tooling
+        command: yarn add -D eslint prettier typescript
+        notes: Common starter toolchain set for JS or TS apps.
+      - label: Inspect Yarn version
+        command: yarn --version
+        notes: Important because Yarn classic and Berry differ significantly in behavior.
+      - label: Show help
+        command: yarn --help
+        notes: Yarn's workspace, plugin, and policy features make help worth revisiting.

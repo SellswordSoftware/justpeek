@@ -1,0 +1,110 @@
+name: yq
+group: shell / shell helpers
+references:
+  - group: Core Reading and Formatting
+    items:
+      - label: Pretty-print YAML
+        command: yq '.' config.yaml
+        notes: Identity filter formats YAML while preserving structure.
+      - label: Read a field
+        command: yq '.spec.replicas' deployment.yaml
+        notes: Dot-path syntax is jq-like for common navigation.
+      - label: Read array item
+        command: yq '.items[0].metadata.name' data.yaml
+        notes: Use zero-based indexing for arrays.
+      - label: Output JSON
+        command: yq -o=json '.' config.yaml
+        notes: Convert YAML to JSON for downstream tools.
+      - label: Read from stdin
+        command: cat config.yaml | yq '.services'
+        notes: Useful in shell pipelines where the file path is not fixed.
+
+  - group: Updating Documents
+    items:
+      - label: Set a scalar field in place
+        command: yq -i '.spec.replicas = 3' deployment.yaml
+        notes: `-i` edits the file directly for supported yq implementations.
+      - label: Set nested field
+        command: yq -i '.image.tag = "1.2.3"' values.yaml
+        notes: Create or overwrite nested values via assignment.
+      - label: Append array element
+        command: yq -i '.args += ["--verbose"]' config.yaml
+        notes: Extend sequence fields without reconstructing the whole list.
+      - label: Delete a field
+        command: yq -i 'del(.metadata.annotations)' manifest.yaml
+        notes: Remove a key cleanly from the document tree.
+      - label: Update all matching items
+        command: yq -i '.containers[].imagePullPolicy = "IfNotPresent"' pod.yaml
+        notes: Apply one assignment across every element in a sequence.
+
+  - group: Selection and Filtering
+    items:
+      - label: Select items by condition
+        command: yq '.items[] | select(.enabled == true)' config.yaml
+        notes: Filter sequence entries similarly to jq.
+      - label: Provide default value
+        command: yq '.image.tag // "latest"' values.yaml
+        notes: Fallback when a value is null or missing.
+      - label: Check key existence
+        command: yq 'has("metadata")' manifest.yaml
+        notes: Boolean test for top-level object keys.
+      - label: Filter by regex
+        command: yq '.users[] | select(.email | test("@example.com$"))' users.yaml
+        notes: Use regex predicates for string-based selection.
+      - label: Match on array contents
+        command: yq '.services[] | select(.ports[] == 443)' services.yaml
+        notes: Useful for scanning Kubernetes and Compose-like structures.
+
+  - group: Multi-Document and Merge Workflows
+    items:
+      - label: Read all documents
+        command: yq eval-all '.' manifests.yaml
+        notes: Process every document in a multi-document YAML file.
+      - label: Merge two files
+        command: yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' base.yaml override.yaml
+        notes: Common overlay pattern for environment-specific config.
+      - label: Merge arrays by append
+        command: yq eval-all '. as $item ireduce ({}; . *+ $item )' a.yaml b.yaml
+        notes: `*+` keeps array items rather than replacing arrays wholesale.
+      - label: Split documents to files
+        command: yq eval -s '.kind + "-" + .metadata.name' manifests.yaml
+        notes: Write each document to a separate output file based on an expression.
+      - label: Show document index
+        command: yq 'document_index' manifests.yaml
+        notes: Helpful when debugging multi-document input ordering.
+
+  - group: Conversions and Data Reshaping
+    items:
+      - label: Convert JSON to YAML
+        command: yq -P input.json
+        notes: Pretty-print JSON input as YAML.
+      - label: Convert YAML to props-like output
+        command: yq -o=props '.' config.yaml
+        notes: Flatten hierarchical config for env or Java-style property use cases.
+      - label: Extract keys
+        command: yq 'keys' config.yaml
+        notes: List object keys at the current path.
+      - label: Get array length
+        command: yq '.items | length' config.yaml
+        notes: Count sequence elements without external tooling.
+      - label: Build new object
+        command: yq '{name: .metadata.name, ns: .metadata.namespace}' manifest.yaml
+        notes: Reshape documents into simpler summaries.
+
+  - group: Common Workflows and Debugging
+    items:
+      - label: Update Kubernetes image tag
+        command: yq -i '.spec.template.spec.containers[].image |= sub(":.*$"; ":1.2.3")' deploy.yaml
+        notes: Practical pattern for manifest release updates.
+      - label: Read Helm values path
+        command: yq '.image.repository, .image.tag' values.yaml
+        notes: Fast inspection of Helm chart image settings.
+      - label: Compare generated YAML as JSON
+        command: yq -o=json '.' config.yaml | jq '.'
+        notes: Pair yq with jq when JSON-native tooling is more comfortable.
+      - label: Preserve comments caveat
+        value: Comment preservation depends on the yq implementation and operation.
+        notes: In-place structural edits can sometimes reorder or rewrite formatting.
+      - label: Show help
+        command: yq --help
+        notes: yq has multiple implementations in the ecosystem, so checking installed help matters.

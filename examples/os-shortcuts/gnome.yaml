@@ -1,0 +1,69 @@
+name: GNOME
+group: os shortcuts
+search_terms:
+  - gnome shell
+references:
+  - group: Overview and Search
+    items:
+      - label: Activities overview
+        keys: Super
+        notes: Press again to return to the desktop; type immediately to search.
+      - label: Applications list
+        keys: Super+A
+      - label: Run command
+        keys: Alt+F2
+      - label: Notifications list
+        keys: Super+V
+      - label: Focus shell chrome
+        keys: Ctrl+Alt+Tab
+        notes: Move keyboard focus between top bar, dash, search, and overview regions.
+
+  - group: Windows and Workspaces
+    items:
+      - label: Switch apps
+        keys: Super+Tab
+      - label: Switch windows in same app
+        keys: Super+Backtick
+      - label: Switch windows in current workspace
+        keys: Alt+Esc
+      - label: Next workspace
+        keys: Super+PageDown
+      - label: Previous workspace
+        keys: Super+PageUp
+      - label: Move window to workspace
+        keys: Shift+Super+PageUp / Shift+Super+PageDown
+      - label: Move window to monitor
+        keys: Shift+Super+Left / Shift+Super+Right
+      - label: Lock screen
+        keys: Super+L
+
+  - group: Screenshots and Recording
+    items:
+      - label: Launch screenshot tool
+        keys: Print
+      - label: Screenshot window
+        keys: Alt+Print
+      - label: Screenshot full screen
+        keys: Shift+Print
+      - label: Start or stop screencast
+        keys: Shift+Ctrl+Alt+R
+
+  - group: Terminal and Editing
+    items:
+      - label: Terminal copy
+        keys: Ctrl+Shift+C
+      - label: Terminal paste
+        keys: Ctrl+Shift+V
+      - label: Standard editing set
+        keys: Ctrl+A / X / C / V / Z
+      - label: Set custom shortcuts
+        value: Settings > Keyboard > Keyboard Shortcuts
+
+  - group: Power and Session
+    items:
+      - label: Power Off dialog
+        keys: Ctrl+Alt+Delete
+      - label: Search from overview
+        value: Open overview with Super, then type
+      - label: Context note
+        value: Many GNOME distributions keep these defaults, but vendors may add their own Super-based actions

@@ -1,0 +1,129 @@
+name: home-manager
+group: package managers
+references:
+  - group: Core User Configuration Operations
+    items:
+      - label: Apply current config
+        command: home-manager switch
+        notes: Build and activate the user environment from the configured Home Manager files.
+      - label: Build without switching
+        command: home-manager build
+        notes: Build the generation but do not activate it yet.
+      - label: Show current generations
+        command: home-manager generations
+        notes: List available user environment generations for rollback and inspection.
+      - label: Expire old generations
+        command: home-manager expire-generations '-30 days'
+        notes: Remove generations older than a chosen window.
+      - label: Roll back generation
+        command: home-manager switch --rollback
+        notes: Revert to the previous Home Manager generation.
+
+  - group: Flake-Based Workflows
+    items:
+      - label: Switch from flake
+        command: home-manager switch --flake .#mike
+        notes: Activate the selected Home Manager flake output for the user.
+      - label: Build from flake
+        command: home-manager build --flake .#mike
+        notes: Validate flake-based config without activating it immediately.
+      - label: Show flake package outputs
+        command: nix flake show .
+        notes: Inspect the exported Home Manager configurations and related outputs.
+      - label: Update lock file
+        command: nix flake update
+        notes: Refresh pinned inputs used by the Home Manager flake.
+      - label: Debug flake activation
+        command: home-manager switch --flake .#mike --show-trace
+        notes: Expand evaluation traces for harder-to-read Nix errors.
+
+  - group: Configuration Structure
+    items:
+      - label: Main config path
+        value: ~/.config/home-manager/home.nix
+        notes: Common non-flake entrypoint for Home Manager configuration.
+      - label: Minimal package config
+        command: |
+          home.packages = with pkgs; [
+            ripgrep
+            fd
+          ];
+        notes: Add packages declaratively to the user environment.
+      - label: Enable program module
+        command: |
+          programs.git = {
+            enable = true;
+            userName = "Mike";
+          };
+        notes: Prefer module options over ad hoc dotfile scripting when available.
+      - label: Manage dotfile content
+        command: |
+          home.file.".config/htop/htoprc".source = ./htoprc;
+        notes: Link or generate config files declaratively.
+      - label: Set state version
+        command: |
+          home.stateVersion = "24.11";
+        notes: Required compatibility marker for Home Manager module behavior.
+
+  - group: Inspection and Validation
+    items:
+      - label: Show option docs
+        command: home-manager help
+        notes: The built-in help is the first stop, though most module detail lives in manuals or option search.
+      - label: Search options in nixpkgs docs flow
+        command: nix repl '<home-manager>'
+        notes: Use the REPL for deeper option and module exploration when needed.
+      - label: Dry-run style build
+        command: home-manager build
+        notes: Most practical validation path before a real switch.
+      - label: Format config directory
+        command: alejandra ~/.config/home-manager
+        notes: Keep Nix config consistent and readable.
+      - label: Check active links
+        command: find ~/.config/home-manager -maxdepth 2 -type f
+        notes: Sanity-check the repository or config layout before activation.
+
+  - group: Common Module Patterns
+    items:
+      - label: Manage shell aliases
+        command: |
+          programs.zsh.shellAliases = {
+            gs = "git status";
+          };
+        notes: Declarative shell config is easier to review and reproduce.
+      - label: Enable Git config
+        command: |
+          programs.git.enable = true;
+        notes: Home Manager can manage both packages and app configuration together.
+      - label: Install fonts package set
+        command: |
+          home.packages = with pkgs; [ nerdfonts ];
+        notes: User-scoped package additions work well for desktop tooling too.
+      - label: Enable tmux module
+        command: |
+          programs.tmux.enable = true;
+        notes: Prefer module-backed program management when available.
+      - label: Manage environment variables
+        command: |
+          home.sessionVariables = {
+            EDITOR = "nvim";
+          };
+        notes: Session variables can be set declaratively alongside packages and dotfiles.
+
+  - group: Common Workflows
+    items:
+      - label: Edit then switch
+        command: $EDITOR ~/.config/home-manager/home.nix && home-manager switch
+        notes: Standard non-flake maintenance loop.
+      - label: Flake-based user deploy
+        command: home-manager switch --flake .#mike
+        notes: Common workflow in dotfiles repos that manage multiple hosts or users.
+      - label: Roll back bad config
+        command: home-manager switch --rollback
+        notes: Fast recovery path when a change breaks the login environment.
+      - label: Clean old generations
+        command: home-manager expire-generations '-14 days'
+        notes: Keep generation history manageable without losing immediate rollback safety.
+      - label: Show help
+        command: home-manager --help
+        notes: Home Manager commands are compact, but subcommand help still matters.

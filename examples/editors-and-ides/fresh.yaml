@@ -1,0 +1,136 @@
+name: Fresh
+group: editors and ides
+process:
+  - fresh
+search_terms:
+  - fresh editor
+  - getfresh
+  - getfresh.dev
+references:
+  - group: Startup and Files
+    items:
+      - label: Open empty buffer
+        command: fresh
+      - label: Open file
+        command: fresh <path>
+      - label: Open at line
+        command: fresh <path>:42
+      - label: Open at line and column
+        command: fresh <path>:42:10
+      - label: Open multiple files
+        command: fresh Cargo.toml src/main.rs:42:10
+      - label: Wait for close
+        command: fresh --wait <path>
+        notes: Useful for `git core.editor`, rebase, and scripted edit flows.
+      - label: Attach named session
+        command: fresh -a myproject
+      - label: Open file in running session
+        command: fresh --cmd session open-file myproject src/main.rs:42
+
+  - group: Command Palette and Navigation
+    items:
+      - label: Open command palette
+        keys: Ctrl+P
+        notes: Fresh uses one palette for file finding, commands, buffers, and go-to-line.
+      - label: Command mode prefix
+        value: "Type `>` inside the palette"
+      - label: Buffer switcher prefix
+        value: "Type `#` inside the palette"
+      - label: Go to line prefix
+        value: "Type `:` inside the palette"
+      - label: Accept top suggestion
+        keys: Tab
+      - label: Jump after opening a file
+        value: "Use `path:line[:col]` in the palette"
+      - label: Fuzzy multi-term search
+        value: "Space-separated terms match independently"
+        notes: Useful for long nested paths and command names.
+
+  - group: Editing and Multi-cursor
+    items:
+      - label: Search
+        keys: Ctrl+F
+      - label: Replace
+        keys: Ctrl+R
+      - label: Query replace
+        command: Query Replace
+        notes: Run from the command palette for interactive y/n/!/q replacement.
+      - label: Add cursor at next occurrence
+        keys: Ctrl+D
+      - label: Add cursor above
+        keys: Ctrl+Alt+Up
+      - label: Add cursor below
+        keys: Ctrl+Alt+Down
+      - label: Remove secondary cursors
+        keys: Escape
+      - label: Select word under cursor
+        keys: Ctrl+W
+      - label: Select current line
+        keys: Ctrl+L
+      - label: Select all
+        keys: Ctrl+A
+      - label: Smart Home
+        keys: Home
+        notes: Toggles between first non-whitespace and column 0.
+      - label: Smart Backspace
+        keys: Backspace
+        notes: Leading whitespace deletes one indent level instead of one character.
+      - label: Surround selection
+        value: Type an opening delimiter over a selection
+
+  - group: Terminal, Git, and Reviews
+    items:
+      - label: Open integrated terminal
+        command: Open Terminal
+        notes: Invoke from the command palette.
+      - label: Terminal mode toggle
+        keys: Ctrl+Space
+        notes: Switch between live terminal input and read-only scrollback mode.
+      - label: Exit terminal mode
+        keys: Ctrl+RightBracket
+      - label: Review working tree diff
+        command: Review Diff
+      - label: Review commit range
+        command: "Review: Commit Range"
+      - label: Review PR branch
+        command: "Review: PR Branch"
+      - label: Git log
+        command: Git Log
+      - label: Next diff chunk
+        command: Next Diff Chunk
+      - label: Previous diff chunk
+        command: Previous Diff Chunk
+
+  - group: Remote Editing and Sessions
+    items:
+      - label: Open remote file over SSH
+        command: fresh user@host:/path/to/file.txt
+      - label: Open remote directory over SSH
+        command: fresh user@host:~/projects
+      - label: Remote file finder
+        value: Ctrl+P works against the remote filesystem too
+      - label: Background reconnect
+        value: Remote sessions reconnect automatically after drops
+      - label: Sudo save over SSH
+        value: Supported
+        notes: Useful for infra edits on protected remote files.
+      - label: Hot Exit
+        value: Buffers persist across restart and crash recovery
+
+  - group: Config, Keymaps, and Plugins
+    items:
+      - label: Init script path
+        value: ~/.config/fresh/init.ts
+      - label: Init script purpose
+        value: Runs once at startup with plugin API access
+      - label: Prefer declarative config first
+        value: Use settings UI, config.json, theme selector, and keybinding editor for static prefs
+      - label: Open keybinding editor
+        command: Keybinding Editor
+      - label: Keybinding editor location
+        value: Edit menu or command palette
+      - label: Keyboard conflicts on terminal apps
+        value: OS, WM, and terminal shortcuts can intercept keys before Fresh sees them
+      - label: Package scaffold
+        command: fresh --init
+        notes: Scaffolds a plugin or package skeleton.

@@ -1,0 +1,99 @@
+name: Win11
+group: os shortcuts
+search_terms:
+  - windows 11
+  - windows shortcuts
+references:
+  - group: Window and Desktop Control
+    items:
+      - label: Switch apps
+        keys: Alt+Tab
+      - label: Close active window
+        keys: Alt+F4
+      - label: Show desktop
+        keys: Win+D
+      - label: Snap left
+        keys: Win+Left
+      - label: Snap right
+        keys: Win+Right
+      - label: Maximize
+        keys: Win+Up
+      - label: Minimize or restore
+        keys: Win+Down
+      - label: Task View
+        keys: Win+Tab
+      - label: Create virtual desktop
+        keys: Win+Ctrl+D
+      - label: Close virtual desktop
+        keys: Win+Ctrl+F4
+      - label: Switch virtual desktops
+        keys: Win+Ctrl+Left / Win+Ctrl+Right
+
+  - group: Launchers and System UI
+    items:
+      - label: Open Start
+        keys: Win
+      - label: Quick Link menu
+        keys: Win+X
+      - label: Search
+        keys: Win+S
+      - label: Run dialog
+        keys: Win+R
+      - label: Settings
+        keys: Win+I
+      - label: File Explorer
+        keys: Win+E
+      - label: Notifications and calendar
+        keys: Win+N
+      - label: Quick Settings
+        keys: Win+A
+      - label: Emoji and symbols
+        keys: Win+Period
+
+  - group: Screenshots and Recording
+    items:
+      - label: Snipping Tool
+        keys: Win+Shift+S
+      - label: Print Screen
+        keys: PrintScreen
+        notes: Launches the screenshot tool on current Windows 11 defaults.
+      - label: Active window screenshot
+        keys: Alt+PrintScreen
+      - label: Save full screenshot to file
+        keys: Win+PrintScreen
+      - label: Xbox Game Bar
+        keys: Win+G
+      - label: Start screen recording
+        keys: Win+Alt+R
+        notes: Uses Xbox Game Bar capture.
+
+  - group: Clipboard and Recovery
+    items:
+      - label: Clipboard history
+        keys: Win+V
+      - label: Paste as plain text
+        keys: Ctrl+Shift+V
+        notes: Supported in many modern apps, but not all.
+      - label: Restart graphics driver
+        keys: Win+Ctrl+Shift+B
+        notes: Useful when the display stack hangs but the system is still alive.
+      - label: Lock screen
+        keys: Win+L
+      - label: Secure attention
+        keys: Ctrl+Alt+Delete
+
+  - group: File Explorer and Text Navigation
+    items:
+      - label: Rename selected item
+        keys: F2
+      - label: Show hidden items
+        keys: Ctrl+Shift+Period
+        notes: In File Explorer.
+      - label: New folder
+        keys: Ctrl+Shift+N
+      - label: Delete without Recycle Bin
+        keys: Shift+Delete
+      - label: Select address bar
+        keys: Alt+D
+      - label: Plain text navigation set
+        value: Ctrl+Arrow, Ctrl+Backspace, Ctrl+Delete, Home, End, Shift+selection keys

@@ -1,0 +1,101 @@
+name: Eclipse
+group: editors and ides
+process:
+  - eclipse
+search_terms:
+  - eclipse ide
+references:
+  - group: Navigation and Search
+    items:
+      - label: Open resource
+        keys: Ctrl+Shift+R
+      - label: Open type
+        keys: Ctrl+Shift+T
+      - label: Open method
+        keys: Ctrl+Shift+O
+        notes: Search for methods by name across the workspace.
+      - label: Quick access
+        keys: Ctrl+3
+        notes: One of the most useful but underused Eclipse launchers.
+      - label: Go to line
+        keys: Ctrl+L
+      - label: Open declaration
+        keys: F3
+      - label: Quick outline
+        keys: Ctrl+O
+      - label: Open call hierarchy
+        keys: Ctrl+Alt+H
+
+  - group: Editing and Refactoring
+    items:
+      - label: Content assist
+        keys: Ctrl+Space
+      - label: Quick fix
+        keys: Ctrl+1
+      - label: Rename
+        keys: Alt+Shift+R
+      - label: Organize imports
+        keys: Ctrl+Shift+O
+        notes: Different from Open method because scope depends on editor focus.
+      - label: Format
+        keys: Ctrl+Shift+F
+      - label: Toggle comment
+        keys: Ctrl+Slash
+      - label: Correct indentation
+        keys: Ctrl+I
+      - label: Show proposals for templates
+        value: "Type prefix, then `Ctrl+Space`"
+        notes: Useful for live templates and code generation stubs.
+
+  - group: Views and Workspace
+    items:
+      - label: Package Explorer
+        command: Window > Show View > Package Explorer
+      - label: Problems view
+        command: Window > Show View > Problems
+      - label: Switch editor
+        keys: Ctrl+E
+      - label: Maximize active view
+        keys: Ctrl+M
+      - label: Next perspective
+        keys: Ctrl+F8
+      - label: Next view
+        keys: Ctrl+F7
+      - label: Next editor
+        keys: Ctrl+F6
+      - label: Open preferences
+        command: Window > Preferences
+
+  - group: Run and Debug
+    items:
+      - label: Run last launched
+        keys: Ctrl+F11
+      - label: Debug last launched
+        keys: F11
+      - label: Toggle breakpoint
+        keys: Ctrl+Shift+B
+      - label: Step into
+        keys: F5
+      - label: Step over
+        keys: F6
+      - label: Step return
+        keys: F7
+      - label: Resume
+        keys: F8
+      - label: Display expression on selection
+        command: Inspect / Display / Watch
+        notes: Old-school Eclipse debugging remains strong for ad hoc expression work.
+
+  - group: Startup and Maintenance
+    items:
+      - label: Workspace chooser
+        command: eclipse -data <workspace-path>
+      - label: Clean start after plugin issues
+        command: eclipse -clean
+      - label: Skip restored workbench state
+        command: eclipse -clean -clearPersistedState
+        notes: Helpful when a corrupted perspective or workspace state blocks startup.
+      - label: Install marketplace plugins
+        value: Help > Eclipse Marketplace
+      - label: Export preferences
+        value: File > Export > General > Preferences

@@ -1,0 +1,115 @@
+name: tmux
+group: shell / shell helpers
+references:
+  - group: Sessions and Startup
+    items:
+      - label: Start new session
+        command: tmux
+        notes: Open a new unnamed tmux session attached to the terminal.
+      - label: Start named session
+        command: tmux new -s work
+        notes: Name sessions clearly so they are easy to reattach later.
+      - label: List sessions
+        command: tmux ls
+        notes: Show active sessions and their attachment state.
+      - label: Attach to session
+        command: tmux attach -t work
+        notes: Reconnect to an existing named session.
+      - label: Detach from session
+        keys: Prefix then D
+        notes: Default prefix is `Ctrl+B` unless remapped.
+
+  - group: Windows and Panes
+    items:
+      - label: New window
+        keys: Prefix then C
+        notes: Create a new shell window inside the current session.
+      - label: Rename window
+        keys: Prefix then Comma
+        notes: Give windows task-oriented names for easier scanning.
+      - label: Split vertically
+        keys: Prefix then Percent
+        notes: Create a left or right pane split.
+      - label: Split horizontally
+        keys: Prefix then DoubleQuote
+        notes: Create a top or bottom pane split.
+      - label: Close current pane
+        keys: Exit shell or Prefix then X
+        notes: Confirm pane kill when using the explicit kill binding.
+
+  - group: Navigation and Layouts
+    items:
+      - label: Move between panes
+        keys: Prefix then ArrowKeys
+        notes: Use directional navigation to focus adjacent panes.
+      - label: Cycle windows
+        keys: Prefix then N / P
+        notes: Move to next or previous window.
+      - label: Select layout
+        keys: Prefix then Space
+        notes: Cycle built-in pane layouts for the current window.
+      - label: Zoom pane
+        keys: Prefix then Z
+        notes: Temporarily maximize the active pane.
+      - label: Show pane numbers
+        keys: Prefix then Q
+        notes: Overlay pane numbers briefly for fast numeric selection.
+
+  - group: Copy Mode and Scrolling
+    items:
+      - label: Enter copy mode
+        keys: Prefix then LeftBracket
+        notes: Scroll back and select text from pane history.
+      - label: Search in copy mode
+        keys: Slash
+        notes: Search scrollback once inside copy mode.
+      - label: Paste tmux buffer
+        keys: Prefix then RightBracket
+        notes: Paste from tmux's own copy buffer, separate from system clipboard.
+      - label: Increase history limit
+        command: |
+          set -g history-limit 100000
+        notes: Keep deeper scrollback available in each pane.
+      - label: Mouse support
+        command: |
+          set -g mouse on
+        notes: Enable mouse-based pane selection, resize, and scroll.
+
+  - group: Configuration and Automation
+    items:
+      - label: Main config path
+        value: ~/.tmux.conf
+        notes: Default user configuration file for tmux.
+      - label: Reload config
+        keys: Prefix then Colon, then `source-file ~/.tmux.conf`
+        notes: Re-read configuration without restarting the session.
+      - label: Change prefix key
+        command: |
+          unbind C-b
+          set -g prefix C-a
+          bind C-a send-prefix
+        notes: Common customization for users coming from GNU Screen.
+      - label: Rename session from CLI
+        command: tmux rename-session -t work project-x
+        notes: Update session naming after context changes.
+      - label: Send keys to pane
+        command: tmux send-keys -t work:1.0 'npm test' Enter
+        notes: Automate commands in a target pane from scripts.
+
+  - group: Troubleshooting and Common Workflows
+    items:
+      - label: Kill session
+        command: tmux kill-session -t work
+        notes: Remove one session cleanly when it is no longer needed.
+      - label: Kill server
+        command: tmux kill-server
+        notes: Stop all tmux sessions and the server process entirely.
+      - label: List panes with metadata
+        command: tmux list-panes -a -F '#S:#I.#P #{pane_current_command}'
+        notes: Useful for scripts and large multi-session workspaces.
+      - label: Check current options
+        command: tmux show-options -g
+        notes: Inspect effective global settings during configuration debugging.
+      - label: Show help
+        command: tmux list-keys
+        notes: Print the bound key table for the current tmux installation and config.

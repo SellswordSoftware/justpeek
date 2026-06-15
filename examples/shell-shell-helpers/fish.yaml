@@ -1,0 +1,130 @@
+name: Fish
+group: shell / shell helpers
+references:
+  - group: Startup and Configuration
+    items:
+      - label: Show Fish version
+        command: fish --version
+      - label: Edit main config
+        command: $EDITOR ~/.config/fish/config.fish
+        notes: Primary interactive configuration file for Fish.
+      - label: Reload Fish config
+        command: source ~/.config/fish/config.fish
+        notes: Re-apply functions, abbreviations, variables, and prompt changes.
+      - label: Open web-based config
+        command: fish_config
+        notes: Launch the browser UI for prompt, colors, and function configuration.
+      - label: Show universal variables
+        command: set -U
+        notes: Inspect variables persisted across Fish sessions.
+
+  - group: Variables and Environment
+    items:
+      - label: Set a local variable
+        command: set name value
+        notes: Fish does not use `=` for variable assignment.
+      - label: Set a global exported variable
+        command: set -gx PATH /custom/bin $PATH
+        notes: Use flags to control scope and export behavior explicitly.
+      - label: Erase a variable
+        command: set -e name
+        notes: Remove a variable from the current scope.
+      - label: Set a universal variable
+        command: set -Ux EDITOR nvim
+        notes: Persist a value across future Fish sessions.
+      - label: Expand list elements
+        command: printf '%s\n' $PATH
+        notes: Lists are first-class values and expand element-by-element.
+
+  - group: Functions and Abbreviations
+    items:
+      - label: Define a function interactively
+        command: |
+          function mkcd
+              mkdir -p $argv[1]; and cd $argv[1]
+          end
+        notes: Fish functions use `function ... end` instead of shell braces.
+      - label: Save a function
+        command: funcsave mkcd
+        notes: Persist the current function definition to the Fish functions directory.
+      - label: Show a function definition
+        command: functions mkcd
+        notes: Print the current implementation for inspection or reuse.
+      - label: Create an abbreviation
+        command: abbr -a gco 'git checkout'
+        notes: Abbreviations expand as you type and are often better than aliases in Fish.
+      - label: List abbreviations
+        command: abbr --show
+        notes: Review the saved shorthand expansions.
+
+  - group: Loops and Conditionals
+    items:
+      - label: For loop
+        command: |
+          for file in *.txt
+              echo $file
+          end
+        notes: Fish block syntax uses indentation plus `end`.
+      - label: While loop
+        command: |
+          while read -l line
+              echo $line
+          end < input.txt
+        notes: `read -l` keeps line-based behavior for common text processing loops.
+      - label: Conditional block
+        command: |
+          if test -f $path
+              echo exists
+          else
+              echo missing
+          end
+        notes: Fish uses commands like `test` instead of `[[ ... ]]`.
+      - label: Switch statement
+        command: |
+          switch $answer
+              case y Y
+                  echo yes
+              case n N
+                  echo no
+              case '*'
+                  echo unknown
+          end
+        notes: Pattern matching uses `case` arms under `switch`.
+      - label: Chain commands on success
+        command: make; and ./run-tests
+        notes: Fish replaces `&&` with `and` and `||` with `or`.
+
+  - group: Interactive Features
+    items:
+      - label: Accept autosuggestion
+        keys: RightArrow
+        notes: Fish suggests command completions from history and known commands.
+      - label: Search history token
+        keys: Alt+Up
+        notes: Cycle through matching history entries based on the current token.
+      - label: Pager for completions
+        keys: Tab
+        notes: Show or cycle through contextual completion candidates.
+      - label: Jump to previous directory
+        command: prevd
+        notes: Navigate backward through Fish directory history.
+      - label: Jump to next directory
+        command: nextd
+        notes: Navigate forward through Fish directory history.
+
+  - group: Jobs and Troubleshooting
+    items:
+      - label: List background jobs
+        command: jobs
+      - label: Bring job to foreground
+        command: fg
+        notes: Resume the most recent suspended job in the foreground.
+      - label: Profile startup
+        command: fish --profile-startup /tmp/fish-profile.txt
+        notes: Write startup timing information for slow shell investigation.
+      - label: Trace command execution
+        command: fish --debug=all
+        notes: Verbose debugging mode for config or completion issues.
+      - label: Run a command in Fish
+        command: fish -c 'echo hello'
+        notes: Handy for testing expressions or scripts non-interactively.

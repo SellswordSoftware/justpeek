@@ -1,0 +1,62 @@
+name: Jujutsu
+group: source control
+references:
+  - group: Working Copy
+    items:
+      - label: Show status
+        command: jj status
+        notes: Inspect the working copy commit and pending changes.
+      - label: Show log
+        command: jj log
+        notes: Default graph view for local change history.
+      - label: Describe current change
+        command: jj describe
+        notes: Add or edit the description for the current change.
+      - label: Split a change
+        command: jj split
+        notes: Break one change into smaller commits interactively.
+
+  - group: Create and Move Changes
+    items:
+      - label: Create a new empty change
+        command: jj new
+        notes: Start a fresh change on top of the current revision.
+      - label: Edit another change
+        command: jj edit <rev>
+        notes: Move the working copy to a different revision for updates.
+      - label: Abandon a change
+        command: jj abandon <rev>
+        notes: Drop a change from history when it is no longer needed.
+      - label: Squash into parent
+        command: jj squash
+        notes: Fold the current change into its parent revision.
+
+  - group: Sync With Git
+    items:
+      - label: Import from Git refs
+        command: jj git fetch
+        notes: Refresh jj state from Git remotes.
+      - label: Export to Git refs
+        command: jj git push
+        notes: Push bookmarks and related Git refs upstream.
+      - label: Clone a Git repo into jj
+        command: jj git clone <url>
+        notes: Start a jj workspace from an existing Git repository.
+      - label: Track remote bookmarks
+        command: jj bookmark list
+        notes: Inspect local and remote bookmark state before pushing.
+
+  - group: History Surgery
+    items:
+      - label: Rebase a change
+        command: jj rebase -s <source> -d <destination>
+        notes: Move one change or subtree onto another base.
+      - label: Restore paths from another revision
+        command: jj restore --from <rev> <path>
+        notes: Bring back file content without checking out the old revision.
+      - label: Show a diff
+        command: jj diff
+        notes: Display patch content for the current working copy change.
+      - label: Undo last operation
+        command: jj undo
+        notes: Roll back the most recent repo operation.

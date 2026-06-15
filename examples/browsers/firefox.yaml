@@ -1,0 +1,130 @@
+name: Firefox
+group: browsers
+process:
+  - firefox
+  - firefox-bin
+  - firefox.exe
+references:
+  - group: Tabs and Windows
+    items:
+      - label: New tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Reopen closed tab
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: New window
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: New private window
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+      - label: Jump to tab by index
+        keys: Ctrl+1..Ctrl+8
+        keys_by_os:
+          macos: Cmd+1..Cmd+8
+
+  - group: Navigation
+    items:
+      - label: Focus address bar
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Reload page
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Hard reload
+        keys: Ctrl+Shift+R
+        keys_by_os:
+          macos: Cmd+Shift+R
+      - label: Back
+        keys: Alt+LeftArrow
+        keys_by_os:
+          macos: Cmd+LeftBracket
+      - label: Forward
+        keys: Alt+RightArrow
+        keys_by_os:
+          macos: Cmd+RightBracket
+
+  - group: Page, Search, and Reading
+    items:
+      - label: Find in page
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Save page
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Open page source
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Reader view
+        notes: Use Reader View on supported pages to strip clutter and improve long-form reading.
+      - label: Zoom reset
+        keys: Ctrl+0
+        keys_by_os:
+          macos: Cmd+0
+
+  - group: History, Profiles, and Privacy
+    items:
+      - label: Open history sidebar
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Shift+H
+      - label: Open downloads
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+J
+      - label: Clear recent history
+        keys: Ctrl+Shift+Delete
+        keys_by_os:
+          macos: Cmd+Shift+Delete
+      - label: Use containers or profiles
+        notes: Firefox containers or profile separation are valuable for multi-account workflows.
+      - label: Restore previous session
+        notes: Restore can be critical when managing large research or triage sessions.
+
+  - group: DevTools and Web Debugging
+    items:
+      - label: Toggle DevTools
+        keys: Ctrl+Shift+I
+        keys_by_os:
+          macos: Cmd+Option+I
+      - label: Open web console
+        keys: Ctrl+Shift+K
+        keys_by_os:
+          macos: Cmd+Option+K
+      - label: Inspect element
+        keys: Ctrl+Shift+C
+        keys_by_os:
+          macos: Cmd+Shift+C
+      - label: Open network monitor
+        keys: Ctrl+Shift+E
+        keys_by_os:
+          macos: Cmd+Option+E
+      - label: Responsive design mode
+        keys: Ctrl+Shift+M
+        keys_by_os:
+          macos: Cmd+Option+M
+
+  - group: Common Workflows
+    items:
+      - label: Bookmark current page
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Search open tabs
+        notes: Prefix search with `%` in the address bar for open-tab filtering in many Firefox workflows.
+      - label: Use about:config carefully
+        notes: Firefox exposes deep configuration power, but changes should be intentional and documented.
+      - label: Manage extension permissions
+        notes: Firefox privacy workflows often depend on disciplined extension and container use.
+      - label: Show help
+        notes: Firefox is especially strong when combining devtools, privacy features, and container-like session separation.

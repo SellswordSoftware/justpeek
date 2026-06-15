@@ -1,0 +1,93 @@
+name: MacOS
+group: os shortcuts
+search_terms:
+  - mac shortcuts
+  - apple shortcuts
+references:
+  - group: Launch and Navigation
+    items:
+      - label: Spotlight
+        keys: Cmd+Space
+      - label: Finder search window
+        keys: Option+Cmd+Space
+      - label: Switch apps
+        keys: Cmd+Tab
+      - label: Switch windows in current app
+        keys: Cmd+Backtick
+      - label: Mission Control
+        keys: Ctrl+Up
+      - label: App Expose
+        keys: Ctrl+Down
+      - label: Show desktop
+        keys: Cmd+Mission Control or Fn+F11
+      - label: Force Quit dialog
+        keys: Option+Cmd+Escape
+
+  - group: System and Screenshots
+    items:
+      - label: Lock screen
+        keys: Ctrl+Cmd+Q
+      - label: Log out
+        keys: Shift+Cmd+Q
+      - label: Sleep
+        keys: Option+Cmd+Power
+      - label: Screenshot selection
+        keys: Shift+Cmd+4
+      - label: Screenshot full screen
+        keys: Shift+Cmd+3
+      - label: Screenshot and recording panel
+        keys: Shift+Cmd+5
+      - label: Copy screenshot to clipboard
+        value: Add Ctrl to screenshot shortcuts
+        notes: "Example `Ctrl+Shift+Cmd+4`."
+
+  - group: Finder and Files
+    items:
+      - label: New Finder window
+        keys: Cmd+N
+      - label: New folder
+        keys: Shift+Cmd+N
+      - label: New Smart Folder
+        keys: Option+Cmd+N
+      - label: Duplicate item
+        keys: Cmd+D
+      - label: Move to Trash
+        keys: Cmd+Delete
+      - label: Empty Trash
+        keys: Shift+Cmd+Delete
+      - label: Force empty Trash
+        keys: Option+Shift+Cmd+Delete
+      - label: Show hidden files
+        keys: Shift+Cmd+Period
+
+  - group: Editing and Text
+    items:
+      - label: Move to beginning or end of line
+        keys: Cmd+Left / Cmd+Right
+      - label: Move by word
+        keys: Option+Left / Option+Right
+      - label: Delete word left
+        keys: Option+Delete
+      - label: Delete to line start
+        keys: Cmd+Delete
+      - label: Emoji and Character Viewer
+        keys: Ctrl+Cmd+Space or Fn+E
+      - label: Undo and redo
+        keys: Cmd+Z / Shift+Cmd+Z
+
+  - group: Window Management
+    items:
+      - label: Hide current app
+        keys: Cmd+H
+      - label: Hide other apps
+        keys: Option+Cmd+H
+      - label: Minimize
+        keys: Cmd+M
+      - label: Minimize all windows of app
+        keys: Option+Cmd+M
+      - label: Close window
+        keys: Cmd+W
+      - label: Close app
+        keys: Cmd+Q
+      - label: Full screen toggle
+        keys: Ctrl+Cmd+F

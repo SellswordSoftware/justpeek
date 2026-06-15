@@ -1,0 +1,115 @@
+name: ripgrep
+group: shell / shell helpers
+references:
+  - group: Core Search
+    items:
+      - label: Search recursively
+        command: rg "pattern"
+        notes: Recursively search the current directory, respecting `.gitignore` by default.
+      - label: Search specific file types
+        command: rg "pattern" -t rust
+        notes: Restrict matches using ripgrep's built-in file type definitions.
+      - label: Search hidden files
+        command: rg "pattern" --hidden
+        notes: Include dotfiles and other hidden paths while still honoring ignore rules unless overridden.
+      - label: Ignore ignore files
+        command: rg "pattern" -uuu
+        notes: Equivalent to disabling ignore, hidden, and binary filtering for exhaustive scans.
+      - label: Search exact string
+        command: rg -F "literal.text"
+        notes: Fixed-string mode avoids regex escaping and is faster for literal matches.
+
+  - group: Regex and Match Control
+    items:
+      - label: Case-insensitive search
+        command: rg -i "pattern"
+      - label: Smart-case search
+        command: rg -S "pattern"
+        notes: Ignore case unless the pattern contains uppercase letters.
+      - label: Word-boundary match
+        command: rg -w "token"
+        notes: Match a whole word rather than substrings.
+      - label: Multiline search
+        command: rg -U 'foo\nbar'
+        notes: Enable multiline mode when the match spans line breaks.
+      - label: PCRE2 regex mode
+        command: rg -P '(?<=user_id=)\\d+'
+        notes: Required for lookarounds and other advanced regex constructs.
+      - label: Invert matches
+        command: rg -v "pattern"
+        notes: Print non-matching lines instead of matching ones.
+
+  - group: Files, Paths, and Listing
+    items:
+      - label: List matching files only
+        command: rg -l "pattern"
+        notes: Show file paths without the matching lines.
+      - label: List files without matches
+        command: rg -L "pattern"
+        notes: Useful for finding files missing a required import or header.
+      - label: Print line numbers
+        command: rg -n "pattern"
+        notes: Line numbers are enabled by default in many terminal contexts, but `-n` is explicit.
+      - label: Show column numbers
+        command: rg --column "pattern"
+        notes: Helpful when editors or tooling want exact match coordinates.
+      - label: Search only certain globs
+        command: rg "pattern" -g '*.md'
+        notes: Limit search to paths matching one or more glob filters.
+      - label: Exclude paths by glob
+        command: rg "pattern" -g '!dist/**'
+        notes: Remove noisy generated directories from one-off searches.
+
+  - group: Replacement and Structured Output
+    items:
+      - label: Replace in output preview
+        command: rg "old" --replace 'new'
+        notes: Shows transformed output but does not edit files in place.
+      - label: JSON output
+        command: rg "pattern" --json
+        notes: Machine-readable stream for editor integrations and tooling.
+      - label: Count matches per file
+        command: rg "pattern" -c
+        notes: Print the number of matches for each matching file.
+      - label: Count matching files
+        command: rg "pattern" -l | wc -l
+        notes: Combine with standard shell tools when you need aggregate totals.
+      - label: Show context lines
+        command: rg "pattern" -A 2 -B 2
+        notes: Include lines after and before each match for surrounding context.
+
+  - group: Performance and Debugging
+    items:
+      - label: Search compressed archives
+        command: rg "pattern" -z
+        notes: Search inside gzip, bzip2, xz, lz4, and other supported compressed content.
+      - label: Follow symlinks
+        command: rg "pattern" -L
+        notes: Traverse symlinked files and directories during the scan.
+      - label: Show debug decisions
+        command: rg "pattern" --debug
+        notes: Explain how ignore rules and file decisions are being applied.
+      - label: Explain why files are skipped
+        command: rg "pattern" --files --debug
+        notes: Useful when expected files are being ignored unexpectedly.
+      - label: Search from files list
+        command: rg "pattern" --files-with-matches --sort path
+        notes: Explicitly sort results for stable output across runs.
+
+  - group: Common Workflows
+    items:
+      - label: Search TODO comments
+        command: rg 'TODO|FIXME|HACK'
+        notes: Fast project-wide scan for work markers.
+      - label: Search only filenames
+        command: rg --files | rg 'config'
+        notes: Pair `rg --files` with another `rg` to search path lists instead of file contents.
+      - label: Open matching file in editor
+        command: nvim $(rg -l "pattern")
+        notes: One-shot way to open all matching files in an editor that accepts many paths.
+      - label: Feed matches into fzf
+        command: rg --line-number --no-heading "pattern" | fzf
+        notes: Popular interactive flow for fuzzy-picking search hits.
+      - label: Restrict to current type definition
+        command: rg --type-list
+        notes: Print built-in type names and glob mappings when choosing `-t` filters.

@@ -1,0 +1,106 @@
+name: Emacs
+group: editors and ides
+process:
+  - emacs
+  - Emacs
+search_terms:
+  - gnu emacs
+references:
+  - group: Files, Buffers, and Help
+    items:
+      - label: Find file
+        keys: Ctrl+X Ctrl+F
+      - label: Save buffer
+        keys: Ctrl+X Ctrl+S
+      - label: Save all modified buffers
+        keys: Ctrl+X S
+      - label: Switch buffer
+        keys: Ctrl+X B
+      - label: List buffers
+        keys: Ctrl+X Ctrl+B
+      - label: Split window below
+        keys: Ctrl+X 2
+      - label: Split window right
+        keys: Ctrl+X 3
+      - label: Delete other windows
+        keys: Ctrl+X 1
+      - label: Describe key
+        keys: Ctrl+H K
+        notes: Essential when debugging unfamiliar bindings.
+
+  - group: Navigation and Search
+    items:
+      - label: Incremental search forward
+        keys: Ctrl+S
+      - label: Incremental search backward
+        keys: Ctrl+R
+      - label: Go to line
+        keys: M G G
+      - label: Beginning of buffer
+        keys: M LessThan
+      - label: End of buffer
+        keys: M GreaterThan
+      - label: Exchange point and mark
+        keys: Ctrl+X Ctrl+X
+        notes: Useful in region-heavy edits.
+      - label: Repeat complex command
+        keys: Ctrl+X Escape Escape
+        notes: Replays and edits the most recent minibuffer command.
+
+  - group: Editing and Regions
+    items:
+      - label: Kill line
+        keys: Ctrl+K
+      - label: Yank
+        keys: Ctrl+Y
+      - label: Yank pop
+        keys: M Y
+        notes: Cycle older kill-ring entries immediately after yank.
+      - label: Set mark
+        keys: Ctrl+Space
+      - label: Kill region
+        keys: Ctrl+W
+      - label: Copy region
+        keys: M W
+      - label: Undo
+        keys: Ctrl+Slash
+      - label: Query replace
+        keys: M Percent
+      - label: Indent region
+        keys: Ctrl+M Backslash
+        notes: "`indent-region` is easy to forget but useful in Lisp and code modes."
+
+  - group: Commands and Modes
+    items:
+      - label: Execute command
+        keys: M X
+      - label: Keyboard macro start
+        keys: F3
+      - label: Keyboard macro end
+        keys: F4
+      - label: Shell
+        command: M-x shell
+      - label: Eshell
+        command: M-x eshell
+      - label: Dired current directory
+        command: M-x dired
+      - label: Revert buffer
+        command: M-x revert-buffer
+      - label: Toggle truncate lines
+        command: M-x toggle-truncate-lines
+
+  - group: Config and Troubleshooting
+    items:
+      - label: Init file
+        value: ~/.emacs.d/init.el or ~/.config/emacs/init.el
+      - label: Open init file quickly
+        command: emacs ~/.config/emacs/init.el
+      - label: Start without init file
+        command: emacs -Q
+      - label: Evaluate current buffer
+        command: M-x eval-buffer
+      - label: Open scratch buffer
+        value: "*scratch*"
+        notes: Default Lisp playground and notes buffer.
+      - label: Package list
+        command: M-x list-packages

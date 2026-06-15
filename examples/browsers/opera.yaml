@@ -1,0 +1,118 @@
+name: Opera
+group: browsers
+process:
+  - opera
+  - opera.exe
+references:
+  - group: Tabs and Windows
+    items:
+      - label: New tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Reopen closed tab
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: New window
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: New private window
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: Search tabs
+        keys: Ctrl+Space
+        notes: Opera's tab search is useful for recovering buried tabs quickly.
+
+  - group: Navigation and Page
+    items:
+      - label: Focus address bar
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Reload page
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Back
+        keys: Alt+LeftArrow
+        keys_by_os:
+          macos: Cmd+LeftBracket
+      - label: Forward
+        keys: Alt+RightArrow
+        keys_by_os:
+          macos: Cmd+RightBracket
+      - label: Find in page
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+
+  - group: Sidebar and Built-in Tools
+    items:
+      - label: Toggle sidebar
+        notes: Opera's sidebar hosts messengers, bookmarks, and workspace-like navigation aids.
+      - label: Use workspaces
+        notes: Organize tabs into workspace contexts rather than one oversized tab row.
+      - label: Open snapshot tool
+        notes: Built-in capture helps save visible or selected page content quickly.
+      - label: Use integrated messenger panel
+        notes: Sidebar apps reduce context switching but can also increase distraction if overused.
+      - label: Open player or utility sidebar apps
+        notes: Built-in side integrations are part of Opera's differentiated workflow model.
+
+  - group: Privacy and Session
+    items:
+      - label: Open history
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Y
+      - label: Open downloads
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+Shift+J
+      - label: Clear browsing data
+        keys: Ctrl+Shift+Delete
+        keys_by_os:
+          macos: Cmd+Shift+Backspace
+      - label: Toggle built-in VPN or proxy-like feature
+        notes: Opera's privacy differentiators should be validated against your actual threat model.
+      - label: Restore previous tabs
+        notes: Session restore matters more if using workspaces or many side features.
+
+  - group: DevTools and Inspection
+    items:
+      - label: Toggle DevTools
+        keys: Ctrl+Shift+I
+        keys_by_os:
+          macos: Cmd+Option+I
+      - label: Inspect element
+        keys: Ctrl+Shift+C
+        keys_by_os:
+          macos: Cmd+Shift+C
+      - label: Open console
+        keys: Ctrl+Shift+J
+        keys_by_os:
+          macos: Cmd+Option+J
+      - label: View page source
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+Option+U
+      - label: Hard reload
+        keys: Ctrl+Shift+R
+        keys_by_os:
+          macos: Cmd+Shift+R
+
+  - group: Common Workflows
+    items:
+      - label: Pin important tabs
+        notes: Pinning plus workspaces helps control session sprawl.
+      - label: Use tab islands or groups
+        notes: If enabled, tab grouping features help manage related browsing contexts.
+      - label: Disable noisy sidebar features
+        notes: Opera can feel cluttered unless nonessential side integrations are trimmed.
+      - label: Tune startup pages
+        notes: Restore only what is actually useful to avoid reopening stale clutter each morning.
+      - label: Show help
+        notes: Opera's identity is less about raw navigation and more about integrated side tools and workspace organization.

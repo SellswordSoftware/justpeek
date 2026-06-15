@@ -1,0 +1,110 @@
+name: cron
+group: shell / shell helpers
+references:
+  - group: Crontab Basics
+    items:
+      - label: Edit current user crontab
+        command: crontab -e
+        notes: Open the current user's scheduled jobs in the configured editor.
+      - label: List current user crontab
+        command: crontab -l
+        notes: Print the active cron entries for the current user.
+      - label: Remove current user crontab
+        command: crontab -r
+        notes: Deletes all current-user cron jobs; use carefully.
+      - label: Install crontab from file
+        command: crontab cronjobs.txt
+        notes: Replace the current user's crontab with entries from a file.
+      - label: Edit another user's crontab
+        command: sudo crontab -u deploy -e
+        notes: Manage scheduled jobs for another account with elevated privileges.
+
+  - group: Schedule Syntax
+    items:
+      - label: Field order
+        value: minute hour day-of-month month day-of-week command
+        notes: Standard crontab entry layout for user crontabs.
+      - label: Every 5 minutes
+        command: '*/5 * * * * /path/to/script.sh'
+        notes: Step syntax repeats within the field range.
+      - label: Daily at 02:30
+        command: '30 2 * * * /path/to/backup.sh'
+        notes: Fixed minute and hour with wildcards for the other date fields.
+      - label: Weekdays at 09:00
+        command: '0 9 * * 1-5 /path/to/report.sh'
+        notes: Day-of-week ranges commonly use 1-5 for Monday through Friday.
+      - label: First day of month
+        command: '0 0 1 * * /path/to/monthly.sh'
+        notes: Day-of-month and month fields are often enough for monthly jobs.
+
+  - group: Environment and Shell Behavior
+    items:
+      - label: Set PATH explicitly
+        command: 'PATH=/usr/local/bin:/usr/bin:/bin'
+        notes: Cron runs with a minimal environment; never assume your interactive PATH.
+      - label: Set mail recipient
+        command: 'MAILTO=ops@example.com'
+        notes: Cron can mail job output if local mail delivery is configured.
+      - label: Choose shell
+        command: 'SHELL=/bin/bash'
+        notes: Override the default shell if the script relies on Bash-specific features.
+      - label: Set working directory in job
+        command: '0 * * * * cd /srv/app && ./rotate.sh'
+        notes: Cron does not run jobs from your expected project directory automatically.
+      - label: Redirect output to log
+        command: '*/15 * * * * /path/to/job.sh >> /var/log/job.log 2>&1'
+        notes: Capture stdout and stderr explicitly for later inspection.
+
+  - group: Common Scheduling Patterns
+    items:
+      - label: Reboot-time job
+        command: '@reboot /path/to/startup.sh'
+        notes: Special string shorthand for running once after boot.
+      - label: Hourly shorthand
+        command: '@hourly /path/to/hourly.sh'
+        notes: Equivalent to a top-of-hour fixed schedule.
+      - label: Daily shorthand
+        command: '@daily /path/to/daily.sh'
+        notes: Shortcut form for one run per day.
+      - label: Sunday at 03:00
+        command: '0 3 * * 0 /path/to/weekly-maintenance.sh'
+        notes: Many cron implementations accept both 0 and 7 for Sunday.
+      - label: Twice per day
+        command: '0 6,18 * * * /path/to/check.sh'
+        notes: Comma-separated lists schedule multiple specific values in one field.
+
+  - group: Safety and Reliability
+    items:
+      - label: Use flock to prevent overlap
+        command: '*/5 * * * * flock -n /tmp/myjob.lock /path/to/job.sh'
+        notes: Prevent a slow job from stacking up overlapping executions.
+      - label: Run only if command exists
+        command: '* * * * * command -v mytool >/dev/null 2>&1 && mytool sync'
+        notes: Guard against missing binaries after package or path changes.
+      - label: Log start and end
+        command: '* * * * * echo "start $(date)" >> /var/log/job.log; /path/to/job.sh >> /var/log/job.log 2>&1; echo "end $(date)" >> /var/log/job.log'
+        notes: Simple way to bracket execution windows in plain logs.
+      - label: Use full paths everywhere
+        value: Prefer `/usr/bin/python3` over `python3` inside cron.
+        notes: Cron's environment is intentionally sparse and non-interactive.
+      - label: Move logic into scripts
+        value: Keep crontab lines short and call maintained scripts instead of dense one-liners.
+        notes: Easier to test, version, and debug than complex inline shell.
+
+  - group: System Cron and Discovery
+    items:
+      - label: Show system crontab
+        command: cat /etc/crontab
+        notes: System-wide crontab includes an extra user field before the command.
+      - label: List cron directories
+        command: ls -lah /etc/cron.d /etc/cron.daily /etc/cron.hourly /etc/cron.weekly /etc/cron.monthly
+        notes: Many distros also schedule jobs through these directories.
+      - label: Check cron service status
+        command: systemctl status cron.service
+        notes: On some distros the unit may be named `crond.service` instead.
+      - label: Inspect cron logs via journal
+        command: journalctl -u cron.service
+        notes: On systemd systems, cron daemon logs often live in the journal.
+      - label: Show help
+        command: crontab -h
+        notes: Helpful for implementation-specific flags and behavior differences.

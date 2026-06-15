@@ -1,0 +1,110 @@
+name: uv
+group: package managers
+references:
+  - group: Core Python Package Operations
+    items:
+      - label: Install package into current env
+        command: uv pip install requests
+        notes: Fast pip-compatible install flow backed by uv's resolver and cache.
+      - label: Upgrade package
+        command: uv pip install --upgrade requests
+        notes: Replace an installed distribution with a newer available version.
+      - label: Uninstall package
+        command: uv pip uninstall requests
+        notes: Remove one or more installed packages from the active environment.
+      - label: Sync from requirements
+        command: uv pip sync requirements.txt
+        notes: Make the environment match a requirements file exactly.
+      - label: Show package metadata
+        command: uv pip show requests
+        notes: Inspect installed package location, version, and dependency info.
+
+  - group: Python and Virtual Environments
+    items:
+      - label: Create virtual environment
+        command: uv venv
+        notes: Create a local `.venv` quickly using uv-managed interpreter logic.
+      - label: Create named venv path
+        command: uv venv .venv
+        notes: Explicitly choose the virtual environment directory.
+      - label: Create venv with Python version
+        command: uv venv --python 3.12
+        notes: Select a specific interpreter version for the environment.
+      - label: List discovered Python versions
+        command: uv python list
+        notes: Show installed or available Python interpreters uv can work with.
+      - label: Install Python interpreter
+        command: uv python install 3.12
+        notes: Fetch and manage Python runtimes directly through uv.
+
+  - group: Project Initialization and Locking
+    items:
+      - label: Initialize project
+        command: uv init
+        notes: Scaffold a Python project with `pyproject.toml` and uv-friendly defaults.
+      - label: Add dependency
+        command: uv add requests
+        notes: Add a runtime dependency and update lock state.
+      - label: Add dev dependency
+        command: uv add --dev pytest ruff
+        notes: Record development-only dependencies separately.
+      - label: Remove dependency
+        command: uv remove requests
+        notes: Drop a dependency from project metadata and lock state.
+      - label: Lock project dependencies
+        command: uv lock
+        notes: Resolve and write the lock file for reproducible installs.
+
+  - group: Sync, Run, and Tooling
+    items:
+      - label: Sync project environment
+        command: uv sync
+        notes: Install exactly what the project and lock file declare.
+      - label: Run command in project env
+        command: uv run pytest
+        notes: Execute a command using the project's resolved environment.
+      - label: Run Python module
+        command: uv run -m http.server
+        notes: Launch Python modules within the managed environment.
+      - label: Run one-off tool
+        command: uv tool run ruff check .
+        notes: Execute a CLI tool ephemerally without permanently installing it.
+      - label: Install global-ish tool
+        command: uv tool install ruff
+        notes: Install standalone developer tools outside one project env.
+
+  - group: Requirements and Export Workflows
+    items:
+      - label: Compile requirements from project
+        command: uv export --format requirements-txt > requirements.txt
+        notes: Emit a requirements-style view from project metadata or lock state.
+      - label: Install from requirements file
+        command: uv pip install -r requirements.txt
+        notes: pip-compatible install path when working with legacy inputs.
+      - label: Freeze current environment
+        command: uv pip freeze
+        notes: Print installed packages in requirements format.
+      - label: Use alternate index
+        command: uv pip install --index-url https://pypi.example.com/simple requests
+        notes: Point installs at a private or mirrored package index.
+      - label: Download wheels only
+        command: uv pip download -r requirements.txt
+        notes: Fetch package artifacts without installing them.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap new project
+        command: uv init && uv add requests && uv sync
+        notes: Common fast-start sequence for a new Python project.
+      - label: Setup dev tooling
+        command: uv add --dev pytest ruff mypy && uv sync
+        notes: Typical developer dependency initialization.
+      - label: Use uv like pip in venv
+        command: uv venv && source .venv/bin/activate && uv pip install -r requirements.txt
+        notes: Practical bridge workflow when migrating from plain pip.
+      - label: Inspect uv version
+        command: uv --version
+        notes: Important because uv features are evolving rapidly across releases.
+      - label: Show help
+        command: uv --help
+        notes: uv spans pip, Python management, project metadata, and tool execution in one CLI.

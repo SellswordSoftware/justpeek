@@ -1,0 +1,228 @@
+name: Anytype
+group: notetaking and knowledge tools
+process:
+  - Anytype
+  - anytype
+search_terms:
+  - local graph workspace
+  - anytype vault
+  - encrypted p2p notes
+references:
+  - group: Vault Key and Core Model
+    items:
+      - label: Vault
+        value: Encrypted box stored on your device that holds your information
+      - label: Key
+        value: Seed phrase used to enter and restore your vault
+      - label: Key safety rule
+        value: Store it offline and securely; Anytype cannot restore access if you lose it
+      - label: Object model
+        value: Everything you create is an Object
+      - label: Type system
+        value: Every object has a Type, defined at creation and changeable later
+      - label: Graph
+        value: Main visual source of truth for how objects connect
+
+  - group: Creation Search and Core Shortcuts
+    items:
+      - label: Search
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Create new object with default type
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Create new object with type chooser
+        keys: Ctrl+Alt+N
+        keys_by_os:
+          macos: Cmd+Opt+N
+      - label: Action menu on current block
+        keys: Ctrl+Slash
+        keys_by_os:
+          macos: Cmd+Slash
+        notes: Useful for turning a block into an object and other block actions.
+      - label: Slash command menu
+        keys: Slash
+        notes: Use it in the editor to insert object types and other commands.
+      - label: Keyboard shortcuts panel
+        value: Bottom-left question mark menu > Keyboard shortcuts
+      - label: Shortcut customization
+        value: Most shortcuts are re-assignable and can be imported or exported as mappings
+
+  - group: Objects Types and Content Model
+    items:
+      - label: What an object is
+        value: The smallest linkable unit in the graph
+      - label: Object examples
+        value: Note, Task, Book, Movie, Idea, Human, Audio, Recipe
+      - label: Default object from sidebar plus button
+        value: Uses your channel default object type
+      - label: Type chooser from sidebar arrow
+        value: Lets you pick from your available types
+      - label: Turn block into object
+        value: Action menu from block handle or keyboard shortcut
+      - label: Type management path
+        value: Channel Settings > Content Model > Object Types
+      - label: Type-level query
+        value: Every Type has an in-built Query accessible by opening the Type object
+      - label: Type design advice
+        value: Keep types fairly general and refine behavior with properties and templates
+
+  - group: Properties Relations and Object Structure
+    items:
+      - label: Property purpose
+        value: Define attributes and connections between objects
+      - label: Relation-like property
+        value: Object property links one object to another
+      - label: Property creation from type editor
+        value: Type edit menu plus button in the Properties section
+      - label: Property creation from space settings
+        value: Channel Settings > Content Model > Properties
+      - label: Property creation in editor
+        value: Add as a block using plus button or inline slash menu
+      - label: Property types
+        value: Text, Number, Date, Select, Multi-select, Email, Phone, URL, Checkbox, File & Media, Object
+      - label: Property panel
+        value: Bullet-list icon in the top right of an object
+      - label: Property sections
+        value: Header, Panel, Hidden, Local
+      - label: Local properties
+        value: Properties not associated with the object's Type
+
+  - group: Templates and Reusable Creation Flows
+    items:
+      - label: Template scope
+        value: Templates are saved on the Type level
+      - label: Multiple templates per type
+        value: Supported
+      - label: Create template from type settings
+        value: Channel > Content Model > Object Types > pick Type > Templates > plus
+      - label: Save current object as template
+        value: Top-right menu > Use as a Template
+      - label: Manage list-view templates
+        value: List view > New dropdown > template modal
+      - label: Default template
+        value: You can choose a default template for each Type or each List view
+      - label: Template name pre-fill
+        value: Toggle controls whether the template name is pre-filled on object creation
+      - label: Template fit
+        value: Best for repeated object structure, icons, covers, and standardized properties
+
+  - group: Queries Collections and Views
+    items:
+      - label: Query purpose
+        value: Live filtered view over objects in your graph
+      - label: Query by Type
+        value: Shows all objects of a given type
+      - label: Query by Property
+        value: Shows objects matching a property criterion
+      - label: Query creation
+        value: Sidebar dropdown or slash menu in the editor
+      - label: Query edit strength
+        value: Batch update properties or object type from a query list
+      - label: Query new-object inheritance
+        value: Properties visible in the query become properties on new objects created there
+      - label: Collection purpose
+        value: Manually assembled container for mixed object types
+      - label: Query vs Collection
+        value: Query pulls matching objects from the graph; Collection starts empty and you add objects manually
+      - label: Add existing object to collection
+        value: Existing object menu from collection view or Add to Collection from object menu
+      - label: Common views
+        value: Table, Kanban, Gallery and other view layouts depending on context
+
+  - group: Sidebar Widgets and Navigation
+    items:
+      - label: Sidebar sections
+        value: Channel widget, Pinned, Objects
+      - label: Channel widget contents
+        value: Search, Members, Settings
+      - label: Pin object
+        value: Use the pin button in the top right of an object
+      - label: Unpin object
+        value: Click the pin again or right-click in Pinned and unlink it
+      - label: Widget layout choices
+        value: Compact, Tree, List, Compact List, Object
+      - label: Query or collection widget special behavior
+        value: Object layout can follow one of the query or collection views
+      - label: Search button
+        value: Available from the sidebar in addition to the keyboard shortcut
+
+  - group: Collaboration Publish and Chats
+    items:
+      - label: Members menu
+        value: Channel Settings > Members
+      - label: Invite link types
+        value: Editor, Viewer, Request Access
+      - label: Channel owner powers
+        value: Can change objects, channel name, settings, and membership
+      - label: Viewer rights
+        value: Read-only
+      - label: Editor rights
+        value: Can edit objects and channel name
+      - label: Publish objects
+        value: Publish selected objects as static HTTPS pages on your subdomain if you have an ANY ID
+      - label: Publish encryption caveat
+        value: Published pages are uploaded as unencrypted HTML or Anyblock content
+      - label: Publish limitation
+        value: Linked objects, queries, and collections are not fully supported yet
+      - label: Chats
+        value: Channel type for conversations alongside objects
+      - label: Chat object behavior
+        value: Chats are native objects and can appear in collections, queries, and mentions
+      - label: Chat limitation
+        value: Chat as a system type does not support templates or layout changes
+
+  - group: Import Export Networks and Backup
+    items:
+      - label: Import or export availability
+        value: Desktop only
+      - label: Import path
+        value: Anytype > Settings > Import to Channel or Export Channel
+      - label: Search-triggered import or export
+        value: Type Import or Export in the Search Menu
+      - label: Import sources
+        value: Obsidian, Notion, Any-Block Protobuf and JSON, Markdown, HTML, TXT, CSV
+      - label: CSV mapping trick
+        value: Match column titles to existing property names like Phone or E-mail
+      - label: Export formats
+        value: Markdown, Any-Block Protobuf, Any-Block JSON
+      - label: Network modes
+        value: Anytype Network, Self-hosted, Local-only
+      - label: Remote backup node
+        value: Included on Anytype Network with current 1 GB file capacity limit
+      - label: Self-hosted switch caution
+        value: Export channels before moving from a self-hosted network to a new identity on Anytype Network
+      - label: Device switching note
+        value: All devices must be switched manually when changing network mode
+
+  - group: Privacy Encryption and Security
+    items:
+      - label: Privacy model
+        value: Only you have the encryption keys
+      - label: Encrypted storage
+        value: Objects are stored locally and on nodes in encrypted form
+      - label: Local index
+        value: Search indexes are created locally and are not synced
+      - label: Trusted device assumption
+        value: Anytype assumes your machine is trusted and not compromised
+      - label: Device hardening advice
+        value: Turn on device password and full-disk or drive encryption
+      - label: Key standard
+        value: BIP-39 seed phrase
+      - label: Backup and restore model
+        value: Seed phrase restores keys; backup nodes only help deliver encrypted object packs
+      - label: Collision or duplicate key risk
+        value: Practically negligible according to the docs
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Private local-first object graphs with typed content models, strong templates, and peer-oriented collaboration
+      - label: Strongest uncommon surfaces
+        value: Vault and seed-key model, network mode switching, queries vs collections, type and property modeling, and chat as a native object
+      - label: Common pitfall
+        value: Making object types too granular too early instead of keeping types general and using templates or properties for refinement
+      - label: Official docs
+        value: doc.anytype.io

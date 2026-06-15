@@ -1,0 +1,110 @@
+name: Terraform
+group: container / infra
+references:
+  - group: Core Workflow
+    items:
+      - label: Initialize working directory
+        command: terraform init
+        notes: Download providers, modules, and backend plugins required by the configuration.
+      - label: Validate configuration
+        command: terraform validate
+        notes: Check syntax and internal configuration consistency after init.
+      - label: Preview changes
+        command: terraform plan
+        notes: Compute the execution plan without changing remote infrastructure.
+      - label: Apply changes
+        command: terraform apply
+        notes: Execute the planned infrastructure changes after confirmation.
+      - label: Destroy managed infrastructure
+        command: terraform destroy
+        notes: Tear down all resources tracked by the current state.
+
+  - group: Formatting, Linting, and Inspection
+    items:
+      - label: Format configuration
+        command: terraform fmt -recursive
+        notes: Apply canonical Terraform formatting across the repository tree.
+      - label: Show detailed state
+        command: terraform show
+        notes: Render the current state or plan in human-readable form.
+      - label: Output machine-readable JSON plan
+        command: terraform show -json plan.out
+        notes: Useful for policy checks, CI annotations, or external diff tooling.
+      - label: Show providers in config
+        command: terraform providers
+        notes: Inspect required providers and where they are sourced from.
+      - label: List resources in state
+        command: terraform state list
+        notes: Show every tracked resource address in the current state.
+
+  - group: Plans, Variables, and Apply Control
+    items:
+      - label: Save execution plan
+        command: terraform plan -out plan.out
+        notes: Persist a reviewed plan for later deterministic apply.
+      - label: Apply saved plan
+        command: terraform apply plan.out
+        notes: Execute exactly the previously saved plan file.
+      - label: Set variable from CLI
+        command: terraform plan -var 'region=us-east-1'
+        notes: Override input variables directly on the command line.
+      - label: Use variable file
+        command: terraform apply -var-file=prod.tfvars
+        notes: Common way to separate environment-specific inputs.
+      - label: Auto-approve apply
+        command: terraform apply -auto-approve
+        notes: Useful in automation, but dangerous for ad hoc production use.
+
+  - group: State and Import Workflows
+    items:
+      - label: Pull remote state locally
+        command: terraform state pull
+        notes: Retrieve the current state snapshot from the backend.
+      - label: Move state address
+        command: terraform state mv old.addr new.addr
+        notes: Re-map resources in state after refactors without recreation.
+      - label: Remove resource from state
+        command: terraform state rm aws_s3_bucket.logs
+        notes: Stop tracking a live resource without deleting it remotely.
+      - label: Import existing resource
+        command: terraform import aws_s3_bucket.logs my-bucket-name
+        notes: Bring externally created resources under Terraform management.
+      - label: Replace one resource explicitly
+        command: terraform apply -replace=aws_instance.web
+        notes: Force recreation of a resource during the next apply.
+
+  - group: Modules, Workspaces, and Backends
+    items:
+      - label: List workspaces
+        command: terraform workspace list
+        notes: Show named workspaces associated with the current backend.
+      - label: Create workspace
+        command: terraform workspace new staging
+        notes: Create an isolated state namespace under the active backend.
+      - label: Switch workspace
+        command: terraform workspace select prod
+        notes: Change the active workspace for subsequent commands.
+      - label: Upgrade modules and providers
+        command: terraform init -upgrade
+        notes: Refresh dependencies to newer allowed versions.
+      - label: Reconfigure backend
+        command: terraform init -reconfigure
+        notes: Reinitialize backend settings after changing backend configuration.
+
+  - group: Common Workflows
+    items:
+      - label: Local review loop
+        command: terraform fmt -recursive && terraform validate && terraform plan
+        notes: Common pre-commit or pre-PR Terraform workflow.
+      - label: Target one resource carefully
+        command: terraform apply -target=module.web.aws_instance.app
+        notes: Useful for break-glass operations, but can create drift if overused.
+      - label: Refresh state during plan
+        command: terraform plan -refresh-only
+        notes: Update state from real infrastructure without proposing config changes.
+      - label: Lock timeout for busy backend
+        command: terraform apply -lock-timeout=5m
+        notes: Wait for state locks instead of failing immediately in shared environments.
+      - label: Show help
+        command: terraform --help
+        notes: Terraform's state, backend, and plan controls are broad enough that help remains useful.

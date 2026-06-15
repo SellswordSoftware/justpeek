@@ -1,0 +1,109 @@
+name: zoxide
+group: shell / shell helpers
+references:
+  - group: Core Navigation
+    items:
+      - label: Jump to best match
+        command: z project
+        notes: Shell integration usually exposes `z` as the primary jump command.
+      - label: Interactive jump
+        command: zi project
+        notes: Opens an interactive selector over ranked directory matches.
+      - label: Query best match without cd
+        command: zoxide query project
+        notes: Print the resolved directory path instead of changing into it.
+      - label: Query interactive choice
+        command: zoxide query -i project
+        notes: Choose among matches interactively and print the result.
+      - label: Jump to subdirectory
+        command: z foo/bar
+        notes: Match based on directory path fragments, not only leaf names.
+
+  - group: Initialization and Shell Setup
+    items:
+      - label: Initialize for Bash
+        command: eval "$(zoxide init bash)"
+        notes: Add to `.bashrc` for persistent integration.
+      - label: Initialize for Zsh
+        command: eval "$(zoxide init zsh)"
+        notes: Add to `.zshrc` after completion and prompt setup.
+      - label: Initialize for Fish
+        command: zoxide init fish | source
+        notes: Standard Fish integration pattern.
+      - label: Initialize for Nushell
+        command: zoxide init nushell
+        notes: Print the integration snippet for inclusion in Nushell config.
+      - label: Replace cd command
+        command: eval "$(zoxide init bash --cmd cd)"
+        notes: Optional mode that makes `cd` use zoxide resolution behavior.
+
+  - group: Database and Learning
+    items:
+      - label: Add current directory manually
+        command: zoxide add .
+        notes: Seed or reinforce a directory without navigating through shell hooks.
+      - label: Remove a path
+        command: zoxide remove ~/old/project
+        notes: Delete a stale or unwanted entry from the database.
+      - label: Show ranked matches
+        command: zoxide query -l project
+        notes: Print all matching paths with their current ranking order.
+      - label: Import from another jumper
+        command: zoxide import --from=z ~/path/to/db
+        notes: Migrate history from tools such as autojump or z.
+      - label: Inspect database location
+        command: echo "$_ZO_DATA_DIR"
+        notes: Check where the zoxide data store lives if you override defaults.
+
+  - group: Shell Workflows
+    items:
+      - label: Open resolved directory in editor
+        command: code "$(zoxide query project)"
+        notes: Resolve a directory path and hand it to another tool.
+      - label: Combine with fzf
+        command: cd "$(zoxide query -i)"
+        notes: Interactive directory picking flow when many matches exist.
+      - label: Use from subshell
+        command: target="$(zoxide query docs)" && cd "$target"
+        notes: Capture the resolved path for additional logic before changing directory.
+      - label: Print shell prompt hint
+        command: zoxide query "$PWD"
+        notes: Useful in scripts or prompt helpers that want ranking-aware lookups.
+      - label: Jump to repo root candidate
+        command: z src/project
+        notes: Path fragments make it effective across similarly named directories.
+
+  - group: Environment and Behavior
+    items:
+      - label: Exclude directories from indexing
+        command: export _ZO_EXCLUDE_DIRS="$HOME:$HOME/private"
+        notes: Prevent noisy or sensitive directories from being learned.
+      - label: Change data directory
+        command: export _ZO_DATA_DIR="$XDG_DATA_HOME/zoxide"
+        notes: Relocate the database to a custom path.
+      - label: Prefer symlink resolution
+        command: export _ZO_RESOLVE_SYMLINKS=1
+        notes: Normalize stored entries through symlink targets.
+      - label: Echo match before jumping
+        command: export _ZO_ECHO=1
+        notes: Print the resolved destination during shell jumps.
+      - label: Use alternate command name
+        command: eval "$(zoxide init zsh --cmd j)"
+        notes: Install shortcuts such as `j` and `ji` instead of `z` and `zi`.
+
+  - group: Troubleshooting and Discovery
+    items:
+      - label: Show version
+        command: zoxide --version
+      - label: Print help
+        command: zoxide --help
+        notes: Overview of top-level commands and flags.
+      - label: Help for query subcommand
+        command: zoxide query --help
+        notes: Inspect filter, list, and interactive query options.
+      - label: Re-run init snippet
+        command: zoxide init bash
+        notes: Useful when debugging shell hook installation.
+      - label: Check shell alias availability
+        value: `z` and `zi` come from shell init, not the standalone `zoxide` binary.
+        notes: Missing aliases usually mean the init snippet is not loaded.

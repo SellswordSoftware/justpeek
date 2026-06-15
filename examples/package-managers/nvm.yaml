@@ -1,0 +1,94 @@
+name: nvm
+group: package managers
+references:
+  - group: Core Node Version Operations
+    items:
+      - label: Install Node version
+        command: nvm install 22
+        notes: Download and install a Node.js major, minor, or exact version.
+      - label: Use installed version
+        command: nvm use 22
+        notes: Switch the current shell to a selected Node version.
+      - label: List installed versions
+        command: nvm ls
+        notes: Show installed versions and aliases available locally.
+      - label: List remote versions
+        command: nvm ls-remote
+        notes: Browse available Node releases from the remote source.
+      - label: Uninstall Node version
+        command: nvm uninstall 20.11.1
+        notes: Remove one installed Node.js version.
+
+  - group: Defaults, Aliases, and LTS
+    items:
+      - label: Set default alias
+        command: nvm alias default 22
+        notes: Make a chosen version load by default in new shells.
+      - label: Install latest LTS
+        command: nvm install --lts
+        notes: Install the current long-term support release line.
+      - label: Use latest LTS
+        command: nvm use --lts
+        notes: Switch to the installed LTS version conveniently.
+      - label: Alias custom version name
+        command: nvm alias stable 20
+        notes: Create memorable aliases for team-standard versions.
+      - label: Show current active version
+        command: nvm current
+        notes: Print the Node version currently active in the shell.
+
+  - group: Shell Integration and Project Files
+    items:
+      - label: Load nvm in shell
+        command: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        notes: Standard shell initialization snippet for Bash or Zsh.
+      - label: Use .nvmrc in project
+        command: nvm use
+        notes: Auto-detect the version declared in `.nvmrc` in the current directory.
+      - label: Install from .nvmrc
+        command: nvm install
+        notes: Read the project's version file and install it if needed.
+      - label: Write .nvmrc
+        command: echo "22" > .nvmrc
+        notes: Record the expected Node version for a project.
+      - label: Reinstall global packages to new version
+        command: nvm install 22 --reinstall-packages-from=20
+        notes: Migrate global npm packages when upgrading Node versions.
+
+  - group: npm and Package Tooling Context
+    items:
+      - label: Show npm bundled with active Node
+        command: npm --version
+        notes: npm comes with the active Node version managed by nvm.
+      - label: Install latest npm for active Node
+        command: npm install -g npm
+        notes: Upgrade npm within the currently selected Node installation.
+      - label: Install global CLI under active Node
+        command: npm install -g typescript
+        notes: Global packages are isolated per Node version under nvm.
+      - label: List globals for active version
+        command: npm list -g --depth=0
+        notes: Inspect globally installed packages for the selected Node version.
+      - label: Use system Node
+        command: nvm use system
+        notes: Switch back to the system-provided Node when available.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap repo from version file
+        command: nvm install && nvm use && npm install
+        notes: Standard first-run workflow in repos that ship `.nvmrc`.
+      - label: Set team default and inspect
+        command: nvm alias default 22 && nvm ls
+        notes: Establish and verify a preferred default version.
+      - label: Try latest LTS for project
+        command: nvm install --lts && nvm use --lts
+        notes: Quick path for testing against the current LTS line.
+      - label: Inspect nvm version
+        command: nvm --version
+        notes: Helpful when shell-loading or alias behavior differs across setups.
+      - label: Show help
+        command: nvm help
+        notes: nvm is shell-function based, so its command reference is best checked through its own help.

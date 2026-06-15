@@ -1,0 +1,109 @@
+name: fd
+group: shell / shell helpers
+references:
+  - group: Core Find Usage
+    items:
+      - label: Find by name
+        command: fd pattern
+        notes: Recursively search for path names matching a regex-like pattern.
+      - label: Search from a directory
+        command: fd pattern src/
+        notes: Limit the search root explicitly instead of starting from the current directory.
+      - label: Exact file extension
+        command: fd -e rs
+        notes: Restrict matches to files with a given extension.
+      - label: Hidden files too
+        command: fd -H pattern
+        notes: Include hidden files and directories in the result set.
+      - label: Ignore ignore rules
+        command: fd -u pattern
+        notes: Disable `.gitignore` and other ignore-file filtering for exhaustive scans.
+
+  - group: Filtering by Type and Path
+    items:
+      - label: Files only
+        command: fd -t f pattern
+        notes: Restrict matches to regular files.
+      - label: Directories only
+        command: fd -t d pattern
+        notes: Restrict matches to directories.
+      - label: Symlinks only
+        command: fd -t l pattern
+        notes: Restrict matches to symbolic links.
+      - label: Full absolute paths
+        command: fd -a pattern
+        notes: Print absolute paths instead of paths relative to the search root.
+      - label: Search full path
+        command: fd -p 'src/lib'
+        notes: Match against the full relative path rather than just the basename.
+
+  - group: Depth, Size, and Time
+    items:
+      - label: Limit search depth
+        command: fd pattern --max-depth 2
+        notes: Stop recursion below the specified directory depth.
+      - label: Minimum search depth
+        command: fd pattern --min-depth 2
+        notes: Skip shallow matches near the root.
+      - label: File size filter
+        command: fd --size +1m
+        notes: Find files larger than a threshold such as `10k`, `5m`, or `1g`.
+      - label: Changed within two weeks
+        command: fd --changed-within 2weeks
+        notes: Filter by modification age using natural-ish time units.
+      - label: Changed before a date
+        command: fd --changed-before 2024-01-01
+        notes: Useful for historical cleanup and stale-file review.
+
+  - group: Execution and Batch Workflows
+    items:
+      - label: Execute a command per match
+        command: fd -e jpg . --exec convert {} {.}.png
+        notes: Run a command once for each individual match.
+      - label: Batch execute on all matches
+        command: fd -e rs --exec-batch rustfmt
+        notes: Pass many matches to one command invocation for efficiency.
+      - label: Delete empty directories
+        command: fd -t d -E .git '^$' --exec rmdir
+        notes: Example cleanup workflow using command execution.
+      - label: Search and preview in fzf
+        command: fd -t f | fzf --preview 'bat --color=always {}'
+        notes: Common pairing for interactive file selection.
+      - label: Print null-delimited paths
+        command: fd -0 pattern
+        notes: Safer for xargs and other consumers when paths may contain whitespace.
+
+  - group: Pattern Semantics and Output
+    items:
+      - label: Case-insensitive match
+        command: fd -i readme
+        notes: Match regardless of case when filename capitalization varies.
+      - label: Glob mode
+        command: fd -g '*.toml'
+        notes: Treat the pattern as a glob instead of the default regex-like syntax.
+      - label: Show one result per line
+        command: fd pattern --strip-cwd-prefix never
+        notes: Control whether `./` is printed for relative results.
+      - label: Follow symlinks
+        command: fd -L pattern
+        notes: Traverse symlinked directories during the search.
+      - label: Exclude a path
+        command: fd pattern -E node_modules -E dist
+        notes: Remove common generated directories from the scan.
+
+  - group: Discovery and Debugging
+    items:
+      - label: Show version
+        command: fd --version
+      - label: Explain hidden and ignored behavior
+        command: fd pattern --show-errors
+        notes: Surface filesystem permission errors instead of suppressing them.
+      - label: Search for empty files
+        command: fd -t f -0 . | xargs -0 stat --format '%s %n' | awk '$1 == 0 { print $2 }'
+        notes: fd pairs well with other shell tools for richer file inspection tasks.
+      - label: List candidate config files
+        command: fd -H '(^|/)\\.(env|bashrc|zshrc)$'
+        notes: Example of regex-style matching over dotfiles.
+      - label: Compare with find semantics
+        value: fd uses regex-like patterns and ignore-aware recursion by default.
+        notes: The default behavior is often safer and faster than raw `find`, but it is not identical.

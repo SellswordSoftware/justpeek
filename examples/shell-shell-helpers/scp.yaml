@@ -1,0 +1,110 @@
+name: scp
+group: shell / shell helpers
+references:
+  - group: Core File Copy
+    items:
+      - label: Copy local file to remote host
+        command: scp file.txt user@host:/tmp/
+        notes: Basic secure copy upload.
+      - label: Copy remote file locally
+        command: scp user@host:/var/log/app.log ./
+        notes: Download a single remote file into the current directory.
+      - label: Copy directory recursively
+        command: scp -r ./site user@host:/srv/www/
+        notes: `-r` is required for directory trees.
+      - label: Copy with custom port
+        command: scp -P 2222 file.txt user@host:/tmp/
+        notes: SCP uses uppercase `-P` for port, unlike SSH's lowercase `-p`.
+      - label: Preserve times and modes
+        command: scp -p file.txt user@host:/tmp/
+        notes: Preserve modification times, access times, and file mode bits.
+
+  - group: Host Routing and Authentication
+    items:
+      - label: Use specific identity file
+        command: scp -i ~/.ssh/work_ed25519 file.txt user@host:/tmp/
+        notes: Select a non-default SSH key for the transfer.
+      - label: Use SSH config alias
+        command: scp build.tar.gz prod-web:/srv/releases/
+        notes: Reuse host aliases defined in `~/.ssh/config`.
+      - label: Copy through jump host
+        command: scp -J bastion file.txt user@private-host:/tmp/
+        notes: Route the transfer through an SSH jump host.
+      - label: Limit offered identities
+        command: scp -o IdentitiesOnly=yes -i ~/.ssh/key file.txt user@host:/tmp/
+        notes: Prevent unrelated agent keys from being tried.
+      - label: Disable host key prompt once
+        command: scp -o StrictHostKeyChecking=no file.txt user@host:/tmp/
+        notes: Expedient for ephemeral hosts, but lowers host authenticity checks.
+
+  - group: Direction and Remote Paths
+    items:
+      - label: Copy from one remote host to another
+        command: scp user1@host1:/tmp/file user2@host2:/tmp/
+        notes: The local machine coordinates the transfer unless using newer direct modes.
+      - label: Download many matching files
+        command: scp 'user@host:/var/log/app-*.log' ./
+        notes: Quote remote globs so the remote shell expands them instead of the local shell.
+      - label: Upload to home directory
+        command: scp file.txt user@host:~
+        notes: `~` resolves on the remote side to the user's home directory.
+      - label: Rename during copy
+        command: scp file.txt user@host:/tmp/file-backup.txt
+        notes: Destination path can include the final filename.
+      - label: Copy hidden file
+        command: scp .env user@host:/srv/app/.env
+        notes: Hidden files work normally as long as the path is quoted correctly when needed.
+
+  - group: Performance and Behavior
+    items:
+      - label: Compress during copy
+        command: scp -C build.tar.gz user@host:/tmp/
+        notes: Can help over slower links, especially for text-heavy payloads.
+      - label: Verbose progress and debug
+        command: scp -v file.txt user@host:/tmp/
+        notes: Useful for debugging auth, routing, and path problems.
+      - label: Limit bandwidth
+        command: scp -l 5000 large.img user@host:/tmp/
+        notes: Bandwidth limit is in Kbit/s, not bytes per second.
+      - label: Use legacy protocol if required
+        command: scp -O file.txt user@host:/tmp/
+        notes: Forces legacy SCP protocol instead of SFTP-based transfers in newer OpenSSH.
+      - label: Use SFTP mode explicitly
+        command: scp -s file.txt user@host:/tmp/
+        notes: Some OpenSSH versions default to SFTP transport already.
+
+  - group: Common Workflows
+    items:
+      - label: Copy build artifact to server
+        command: scp dist/app.tar.gz deploy@host:/srv/releases/
+        notes: Simple deployment handoff for one-file artifacts.
+      - label: Pull remote logs for review
+        command: scp 'ops@host:/var/log/myapp/*.log' ./logs/
+        notes: Good for short-term diagnostics without an interactive session.
+      - label: Backup remote config locally
+        command: scp root@host:/etc/nginx/nginx.conf ./backup/
+        notes: Fast one-off config retrieval pattern.
+      - label: Pair with SSH command
+        command: scp app.env host:/tmp/ && ssh host 'sudo mv /tmp/app.env /srv/app/.env'
+        notes: Common follow-up when the final destination requires privilege escalation.
+      - label: Show help
+        command: scp -h
+        notes: Check installed help because behavior has shifted across OpenSSH releases.
+
+  - group: Caveats and Safer Alternatives
+    items:
+      - label: Prefer rsync for incremental sync
+        value: `rsync` is better for repeated syncs, deletes, resumes, and filter rules.
+        notes: SCP is strongest for simple one-shot copies.
+      - label: Prefer sftp for interactive remote browsing
+        value: `sftp` gives remote directory navigation and batched file operations.
+        notes: Better fit when you need to inspect remote paths before copying.
+      - label: Remote shell quoting matters
+        value: Quote remote globs and spaces carefully.
+        notes: Local and remote shell expansion can differ in surprising ways.
+      - label: No native delete or mirror mode
+        value: SCP copies files but does not synchronize destination state.
+        notes: Use rsync when destination cleanup is required.
+      - label: Host key trust still applies
+        value: SCP relies on SSH host key verification and auth config.
+        notes: Most connection problems are really SSH problems surfaced through SCP.

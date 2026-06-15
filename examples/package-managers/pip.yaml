@@ -1,0 +1,110 @@
+name: pip
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Install package
+        command: python -m pip install requests
+        notes: Prefer `python -m pip` to ensure you target the intended interpreter.
+      - label: Upgrade package
+        command: python -m pip install --upgrade requests
+        notes: Replace an installed package with the latest available version.
+      - label: Uninstall package
+        command: python -m pip uninstall requests
+        notes: Remove one or more installed distributions.
+      - label: Reinstall package
+        command: python -m pip install --force-reinstall requests
+        notes: Replace installed files even if the same version is already present.
+      - label: Install exact version
+        command: python -m pip install requests==2.32.3
+        notes: Pin a deterministic package version.
+
+  - group: Discovery and Inspection
+    items:
+      - label: List installed packages
+        command: python -m pip list
+        notes: Show installed distributions for the active interpreter environment.
+      - label: Show outdated packages
+        command: python -m pip list --outdated
+        notes: Review upgrades before applying them.
+      - label: Show package details
+        command: python -m pip show requests
+        notes: Print metadata, location, and dependency information.
+      - label: Check package dependency issues
+        command: python -m pip check
+        notes: Detect incompatible or unsatisfied installed dependencies.
+      - label: Freeze environment
+        command: python -m pip freeze
+        notes: Emit installed packages in a requirements-style format.
+
+  - group: Requirements and Constraints
+    items:
+      - label: Install from requirements file
+        command: python -m pip install -r requirements.txt
+        notes: Standard project dependency installation workflow.
+      - label: Install with constraints
+        command: python -m pip install -r requirements.txt -c constraints.txt
+        notes: Use constraints to restrict versions without declaring direct dependencies.
+      - label: Upgrade from requirements file
+        command: python -m pip install --upgrade -r requirements.txt
+        notes: Apply newer versions while staying within declared specifiers.
+      - label: Write frozen requirements
+        command: python -m pip freeze > requirements.txt
+        notes: Snapshot the current environment for reproducibility or sharing.
+      - label: Install editable local package
+        command: python -m pip install -e .
+        notes: Common for application or library development on a local checkout.
+
+  - group: Virtual Environments and Targeting
+    items:
+      - label: Create venv
+        command: python -m venv .venv
+        notes: Standard isolated environment for project dependencies.
+      - label: Activate venv in Bash
+        command: source .venv/bin/activate
+        notes: Unix shell activation script for a virtual environment.
+      - label: Activate venv in PowerShell
+        command: .\\.venv\\Scripts\\Activate.ps1
+        notes: Windows PowerShell activation path.
+      - label: Install to user site
+        command: python -m pip install --user requests
+        notes: Use user installs only when venvs or managed environments are not appropriate.
+      - label: Show pip target environment
+        command: python -m pip --version
+        notes: Confirms which interpreter and site-packages path pip is targeting.
+
+  - group: Indexes, Caches, and Wheels
+    items:
+      - label: Use alternate index
+        command: python -m pip install --index-url https://pypi.example.com/simple requests
+        notes: Point pip at a private or mirrored package index.
+      - label: Add extra index
+        command: python -m pip install --extra-index-url https://pypi.org/simple package
+        notes: Search an additional index after the primary one.
+      - label: Download packages only
+        command: python -m pip download -r requirements.txt
+        notes: Fetch distribution archives without installing them.
+      - label: Build wheel for local project
+        command: python -m pip wheel .
+        notes: Create a wheel artifact for the current project.
+      - label: Clear pip cache
+        command: python -m pip cache purge
+        notes: Remove cached archives and wheels when debugging or reclaiming space.
+
+  - group: Common Workflows
+    items:
+      - label: New project setup
+        command: python -m venv .venv && source .venv/bin/activate && python -m pip install -r requirements.txt
+        notes: Typical Python project bootstrap sequence.
+      - label: Audit resolver problems
+        command: python -m pip install -r requirements.txt --verbose
+        notes: Increase logs when dependency resolution behaves unexpectedly.
+      - label: Generate reproducible lock-ish snapshot
+        command: python -m pip freeze > requirements.lock.txt
+        notes: Not a true solver lockfile, but still useful for exact environment recreation.
+      - label: Check externally managed env warning
+        command: python -m pip install --break-system-packages requests
+        notes: Only use this when you intentionally need to bypass distro packaging protections.
+      - label: Show help
+        command: python -m pip --help
+        notes: pip has many less-used flags around indexes, wheels, and build isolation.

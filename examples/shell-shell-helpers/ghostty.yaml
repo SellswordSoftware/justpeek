@@ -1,0 +1,120 @@
+name: Ghostty
+group: shell / shell helpers
+references:
+  - group: Core Usage
+    items:
+      - label: Launch terminal
+        command: ghostty
+        notes: Start the terminal emulator with the default profile and shell.
+      - label: Show version
+        command: ghostty --version
+        notes: Confirm the installed build when comparing config or rendering behavior.
+      - label: Run a command directly
+        command: ghostty -e bash -lc 'htop'
+        notes: Start Ghostty with a specific program instead of the default shell.
+      - label: Open help
+        command: ghostty +help
+        notes: Show built-in command and argument help.
+      - label: Start from a directory
+        command: ghostty --working-directory ~/src/project
+        notes: Launch the terminal rooted in a known project path.
+
+  - group: Configuration
+    items:
+      - label: Default config path
+        value: ~/.config/ghostty/config
+        notes: Primary text configuration file for user settings.
+      - label: Set font family
+        command: |
+          font-family = JetBrainsMono Nerd Font
+        notes: Configure the main text font used by the terminal.
+      - label: Set theme
+        command: |
+          theme = catppuccin-mocha
+        notes: Use a bundled or installed theme name.
+      - label: Set shell program
+        command: |
+          command = /bin/bash -l
+        notes: Override the default shell command launched in new sessions.
+      - label: Set padding
+        command: |
+          window-padding-x = 8
+          window-padding-y = 8
+        notes: Add breathing room around terminal content.
+
+  - group: Tabs, Splits, and Navigation
+    items:
+      - label: New tab
+        keys: Ctrl+Shift+T
+        notes: Open another terminal tab in the current window.
+      - label: Close tab
+        keys: Ctrl+Shift+W
+        notes: Close the current tab or terminal surface.
+      - label: Split pane
+        keys: Ctrl+Shift+D
+        notes: Create a split depending on the active layout and config.
+      - label: Next tab
+        keys: Ctrl+Tab
+        notes: Cycle through tabs quickly from the keyboard.
+      - label: Previous tab
+        keys: Ctrl+Shift+Tab
+        notes: Move backward through tabs in the current window.
+
+  - group: Clipboard, Selection, and Search
+    items:
+      - label: Copy selection
+        keys: Ctrl+Shift+C
+        notes: Copy selected text to the system clipboard.
+      - label: Paste clipboard
+        keys: Ctrl+Shift+V
+        notes: Paste clipboard contents into the terminal.
+      - label: Open search
+        keys: Ctrl+Shift+F
+        notes: Search within scrollback and visible terminal output.
+      - label: Increase font size
+        keys: Ctrl+Plus
+        notes: Temporarily zoom text for the current session.
+      - label: Reset font size
+        keys: Ctrl+0
+        notes: Return to the configured default size.
+
+  - group: Appearance and Behavior
+    items:
+      - label: Set opacity
+        command: |
+          background-opacity = 0.92
+        notes: Transparency support depends on platform and compositor capabilities.
+      - label: Set cursor style
+        command: |
+          cursor-style = block
+        notes: Choose between block, bar, underline, and related cursor styles.
+      - label: Set shell integration
+        command: |
+          shell-integration = detect
+        notes: Enable prompt-marking and integration features when available.
+      - label: Set window decorations
+        command: |
+          window-decoration = auto
+        notes: Tune how much native window chrome the terminal uses.
+      - label: Adjust scrollback
+        command: |
+          scrollback-limit = 100000
+        notes: Increase retained history for long-running logs and command output.
+
+  - group: Troubleshooting and Discovery
+    items:
+      - label: Validate startup args
+        command: ghostty +help flags
+        notes: Built-in help covers current CLI flags and their meanings.
+      - label: Show config docs pointer
+        value: Keep config simple first, then layer appearance, keybinds, and shell integration gradually.
+        notes: Terminal config errors are easier to debug when changes are introduced incrementally.
+      - label: Test alternate config
+        command: ghostty --config-file /tmp/ghostty-test.conf
+        notes: Useful for reproducing issues without touching the main config.
+      - label: Run command in clean session
+        command: env -i HOME="$HOME" ghostty
+        notes: Narrow environment-related startup issues by reducing inherited variables.
+      - label: Show help
+        command: ghostty +help
+        notes: Quick reference for current options and subcommands.

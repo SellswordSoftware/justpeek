@@ -1,0 +1,110 @@
+name: gradle
+group: package managers
+references:
+  - group: Core Build Operations
+    items:
+      - label: Build project
+        command: ./gradlew build
+        notes: Compile, test, and assemble the project using the Gradle Wrapper.
+      - label: Run tests
+        command: ./gradlew test
+        notes: Execute the test task and its dependencies.
+      - label: Clean build outputs
+        command: ./gradlew clean
+        notes: Remove generated build artifacts before a fresh build.
+      - label: Assemble without tests
+        command: ./gradlew assemble
+        notes: Build distributable outputs without running the full verification lifecycle.
+      - label: Run application
+        command: ./gradlew run
+        notes: Execute the app when the application plugin is configured.
+
+  - group: Dependencies and Insight
+    items:
+      - label: Show dependency tree
+        command: ./gradlew dependencies
+        notes: Print dependency graphs for the project's configurations.
+      - label: Inspect one dependency
+        command: ./gradlew dependencyInsight --dependency guava
+        notes: Explain why a dependency is present and which version was selected.
+      - label: Refresh dependencies
+        command: ./gradlew build --refresh-dependencies
+        notes: Re-resolve external dependencies instead of using cached metadata blindly.
+      - label: List available tasks
+        command: ./gradlew tasks
+        notes: Show grouped tasks exposed by the current build.
+      - label: Show project properties
+        command: ./gradlew properties
+        notes: Print resolved project properties and environment context.
+
+  - group: Multi-Project and Targeted Execution
+    items:
+      - label: Build one subproject
+        command: ./gradlew :service-a:build
+        notes: Run a task scoped to one subproject in a multi-project build.
+      - label: Test one subproject
+        command: ./gradlew :service-a:test
+        notes: Narrow work to one subproject for faster iteration.
+      - label: Continue after task failures
+        command: ./gradlew build --continue
+        notes: Let independent tasks proceed even if some fail.
+      - label: Exclude a task
+        command: ./gradlew build -x test
+        notes: Skip one task explicitly during a build.
+      - label: Dry-run task graph
+        command: ./gradlew build --dry-run
+        notes: Show which tasks would execute without actually running them.
+
+  - group: Wrapper, Versions, and Plugins
+    items:
+      - label: Generate wrapper
+        command: gradle wrapper
+        notes: Create the Gradle Wrapper scripts and support files for reproducible builds.
+      - label: Upgrade wrapper version
+        command: ./gradlew wrapper --gradle-version 8.8
+        notes: Pin the project to a specific Gradle release.
+      - label: Show Gradle version
+        command: ./gradlew --version
+        notes: Print Gradle, JVM, Kotlin, and Groovy version details.
+      - label: Run build scan
+        command: ./gradlew build --scan
+        notes: Publish a Build Scan for deeper performance or task-graph diagnostics.
+      - label: Validate Kotlin DSL syntax quickly
+        command: ./gradlew help
+        notes: Light-touch evaluation pass for build scripts and plugin configuration.
+
+  - group: Publishing, Caches, and Daemon
+    items:
+      - label: Publish artifacts
+        command: ./gradlew publish
+        notes: Upload configured publications to a remote repository.
+      - label: Publish to local Maven repo
+        command: ./gradlew publishToMavenLocal
+        notes: Install artifacts into the local Maven cache for testing.
+      - label: Stop Gradle daemons
+        command: ./gradlew --stop
+        notes: Shut down background daemons when debugging environment or memory issues.
+      - label: Clear build cache by path
+        command: rm -rf ~/.gradle/caches
+        notes: Heavy-handed cache reset when metadata or dependency state seems corrupt.
+      - label: Run offline
+        command: ./gradlew build --offline
+        notes: Use only locally cached dependencies with no repository network access.
+
+  - group: Common Workflows
+    items:
+      - label: Standard CI build
+        command: ./gradlew clean build
+        notes: Common wrapper-based CI pipeline for consistent Gradle versioning.
+      - label: Fast inner-loop compile
+        command: ./gradlew classes
+        notes: Compile sources without running the full verification lifecycle.
+      - label: Debug failing task
+        command: ./gradlew test --stacktrace --info
+        notes: Increase logging detail to diagnose task failures.
+      - label: Inspect configuration cache readiness
+        command: ./gradlew build --configuration-cache
+        notes: Test whether the build is compatible with configuration cache acceleration.
+      - label: Show help
+        command: ./gradlew help
+        notes: Gradle builds are highly plugin-driven, so local task help matters a lot.

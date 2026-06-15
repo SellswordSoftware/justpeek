@@ -1,0 +1,66 @@
+name: Gemini CLI
+group: ai tools
+search_terms:
+  - google gemini cli
+references:
+  - group: Install and Start
+    items:
+      - label: Run with npx
+        command: npx @google/gemini-cli
+      - label: Install globally with npm
+        command: npm install -g @google/gemini-cli
+      - label: Install with Homebrew
+        command: brew install gemini-cli
+      - label: Start interactive session
+        command: gemini
+      - label: Include extra directories
+        command: gemini --include-directories ../lib,../docs
+      - label: Pick model explicitly
+        command: gemini -m gemini-2.5-flash
+
+  - group: Auth and Providers
+    items:
+      - label: Sign in with Google
+        value: "Start `gemini` and choose the browser-based Google sign-in flow"
+      - label: Gemini API key
+        command: export GEMINI_API_KEY="YOUR_API_KEY"
+      - label: Vertex AI mode
+        command: |
+          export GOOGLE_API_KEY="YOUR_API_KEY"
+          export GOOGLE_GENAI_USE_VERTEXAI=true
+      - label: Code Assist org project
+        command: export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
+        notes: Needed when using an organization Code Assist license.
+
+  - group: Prompting and Automation
+    items:
+      - label: One-shot prompt
+        command: gemini -p "Explain the architecture of this codebase"
+      - label: Structured JSON output
+        command: gemini -p "Explain the architecture" --output-format json
+      - label: Stream NDJSON events
+        command: gemini -p "Run tests and deploy" --output-format stream-json
+      - label: Analyze repo changes
+        value: Start interactive mode in the repo and ask natural-language questions about recent work
+      - label: Multimodal generation
+        value: Gemini CLI can generate apps from PDFs, images, or sketches
+
+  - group: Release Channels
+    items:
+      - label: Stable
+        command: npm install -g @google/gemini-cli@latest
+      - label: Preview
+        command: npm install -g @google/gemini-cli@preview
+      - label: Nightly
+        command: npm install -g @google/gemini-cli@nightly
+      - label: Channel tradeoff
+        value: Preview and nightly ship faster but are more likely to regress
+
+  - group: Practical Reminders
+    items:
+      - label: Main binary
+        value: gemini
+      - label: Current docs and releases
+        value: github.com/google-gemini/gemini-cli and geminicli.com
+      - label: Good scripting default
+        value: "Use `--output-format json` when another tool will parse the response"

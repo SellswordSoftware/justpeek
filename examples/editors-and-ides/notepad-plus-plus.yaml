@@ -1,0 +1,83 @@
+name: Notepad++
+group: editors and ides
+process:
+  - notepad++
+  - notepad++.exe
+search_terms:
+  - npp
+references:
+  - group: Files and Tabs
+    items:
+      - label: New file
+        keys: Ctrl+N
+      - label: Open file
+        keys: Ctrl+O
+      - label: Save all
+        keys: Ctrl+Shift+S
+      - label: Close current tab
+        keys: Ctrl+W
+      - label: Close all but current
+        command: File > Close All BUT This
+      - label: Clone to other view
+        command: View > Move/Clone Current Document
+        notes: One of the more useful hidden features for side-by-side work.
+
+  - group: Search and Navigation
+    items:
+      - label: Find
+        keys: Ctrl+F
+      - label: Replace
+        keys: Ctrl+H
+      - label: Find in files
+        keys: Ctrl+Shift+F
+      - label: Go to line
+        keys: Ctrl+G
+      - label: Switch to matching brace
+        keys: Ctrl+B
+      - label: Function list panel
+        command: View > Function List
+      - label: Document map
+        command: View > Document Map
+
+  - group: Editing and Column Work
+    items:
+      - label: Toggle line comment
+        keys: Ctrl+Q
+      - label: Block comment
+        keys: Ctrl+Shift+Q
+      - label: Duplicate current line
+        keys: Ctrl+D
+      - label: Delete current line
+        keys: Ctrl+L
+      - label: Column mode
+        value: Alt+mouse drag or Edit > Column Editor
+        notes: Very useful for aligned edits, numbering, and CSV cleanup.
+      - label: Begin end-select mode
+        keys: Alt+Shift+Arrow
+      - label: Convert case
+        command: Edit > Convert Case To
+
+  - group: Macros and Automation
+    items:
+      - label: Start recording macro
+        command: Macro > Start Recording
+      - label: Stop recording macro
+        command: Macro > Stop Recording
+      - label: Playback macro
+        command: Macro > Playback
+      - label: Run macro multiple times
+        command: Macro > Run a Macro Multiple Times
+      - label: PythonScript and plugins
+        value: Plugins menu
+        notes: Many power workflows live in plugin commands rather than core shortcuts.
+
+  - group: Maintenance and Config
+    items:
+      - label: Run as admin carefully
+        value: Needed only for protected files
+      - label: Preferences
+        command: Settings > Preferences
+      - label: Shortcut mapper
+        command: Settings > Shortcut Mapper
+      - label: Session snapshot
+        value: Notepad++ can remember open files and unsaved buffers across launches.

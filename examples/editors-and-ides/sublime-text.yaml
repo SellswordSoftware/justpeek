@@ -1,0 +1,108 @@
+name: Sublime Text
+group: editors and ides
+process:
+  - sublime_text
+  - sublime-text
+search_terms:
+  - sublime
+references:
+  - group: Navigation and Commanding
+    items:
+      - label: Command Palette
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+      - label: Go to anything
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Goto symbol
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Goto line
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Ctrl+G
+      - label: Goto definition
+        keys: F12
+      - label: Switch project in current window
+        keys: Ctrl+Alt+P
+        keys_by_os:
+          macos: Cmd+Ctrl+P
+
+  - group: Editing and Multi-cursor
+    items:
+      - label: Multiple cursors by next occurrence
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Skip current occurrence
+        keys: Ctrl+K Ctrl+D
+        keys_by_os:
+          macos: Cmd+K Cmd+D
+      - label: Split selection into lines
+        keys: Ctrl+Shift+L
+        keys_by_os:
+          macos: Cmd+Shift+L
+      - label: Expand selection to scope
+        keys: Ctrl+Shift+Space
+        keys_by_os:
+          macos: Ctrl+Shift+Space
+      - label: Reindent
+        keys: Ctrl+Shift+P then Reindent
+      - label: Swap line up
+        keys: Ctrl+Shift+Up
+        keys_by_os:
+          macos: Ctrl+Cmd+Up
+      - label: Toggle comment
+        keys: Ctrl+Slash
+        keys_by_os:
+          macos: Cmd+Slash
+
+  - group: Search, Replace, and Views
+    items:
+      - label: Find
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Replace
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Alt+Cmd+F
+      - label: Find in files
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+      - label: Toggle side bar
+        keys: Ctrl+K Ctrl+B
+        keys_by_os:
+          macos: Cmd+K Cmd+B
+      - label: Focus group by index
+        keys: Ctrl+1..Ctrl+4
+        keys_by_os:
+          macos: Cmd+1..Cmd+4
+      - label: Distraction free mode
+        command: View > Enter Distraction Free Mode
+
+  - group: Projects, Console, and Packages
+    items:
+      - label: Save project as
+        command: Project > Save Project As
+      - label: Open project switcher
+        command: Project > Quick Switch Project
+      - label: Python console
+        keys: Ctrl+Backtick
+        keys_by_os:
+          macos: Ctrl+Backtick
+        notes: Inspect API objects and plugin behavior directly.
+      - label: Package control
+        value: Install via Command Palette
+      - label: Build system
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Build with selection
+        keys: Ctrl+Shift+B
+        keys_by_os:
+          macos: Cmd+Shift+B

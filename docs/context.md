@@ -204,9 +204,9 @@ Reference file model:
     - optional `search_terms`
 
 Sample files live in:
-- [shortcuts-example/vscode.yaml](/home/mike/sellsword/justpeek/shortcuts-example/vscode.yaml)
-- [shortcuts-example/git.yaml](/home/mike/sellsword/justpeek/shortcuts-example/git.yaml)
-- [shortcuts-example/people.yaml](/home/mike/sellsword/justpeek/shortcuts-example/people.yaml)
+- [examples/vscode.yaml](/home/mike/sellsword/justpeek/examples/vscode.yaml)
+- [examples/git.yaml](/home/mike/sellsword/justpeek/examples/git.yaml)
+- [examples/people.yaml](/home/mike/sellsword/justpeek/examples/people.yaml)
 
 ## Config and Paths
 

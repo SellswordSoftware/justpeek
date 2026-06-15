@@ -1,0 +1,115 @@
+name: Zen Browser
+group: browsers
+process:
+  - zen
+  - zen-browser
+references:
+  - group: Tabs and Workspaces
+    items:
+      - label: New tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Reopen closed tab
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: New window
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Vertical tab workflow
+        notes: Zen emphasizes sidebar or vertical tab management instead of a conventional top strip.
+      - label: Use workspaces
+        notes: Separate tab groups by project, role, or context to keep the UI minimal.
+
+  - group: Navigation
+    items:
+      - label: Focus address bar
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Reload page
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Find in page
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Back
+        keys: Alt+LeftArrow
+        keys_by_os:
+          macos: Cmd+LeftBracket
+      - label: Forward
+        keys: Alt+RightArrow
+        keys_by_os:
+          macos: Cmd+RightBracket
+
+  - group: Sidebar and Minimal UI
+    items:
+      - label: Toggle sidebar
+        notes: Zen's sidebar is central to tab, workspace, and sometimes extension workflows.
+      - label: Collapse distractions
+        notes: Use Zen's minimal presentation modes to keep the page content dominant.
+      - label: Use split or side views
+        notes: If configured, side-by-side browsing can support docs-plus-app workflows.
+      - label: Pin important tabs
+        notes: Persistent tabs help preserve your core working set across sessions.
+      - label: Use compact mode
+        notes: Compact layouts are part of Zen's identity and worth enabling intentionally.
+
+  - group: Privacy and Session Control
+    items:
+      - label: New private window
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+      - label: Clear recent history
+        keys: Ctrl+Shift+Delete
+        keys_by_os:
+          macos: Cmd+Shift+Delete
+      - label: Open history
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Shift+H
+      - label: Open downloads
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+J
+      - label: Restore prior session
+        notes: Session restore matters more when workspace context is part of daily flow.
+
+  - group: DevTools and Inspection
+    items:
+      - label: Toggle DevTools
+        keys: Ctrl+Shift+I
+        keys_by_os:
+          macos: Cmd+Option+I
+      - label: Open console
+        keys: Ctrl+Shift+K
+        keys_by_os:
+          macos: Cmd+Option+K
+      - label: Inspect element
+        keys: Ctrl+Shift+C
+        keys_by_os:
+          macos: Cmd+Shift+C
+      - label: View page source
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+Option+U
+      - label: Browser toolbox style tuning
+        notes: Zen inherits much of the Firefox-style devtools and configuration model underneath.
+
+  - group: Common Workflows
+    items:
+      - label: Use workspace-per-project
+        notes: Zen feels best when workspaces replace giant undifferentiated tab piles.
+      - label: Lean on keyboard search
+        notes: Command or address-bar-driven navigation keeps the minimal UI effective.
+      - label: Keep pinned reference tabs stable
+        notes: Good for dashboards, docs, and issue trackers that anchor daily work.
+      - label: Review extension impact
+        notes: Minimal browsers lose their advantage if overloaded with noisy extensions.
+      - label: Show help
+        notes: Zen is less about sheer feature count and more about intentional tab and workspace ergonomics.

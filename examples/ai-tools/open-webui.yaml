@@ -1,0 +1,58 @@
+name: Open WebUI
+group: ai tools
+search_terms:
+  - self hosted ai ui
+  - webui
+references:
+  - group: Quick Start
+    items:
+      - label: Docker run
+        command: docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+      - label: Python install
+        command: |
+          pip install open-webui
+          open-webui serve
+      - label: uv quickstart
+        command: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          DATA_DIR=~/.open-webui uvx --python 3.11 open-webui@latest serve
+      - label: Docker URL
+        value: http://localhost:3000
+      - label: Python and uv URL
+        value: http://localhost:8080
+      - label: Desktop app
+        value: github.com/open-webui/desktop
+
+  - group: Core Product Shape
+    items:
+      - label: Self-hosted platform
+        value: Offline-capable, extensible AI platform
+      - label: Provider compatibility
+        value: Supports Ollama and OpenAI-compatible APIs
+      - label: Provider-agnostic use
+        value: Works for both local and cloud model backends
+      - label: Best post-install guide
+        value: Essentials for Open WebUI
+        notes: Covers plugins, tool calling, task models, context management, RAG, and Open Terminal.
+
+  - group: Common Next Steps
+    items:
+      - label: Connect a provider
+        value: Ollama, OpenAI, Anthropic, vLLM, and more
+      - label: Connect an agent
+        value: Hermes Agent, OpenClaw, and other autonomous agents
+      - label: Update instance
+        value: Follow the updating guide to stay current
+      - label: Advanced topics
+        value: Scaling, logging, and advanced configuration
+      - label: Production install guidance
+        value: Prefer Docker or Python for production deployments
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Self-hosted chat and tool UI over local or remote model providers
+      - label: Less ideal fit
+        value: Bare CLI automation; this is primarily a browser-first operational surface
+      - label: Official docs
+        value: docs.openwebui.com

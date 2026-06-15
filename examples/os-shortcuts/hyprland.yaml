@@ -1,0 +1,64 @@
+name: Hyprland
+group: os shortcuts
+search_terms:
+  - hypr
+  - hyprctl
+references:
+  - group: Binding Model
+    items:
+      - label: Standard bind syntax
+        command: bind = MODS, key, dispatcher, params
+      - label: Mouse move window bind
+        command: bindm = SUPER, mouse:272, movewindow
+      - label: Mouse resize window bind
+        command: bindm = SUPER, mouse:273, resizewindow
+      - label: Keyboard move and resize alternative
+        value: "`bindm` also supports modifier-key variants such as `Control_L` or `ALT_L`"
+      - label: Unbind a key
+        command: unbind = SUPER, O
+      - label: Runtime unbind
+        command: hyprctl keyword unbind SUPER, O
+
+  - group: Common Useful Patterns
+    items:
+      - label: Toggle launcher on second press
+        command: bindr = SUPER, SUPER_L, exec, pkill wofi || wofi
+      - label: Cycle next window in floating workspace
+        command: |
+          bind = SUPER, Tab, cyclenext
+          bind = SUPER, Tab, bringactivetotop
+      - label: Workspace scroll
+        command: bind = SUPER, mouse_down, workspace, e-1
+      - label: Global app pass-through
+        command: bind = SUPER, F10, pass, class:^(com\.obsproject\.Studio)$
+      - label: Send alternate shortcut to app
+        command: bind = SUPER, F10, sendshortcut, SUPER, F4, class:^(com\.obsproject\.Studio)$
+
+  - group: Descriptions and Device-specific Binds
+    items:
+      - label: Described bind
+        command: bindd = SUPER, Q, Open my favourite terminal, exec, kitty
+      - label: Device-specific bind
+        command: bindk = SUPER, Q !razer-keyboard asus-keyboard, exec, kitty
+      - label: Inspect input device names
+        command: hyprctl devices
+
+  - group: Advanced Modes
+    items:
+      - label: Submap entry
+        command: bind = $mainMod, M, submap, main_submap
+      - label: Exit nested submap
+        command: bind = SHIFT, escape, submap, reset
+      - label: Multiple keys in one bind
+        command: binds = Control_L, A&Z, exec, kitty
+      - label: Modifier-only binding
+        command: bindr = SUPER ALT, Alt_L, exec, amongus
+
+  - group: Practical Reminders
+    items:
+      - label: Case sensitivity
+        value: "`unbind` keys are case-sensitive and must match the original bind exactly"
+      - label: Config path
+        value: ~/.config/hypr/hyprland.conf
+      - label: Best use of this reference
+        value: Hyprland is bind-driven; the highest-value shortcut reference is often the binding syntax patterns, not one fixed default set

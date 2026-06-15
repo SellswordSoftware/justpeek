@@ -1,0 +1,134 @@
+name: Chrome
+group: browsers
+process:
+  - google-chrome
+  - chrome
+  - chrome.exe
+references:
+  - group: Tabs and Windows
+    items:
+      - label: New tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Reopen closed tab
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: New window
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: New incognito window
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: Jump to tab by index
+        keys: Ctrl+1..Ctrl+8
+        keys_by_os:
+          macos: Cmd+1..Cmd+8
+        notes: `9` jumps to the last tab.
+
+  - group: Navigation
+    items:
+      - label: Focus address bar
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Go back
+        keys: Alt+LeftArrow
+        keys_by_os:
+          macos: Cmd+LeftBracket
+      - label: Go forward
+        keys: Alt+RightArrow
+        keys_by_os:
+          macos: Cmd+RightBracket
+      - label: Reload page
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Hard reload bypass cache
+        keys: Ctrl+Shift+R
+        keys_by_os:
+          macos: Cmd+Shift+R
+        notes: Useful when testing frontend changes or stale assets.
+
+  - group: Page and Search
+    items:
+      - label: Find in page
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Save page
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Print page
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Bookmark page
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Reader-like zoom reset
+        keys: Ctrl+0
+        keys_by_os:
+          macos: Cmd+0
+        notes: Reset zoom after temporary page scaling.
+
+  - group: Profiles, Privacy, and Session
+    items:
+      - label: Open history
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Y
+      - label: Open downloads
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+Shift+J
+      - label: Clear browsing data
+        keys: Ctrl+Shift+Delete
+        keys_by_os:
+          macos: Cmd+Shift+Backspace
+      - label: Open profile menu
+        notes: Use the avatar button to switch profiles, guest mode, or sync state.
+      - label: Restore previous session
+        notes: Enable startup restore in settings when working across many research tabs.
+
+  - group: DevTools and Inspection
+    items:
+      - label: Toggle DevTools
+        keys: Ctrl+Shift+I
+        keys_by_os:
+          macos: Cmd+Option+I
+      - label: Inspect element
+        keys: Ctrl+Shift+C
+        keys_by_os:
+          macos: Cmd+Shift+C
+      - label: Open console
+        keys: Ctrl+Shift+J
+        keys_by_os:
+          macos: Cmd+Option+J
+      - label: Open source view
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+Option+U
+      - label: Hard reload options
+        notes: Open DevTools first, then long-press reload for normal, hard, and cache-clearing reload choices.
+
+  - group: Common Workflows
+    items:
+      - label: Duplicate tab
+        notes: Right-click tab and choose Duplicate when branching research or auth state.
+      - label: Pin tab
+        notes: Pin durable tabs such as dashboards, mail, or docs to reduce accidental closure.
+      - label: Mute noisy site
+        notes: Right-click a tab and mute site audio when media tabs interrupt work.
+      - label: Use tab search
+        keys: Ctrl+Shift+A
+        keys_by_os:
+          macos: Cmd+Shift+A
+        notes: Fast way to find buried tabs across large sessions.
+      - label: Show help
+        notes: Chrome behavior around profiles, flags, and DevTools changes over time; check built-in settings or docs when needed.

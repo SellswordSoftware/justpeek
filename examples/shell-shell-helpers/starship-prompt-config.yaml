@@ -1,0 +1,157 @@
+name: Starship Prompt Config
+group: shell / shell helpers
+references:
+  - group: Installation and Startup
+    items:
+      - label: Print Starship version
+        command: starship --version
+        notes: Confirm the installed version before debugging config behavior.
+      - label: Show init snippet for Bash
+        command: starship init bash
+        notes: Emits the shell initialization code to eval from `.bashrc`.
+      - label: Show init snippet for Zsh
+        command: starship init zsh
+        notes: Emits the shell initialization code to eval from `.zshrc`.
+      - label: Show init snippet for Fish
+        command: starship init fish
+        notes: Emits the shell initialization code to source from Fish config.
+      - label: Explain config location
+        value: ~/.config/starship.toml
+        notes: Default configuration file path; can be overridden with `STARSHIP_CONFIG`.
+      - label: Override config path
+        command: export STARSHIP_CONFIG=~/dotfiles/starship.toml
+        notes: Point Starship at a non-default config file.
+
+  - group: Core Prompt Configuration
+    items:
+      - label: Minimal format example
+        command: |
+          format = """
+          $directory$git_branch$git_status$character
+          """
+        notes: Top-level `format` controls module ordering and prompt composition.
+      - label: Right prompt format
+        command: |
+          right_format = """$cmd_duration$time"""
+        notes: Use a right-side prompt for transient or secondary information.
+      - label: Add line break module
+        command: |
+          add_newline = true
+        notes: Inserts a blank line before the prompt body for a two-line layout.
+      - label: Set scan timeout
+        command: |
+          scan_timeout = 30
+        notes: Reduce prompt lag by limiting how long Starship scans the current directory.
+      - label: Set command timeout
+        command: |
+          command_timeout = 500
+        notes: Cap slow external module commands in milliseconds.
+
+  - group: Common Module Customization
+    items:
+      - label: Customize directory module
+        command: |
+          [directory]
+          truncation_length = 4
+          truncate_to_repo = false
+          style = "bold blue"
+        notes: Control path depth, repo-relative display, and styling.
+      - label: Customize git branch module
+        command: |
+          [git_branch]
+          symbol = " "
+          truncation_length = 24
+        notes: Tailor branch display for long or noisy branch names.
+      - label: Customize git status module
+        command: |
+          [git_status]
+          ahead = "⇡${count}"
+          behind = "⇣${count}"
+          diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+        notes: Make repo sync state more legible at a glance.
+      - label: Customize nodejs module
+        command: |
+          [nodejs]
+          format = "via [⬢ $version](bold green) "
+        notes: Example of per-runtime formatting for language toolchains.
+      - label: Disable a module
+        command: |
+          [package]
+          disabled = true
+        notes: Turn off noisy modules you do not want in the prompt.
+
+  - group: Presets, Palettes, and Styling
+    items:
+      - label: Use a palette
+        command: |
+          palette = "catppuccin_mocha"
+        notes: Reference a named palette for reusable color tokens.
+      - label: Define palette colors
+        command: |
+          [palettes.catppuccin_mocha]
+          rosewater = "#f5e0dc"
+          blue = "#89b4fa"
+        notes: Centralize colors instead of repeating literal values across modules.
+      - label: Use style token in module
+        command: |
+          [character]
+          success_symbol = "[➜](blue)"
+          error_symbol = "[➜](red)"
+        notes: Symbol and color are often enough to make prompt state obvious.
+      - label: Apply preset
+        command: starship preset nerd-font-symbols -o ~/.config/starship.toml
+        notes: Write a preset config file as a starting point for customization.
+      - label: Print preset to terminal
+        command: starship preset plain-text-symbols
+        notes: Inspect preset output before merging it into your config.
+
+  - group: Custom Modules and Context
+    items:
+      - label: Add a custom module
+        command: |
+          [custom.kubecontext]
+          command = "kubectl config current-context"
+          when = "command -v kubectl >/dev/null 2>&1"
+          format = "on [$output](bold cyan) "
+        notes: Custom modules inject arbitrary command output into the prompt.
+      - label: Show module only in project
+        command: |
+          [custom.just]
+          detect_files = ["justfile"]
+          command = "just --summary | head -n 1"
+        notes: File detection limits custom modules to relevant directories.
+      - label: Detect environment variables
+        command: |
+          [env_var.AWS_PROFILE]
+          format = "[$env_value](yellow) "
+        notes: Display active environment context such as cloud profiles.
+      - label: Configure shell indicator
+        command: |
+          [shell]
+          disabled = false
+          format = "[$indicator]($style) "
+        notes: Useful when you switch between Bash, Zsh, Fish, and Nushell frequently.
+      - label: Configure time module
+        command: |
+          [time]
+          disabled = false
+          time_format = "%R"
+        notes: Add clock context without relying on a terminal status bar.
+
+  - group: Debugging and Maintenance
+    items:
+      - label: Explain current prompt timing
+        command: starship timings
+        notes: Profile module execution to find prompt latency hotspots.
+      - label: Print module explanation
+        command: starship explain
+        notes: Show which modules rendered and why.
+      - label: Render prompt for one shell
+        command: starship prompt
+        notes: Generate prompt output manually for debugging.
+      - label: Print bug report data
+        command: starship bug-report
+        notes: Collect environment and config details for issue reports.
+      - label: Validate TOML syntax
+        command: starship module character
+        notes: Quick way to exercise config parsing with a specific module.

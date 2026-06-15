@@ -1,0 +1,99 @@
+name: Helix
+group: editors and ides
+search_terms:
+  - hx
+  - helix editor
+references:
+  - group: Startup and Files
+    items:
+      - label: Open file
+        command: hx <path>
+      - label: Open multiple files
+        command: hx <path> <path>
+      - label: Jump to line on open
+        command: hx +42 <path>
+      - label: Open config
+        value: ~/.config/helix/config.toml
+      - label: Open language config
+        value: ~/.config/helix/languages.toml
+      - label: Health check
+        command: hx --health
+        notes: Verifies language servers, grammars, and runtime support.
+
+  - group: Core Modal Editing
+    items:
+      - label: Normal to insert mode
+        keys: I / A / O
+      - label: Return to normal mode
+        keys: Escape
+      - label: Select mode
+        keys: V
+        notes: Helix selection-first editing starts here.
+      - label: Extend line selection
+        keys: X
+      - label: Search
+        keys: Slash
+      - label: Command mode
+        keys: Colon
+      - label: File picker
+        keys: Space F
+      - label: Buffer picker
+        keys: Space B
+
+  - group: Movement and Selection
+    items:
+      - label: Next word start
+        keys: W
+      - label: Previous word start
+        keys: B
+      - label: Match bracket
+        keys: M
+      - label: Select surrounding syntax node
+        keys: Alt+O
+        notes: One of the more uncommon but high-leverage tree-sitter actions.
+      - label: Expand selection
+        keys: Alt+Up
+      - label: Shrink selection
+        keys: Alt+Down
+      - label: Select all regex matches
+        keys: S
+        notes: Enter a regex to create multi-selections in one pass.
+
+  - group: Editing and Multi-selection
+    items:
+      - label: Change selection
+        keys: C
+      - label: Delete selection
+        keys: D
+      - label: Replace selection
+        keys: R
+      - label: Keep primary selection only
+        keys: Comma
+      - label: Align selections
+        keys: Ampersand
+        notes: Good for editing columns or assignments.
+      - label: Rotate selection contents forward
+        keys: RightParen
+      - label: Rotate selection contents backward
+        keys: LeftParen
+      - label: Repeat last motion command
+        keys: Alt+Period
+
+  - group: LSP, Picker, and Maintenance
+    items:
+      - label: Go to definition
+        keys: G D
+      - label: Go to references
+        keys: G R
+      - label: Rename symbol
+        keys: Space R
+      - label: Code action
+        keys: Space A
+      - label: Document symbols picker
+        keys: Space S
+      - label: Workspace symbol picker
+        keys: Space Slash
+      - label: Format selection or document
+        keys: Equal
+      - label: Reload from disk
+        command: :reload

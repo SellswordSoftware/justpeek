@@ -1,0 +1,62 @@
+name: Aider
+group: ai tools
+search_terms:
+  - aider chat
+  - aider terminal
+references:
+  - group: Start and Repo Context
+    items:
+      - label: Start in current git repo
+        command: aider
+      - label: Start with specific files
+        command: aider <file> <file>
+      - label: Add files in chat
+        command: /add <file>
+      - label: Switch model in chat
+        command: /model <provider/model>
+      - label: Chat modes
+        value: code, architect, ask, help
+      - label: Repo map
+        value: Aider builds a repository map to provide context across a git repo
+
+  - group: Editing and Review Flow
+    items:
+      - label: Work in local git repo
+        value: Aider is tightly integrated with git for code edits
+      - label: In-chat commands
+        value: Use slash commands to control files, models, commits, and session behavior
+      - label: Images and web pages
+        value: Add screenshots or URLs into the coding chat when needed
+      - label: Prompt caching
+        value: Supported for lower cost and faster repeated work
+      - label: Lint and test loops
+        value: Aider can help fix linting and testing failures automatically
+
+  - group: Providers and Integrations
+    items:
+      - label: Supported providers
+        value: OpenAI, Anthropic, Gemini, Ollama, GitHub Copilot, OpenRouter, LM Studio, Vertex AI, and more
+      - label: Browser mode
+        value: Aider can run in a browser, not only in a terminal
+      - label: IDE workflow
+        value: Aider can watch files and react to AI comments added from an editor
+      - label: Voice to code
+        value: Supported through documented voice workflows
+
+  - group: Automation and Advanced Use
+    items:
+      - label: Script aider
+        value: Aider can be scripted from the command line or Python
+      - label: Edit formats
+        value: Important when tuning how the model proposes file edits
+      - label: Infinite output support
+        value: Useful with models that support prefill and long iterative outputs
+      - label: Config and conventions
+        value: Document coding conventions so aider follows project style consistently
+
+  - group: Practical Reminders
+    items:
+      - label: Best repo shape
+        value: A git repo with the relevant files already present
+      - label: Official docs
+        value: aider.chat/docs

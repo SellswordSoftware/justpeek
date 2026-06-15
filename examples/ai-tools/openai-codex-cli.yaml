@@ -1,0 +1,70 @@
+name: OpenAI Codex CLI
+group: ai tools
+search_terms:
+  - codex cli
+  - openai codex
+references:
+  - group: Start and Modes
+    items:
+      - label: Start interactive TUI
+        command: codex
+      - label: Script repeatable workflows
+        command: codex exec "<prompt>"
+        notes: Use non-interactive execution for automations and batch tasks.
+      - label: Switch model and reasoning
+        command: /model
+      - label: Approval modes
+        value: Choose the mode that controls when Codex may edit files or run commands
+      - label: Image input
+        value: Attach screenshots or specs directly in the CLI session
+      - label: Image generation
+        value: Generate or edit images from the CLI when a task includes assets
+
+  - group: Reviews and Research
+    items:
+      - label: Local code review
+        command: /review
+        notes: Run a separate Codex agent to review your current changes.
+      - label: Web search
+        value: Built-in for current information gathering during a task
+      - label: Subagents
+        value: Parallelize parts of a larger task
+      - label: Codex Cloud tasks
+        value: Launch cloud tasks and apply resulting diffs from the terminal
+
+  - group: Configuration Surfaces
+    items:
+      - label: Repo guidance
+        value: AGENTS.md
+      - label: Project config
+        value: .codex/config.toml
+      - label: Hooks
+        value: Use hooks for lifecycle enforcement around commands or edits
+      - label: Skills
+        value: Package repeatable workflows and references
+      - label: Sites and plugins
+        value: Codex supports plugins, MCP, and site configuration
+
+  - group: Tools and Integrations
+    items:
+      - label: MCP
+        value: Connect third-party tools and context with Model Context Protocol
+      - label: Shell and apply-patch
+        value: Core local execution and editing tools
+      - label: Web search and retrieval
+        value: Built-in research and file discovery tools
+      - label: GitHub Action
+        value: Codex can be automated in CI workflows
+      - label: SDK and app server
+        value: Use Codex in custom orchestrations and server-backed flows
+
+  - group: Practical Reminders
+    items:
+      - label: Run from repo root
+        value: Best default when you want project-wide context
+      - label: Keep AGENTS.md high-signal
+        value: Put durable commands, conventions, and verification steps there
+      - label: Use exec for machines
+        value: "Prefer `codex exec` when another script needs stable non-interactive output"
+      - label: Official docs
+        value: developers.openai.com/codex/cli

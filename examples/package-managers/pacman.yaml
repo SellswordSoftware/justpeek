@@ -1,0 +1,110 @@
+name: pacman
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Synchronize repos and upgrade system
+        command: sudo pacman -Syu
+        notes: Standard full system upgrade workflow on Arch and Arch-based systems.
+      - label: Install package
+        command: sudo pacman -S ripgrep
+        notes: Install one or more packages from configured sync repositories.
+      - label: Remove package
+        command: sudo pacman -R ripgrep
+        notes: Uninstall a package while leaving unneeded dependencies in place.
+      - label: Remove package with deps
+        command: sudo pacman -Rs ripgrep
+        notes: Remove the package and dependencies that are no longer required.
+      - label: Reinstall package
+        command: sudo pacman -S ripgrep
+        notes: Pacman does not use a separate reinstall verb for common repo packages.
+
+  - group: Search and Information
+    items:
+      - label: Search repositories
+        command: pacman -Ss ripgrep
+        notes: Search available sync repositories by name and description.
+      - label: Search installed packages
+        command: pacman -Qs ripgrep
+        notes: Search only the local package database.
+      - label: Show package info from repo
+        command: pacman -Si ripgrep
+        notes: Display repository package details without installing it.
+      - label: Show installed package info
+        command: pacman -Qi ripgrep
+        notes: Print metadata for the already installed package.
+      - label: Find file owner
+        command: pacman -Qo /usr/bin/rg
+        notes: Identify which installed package owns a given file path.
+
+  - group: Database and Files
+    items:
+      - label: List package files
+        command: pacman -Ql ripgrep
+        notes: Show all installed paths that belong to the package.
+      - label: Verify package files
+        command: pacman -Qk ripgrep
+        notes: Check for missing files and other package integrity issues.
+      - label: List explicitly installed packages
+        command: pacman -Qe
+        notes: Show manually installed top-level packages.
+      - label: List orphans
+        command: pacman -Qdt
+        notes: Find dependencies no longer required by explicitly installed packages.
+      - label: List foreign packages
+        command: pacman -Qm
+        notes: Show packages not found in sync databases, such as local or AUR-built installs.
+
+  - group: Cache, Cleanup, and Repair
+    items:
+      - label: Clean old package cache
+        command: sudo paccache -r
+        notes: Preferred cleanup path when `pacman-contrib` is installed.
+      - label: Clean all cached packages
+        command: sudo pacman -Scc
+        notes: Remove cached package archives aggressively; use with care.
+      - label: Remove orphan packages
+        command: sudo pacman -Rns $(pacman -Qdtq)
+        notes: Common cleanup pattern once orphaned packages are reviewed.
+      - label: Refresh package databases only
+        command: sudo pacman -Sy
+        notes: Sync package databases without upgrading, generally avoided unless followed by a full upgrade.
+      - label: Reinstall all packages from explicit list
+        command: sudo pacman -S $(pacman -Qqn)
+        notes: Recovery-oriented workflow for repairing a damaged userspace.
+
+  - group: Local Packages and Mirrors
+    items:
+      - label: Install local package file
+        command: sudo pacman -U ./package.pkg.tar.zst
+        notes: Install a package archive from local disk or URL.
+      - label: Show mirrorlist
+        command: grep -v '^#' /etc/pacman.d/mirrorlist
+        notes: Review active mirrors and ordering.
+      - label: Force refresh package databases
+        command: sudo pacman -Syy
+        notes: Re-download all sync databases when metadata appears out of date or corrupted.
+      - label: Show pacman config
+        command: sed -n '1,220p' /etc/pacman.conf
+        notes: Inspect signature, parallel download, and repo configuration.
+      - label: Download package without installing
+        command: sudo pacman -Sw ripgrep
+        notes: Fetch package archives into cache only.
+
+  - group: Common Workflows
+    items:
+      - label: Safe full upgrade pattern
+        command: sudo pacman -Syu
+        notes: Avoid partial upgrades; Arch expects full sync-and-upgrade transactions.
+      - label: Check for failed backup file merges
+        command: pacdiff
+        notes: Compare `.pacnew` and `.pacsave` files when using `pacman-contrib`.
+      - label: Query package for command path
+        command: pacman -F /usr/bin/rg
+        notes: File database search requires the `files` database to be enabled and refreshed.
+      - label: Refresh files database
+        command: sudo pacman -Fy
+        notes: Update the remote file ownership database used by `pacman -F`.
+      - label: Show help
+        command: pacman -h
+        notes: Worth revisiting because pacman's short option combinations are dense and easy to forget.

@@ -1,0 +1,110 @@
+name: poetry
+group: package managers
+references:
+  - group: Project Initialization and Dependency Management
+    items:
+      - label: Initialize project
+        command: poetry init
+        notes: Create a new `pyproject.toml` interactively.
+      - label: Install dependencies from lock
+        command: poetry install
+        notes: Create or use a virtualenv and install locked dependencies.
+      - label: Add dependency
+        command: poetry add requests
+        notes: Add a runtime dependency and update `poetry.lock`.
+      - label: Add dev dependency
+        command: poetry add --group dev pytest ruff
+        notes: Record development dependencies in a named dependency group.
+      - label: Remove dependency
+        command: poetry remove requests
+        notes: Remove a dependency from project metadata and lock file.
+
+  - group: Locking and Synchronization
+    items:
+      - label: Refresh lock file
+        command: poetry lock
+        notes: Resolve dependencies and rewrite the lock file.
+      - label: Install without updating lock
+        command: poetry install --no-root
+        notes: Install dependencies only, without installing the current project package itself.
+      - label: Update one package
+        command: poetry update requests
+        notes: Refresh the selected dependency within allowed version constraints.
+      - label: Update everything
+        command: poetry update
+        notes: Re-resolve and upgrade all dependencies within their constraints.
+      - label: Check lock consistency
+        command: poetry check
+        notes: Validate that project metadata is internally consistent.
+
+  - group: Virtual Environments and Execution
+    items:
+      - label: Show environment info
+        command: poetry env info
+        notes: Print active environment paths, interpreter, and virtualenv details.
+      - label: List environments
+        command: poetry env list
+        notes: Show all virtualenvs Poetry knows for the current project.
+      - label: Use specific Python
+        command: poetry env use python3.12
+        notes: Recreate or select the project env with a chosen interpreter.
+      - label: Run command in env
+        command: poetry run pytest
+        notes: Execute a command using the project environment without manual activation.
+      - label: Open Poetry shell-like env
+        command: poetry shell
+        notes: Enter an interactive shell in the project environment when the plugin or workflow supports it.
+
+  - group: Build and Publish
+    items:
+      - label: Build sdist and wheel
+        command: poetry build
+        notes: Create distribution artifacts under the `dist/` directory.
+      - label: Publish to PyPI
+        command: poetry publish
+        notes: Upload built artifacts to the configured default repository.
+      - label: Publish with build step
+        command: poetry publish --build
+        notes: Build and publish in one step.
+      - label: Configure repository token
+        command: poetry config pypi-token.pypi <token>
+        notes: Store a token for authenticated publishing.
+      - label: Publish to alternate repo
+        command: poetry publish -r internal
+        notes: Use a named repository configured in Poetry settings.
+
+  - group: Configuration and Inspection
+    items:
+      - label: Show config values
+        command: poetry config --list
+        notes: Inspect global and project-specific Poetry settings.
+      - label: Disable in-project venvs
+        command: poetry config virtualenvs.in-project false
+        notes: Control whether virtualenvs live under the project root.
+      - label: Enable in-project venv
+        command: poetry config virtualenvs.in-project true
+        notes: Common preference for repo-local environment visibility.
+      - label: Show dependency tree
+        command: poetry show --tree
+        notes: Inspect transitive dependencies and their structure.
+      - label: Export requirements
+        command: poetry export -f requirements.txt --output requirements.txt
+        notes: Requires the export plugin in newer Poetry setups.
+
+  - group: Common Workflows
+    items:
+      - label: New app setup
+        command: poetry init && poetry add requests && poetry add --group dev pytest ruff && poetry install
+        notes: Typical project bootstrap loop.
+      - label: Use exact Python for project
+        command: poetry env use python3.12 && poetry install
+        notes: Stabilize interpreter selection before adding or locking dependencies.
+      - label: CI install without package
+        command: poetry install --no-root
+        notes: Useful when CI only needs dependencies, not an editable install of the app itself.
+      - label: Inspect Poetry version
+        command: poetry --version
+        notes: Behavior and plugin assumptions can vary across Poetry releases.
+      - label: Show help
+        command: poetry --help
+        notes: Poetry spans package management, venvs, build, and publish workflows.

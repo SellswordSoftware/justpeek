@@ -1,0 +1,113 @@
+name: Podman
+group: container / infra
+process:
+  - podman
+  - podman.exe
+references:
+  - group: Images and Containers
+    items:
+      - label: Pull image
+        command: podman pull quay.io/podman/hello
+        notes: Download an image from a registry into local storage.
+      - label: Build image
+        command: podman build -t myapp:dev .
+        notes: Build an OCI image from the current context.
+      - label: Run interactive container
+        command: podman run --rm -it ubuntu:24.04 bash
+        notes: Start a disposable interactive container session.
+      - label: Run detached container
+        command: podman run -d --name web -p 8080:80 nginx
+        notes: Start a background container and map its service port.
+      - label: List containers
+        command: podman ps -a
+        notes: Show running and stopped containers managed by Podman.
+
+  - group: Rootless and Runtime Behavior
+    items:
+      - label: Show Podman info
+        command: podman info
+        notes: Inspect rootless mode, storage, OCI runtime, and registries configuration.
+      - label: Inspect container
+        command: podman inspect web
+        notes: Show runtime config, state, networking, and mounts.
+      - label: Exec shell in container
+        command: podman exec -it web sh
+        notes: Open an interactive shell inside an already running container.
+      - label: Follow logs
+        command: podman logs -f web
+        notes: Stream stdout and stderr from a container.
+      - label: Show top processes
+        command: podman top web
+        notes: Inspect processes inside the container namespace.
+
+  - group: Pods, Networks, and Volumes
+    items:
+      - label: Create pod
+        command: podman pod create --name app-pod -p 8080:80 -p 5432:5432
+        notes: Group containers under a shared network namespace with Kubernetes-like pod semantics.
+      - label: Run container in pod
+        command: podman run -d --pod app-pod --name web nginx
+        notes: Attach a container to an existing pod.
+      - label: Create volume
+        command: podman volume create pgdata
+        notes: Persist application data outside container writable layers.
+      - label: Create network
+        command: podman network create app-net
+        notes: Define a custom network for related containers.
+      - label: List pods
+        command: podman pod ps
+        notes: Show pod-level state and contained containers.
+
+  - group: Images, Registries, and Transfer
+    items:
+      - label: Tag image
+        command: podman tag myapp:dev registry.example.com/myapp:dev
+        notes: Assign an additional registry or version tag to a local image.
+      - label: Push image
+        command: podman push registry.example.com/myapp:dev
+        notes: Upload an image to a remote registry.
+      - label: Login to registry
+        command: podman login registry.example.com
+        notes: Store credentials for image pulls and pushes.
+      - label: Save image archive
+        command: podman save -o myapp.tar myapp:dev
+        notes: Export an image for offline transfer.
+      - label: Load image archive
+        command: podman load -i myapp.tar
+        notes: Import an image archive into local storage.
+
+  - group: Systemd and Generate Workflows
+    items:
+      - label: Generate systemd unit
+        command: podman generate systemd --new --name web
+        notes: Produce a unit file for managing a container with systemd.
+      - label: Generate kube YAML
+        command: podman generate kube app-pod > app-pod.yaml
+        notes: Export pod or container definitions as Kubernetes YAML.
+      - label: Play kube YAML
+        command: podman kube play app-pod.yaml
+        notes: Create Podman resources from Kubernetes-style manifests.
+      - label: Auto-update eligible containers
+        command: podman auto-update
+        notes: Refresh containers labeled for image-based updates.
+      - label: List auto-update candidates
+        command: podman auto-update --dry-run
+        notes: Preview which containers would be updated.
+
+  - group: Cleanup and Common Workflows
+    items:
+      - label: Remove container forcefully
+        command: podman rm -f web
+        notes: Stop and delete a container in one command.
+      - label: Prune unused resources
+        command: podman system prune
+        notes: Remove unused containers, images, networks, and build cache.
+      - label: Show disk usage
+        command: podman system df
+        notes: Inspect image, container, and volume storage consumption.
+      - label: Local rootless dev loop
+        command: podman build -t myapp:dev . && podman run --rm -p 8080:8080 myapp:dev
+        notes: Common rootless local development flow.
+      - label: Show help
+        command: podman --help
+        notes: Podman overlaps Docker for many commands but adds pods and rootless or systemd-centric workflows.

@@ -1,0 +1,110 @@
+name: journalctl
+group: shell / shell helpers
+references:
+  - group: Core Log Viewing
+    items:
+      - label: Show full journal
+        command: journalctl
+        notes: Print all accessible journal entries, usually piped through a pager.
+      - label: Show current boot only
+        command: journalctl -b
+        notes: Restrict output to the active boot session.
+      - label: Show previous boot
+        command: journalctl -b -1
+        notes: Useful for diagnosing the last failed or problematic boot.
+      - label: Follow logs live
+        command: journalctl -f
+        notes: Stream new entries similarly to `tail -f`.
+      - label: Disable pager
+        command: journalctl --no-pager
+        notes: Better for scripts, piping, and copied output.
+
+  - group: Filtering by Unit and Process
+    items:
+      - label: Filter one service
+        command: journalctl -u nginx.service
+        notes: Show logs associated with a specific systemd unit.
+      - label: Filter multiple units
+        command: journalctl -u nginx.service -u php-fpm.service
+        notes: Combine related service logs into one view.
+      - label: Filter current executable path
+        command: journalctl /usr/bin/sshd
+        notes: Match logs emitted by a specific executable path.
+      - label: Filter by PID
+        command: journalctl _PID=1234
+        notes: Use journal field matching for precise process-level inspection.
+      - label: Filter user unit
+        command: journalctl --user -u syncthing.service
+        notes: Read logs from the per-user journal namespace.
+
+  - group: Time and Priority Filtering
+    items:
+      - label: Since a specific time
+        command: journalctl --since '2026-06-14 09:00:00'
+        notes: Accepts natural-ish timestamps such as `today`, `yesterday`, or full datetimes.
+      - label: Until a specific time
+        command: journalctl --until '2026-06-14 17:00:00'
+        notes: Combine with `--since` to bound a time window.
+      - label: Last hour for one service
+        command: journalctl -u nginx.service --since '1 hour ago'
+        notes: Practical operational view during deploys or incidents.
+      - label: Errors and above
+        command: journalctl -p err..alert
+        notes: Filter by priority range from error through alert.
+      - label: Kernel messages only
+        command: journalctl -k
+        notes: Focus on kernel-generated logs rather than service logs.
+
+  - group: Output Formats and Parsing
+    items:
+      - label: Short ISO timestamps
+        command: journalctl -o short-iso
+        notes: More stable and scannable than locale-dependent output.
+      - label: JSON output
+        command: journalctl -o json
+        notes: Machine-readable output for jq or other structured processing.
+      - label: Pretty JSON
+        command: journalctl -o json-pretty
+        notes: Easier for direct human inspection of journal fields.
+      - label: Export format
+        command: journalctl -o export
+        notes: Structured export format suitable for archival or transfer.
+      - label: Output catalog messages
+        command: journalctl -x
+        notes: Augment entries with explanatory catalog text when available.
+
+  - group: Boot, Disk, and Retention
+    items:
+      - label: List boots
+        command: journalctl --list-boots
+        notes: Map boot offsets like `-1` or `-2` to exact boot IDs and times.
+      - label: Show journal disk usage
+        command: journalctl --disk-usage
+        notes: Inspect how much space journal files consume.
+      - label: Vacuum old logs by size
+        command: sudo journalctl --vacuum-size=500M
+        notes: Trim archived journals until usage falls below the target size.
+      - label: Vacuum old logs by age
+        command: sudo journalctl --vacuum-time=14d
+        notes: Remove archived journals older than the chosen retention window.
+      - label: Verify journal files
+        command: journalctl --verify
+        notes: Check journal file integrity when corruption is suspected.
+
+  - group: Common Workflows
+    items:
+      - label: Tail service logs during deploy
+        command: journalctl -u myapp.service -f -o short-iso
+        notes: Common operational loop while restarting or updating a service.
+      - label: Show boot errors only
+        command: journalctl -b -p warning..alert
+        notes: Fast post-boot health review.
+      - label: Pipe structured logs into jq
+        command: journalctl -u myapp.service -o json | jq 'select(.PRIORITY <= 3)'
+        notes: Filter severe structured entries using jq when plain text is too noisy.
+      - label: Show recent SSH auth logs
+        command: journalctl -u ssh.service --since '30 minutes ago'
+        notes: Replace distro-specific `/var/log/auth.log` habits on systemd-based systems.
+      - label: Show help
+        command: journalctl --help
+        notes: Field matching and output modes are broad enough that help is worth revisiting.

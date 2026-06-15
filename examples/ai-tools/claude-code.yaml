@@ -1,0 +1,78 @@
+name: Claude Code
+group: ai tools
+search_terms:
+  - anthropic claude code
+  - claude cli
+references:
+  - group: Install and Start
+    items:
+      - label: Start Claude Code
+        command: claude
+        notes: Run inside a project directory to start an interactive coding session.
+      - label: Install on macOS Linux WSL
+        command: curl -fsSL https://claude.ai/install.sh | bash
+      - label: Install with Homebrew
+        command: brew install --cask claude-code
+      - label: Install with WinGet
+        command: winget install Anthropic.ClaudeCode
+      - label: Upgrade Homebrew install
+        command: brew upgrade claude-code
+      - label: Upgrade WinGet install
+        command: winget upgrade Anthropic.ClaudeCode
+
+  - group: Core Workflows
+    items:
+      - label: One-shot prompt
+        command: claude -p "review the recent changes for security issues"
+        notes: Good for CI, pipes, and short scripted tasks.
+      - label: Analyze piped input
+        command: tail -200 app.log | claude -p "summarize any anomalies"
+      - label: Create commit with AI
+        command: claude "commit my changes with a descriptive message"
+      - label: Run local code review
+        value: Ask Claude to review current changes before commit or push
+      - label: Parallel agents
+        value: Use multiple Claude Code agents for subtasks
+      - label: Background or scheduled work
+        value: Use routines, background agents, or desktop scheduled tasks for recurring jobs
+
+  - group: Project Customization
+    items:
+      - label: Project instructions file
+        value: CLAUDE.md
+        notes: Put coding standards, architecture rules, review checklists, and repo-specific guidance here.
+      - label: Skills
+        value: Create reusable workflows such as review or deploy helpers
+      - label: Hooks
+        value: Run shell commands before or after Claude actions
+      - label: MCP
+        value: Connect Claude Code to Jira, Slack, Drive, and custom tools
+      - label: Auto memory
+        value: Claude can retain learned repo context across sessions
+
+  - group: Sessions and Surfaces
+    items:
+      - label: Remote control
+        value: Move work between terminal, desktop, web, and phone
+      - label: Teleport cloud work into terminal
+        command: claude --teleport
+        notes: Pull a web-started task back into the CLI when you want local execution.
+      - label: Hand off to desktop
+        command: /desktop
+        notes: Useful for visual diff review from a terminal session.
+      - label: VS Code and JetBrains
+        value: Claude Code also ships editor integrations with shared context and diffs
+      - label: Browser and desktop sessions
+        value: Useful for long-running tasks or repos not cloned locally
+
+  - group: Permissions and Troubleshooting
+    items:
+      - label: Permission modes
+        value: Choose a mode that controls when Claude may edit or run commands
+      - label: Third-party providers
+        value: Terminal CLI and VS Code support third-party model providers
+      - label: Windows shell note
+        value: Git for Windows is recommended so Bash can be used as the shell tool
+      - label: Full CLI reference
+        value: code.claude.com/docs/en/reference
+        notes: Use the official reference for flag-by-flag details.

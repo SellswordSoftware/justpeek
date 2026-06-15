@@ -1,0 +1,128 @@
+name: Android Studio
+group: editors and ides
+process:
+  - studio
+  - studio64
+  - studio64.exe
+  - android-studio
+references:
+  - group: Search and Navigation
+    items:
+      - label: Search everywhere
+        keys: Shift Shift
+        notes: Double Shift is the fastest general launcher.
+      - label: Find action
+        keys: Ctrl+Shift+A
+        keys_by_os:
+          macos: Cmd+Shift+A
+      - label: Open class
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+O
+      - label: Open file
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+O
+      - label: Go to symbol
+        keys: Ctrl+Alt+Shift+N
+        keys_by_os:
+          macos: Cmd+Alt+O
+      - label: Go to declaration or usages
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Recent files
+        keys: Ctrl+E
+        keys_by_os:
+          macos: Cmd+E
+
+  - group: Editing and Refactoring
+    items:
+      - label: Basic code completion
+        keys: Ctrl+Space
+      - label: Smart completion
+        keys: Ctrl+Shift+Space
+      - label: Show intention actions
+        keys: Alt+Enter
+        keys_by_os:
+          macos: Option+Enter
+      - label: Reformat code
+        keys: Ctrl+Alt+L
+        keys_by_os:
+          macos: Option+Cmd+L
+      - label: Optimize imports
+        keys: Ctrl+Alt+O
+        keys_by_os:
+          macos: Ctrl+Option+O
+      - label: Rename
+        keys: Shift+F6
+      - label: Extract method
+        keys: Ctrl+Alt+M
+        keys_by_os:
+          macos: Option+Cmd+M
+      - label: Generate code
+        keys: Alt+Insert
+        keys_by_os:
+          macos: Cmd+N
+
+  - group: Tool Windows and Layout
+    items:
+      - label: Project tool window
+        keys: Alt+1
+        keys_by_os:
+          macos: Cmd+1
+      - label: Logcat
+        value: View > Tool Windows > Logcat
+      - label: Terminal
+        value: View > Tool Windows > Terminal
+      - label: Version Control
+        value: View > Tool Windows > Commit or Version Control
+      - label: Hide all tool windows
+        keys: Ctrl+Shift+F12
+        keys_by_os:
+          macos: Cmd+Shift+F12
+      - label: Jump between editor and tool window
+        keys: F12
+
+  - group: Build, Run, and Debug
+    items:
+      - label: Build project
+        keys: Ctrl+F9
+        keys_by_os:
+          macos: Cmd+F9
+      - label: Make project
+        keys: Ctrl+F9
+        notes: Trigger incremental build before run when you need compile-only feedback.
+      - label: Run app
+        keys: Shift+F10
+        keys_by_os:
+          macos: Ctrl+R
+      - label: Debug app
+        keys: Shift+F9
+        keys_by_os:
+          macos: Ctrl+D
+      - label: Rerun
+        keys: Ctrl+F5
+        keys_by_os:
+          macos: Ctrl+R
+      - label: Toggle breakpoint
+        keys: Ctrl+F8
+        keys_by_os:
+          macos: Cmd+F8
+      - label: Open Run Configuration
+        value: Run > Edit Configurations
+
+  - group: Emulator, Device, and Gradle
+    items:
+      - label: Device Manager
+        value: Tools > Device Manager
+      - label: SDK Manager
+        value: Tools > SDK Manager
+      - label: Sync project with Gradle files
+        value: File > Sync Project with Gradle Files
+      - label: Invalidate caches
+        value: File > Invalidate Caches
+      - label: Capture layout inspector
+        value: Tools > Layout Inspector
+      - label: Profiler
+        value: View > Tool Windows > App Inspection or Profiler

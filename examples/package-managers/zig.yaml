@@ -1,0 +1,114 @@
+name: zig
+group: package managers
+references:
+  - group: Core Project and Build Operations
+    items:
+      - label: Initialize executable project
+        command: zig init-exe
+        notes: Scaffold a starter executable project with build files and source layout.
+      - label: Initialize library project
+        command: zig init-lib
+        notes: Scaffold a reusable library package instead of a standalone executable.
+      - label: Build project
+        command: zig build
+        notes: Run the project build graph defined by `build.zig`.
+      - label: Run project
+        command: zig build run
+        notes: Build and execute the configured run step from the build script.
+      - label: Run tests
+        command: zig build test
+        notes: Execute test steps defined in the build graph.
+
+  - group: Single-File Compilation
+    items:
+      - label: Build executable from source file
+        command: zig build-exe src/main.zig
+        notes: Compile one Zig source file directly without a full project build script.
+      - label: Run source file directly
+        command: zig run src/main.zig
+        notes: Compile and execute a file in one command.
+      - label: Test source file directly
+        command: zig test src/main.zig
+        notes: Compile and run tests from one Zig source file.
+      - label: Build static library
+        command: zig build-lib src/lib.zig
+        notes: Produce a library artifact directly from source.
+      - label: Format source
+        command: zig fmt .
+        notes: Apply canonical Zig formatting across files or directories.
+
+  - group: Package and Dependency Workflows
+    items:
+      - label: Fetch dependencies via build
+        command: zig build
+        notes: Package dependencies are usually resolved through `build.zig.zon` and the build graph.
+      - label: Show package file
+        command: cat build.zig.zon
+        notes: Inspect declared package metadata and dependencies for the project.
+      - label: Add dependency manually
+        command: |
+          .dependencies = .{
+              .foo = .{ .url = "https://example.com/foo.tar.gz", .hash = "1220..." },
+          },
+        notes: Dependencies are declared in `build.zig.zon`, not through a separate package-add CLI.
+      - label: Use dependency in build script
+        command: |
+          const foo = b.dependency("foo", .{});
+        notes: Build graph wiring happens in `build.zig` after declaration in the package file.
+      - label: Vendor lock-like state
+        value: Zig package resolution is tracked through hashes in `build.zig.zon`.
+        notes: Integrity comes from explicit content hashes rather than a separate lockfile.
+
+  - group: Cross-Compilation and Targets
+    items:
+      - label: Build for target triple
+        command: zig build -Dtarget=x86_64-linux-gnu
+        notes: Override the target through the project build options.
+      - label: Single-file cross-compile
+        command: zig build-exe src/main.zig -target aarch64-macos
+        notes: Zig's bundled toolchain makes cross-compilation a first-class workflow.
+      - label: Optimize for release-fast
+        command: zig build -Doptimize=ReleaseFast
+        notes: Choose optimization profiles through build options.
+      - label: Build with debug optimization
+        command: zig build -Doptimize=Debug
+        notes: Explicitly set a debug-oriented optimization profile.
+      - label: List supported targets
+        command: zig targets
+        notes: Print supported architectures, OSes, ABIs, and libc targets.
+
+  - group: C Interop and Toolchain Utilities
+    items:
+      - label: Translate C header
+        command: zig translate-c header.h
+        notes: Generate Zig bindings or inspect how Zig interprets a C header.
+      - label: Use Zig as C compiler
+        command: zig cc main.c -o main
+        notes: Zig bundles cross-compilation-aware C compilation tooling.
+      - label: Use Zig as C++ compiler
+        command: zig c++ main.cpp -o main
+        notes: Similar workflow for C++ source builds.
+      - label: Archive static library
+        command: zig ar rcs libfoo.a foo.o
+        notes: Zig also exposes archive tooling compatible with common native build workflows.
+      - label: Inspect environment
+        command: zig env
+        notes: Show Zig installation paths and environment-related configuration.
+
+  - group: Common Workflows
+    items:
+      - label: New project bootstrap
+        command: zig init-exe && zig build run
+        notes: Quick start path for a new executable project.
+      - label: Fast edit-test loop
+        command: zig test src/main.zig
+        notes: Common inner loop when iterating on logic-heavy source files.
+      - label: Cross-compile release binary
+        command: zig build -Dtarget=x86_64-windows -Doptimize=ReleaseFast
+        notes: Typical deployment workflow when targeting another platform.
+      - label: Inspect Zig version
+        command: zig version
+        notes: Important because package and build behavior can evolve across releases.
+      - label: Show help
+        command: zig --help
+        notes: Zig spans package declarations, builds, cross-compilation, and C toolchain use.

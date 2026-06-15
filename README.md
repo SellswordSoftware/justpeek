@@ -38,7 +38,7 @@ Seed the default references directory with example files:
 ./setup.sh
 ```
 
-That copies the sample YAML files from `shortcuts-example/` into:
+That copies the sample YAML files from `examples/` into:
 
 ```text
 ~/.config/justpeek/references
@@ -151,6 +151,25 @@ references:
         notes: cli help output
 ```
 
+Multi-line notes are supported with YAML block syntax and render with visible line breaks in the panel:
+
+```yaml
+- label: Incident handoff
+  notes: |
+    Check the dashboard first.
+    Then review the most recent deploy.
+    Escalate if error rate is still rising.
+```
+
+Multi-line commands are supported the same way and render with visible line breaks in the command block:
+
+```yaml
+- label: Release steps
+  command: |
+    git tag -a v1.2.3 -m "Release v1.2.3"
+    git push --tags
+```
+
 `keys_by_os` is optional. If JustPeek has a variant for the preferred or current OS, it uses that. Otherwise it falls back to `keys`.
 
 Supported fields:
@@ -182,9 +201,9 @@ More detailed docs:
 
 The repo includes sample reference packs in:
 
-- `shortcuts-example/vscode.yaml`
-- `shortcuts-example/git.yaml`
-- `shortcuts-example/people.yaml`
+- `examples/vscode.yaml`
+- `examples/git.yaml`
+- `examples/people.yaml`
 
 ## Current Platform Notes
 

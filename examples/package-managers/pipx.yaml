@@ -1,0 +1,92 @@
+name: pipx
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Install CLI app
+        command: pipx install black
+        notes: Install a Python CLI tool into its own isolated virtual environment.
+      - label: Upgrade one app
+        command: pipx upgrade black
+        notes: Update one installed application environment.
+      - label: Upgrade all apps
+        command: pipx upgrade-all
+        notes: Refresh every installed pipx-managed application.
+      - label: Uninstall app
+        command: pipx uninstall black
+        notes: Remove the app and its dedicated environment.
+      - label: Reinstall all apps
+        command: pipx reinstall-all
+        notes: Rebuild all managed virtualenvs, often useful after Python upgrades.
+
+  - group: Discovery and Inventory
+    items:
+      - label: List installed apps
+        command: pipx list
+        notes: Show installed applications, injected packages, and venv locations.
+      - label: Show pipx version
+        command: pipx --version
+        notes: Confirm the installed pipx build when behavior differs across machines.
+      - label: Show environment paths
+        command: pipx environment
+        notes: Print the directories and environment variables pipx uses.
+      - label: Ensure PATH setup
+        command: pipx ensurepath
+        notes: Add pipx binary paths to the user's shell environment.
+      - label: Run app without installing
+        command: pipx run cowsay hello
+        notes: Execute a Python CLI tool temporarily in an ephemeral environment.
+
+  - group: Install Variants and Injection
+    items:
+      - label: Install exact version
+        command: pipx install 'black==24.4.2'
+        notes: Pin a specific release for compatibility or reproducibility.
+      - label: Install from Git URL
+        command: pipx install git+https://github.com/psf/black
+        notes: Useful for testing unreleased or forked application versions.
+      - label: Install with Python interpreter
+        command: pipx install --python python3.12 black
+        notes: Choose a specific interpreter for one app environment.
+      - label: Inject extra package
+        command: pipx inject ansible ansible-lint
+        notes: Add supplementary packages into an existing app environment.
+      - label: Uninject package
+        command: pipx uninject ansible ansible-lint
+        notes: Remove previously injected extras from the app environment.
+
+  - group: Maintenance and Repair
+    items:
+      - label: Upgrade shared libraries
+        command: pipx upgrade-shared
+        notes: Refresh pipx shared tooling used by app environments.
+      - label: Reinstall one app
+        command: pipx reinstall black
+        notes: Rebuild a single app environment from scratch.
+      - label: Pin package version externally
+        value: pipx does not manage version pin state separately; reinstall with an explicit specifier when needed.
+        notes: Treat version control as part of the install target specification.
+      - label: Show logs with verbose mode
+        command: pipx install black --verbose
+        notes: More logging helps diagnose resolver, interpreter, or venv issues.
+      - label: Remove orphaned metadata
+        command: pipx uninstall-all
+        notes: Nuclear cleanup option when resetting a broken pipx setup entirely.
+
+  - group: Common Workflows
+    items:
+      - label: Install common Python CLIs
+        command: pipx install black && pipx install ruff && pipx install mypy
+        notes: Good default pattern for developer workstations.
+      - label: Run temporary app version
+        command: pipx run --spec httpie==3.2.2 http --help
+        notes: Try one tool version without changing the persistent installed environment.
+      - label: Bootstrap PATH after install
+        command: pipx ensurepath && exec "$SHELL" -l
+        notes: Common first-run workflow so shims become visible.
+      - label: Use pipx for user-facing CLIs only
+        value: Prefer `pipx` for standalone apps and `pip` inside project venvs.
+        notes: Keeps project dependencies and end-user tools separated cleanly.
+      - label: Show help
+        command: pipx --help
+        notes: pipx commands are compact, but help is useful for specifiers and interpreter targeting.

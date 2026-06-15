@@ -1,0 +1,346 @@
+name: Notion
+group: notetaking and knowledge tools
+process:
+  - Notion
+  - notion
+search_terms:
+  - notion workspace
+  - notion databases
+  - notion formulas
+  - notion mcp
+references:
+  - group: Core Navigation and Global Shortcuts
+    items:
+      - label: Search or jump to recent page
+        keys: Ctrl+P or Ctrl+K
+        keys_by_os:
+          macos: Cmd+P or Cmd+K
+      - label: Search inside current page
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Copy current page URL
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Go back
+        keys: Ctrl+LeftBracket
+        keys_by_os:
+          macos: Cmd+LeftBracket
+      - label: Go forward
+        keys: Ctrl+RightBracket
+        keys_by_os:
+          macos: Cmd+RightBracket
+      - label: Toggle dark or light mode
+        keys: Ctrl+Shift+L
+        keys_by_os:
+          macos: Cmd+Shift+L
+      - label: New page
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: New window
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: New tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Open link in new tab
+        keys: Ctrl+Click
+        keys_by_os:
+          macos: Cmd+Click
+
+  - group: Markdown Inline Syntax and Block Creation
+    items:
+      - label: Bold
+        value: "**text**"
+      - label: Italic
+        value: "*text*"
+      - label: Inline code
+        value: "`code`"
+      - label: Strikethrough
+        value: "~text~"
+      - label: Bulleted list
+        value: "* or - or + then space"
+      - label: To-do checkbox
+        value: "[] then space"
+      - label: Numbered list
+        value: "1. or a. or i. then space"
+      - label: H1 H2 H3
+        value: "# ## ### then space"
+      - label: Toggle list
+        value: "> then space"
+      - label: Quote block
+        value: "\" then space"
+      - label: Divider
+        value: "---"
+
+  - group: Text Styling and Block Editing
+    items:
+      - label: Bold selected text
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Italic selected text
+        keys: Ctrl+I
+        keys_by_os:
+          macos: Cmd+I
+      - label: Underline selected text
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+U
+      - label: Strikethrough selected text
+        keys: Ctrl+Shift+S
+        keys_by_os:
+          macos: Cmd+Shift+S
+      - label: Add link to selected text
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+      - label: Inline code on selection
+        keys: Ctrl+E
+        keys_by_os:
+          macos: Cmd+E
+      - label: Create comment
+        keys: Ctrl+Shift+M
+        keys_by_os:
+          macos: Cmd+Shift+M
+      - label: Indent block
+        keys: Tab
+      - label: Un-indent block
+        keys: Shift+Tab
+      - label: Change selected block type or color
+        keys: Ctrl+Slash
+        keys_by_os:
+          macos: Cmd+Slash
+        notes: Opens the block action box for convert, color, duplicate, move, and more.
+      - label: Duplicate selected blocks
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Move selected block
+        keys: Ctrl+Shift+Arrow keys
+        keys_by_os:
+          macos: Cmd+Shift+Arrow keys
+      - label: Apply last used text highlight color
+        keys: Ctrl+Shift+H
+        keys_by_os:
+          macos: Cmd+Shift+H
+      - label: Expand or collapse all toggles
+        keys: Ctrl+Alt+T
+        keys_by_os:
+          macos: Cmd+Option+T
+
+  - group: Block Selection and Navigation
+    items:
+      - label: Select current block
+        keys: Escape or Ctrl+A once
+        keys_by_os:
+          macos: Escape or Cmd+A once
+      - label: Expand block selection
+        keys: Shift+Up or Shift+Down
+      - label: Multi-select blocks with mouse
+        value: Shift+click range, or modifier plus click per platform
+      - label: Delete selected blocks
+        keys: Backspace or Delete
+      - label: Edit selected block
+        keys: Enter
+      - label: Activate current block
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Enter
+        notes: Opens nested page, toggles checkbox, expands toggle, or opens full-screen media depending on block type.
+      - label: Database peek previous item
+        keys: Ctrl+K on Windows Linux, Ctrl+Shift+K on macOS
+      - label: Database peek next item
+        keys: Ctrl+J on Windows Linux, Ctrl+Shift+J on macOS
+
+  - group: Mentions Links and Slash Workflows
+    items:
+      - label: Mention person page or date
+        value: "@"
+        notes: "Supports `@name`, `@page`, `@today`, `@tomorrow`, and full dates."
+      - label: Reminder
+        value: "@remind <date>"
+      - label: Page link
+        value: "[[Page Name]]"
+      - label: Create page with link-first picker
+        value: "[[New Page]]"
+        notes: "`[[` biases the chooser toward page linking."
+      - label: Create page with creation-first picker
+        value: "+New Page"
+        notes: "`+` biases the chooser toward page creation."
+      - label: Slash command trigger
+        keys: Slash
+      - label: Fast slash commands
+        value: /page /bullet /num /todo /toggle /quote /link /image /pdf /code /embed /toc /button /template /math
+      - label: Turn block command
+        value: "/turn"
+      - label: Color block command
+        value: "/color or /blue /blue background /default"
+
+  - group: Block Type Hotkeys
+    items:
+      - label: Text block
+        keys: Ctrl+Shift+0
+        keys_by_os:
+          macos: Cmd+Option+0
+      - label: H1
+        keys: Ctrl+Shift+1
+        keys_by_os:
+          macos: Cmd+Option+1
+      - label: H2
+        keys: Ctrl+Shift+2
+        keys_by_os:
+          macos: Cmd+Option+2
+      - label: H3
+        keys: Ctrl+Shift+3
+        keys_by_os:
+          macos: Cmd+Option+3
+      - label: To-do block
+        keys: Ctrl+Shift+4
+        keys_by_os:
+          macos: Cmd+Option+4
+      - label: Bulleted list
+        keys: Ctrl+Shift+5
+        keys_by_os:
+          macos: Cmd+Option+5
+      - label: Numbered list
+        keys: Ctrl+Shift+6
+        keys_by_os:
+          macos: Cmd+Option+6
+      - label: Toggle list
+        keys: Ctrl+Shift+7
+        keys_by_os:
+          macos: Cmd+Option+7
+      - label: Code block
+        keys: Ctrl+Shift+8
+        keys_by_os:
+          macos: Cmd+Option+8
+      - label: Turn block into page
+        keys: Ctrl+Shift+9
+        keys_by_os:
+          macos: Cmd+Option+9
+
+  - group: Databases Views and Modeling
+    items:
+      - label: Core database views
+        value: Table, Board, Timeline, Calendar, List, Gallery, Chart, Dashboard, Map, Feed
+      - label: Relations
+        value: Link rows between databases
+      - label: Rollups
+        value: Summarize related rows through a relation
+      - label: Connected properties
+        value: Pull external synced data into properties where supported
+      - label: Database templates
+        value: Pre-fill properties and page content for repeated item creation
+      - label: Unique ID property
+        value: Stable item identifier when databases need durable IDs
+      - label: Sub-items and dependencies
+        value: Built-in task hierarchy and dependency modeling
+      - label: Performance habit
+        value: Keep large databases filtered and ensure the first view is the one you actually use most often
+
+  - group: Formulas Relations and Rollups
+    items:
+      - label: Formula language
+        value: Spreadsheet-like formula language with Notion-specific functions
+      - label: Formula editor fit
+        value: Best for computed statuses dates text transforms and rollups of related data
+      - label: Relation plus rollup pattern
+        value: Link project rows to tasks, then roll up completion, due dates, or assignees
+      - label: Common formula use cases
+        value: Progress labels, overdue flags, sprint windows, formatted display text, automatic prioritization
+      - label: Error handling
+        value: Use common formula error docs when types or null values do not match expectations
+      - label: Formula docs
+        value: notion.com/help/formula-syntax
+
+  - group: Buttons Forms and Automations
+    items:
+      - label: Buttons
+        value: Trigger actions manually from a page or database
+      - label: Database buttons
+        value: Create or update related records directly from a row
+      - label: Database automations
+        value: Triggered workflows based on database changes
+      - label: Webhook actions
+        value: Call out to external systems from automations
+      - label: Forms
+        value: Capture structured input into a database
+      - label: Automation fit
+        value: Good for intake, routing, notifications, and status transitions inside operational workspaces
+      - label: Common pitfall
+        value: Complex automations become brittle if the underlying database model is still changing weekly
+
+  - group: Collaboration Sharing and Permissions
+    items:
+      - label: Members vs guests
+        value: Workspace members have broader access; guests are scoped to invited pages
+      - label: Comments mentions and reactions
+        value: Core collaboration surface for async review
+      - label: Suggested edits
+        value: Editorial workflow for docs and wikis
+      - label: Synced blocks
+        value: Reuse shared content in multiple locations while keeping one source of truth
+      - label: Teamspaces
+        value: Group pages by team or organizational scope
+      - label: Groups
+        value: Permission targets for shared access patterns
+      - label: Page analytics
+        value: View engagement and usage where available
+
+  - group: API Connections MCP and Developers
+    items:
+      - label: Notion API connections
+        value: Create integrations that can read or write authorized workspace content
+      - label: Developer platform
+        value: developers.notion.com and notion.dev
+      - label: Notion CLI beta
+        value: Official terminal surface for developer workflows
+      - label: Workers beta
+        value: Run custom code on the Notion developer platform
+      - label: Notion MCP
+        value: Connect MCP-capable AI apps directly to workspace content
+      - label: Notion MCP popular apps
+        value: Claude, Cursor, ChatGPT Pro, and any MCP-capable client
+      - label: MCP admin control path
+        value: Settings > Connections > Permissions
+      - label: MCP permissions model
+        value: MCP respects existing Notion permissions; it does not bypass them
+      - label: API and connections fit
+        value: External automation, internal tools, synchronized metadata, and AI-assisted content workflows
+
+  - group: Import Export Offline and Portability
+    items:
+      - label: Imports
+        value: Import from many external tools including Asana, Confluence, Monday.com, and common file formats
+      - label: Export
+        value: Export pages or workspace content for backup or migration
+      - label: Backups
+        value: Documented export and backup flows exist in the Help Center
+      - label: Offline supported surfaces
+        value: Desktop and mobile apps only
+      - label: Mark page available offline
+        value: Page menu > Available offline
+      - label: Offline database caveat
+        value: First 50 rows of the first view are downloaded with an offline database page
+      - label: Offline block caveat
+        value: Some advanced blocks such as embeds, AI blocks, forms, and buttons do not fully work offline
+      - label: Offline settings path
+        value: Settings > Offline
+      - label: Automatic offline downloads
+        value: Paid plans automatically download recent and favorited pages
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Shared docs, databases, wikis, lightweight PM, and AI-enhanced operational workspaces
+      - label: Common anti-pattern
+        value: Building overly abstract databases and automations before the team has stable real workflows
+      - label: Official help
+        value: notion.com/help
+      - label: CLI docs
+        value: notion.com/help/use-notion-from-your-terminal-with-notion-cli

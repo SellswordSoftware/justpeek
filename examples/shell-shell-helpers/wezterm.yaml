@@ -1,0 +1,126 @@
+name: WezTerm
+group: shell / shell helpers
+references:
+  - group: Core Usage
+    items:
+      - label: Launch terminal
+        command: wezterm
+        notes: Start the GUI terminal application normally.
+      - label: Show version
+        command: wezterm --version
+        notes: Confirm the installed build when debugging config or rendering issues.
+      - label: Start command directly
+        command: wezterm start -- bash -lc 'htop'
+        notes: Launch a specific command instead of the default shell.
+      - label: Open new window from CLI
+        command: wezterm cli spawn --new-window
+        notes: Use the CLI to create windows in a running WezTerm instance.
+      - label: Split current pane from CLI
+        command: wezterm cli split-pane --right
+        notes: Remote-control an existing mux session from the shell.
+
+  - group: Configuration
+    items:
+      - label: Default config location
+        value: ~/.wezterm.lua
+        notes: Main Lua config file used by WezTerm.
+      - label: Reload config
+        keys: Ctrl+Shift+R
+        notes: Default keybinding for hot-reloading configuration changes.
+      - label: Minimal config example
+        command: |
+          local wezterm = require 'wezterm'
+          return {
+            color_scheme = 'Catppuccin Mocha',
+            font = wezterm.font 'JetBrains Mono',
+            font_size = 12.0,
+          }
+        notes: Config is Lua code that returns a table of settings.
+      - label: Set default program
+        command: |
+          default_prog = { 'bash', '-l' }
+        notes: Override the shell or startup program explicitly.
+      - label: Set launch menu entry
+        command: |
+          launch_menu = {
+            { label = 'htop', args = { 'htop' } },
+          }
+        notes: Add custom launch targets to the new-tab or new-window UI.
+
+  - group: Panes, Tabs, and Windows
+    items:
+      - label: Split pane vertically
+        keys: Alt+Shift+5
+        notes: Default split action may vary by config; many users remap this early.
+      - label: Spawn new tab
+        keys: Ctrl+Shift+T
+        notes: Open another shell tab in the current window.
+      - label: Close current pane or tab
+        keys: Ctrl+Shift+W
+        notes: Usually prompts if processes are still running.
+      - label: Activate tab by index
+        keys: Alt+1..Alt+9
+        notes: Common default bindings for jumping directly between tabs.
+      - label: Toggle zoom for pane
+        keys: Ctrl+Shift+Z
+        notes: Focus on one pane temporarily without destroying the split layout.
+
+  - group: CLI, Mux, and Sessions
+    items:
+      - label: List clients and panes
+        command: wezterm cli list
+        notes: Inspect running panes, tabs, and windows in the local mux server.
+      - label: Send text to pane
+        command: wezterm cli send-text --pane-id <id> 'make test\n'
+        notes: Automate actions inside a running pane.
+      - label: Activate pane by id
+        command: wezterm cli activate-pane --pane-id <id>
+        notes: Focus a specific pane from scripts or helper commands.
+      - label: Rename current tab
+        command: wezterm cli set-tab-title 'server logs'
+        notes: Keep task-oriented tabs easier to scan.
+      - label: Connect to unix domain mux
+        command: wezterm connect unix
+        notes: Attach to a named mux domain when using remote or detached workflows.
+
+  - group: Appearance and Behavior
+    items:
+      - label: Set color scheme
+        command: |
+          color_scheme = 'Tokyo Night'
+        notes: Use a built-in or custom registered scheme name.
+      - label: Enable opacity
+        command: |
+          window_background_opacity = 0.92
+        notes: Transparency support depends on platform and compositor.
+      - label: Configure tab bar
+        command: |
+          enable_tab_bar = true
+          use_fancy_tab_bar = false
+        notes: Tune tab visuals between minimal and decorated styles.
+      - label: Set scrollback lines
+        command: |
+          scrollback_lines = 10000
+        notes: Increase retained terminal history for log-heavy workflows.
+      - label: Use leader key
+        command: |
+          leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+        notes: Popular setup for tmux-like chorded keybindings inside WezTerm.
+
+  - group: Troubleshooting and Discovery
+    items:
+      - label: Show debug overlay
+        keys: Ctrl+Shift+L
+        notes: Helpful when diagnosing rendering, FPS, or terminal state issues.
+      - label: Start with debug logging
+        command: WEZTERM_LOG=debug wezterm
+        notes: Emit verbose logs for config, mux, and rendering debugging.
+      - label: Check config errors
+        command: wezterm ls-fonts
+        notes: Often useful when validating font fallback and Nerd Font availability.
+      - label: Open docs from CLI
+        command: wezterm help
+        notes: Show the available subcommands and CLI help.
+      - label: Show effective config habits
+        value: Prefer small iterative config changes and hot-reload often.
+        notes: WezTerm config is executable Lua, so syntax mistakes can disable settings unexpectedly.

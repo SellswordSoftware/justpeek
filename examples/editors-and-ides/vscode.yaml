@@ -1,0 +1,287 @@
+name: VS Code
+group: editors and ides
+process:
+  - code
+  - Code
+  - code-insiders
+search_terms:
+  - visual studio code
+references:
+  - group: Navigation
+    items:
+      - label: Quick Open
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+        notes: Open a file by name.
+      - label: Command Palette
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+        notes: Open actions, commands, and settings.
+      - label: Go to line
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Ctrl+G
+        notes: Jump directly to a specific line number.
+      - label: Go to symbol in file
+        keys: Ctrl+Shift+O
+        keys_by_os:
+          macos: Cmd+Shift+O
+        notes: Search functions, classes, and symbols in the current file.
+      - label: Go to definition
+        keys: F12
+        notes: Jump to the definition of the symbol under the cursor.
+      - label: Peek definition
+        keys: Alt+F12
+        notes: Show the definition inline without leaving the current location.
+      - label: Go back
+        keys: Alt+LeftArrow
+        keys_by_os:
+          macos: Ctrl+Minus
+        notes: Return to the previous navigation location.
+      - label: Go forward
+        keys: Alt+RightArrow
+        keys_by_os:
+          macos: Ctrl+Shift+Minus
+        notes: Move forward after going back.
+
+  - group: Files and Workspace
+    items:
+      - label: New file
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: Open file
+        keys: Ctrl+O
+        keys_by_os:
+          macos: Cmd+O
+      - label: Save
+        keys: Ctrl+S
+        keys_by_os:
+          macos: Cmd+S
+      - label: Save all
+        keys: Ctrl+K+S
+        keys_by_os:
+          macos: Cmd+Option+S
+        notes: Save every dirty editor.
+      - label: Close editor
+        keys: Ctrl+W
+        keys_by_os:
+          macos: Cmd+W
+      - label: Reopen closed editor
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: New window
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: Open folder
+        keys: Ctrl+K+Ctrl+O
+        keys_by_os:
+          macos: Cmd+K+Cmd+O
+        notes: Open a project folder into the current window.
+
+  - group: Search and Replace
+    items:
+      - label: Find
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+      - label: Replace
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Option+F
+      - label: Find in files
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+      - label: Replace in files
+        keys: Ctrl+Shift+H
+        keys_by_os:
+          macos: Cmd+Shift+H
+      - label: Search modifiers
+        notes: Use the find widget controls when you need regex, match-case, or whole-word search.
+        search_terms:
+          - regex search
+          - whole word
+          - match case
+
+  - group: Editing
+    items:
+      - label: Format document
+        keys: Shift+Alt+F
+        keys_by_os:
+          macos: Shift+Option+F
+      - label: Quick fix / code actions
+        keys: Ctrl+Period
+        keys_by_os:
+          macos: Cmd+Period
+      - label: Rename symbol
+        keys: F2
+      - label: Toggle line comment
+        keys: Ctrl+Slash
+        keys_by_os:
+          macos: Cmd+Slash
+      - label: Toggle block comment
+        keys: Shift+Alt+A
+        keys_by_os:
+          macos: Shift+Option+A
+      - label: Move line up
+        keys: Alt+Up
+        keys_by_os:
+          macos: Option+Up
+      - label: Move line down
+        keys: Alt+Down
+        keys_by_os:
+          macos: Option+Down
+      - label: Copy line up
+        keys: Shift+Alt+Up
+        keys_by_os:
+          macos: Shift+Option+Up
+      - label: Copy line down
+        keys: Shift+Alt+Down
+        keys_by_os:
+          macos: Shift+Option+Down
+      - label: Delete line
+        keys: Ctrl+Shift+K
+        keys_by_os:
+          macos: Cmd+Shift+K
+      - label: Insert line below
+        keys: Ctrl+Enter
+        keys_by_os:
+          macos: Cmd+Enter
+      - label: Insert line above
+        keys: Ctrl+Shift+Enter
+        keys_by_os:
+          macos: Cmd+Shift+Enter
+      - label: Trigger suggestions
+        keys: Ctrl+Space
+        notes: Manually open IntelliSense.
+
+  - group: Multi-cursor and Selection
+    items:
+      - label: Add cursor above
+        keys: Ctrl+Alt+Up
+        keys_by_os:
+          macos: Cmd+Option+Up
+      - label: Add cursor below
+        keys: Ctrl+Alt+Down
+        keys_by_os:
+          macos: Cmd+Option+Down
+      - label: Add next match to selection
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Select all matches
+        keys: Ctrl+Shift+L
+        keys_by_os:
+          macos: Cmd+Shift+L
+      - label: Expand selection
+        keys: Shift+Alt+RightArrow
+        keys_by_os:
+          macos: Shift+Option+RightArrow
+      - label: Shrink selection
+        keys: Shift+Alt+LeftArrow
+        keys_by_os:
+          macos: Shift+Option+LeftArrow
+
+  - group: View and Panels
+    items:
+      - label: Toggle Sidebar
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+      - label: Toggle Panel
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+J
+      - label: Focus Explorer
+        keys: Ctrl+Shift+E
+        keys_by_os:
+          macos: Cmd+Shift+E
+      - label: Focus Search
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+      - label: Focus Source Control
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Ctrl+Shift+G
+      - label: Zen mode
+        keys: Ctrl+K+Z
+        notes: Toggle distraction-free editor mode.
+      - label: Split editor
+        keys: Ctrl+Backslash
+        keys_by_os:
+          macos: Cmd+Backslash
+      - label: Focus next editor group
+        keys: Ctrl+K+Ctrl+RightArrow
+        keys_by_os:
+          macos: Cmd+K+Cmd+RightArrow
+      - label: Focus previous editor group
+        keys: Ctrl+K+Ctrl+LeftArrow
+        keys_by_os:
+          macos: Cmd+K+Cmd+LeftArrow
+
+  - group: Terminal and Debug
+    items:
+      - label: Toggle integrated terminal
+        keys: Ctrl+Backtick
+        keys_by_os:
+          macos: Ctrl+Backtick
+      - label: New terminal
+        keys: Ctrl+Shift+Backtick
+        keys_by_os:
+          macos: Ctrl+Shift+Backtick
+      - label: Start or continue debugging
+        keys: F5
+      - label: Run without debugging
+        keys: Ctrl+F5
+        keys_by_os:
+          macos: Ctrl+F5
+      - label: Toggle breakpoint
+        keys: F9
+      - label: Step over
+        keys: F10
+      - label: Step into
+        keys: F11
+      - label: Step out
+        keys: Shift+F11
+
+  - group: CLI
+    items:
+      - label: Open current directory in VS Code
+        command: code .
+        notes: Launch the current folder as a workspace window.
+      - label: Open a specific file or folder
+        command: code <path>
+        notes: Open a file or folder directly from the terminal.
+      - label: Reuse the current window
+        command: code -r <path>
+        notes: Open the target in the last active VS Code window.
+      - label: Open a new window
+        command: code -n <path>
+        notes: Force the target to open in a new VS Code window.
+      - label: Wait for the editor to close
+        command: code --wait <path>
+        notes: Useful for Git commit editors and other blocking CLI flows.
+      - label: Compare two files
+        command: code --diff <file1> <file2>
+        notes: Open the built-in diff view.
+      - label: Merge conflict mode
+        command: code --merge <path1> <path2> <base> <result>
+        notes: Open VS Code's merge editor for a conflict workflow.
+      - label: Jump to file and line
+        command: code --goto <path>:<line>:<column>
+        notes: Open a file at a specific line and column.
+      - label: Install an extension
+        command: code --install-extension <publisher.extension>
+        notes: Install an extension by identifier from the command line.
+      - label: List installed extensions
+        command: code --list-extensions
+        notes: Print installed extensions for scripting or migration.
+      - label: Show CLI help
+        command: code --help
+        notes: Full command-line option reference.

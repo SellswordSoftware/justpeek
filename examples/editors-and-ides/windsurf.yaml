@@ -1,0 +1,79 @@
+name: Windsurf
+group: editors and ides
+process:
+  - windsurf
+  - Windsurf
+search_terms:
+  - codeium windsurf
+references:
+  - group: Core Editing
+    items:
+      - label: Quick Open
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Command Palette
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+      - label: Find in files
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+      - label: Rename symbol
+        keys: F2
+      - label: Toggle integrated terminal
+        keys: Ctrl+Backtick
+        keys_by_os:
+          macos: Ctrl+Backtick
+      - label: Toggle Sidebar
+        keys: Ctrl+B
+        keys_by_os:
+          macos: Cmd+B
+
+  - group: Cascade and AI
+    items:
+      - label: Open Cascade
+        command: "Windsurf: Focus Cascade"
+      - label: Use inline generation
+        command: "Windsurf: Inline Command"
+      - label: Ask across multiple files
+        value: Include the relevant file set explicitly before prompting.
+      - label: Review generated edits in diff form
+        value: Prefer diff-oriented review when Cascade touches several files.
+      - label: Re-anchor context after large changes
+        notes: AI context drifts fastest after automated multi-file rewrites.
+      - label: Fall back to command palette
+        value: Most Windsurf-specific actions are easiest to find by name.
+
+  - group: Project and Source Control
+    items:
+      - label: Open folder
+        keys: Ctrl+K Ctrl+O
+        keys_by_os:
+          macos: Cmd+K Cmd+O
+      - label: Split editor
+        keys: Ctrl+Backslash
+        keys_by_os:
+          macos: Cmd+Backslash
+      - label: Open source control
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Ctrl+Shift+G
+      - label: Run task
+        command: "Tasks: Run Task"
+      - label: Start debugging
+        keys: F5
+
+  - group: CLI and Config
+    items:
+      - label: Open current directory
+        command: windsurf .
+      - label: Open diff
+        command: windsurf --diff <left> <right>
+      - label: Wait for close
+        command: windsurf --wait <path>
+      - label: Settings model
+        value: Windsurf inherits a VS Code-like settings and extension layout.
+      - label: Extension compatibility
+        value: Many VS Code extensions work, but AI and editor integrations are product-specific.

@@ -1,0 +1,70 @@
+name: KDE Plasma
+group: os shortcuts
+search_terms:
+  - plasma
+  - kwin
+references:
+  - group: Launchers and Search
+    items:
+      - label: Application launcher
+        keys: Meta
+        notes: On current Plasma defaults, Meta opens the launcher when a launcher shortcut is assigned.
+      - label: Launcher fallback
+        keys: Alt+F1
+      - label: KRunner
+        keys: Alt+Space
+        notes: Common Plasma default even though many users remap Meta to KRunner instead.
+      - label: Rebind Meta to KRunner
+        value: "System Settings > Keyboard > Shortcuts or edit `~/.config/kwinrc`"
+      - label: Reload KWin after shortcut changes
+        command: qdbus org.kde.KWin /KWin reconfigure
+
+  - group: Windows and Virtual Desktops
+    items:
+      - label: Present windows
+        keys: Ctrl+F10
+      - label: Present windows on current desktop
+        keys: Ctrl+F9
+      - label: Show desktop
+        keys: Ctrl+F12
+      - label: Close window
+        keys: Alt+F4
+      - label: Maximize
+        keys: Meta+PgUp
+      - label: Minimize
+        keys: Meta+PgDown
+      - label: Move window
+        keys: Alt+F3 then M
+      - label: Resize window
+        keys: Alt+F3 then S
+      - label: Window operations menu
+        keys: Alt+F3
+
+  - group: Workspaces and Session
+    items:
+      - label: Switch activities or desktops
+        value: Highly configurable in System Settings > Keyboard > Shortcuts
+      - label: Lock screen
+        keys: Meta+L
+      - label: Logout dialog
+        keys: Ctrl+Alt+Delete
+      - label: Run command habit
+        value: KRunner is often the fastest way to launch apps, math, files, and unit conversions
+
+  - group: Configuration Paths
+    items:
+      - label: Shortcut settings area
+        value: System Settings > Keyboard > Shortcuts
+      - label: Modifier-only shortcut config
+        value: ~/.config/kwinrc
+      - label: Use Meta for launcher
+        value: Activate Application Launcher can be bound in Plasma Workspace shortcuts
+      - label: Use Meta for KRunner
+        command: |
+          kwriteconfig5 --file ~/.config/kwinrc --group ModifierOnlyShortcuts --key Meta "org.kde.kglobalaccel,/component/krunner_desktop,org.kde.kglobalaccel.Component,invokeShortcut,_launch"
+          qdbus org.kde.KWin /KWin reconfigure
+
+  - group: Practical Reminder
+    items:
+      - label: Plasma defaults vary more than GNOME
+        value: Plasma is extremely configurable; the most useful reference is often where to inspect or rebind the shortcut

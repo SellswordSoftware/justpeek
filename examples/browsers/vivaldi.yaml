@@ -1,0 +1,117 @@
+name: Vivaldi
+group: browsers
+process:
+  - vivaldi
+  - vivaldi-bin
+  - vivaldi.exe
+references:
+  - group: Tabs and Windows
+    items:
+      - label: New tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Reopen closed tab
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: New window
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: New private window
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: Tile selected tabs
+        notes: Vivaldi's tab tiling is one of its strongest research and multitasking features.
+
+  - group: Navigation and Page
+    items:
+      - label: Focus address bar
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Reload
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Back
+        keys: Alt+LeftArrow
+        keys_by_os:
+          macos: Cmd+LeftBracket
+      - label: Forward
+        keys: Alt+RightArrow
+        keys_by_os:
+          macos: Cmd+RightBracket
+      - label: Find in page
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+
+  - group: Panels, Workspaces, and Side UI
+    items:
+      - label: Toggle panel
+        keys: F4
+        notes: Show or hide Vivaldi's side panel area.
+      - label: Open downloads panel
+        keys: Ctrl+Shift+D
+        notes: Panel shortcuts are a key part of Vivaldi's workflow model.
+      - label: Use workspaces
+        notes: Split tab sets by project or context instead of keeping one giant strip.
+      - label: Open notes panel
+        notes: Built-in notes are useful for research capture without leaving the browser.
+      - label: Toggle full-screen UI
+        keys: F11
+        keys_by_os:
+          macos: Ctrl+Cmd+F
+
+  - group: Tab Management
+    items:
+      - label: Quick Commands
+        keys: F2
+        notes: Search commands, tabs, bookmarks, and history from one command palette.
+      - label: Cycle recent tabs
+        keys: Ctrl+Tab
+        keys_by_os:
+          macos: Ctrl+Tab
+      - label: Stack tabs
+        notes: Group related tabs into stacks to reduce strip clutter.
+      - label: Rename or hibernate tab stack
+        notes: Tab stacks support persistence and memory-saving workflows in larger sessions.
+      - label: Tab search
+        notes: Use Quick Commands or window panel for buried-tab recovery.
+
+  - group: Privacy, Sessions, and Capture
+    items:
+      - label: Open history
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Y
+      - label: Open downloads
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+Shift+J
+      - label: Capture page screenshot
+        notes: Built-in page capture can export visible area or full page.
+      - label: Save session
+        notes: Session save and restore is useful for project-specific browser state.
+      - label: Clear browsing data
+        keys: Ctrl+Shift+Delete
+        keys_by_os:
+          macos: Cmd+Shift+Backspace
+
+  - group: DevTools and Customization
+    items:
+      - label: Toggle DevTools
+        keys: Ctrl+Shift+I
+        keys_by_os:
+          macos: Cmd+Option+I
+      - label: Open command chains
+        notes: Vivaldi command chains let you compose repeatable browser actions.
+      - label: Edit keyboard shortcuts
+        notes: Vivaldi is unusually customizable; many defaults are worth remapping intentionally.
+      - label: Theme scheduling
+        notes: Themes can be switched automatically by time or context for long daily use.
+      - label: Show help
+        notes: Vivaldi's differentiators are panels, tab stacks, workspaces, and command layers rather than raw page navigation alone.

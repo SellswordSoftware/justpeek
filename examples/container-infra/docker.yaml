@@ -1,0 +1,113 @@
+name: Docker
+group: container / infra
+process:
+  - docker
+  - docker.exe
+references:
+  - group: Images and Builds
+    items:
+      - label: Build image from Dockerfile
+        command: docker build -t myapp:dev .
+        notes: Build an image from the current directory context and tag it.
+      - label: Pull image
+        command: docker pull postgres:16
+        notes: Download an image from the configured registry.
+      - label: List local images
+        command: docker images
+        notes: Show locally cached image repositories, tags, and sizes.
+      - label: Remove image
+        command: docker rmi myapp:dev
+        notes: Delete one or more local images when no longer needed.
+      - label: Inspect image layers and config
+        command: docker image inspect myapp:dev
+        notes: Show metadata such as entrypoint, env vars, labels, and layers.
+
+  - group: Containers and Runtime
+    items:
+      - label: Run interactive container
+        command: docker run --rm -it ubuntu:24.04 bash
+        notes: Start a disposable shell inside a new container.
+      - label: Run detached service container
+        command: docker run -d --name db -p 5432:5432 postgres:16
+        notes: Start a background container and expose its service port.
+      - label: List running containers
+        command: docker ps
+        notes: Show only currently running containers.
+      - label: List all containers
+        command: docker ps -a
+        notes: Include stopped containers for troubleshooting and cleanup.
+      - label: Stop and remove container
+        command: docker rm -f db
+        notes: Force-stop and delete a container in one command.
+
+  - group: Logs, Exec, and Inspection
+    items:
+      - label: Follow container logs
+        command: docker logs -f web
+        notes: Stream stdout and stderr from a running container.
+      - label: Exec shell in container
+        command: docker exec -it web sh
+        notes: Open a shell inside an already running container.
+      - label: Inspect container metadata
+        command: docker inspect web
+        notes: Show runtime config, mounts, networking, and state.
+      - label: Show container resource usage
+        command: docker stats
+        notes: Stream CPU, memory, network, and block I/O metrics.
+      - label: Show container processes
+        command: docker top web
+        notes: List processes running inside the container.
+
+  - group: Volumes, Networks, and Data
+    items:
+      - label: Create named volume
+        command: docker volume create pgdata
+        notes: Persist container data outside the writable container layer.
+      - label: Mount bind volume
+        command: docker run --rm -v "$PWD":/app -w /app node:20 npm test
+        notes: Bind the current directory into a container for local dev workflows.
+      - label: List volumes
+        command: docker volume ls
+        notes: Show named volumes managed by Docker.
+      - label: Create custom network
+        command: docker network create app-net
+        notes: Isolate related containers on a shared user-defined network.
+      - label: Inspect network
+        command: docker network inspect app-net
+        notes: Show connected containers, subnets, and bridge details.
+
+  - group: Cleanup and System Maintenance
+    items:
+      - label: Remove stopped containers
+        command: docker container prune
+        notes: Delete all stopped containers after confirmation.
+      - label: Remove unused images
+        command: docker image prune -a
+        notes: Free space by deleting images not referenced by any container.
+      - label: Remove unused volumes
+        command: docker volume prune
+        notes: Delete dangling volumes not referenced by containers.
+      - label: Full system cleanup
+        command: docker system prune -a
+        notes: Aggressively clean unused containers, images, networks, and build cache.
+      - label: Show disk usage
+        command: docker system df
+        notes: Inspect how disk space is being consumed by Docker resources.
+
+  - group: Common Workflows
+    items:
+      - label: Tag and push image
+        command: docker tag myapp:dev registry.example.com/myapp:dev && docker push registry.example.com/myapp:dev
+        notes: Standard registry publish flow for built images.
+      - label: Buildx multi-arch build
+        command: docker buildx build --platform linux/amd64,linux/arm64 -t registry.example.com/myapp:latest --push .
+        notes: Common flow for publishing multi-architecture images.
+      - label: Copy files from container
+        command: docker cp web:/app/log.txt ./log.txt
+        notes: Extract artifacts or logs from a container filesystem.
+      - label: Save and load image archive
+        command: docker save myapp:dev -o myapp.tar && docker load -i myapp.tar
+        notes: Move images between systems without using a registry.
+      - label: Show help
+        command: docker --help
+        notes: Docker's command surface is broad across images, containers, networks, volumes, and builders.

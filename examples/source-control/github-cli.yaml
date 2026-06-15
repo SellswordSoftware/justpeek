@@ -1,0 +1,194 @@
+name: GitHub CLI
+group: source control
+references:
+  - group: Authentication and Setup
+    items:
+      - label: Log in
+        command: gh auth login
+        notes: Authenticate the CLI with GitHub.com or a GitHub Enterprise host.
+      - label: Check auth status
+        command: gh auth status
+        notes: Confirm the active host, account, and token scopes.
+      - label: Refresh auth scopes
+        command: gh auth refresh -s repo,read:org,workflow
+        notes: Expand token scopes when new commands need additional access.
+      - label: Configure git protocol
+        command: gh auth setup-git
+        notes: Set up git to use the same authenticated GitHub credentials.
+      - label: Set a repo context
+        command: gh repo set-default <owner/repo>
+        notes: Avoid repeating `-R` in later commands.
+      - label: Print auth token
+        command: gh auth token
+        notes: Emit the active token for controlled shell integrations.
+
+  - group: Repository Work
+    items:
+      - label: Clone a repository
+        command: gh repo clone <owner/repo>
+        notes: Clone directly from GitHub using the current auth context.
+      - label: Create a repository
+        command: gh repo create
+        notes: Create a new repo interactively and optionally push local content.
+      - label: Fork the current repository
+        command: gh repo fork
+        notes: Create your fork and optionally add an upstream remote.
+      - label: Sync fork with upstream
+        command: gh repo sync
+        notes: Update the default branch of a fork from its parent repository.
+      - label: View repository details
+        command: gh repo view
+        notes: Show repository metadata, visibility, description, and URLs.
+      - label: Open current repo in browser
+        command: gh repo view --web
+        notes: Jump from terminal context back to the web UI.
+
+  - group: Pull Requests
+    items:
+      - label: Create a pull request
+        command: gh pr create
+        notes: Open the interactive flow for title, body, base branch, and reviewers.
+      - label: List pull requests
+        command: gh pr list
+        notes: Filter current PR queues without opening the browser.
+      - label: Check out a pull request
+        command: gh pr checkout <number>
+        notes: Fetch the PR branch locally and switch to it.
+      - label: View pull request details
+        command: gh pr view <number>
+        notes: Show status, reviewers, checks, and linked metadata.
+      - label: Show pull request diff
+        command: gh pr diff <number>
+        notes: Inspect the PR patch from the terminal.
+      - label: View pull request checks
+        command: gh pr checks <number>
+        notes: Summarize CI and required status checks for a PR.
+      - label: Review a pull request
+        command: gh pr review <number> --approve
+        notes: Approve, comment on, or request changes from the CLI.
+      - label: Update branch from base
+        command: gh pr update-branch <number>
+        notes: Bring a PR branch up to date with its base branch.
+      - label: Merge a pull request
+        command: gh pr merge <number>
+        notes: Merge from the terminal once approvals and checks are complete.
+      - label: Revert a merged pull request
+        command: gh pr revert <number>
+        notes: Create a revert PR for a merged change.
+
+  - group: Issues and Project Work
+    items:
+      - label: Create an issue
+        command: gh issue create
+        notes: Open a new issue from prompts or flags.
+      - label: List open issues
+        command: gh issue list
+        notes: Review current issue queues without opening the browser.
+      - label: View issue details
+        command: gh issue view <number>
+        notes: Show labels, assignees, linked PRs, and current state.
+      - label: Comment on an issue
+        command: gh issue comment <number> --body "<text>"
+        notes: Add follow-up context or status from the terminal.
+      - label: Edit an issue
+        command: gh issue edit <number>
+        notes: Change title, labels, assignees, milestones, or body text.
+      - label: Check issue status across repos
+        command: gh issue status
+        notes: See issues assigned to you and issues you are involved in.
+      - label: Create a project
+        command: gh project create --owner <owner> --title "<title>"
+        notes: Create a GitHub Projects v2 board from the CLI.
+      - label: View project items
+        command: gh project item-list <project-number> --owner <owner>
+        notes: Inspect GitHub Projects v2 items from the terminal.
+      - label: Add issue or PR to a project
+        command: gh project item-add <project-number> --owner <owner> --url <item-url>
+        notes: Attach work items to a project board explicitly.
+
+  - group: Actions and Releases
+    items:
+      - label: List workflow runs
+        command: gh run list
+        notes: See recent GitHub Actions runs for the current repository.
+      - label: Watch a workflow run
+        command: gh run watch <run-id>
+        notes: Stream status updates until the workflow finishes.
+      - label: Rerun a workflow run
+        command: gh run rerun <run-id>
+        notes: Retry an existing run without opening Actions in the browser.
+      - label: View failed run logs
+        command: gh run view <run-id> --log-failed
+        notes: Inspect only failed jobs when triaging CI problems.
+      - label: List workflows
+        command: gh workflow list
+        notes: Inspect available workflow definitions for the current repo.
+      - label: Run a workflow manually
+        command: gh workflow run "<workflow>"
+        notes: Dispatch a workflow that supports manual triggers.
+      - label: Create a release
+        command: gh release create <tag>
+        notes: Publish a release with notes and attached assets.
+      - label: List releases
+        command: gh release list
+        notes: Review recent published releases and draft state.
+      - label: Download release assets
+        command: gh release download <tag>
+        notes: Pull release artifacts locally for inspection or deployment.
+
+  - group: Search and API
+    items:
+      - label: Search repositories
+        command: gh search repos "<query>"
+        notes: Find repositories by name, topic, language, or stars.
+      - label: Search pull requests
+        command: gh search prs "<query>"
+        notes: Query PRs across repositories with GitHub search syntax.
+      - label: Search issues
+        command: gh search issues "<query>"
+        notes: Useful for cross-repo triage and duplicate discovery.
+      - label: Call the GitHub API
+        command: gh api repos/<owner>/<repo>
+        notes: Reach REST endpoints directly when higher-level commands are missing.
+      - label: Use GraphQL through gh
+        command: gh api graphql -f query='query { viewer { login } }'
+        notes: Query GraphQL from the CLI for custom automation.
+
+  - group: Extensions and Aliases
+    items:
+      - label: Search extensions
+        command: gh extension search <keyword>
+        notes: Find community or internal extensions for specialized workflows.
+      - label: Install an extension
+        command: gh extension install <owner/gh-extension>
+        notes: Add new subcommands to gh.
+      - label: List installed extensions
+        command: gh extension list
+        notes: Audit the custom commands available in your environment.
+      - label: Create an alias
+        command: gh alias set <name> '<expansion>'
+        notes: Save repeated command pipelines behind a short custom name.
+      - label: List aliases
+        command: gh alias list
+        notes: Review the shorthand commands configured for your account.
+
+  - group: Gists, Secrets, and Variables
+    items:
+      - label: Create a gist
+        command: gh gist create <file>
+        notes: Publish a snippet directly from local files.
+      - label: List gists
+        command: gh gist list
+        notes: Review your existing gists from the terminal.
+      - label: Set an Actions secret
+        command: gh secret set <name>
+        notes: Add a repository, environment, or organization secret securely.
+      - label: List secrets
+        command: gh secret list
+        notes: Confirm which secret names exist without revealing values.
+      - label: Set a variable
+        command: gh variable set <name>
+        notes: Store non-secret configuration for workflows or repo automation.
+      - label: List variables
+        command: gh variable list
+        notes: Inspect configured variable names and scopes.

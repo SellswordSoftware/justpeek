@@ -1,0 +1,110 @@
+name: choco
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Search packages
+        command: choco search ripgrep
+        notes: Search package names and package metadata in configured feeds.
+      - label: Install package
+        command: choco install ripgrep -y
+        notes: `-y` accepts prompts automatically for unattended installs.
+      - label: Upgrade one package
+        command: choco upgrade git -y
+        notes: Update a single installed package.
+      - label: Upgrade all packages
+        command: choco upgrade all -y
+        notes: Apply all available upgrades across installed Chocolatey packages.
+      - label: Uninstall package
+        command: choco uninstall ripgrep -y
+        notes: Remove the package non-interactively.
+
+  - group: Discovery and Inventory
+    items:
+      - label: List local packages
+        command: choco list --local-only
+        notes: Show packages installed through Chocolatey.
+      - label: Show package info
+        command: choco info git
+        notes: Display version history, summary, and package metadata.
+      - label: Check outdated packages
+        command: choco outdated
+        notes: Review upgrade candidates before bulk changes.
+      - label: Search exact package ID
+        command: choco search ripgrep --exact
+        notes: Narrow ambiguous search results to one package.
+      - label: Show feature settings
+        command: choco feature list
+        notes: Inspect Chocolatey behavior flags that affect installs and upgrades.
+
+  - group: Sources and Configuration
+    items:
+      - label: List sources
+        command: choco source list
+        notes: Show configured package feeds and whether they are enabled.
+      - label: Add source
+        command: choco source add -n=internal -s='https://packages.contoso.example/chocolatey'
+        notes: Register a private feed for internal packages.
+      - label: Disable source
+        command: choco source disable -n=internal
+        notes: Keep a source configured but temporarily inactive.
+      - label: Remove source
+        command: choco source remove -n=internal
+        notes: Delete a configured source definition.
+      - label: Set config value
+        command: choco config set cacheLocation C:\\choco-cache
+        notes: Persist configuration changes through Chocolatey's config system.
+
+  - group: Install Control and Scripts
+    items:
+      - label: Install specific version
+        command: choco install nodejs --version=20.11.1 -y
+        notes: Pin a precise version for compatibility or reproducibility.
+      - label: Reinstall package
+        command: choco install git --force -y
+        notes: Force a reinstall even when Chocolatey believes the package is already present.
+      - label: Ignore checksums once
+        command: choco install package --ignore-checksums -y
+        notes: Expedient for broken package metadata, but weaker from a supply-chain perspective.
+      - label: Pass installer arguments
+        command: choco install 7zip --install-arguments '"/S"' -y
+        notes: Forward package-specific installer switches when needed.
+      - label: Download package without install
+        command: choco download ripgrep --internalize
+        notes: Useful for offline prep or private-feed packaging workflows.
+
+  - group: Maintenance and Troubleshooting
+    items:
+      - label: Clean package cache
+        command: choco clean --yes
+        notes: Remove cached package files and reduce disk usage.
+      - label: Pin package
+        command: choco pin add -n=git
+        notes: Prevent one package from being upgraded in bulk operations.
+      - label: Remove pin
+        command: choco pin remove -n=git
+        notes: Allow future upgrades again.
+      - label: Show logs path
+        command: choco config get logLocation
+        notes: Find the log directory for deeper failure inspection.
+      - label: Enable verbose logs
+        command: choco install git -y --verbose --debug
+        notes: Emit more detailed logs for resolver or installer issues.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap developer tools
+        command: choco install git ripgrep fd bat 7zip -y
+        notes: Typical workstation setup batch.
+      - label: Refresh and upgrade all
+        command: choco outdated && choco upgrade all -y
+        notes: Review candidates first, then apply the full upgrade sweep.
+      - label: Export installed packages
+        command: choco export
+        notes: Available in some environments or extensions for capturing package state.
+      - label: Validate package script behavior
+        command: choco install package -y --what-if
+        notes: Preview some actions without executing the full transaction.
+      - label: Show help
+        command: choco -?
+        notes: Chocolatey's built-in help and per-command help are useful because flags can be dense.

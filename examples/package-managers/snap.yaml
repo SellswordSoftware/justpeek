@@ -1,0 +1,110 @@
+name: snap
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Find packages
+        command: snap find firefox
+        notes: Search the Snap Store catalog by name or keyword.
+      - label: Install a snap
+        command: sudo snap install firefox
+        notes: Install a package from the default snap channel track.
+      - label: Refresh installed snaps
+        command: sudo snap refresh
+        notes: Update installed snaps to their newest eligible revisions.
+      - label: Refresh one snap
+        command: sudo snap refresh firefox
+        notes: Limit updates to one installed package.
+      - label: Remove a snap
+        command: sudo snap remove firefox
+        notes: Uninstall an installed snap package.
+
+  - group: Discovery and Inventory
+    items:
+      - label: List installed snaps
+        command: snap list
+        notes: Show installed snaps, versions, revisions, and tracking channels.
+      - label: Show snap info
+        command: snap info firefox
+        notes: Display publisher, channels, commands, and package description.
+      - label: Show services provided by snap
+        command: snap services
+        notes: List background daemons managed by installed snaps.
+      - label: Show connection interfaces
+        command: snap connections firefox
+        notes: Inspect granted and available interfaces for one snap.
+      - label: Show changes
+        command: snap changes
+        notes: Review recent snap operations and their status.
+
+  - group: Channels, Revisions, and Control
+    items:
+      - label: Install from channel
+        command: sudo snap install node --channel=20/stable
+        notes: Specify track and risk level explicitly when needed.
+      - label: Switch channel
+        command: sudo snap refresh node --channel=22/stable
+        notes: Move an installed snap to a different track or risk channel.
+      - label: Revert to previous revision
+        command: sudo snap revert firefox
+        notes: Roll back to the prior installed revision if a refresh caused trouble.
+      - label: Hold refreshes
+        command: sudo snap refresh --hold=24h
+        notes: Temporarily defer automatic snap updates.
+      - label: Resume refreshes
+        command: sudo snap refresh --unhold
+        notes: Remove a previously configured refresh hold.
+
+  - group: Services and Interfaces
+    items:
+      - label: Start snap service
+        command: sudo snap start lxd
+        notes: Start a daemon exposed by an installed snap.
+      - label: Stop snap service
+        command: sudo snap stop lxd
+        notes: Stop a managed snap daemon.
+      - label: Restart snap service
+        command: sudo snap restart lxd
+        notes: Bounce one snap-managed service.
+      - label: Connect interface
+        command: sudo snap connect firefox:camera
+        notes: Grant an available interface connection when auto-connect did not happen.
+      - label: Disconnect interface
+        command: sudo snap disconnect firefox:camera
+        notes: Revoke an interface connection manually.
+
+  - group: Troubleshooting and State
+    items:
+      - label: Inspect one change
+        command: snap tasks <change-id>
+        notes: Drill into one change record to see why it failed or stalled.
+      - label: Acknowledge assertions
+        command: snap ack package.assert
+        notes: Import a snap assertion file, often part of offline or signed workflows.
+      - label: Install local snap file
+        command: sudo snap install ./package.snap --dangerous
+        notes: Install unsigned local snap builds for testing.
+      - label: Show snap logs
+        command: snap logs firefox
+        notes: Read service or runtime logs associated with a snap.
+      - label: Show debug sandbox info
+        command: snap debug confinement firefox
+        notes: Inspect confinement state when permissions or access are in question.
+
+  - group: Common Workflows
+    items:
+      - label: Track current channel usage
+        command: snap list
+        notes: Installed snaps show the channel they are following.
+      - label: Check pending updates
+        command: snap refresh --list
+        notes: Review what would refresh before running a full update.
+      - label: Use classic confinement
+        command: sudo snap install code --classic
+        notes: Some snaps require classic confinement for broader host access.
+      - label: Use beta channel for testing
+        command: sudo snap install package --beta
+        notes: Shortcut for selecting a less stable risk channel.
+      - label: Show help
+        command: snap help
+        notes: Snap command help is useful because channels, services, and interfaces interact in non-obvious ways.

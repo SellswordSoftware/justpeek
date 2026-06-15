@@ -173,16 +173,31 @@ function getItemKind(item, displayKeys = item.keys) {
 
 /**
  * @param {PanelItem} item
+ * @param {string} itemKey
  * @param {string[]=} displayKeys
  * @returns {string}
  */
-function renderBody(item, displayKeys = item.keys) {
+function renderBody(item, itemKey, displayKeys = item.keys) {
   const value = item.value?.trim();
   const command = item.command?.trim();
   const itemKind = getItemKind(item, displayKeys);
   const valueMarkup = value ? `<p class="peek-item__value">${text(value)}</p>` : "";
   const commandMarkup = command
-    ? `<code class="peek-item__value peek-item__value--command">${text(command)}</code>`
+    ? `
+        <div class="peek-item__command-wrap">
+          <code class="peek-item__value peek-item__value--command">${text(command)}</code>
+          <button
+            type="button"
+            class="peek-item__command-copy"
+            data-copy-value="${text(command)}"
+            data-copy-item-key="${text(itemKey)}"
+            aria-label="Copy command"
+            title="Copy command"
+          >
+            <span class="icon-mask peek-item__command-copy-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      `
     : "";
   const notesMarkup = item.notes ? `<p class="peek-item__notes">${text(item.notes)}</p>` : "";
   const actionMarkup = item.url
@@ -803,6 +818,19 @@ export function createPanel(data, options = {}) {
         }),
         listener(groupsHost, "click", (event) => {
           const target = event.target instanceof HTMLElement ? event.target : null;
+          const copyTarget = target?.closest("[data-copy-value]");
+          if (copyTarget instanceof HTMLElement) {
+            const copyValue = copyTarget.getAttribute("data-copy-value");
+            const itemKey = copyTarget.getAttribute("data-copy-item-key");
+            if (copyValue) {
+              copyValueToClipboard(copyValue);
+              if (itemKey) {
+                flashCopiedItem(itemKey);
+              }
+            }
+            return;
+          }
+
           const urlTarget = target?.closest("[data-item-url]");
           if (urlTarget instanceof HTMLElement) {
             const url = urlTarget.getAttribute("data-item-url");
@@ -844,8 +872,25 @@ export function createPanel(data, options = {}) {
           const copiedKey = copiedItemKey();
           const collapsed = collapsedGroups();
           const currentStatus = statusMessage();
+          const previousScrollTop = groupsHost.scrollTop;
+          const previousScrollLeft = groupsHost.scrollLeft;
 
           title.textContent = appData().app_name;
+
+          const restoreScrollState = () => {
+            queueMicrotask(() => {
+              groupsHost.scrollTop = previousScrollTop;
+              groupsHost.scrollLeft = previousScrollLeft;
+
+              const activeEntry = groupsHost.querySelector("[data-active-entry='true']");
+              if (activeEntry instanceof HTMLElement) {
+                activeEntry.scrollIntoView({
+                  block: "nearest",
+                  inline: "nearest",
+                });
+              }
+            });
+          };
 
           if (currentMode === "picker") {
             const groups = visiblePickerGroups();
@@ -907,6 +952,7 @@ export function createPanel(data, options = {}) {
                       })
                       .join("")}
                   `;
+            restoreScrollState();
             return;
           }
 
@@ -942,7 +988,7 @@ export function createPanel(data, options = {}) {
                             );
                             const primaryDisplayKeys = displayKeySets[0]?.keys ?? [];
                             const itemKind = getItemKind(item, primaryDisplayKeys);
-                            return `
+                            return /*html*/`
                               <article
                                 class="peek-item peek-item--${itemKind}${isHighlighted ? " peek-item--highlighted" : ""}${isCopied ? " peek-item--copied" : ""}"
                                 ${isHighlighted ? 'data-active-entry="true"' : ""}
@@ -956,12 +1002,11 @@ export function createPanel(data, options = {}) {
                                     aria-label="Open link"
                                     title="Open link"
                                   >
-                                    <span class="peek-item__action-label">Open</span>
                                     <span class="icon-mask peek-item__action-icon" aria-hidden="true"></span>
                                   </button>` : ""}
                                 </div>
                                 ${displayKeySets.length > 0 ? `<div class="peek-item__keys${displayKeySets.length > 1 ? " peek-item__keys--stacked" : ""}">${renderDisplayKeySets(displayKeySets)}</div>` : ""}
-                                ${renderBody(item, primaryDisplayKeys)}
+                                ${renderBody(item, itemKey, primaryDisplayKeys)}
                               </article>
                             `;
                           })
@@ -984,15 +1029,7 @@ export function createPanel(data, options = {}) {
                   })
                   .join("");
 
-          queueMicrotask(() => {
-            const activeEntry = groupsHost.querySelector("[data-active-entry='true']");
-            if (activeEntry instanceof HTMLElement) {
-              activeEntry.scrollIntoView({
-                block: "nearest",
-                inline: "nearest",
-              });
-            }
-          });
+          restoreScrollState();
         }),
       );
       ctx.cleanup.add(() => {

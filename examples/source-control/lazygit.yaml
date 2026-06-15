@@ -1,0 +1,58 @@
+name: Lazygit
+group: source control
+process:
+  - wezterm
+  - alacritty
+  - gnome-terminal
+  - kitty
+  - ghostty
+title_contains: lazygit
+references:
+  - group: Navigation
+    items:
+      - label: Move selection down
+        keys: J
+      - label: Move selection up
+        keys: K
+      - label: Next panel
+        keys: RightArrow
+        notes: Move focus across Lazygit panes.
+      - label: Previous panel
+        keys: LeftArrow
+
+  - group: Common Actions
+    items:
+      - label: Stage file or hunk
+        keys: Space
+        notes: Toggle staged state for the selected file or hunk.
+      - label: Commit staged changes
+        keys: C
+        notes: Open the commit prompt for staged work.
+      - label: Push to remote
+        keys: P
+        notes: Push the current branch using the configured remote.
+      - label: Pull from remote
+        keys: Shift+P
+        notes: Fetch and integrate upstream changes.
+
+  - group: Branches and History
+    items:
+      - label: Create a new branch
+        keys: N
+        notes: Available from the branches panel.
+      - label: Checkout selected branch
+        keys: Space
+        notes: In the branches panel, switch to the highlighted branch.
+      - label: Open commit details
+        keys: Enter
+        notes: Drill into the selected commit, file, or branch details.
+      - label: Open reflog
+        notes: Use the command palette or custom command flow when you need recovery history.
+
+  - group: Help
+    items:
+      - label: Toggle help menu
+        keys: QuestionMark
+        notes: Show current keybindings inside Lazygit.
+      - label: Quit Lazygit
+        keys: Q

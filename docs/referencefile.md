@@ -218,6 +218,25 @@ A good entry is short, scannable, and searchable.
   url: https://git-scm.com/docs/git-revert
 ```
 
+### Good multi-line notes entry
+
+```yaml
+- label: Incident handoff
+  notes: |
+    Check the dashboard first.
+    Then review the most recent deploy.
+    Escalate if error rate is still rising.
+```
+
+### Good multi-line command entry
+
+```yaml
+- label: Release steps
+  command: |
+    git tag -a v1.2.3 -m "Release v1.2.3"
+    git push --tags
+```
+
 ## Authoring Tips
 
 ### Keep labels short
@@ -236,6 +255,8 @@ For people references, `value` can be a role or team.
 
 Anything defined under `command` renders in a command block in the panel. `value` does not.
 
+If you want visible line breaks in the command block, write `command` as a YAML block with `|`. JustPeek preserves those line breaks when rendering.
+
 ### Use `url` for source material
 
 If an entry has a canonical doc page, runbook, or profile, store it in `url`.
@@ -253,6 +274,8 @@ In the panel, entries with a `url` show an `Open` action that launches the link 
 ### Use `notes` for context, not duplication
 
 Good `notes` add useful guidance.
+
+If you want visible line breaks in the panel, write `notes` as a YAML block with `|`. JustPeek preserves those line breaks when rendering.
 
 Weak:
 

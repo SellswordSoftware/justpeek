@@ -1,0 +1,110 @@
+name: curl
+group: shell / shell helpers
+references:
+  - group: Core Requests
+    items:
+      - label: Simple GET request
+        command: curl https://example.com
+        notes: Fetch a URL and print the response body to stdout.
+      - label: Follow redirects
+        command: curl -L https://example.com
+        notes: Required for endpoints that respond with 3xx redirects before the final content.
+      - label: Show response headers
+        command: curl -i https://example.com
+        notes: Include headers inline with the response body.
+      - label: Headers only
+        command: curl -I https://example.com
+        notes: Send a HEAD request to inspect metadata without downloading the body.
+      - label: Save response to file
+        command: curl -o page.html https://example.com
+        notes: Write the response body to a chosen output path.
+
+  - group: Methods and Payloads
+    items:
+      - label: Explicit POST request
+        command: curl -X POST https://api.example.com/items
+        notes: Set a specific HTTP method when the default GET is not appropriate.
+      - label: Submit form fields
+        command: curl -X POST -d 'name=alice&role=admin' https://api.example.com/users
+        notes: Sends URL-encoded form data by default.
+      - label: Send JSON body
+        command: curl -X POST https://api.example.com/items -H 'Content-Type: application/json' -d '{"name":"demo"}'
+        notes: Common API pattern for structured request payloads.
+      - label: Read request body from file
+        command: curl -X POST https://api.example.com/items -H 'Content-Type: application/json' --data @payload.json
+        notes: Keeps larger request bodies out of shell history and quoting trouble.
+      - label: Use PUT with file upload body
+        command: curl -T archive.tar.gz https://uploads.example.com/archive.tar.gz
+        notes: `-T` uploads a local file as the request body.
+
+  - group: Headers, Auth, and Cookies
+    items:
+      - label: Add a custom header
+        command: curl -H 'X-Request-ID: demo-123' https://api.example.com
+        notes: Repeat `-H` for multiple headers.
+      - label: Bearer token auth
+        command: curl -H 'Authorization: Bearer $TOKEN' https://api.example.com/me
+        notes: Common pattern for REST APIs and service tokens.
+      - label: Basic auth
+        command: curl -u user:password https://example.com/private
+        notes: Sends HTTP Basic credentials; avoid exposing secrets in shell history when possible.
+      - label: Store cookies
+        command: curl -c cookies.txt https://example.com/login
+        notes: Save received cookies to a Netscape-format cookie jar file.
+      - label: Send saved cookies
+        command: curl -b cookies.txt https://example.com/dashboard
+        notes: Reuse cookies across requests for authenticated sessions.
+
+  - group: Files, Forms, and Uploads
+    items:
+      - label: Multipart form upload
+        command: curl -F 'file=@report.pdf' -F 'title=Quarterly Report' https://api.example.com/upload
+        notes: `-F` builds `multipart/form-data` requests, commonly used for file uploads.
+      - label: Download with remote filename
+        command: curl -O https://example.com/archive.tar.gz
+        notes: Save using the filename from the URL path.
+      - label: Download with server-provided name
+        command: curl -OJ https://example.com/download?id=42
+        notes: Honor `Content-Disposition` filename from the response when present.
+      - label: Resume an interrupted download
+        command: curl -C - -O https://example.com/large.iso
+        notes: Continue a partial download from the last completed byte offset.
+      - label: Upload multiple form parts
+        command: curl -F 'meta={"env":"prod"};type=application/json' -F 'file=@bundle.zip' https://api.example.com/deploy
+        notes: Mix structured metadata and files in one multipart request.
+
+  - group: Diagnostics and Output Control
+    items:
+      - label: Verbose request trace
+        command: curl -v https://example.com
+        notes: Show request, response, TLS, and connection details for debugging.
+      - label: Fail on HTTP errors
+        command: curl -f https://api.example.com/items/404
+        notes: Exit non-zero on 400 or 500 responses instead of printing an HTML error page.
+      - label: Silent except errors
+        command: curl -sS https://api.example.com/health
+        notes: Suppress progress meter but still surface transfer failures.
+      - label: Show status code only
+        command: curl -s -o /dev/null -w '%{http_code}\n' https://example.com
+        notes: Useful in scripts and health checks.
+      - label: Time request phases
+        command: curl -w 'dns=%{time_namelookup} connect=%{time_connect} total=%{time_total}\n' -o /dev/null -s https://example.com
+        notes: Expose coarse-grained network timing without external tooling.
+
+  - group: Common Workflows
+    items:
+      - label: Query string from shell vars
+        command: curl -G https://api.example.com/search --data-urlencode 'q=error budget' --data-urlencode 'limit=10'
+        notes: `-G` turns data parameters into a properly encoded query string.
+      - label: Pipe JSON into jq
+        command: curl -s https://api.example.com/items | jq '.items[]'
+        notes: Typical shell workflow for structured API inspection.
+      - label: Use proxy for request
+        command: curl -x http://proxy.internal:8080 https://example.com
+        notes: Route traffic through an HTTP or SOCKS proxy.
+      - label: Test TLS cert issues
+        command: curl --cacert ca.pem https://internal.example.com
+        notes: Point curl at a custom CA bundle when talking to internal services.
+      - label: Show help for all options
+        command: curl --help all
+        notes: curl has a very large option surface; full help is often worth searching directly.

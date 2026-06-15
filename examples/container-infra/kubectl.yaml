@@ -1,0 +1,110 @@
+name: kubectl
+group: container / infra
+references:
+  - group: Cluster and Context Basics
+    items:
+      - label: Show current context
+        command: kubectl config current-context
+        notes: Print the active cluster and user context for this shell.
+      - label: List contexts
+        command: kubectl config get-contexts
+        notes: Show available contexts and which one is active.
+      - label: Switch context
+        command: kubectl config use-context prod-cluster
+        notes: Change the active cluster context for future commands.
+      - label: Show cluster info
+        command: kubectl cluster-info
+        notes: Print core control-plane and service endpoints.
+      - label: Show namespaces
+        command: kubectl get ns
+        notes: List namespaces in the current cluster.
+
+  - group: Resource Listing and Inspection
+    items:
+      - label: List pods
+        command: kubectl get pods
+        notes: Show Pods in the current namespace.
+      - label: List pods in all namespaces
+        command: kubectl get pods -A
+        notes: Cluster-wide Pod overview for debugging or audits.
+      - label: Describe resource
+        command: kubectl describe pod web-abc123
+        notes: Show events, conditions, container state, and scheduling details.
+      - label: Get YAML for resource
+        command: kubectl get deploy web -o yaml
+        notes: Inspect the full resource manifest as stored by the API.
+      - label: List custom resource types
+        command: kubectl api-resources
+        notes: Show built-in and installed CRDs exposed through the API.
+
+  - group: Apply, Edit, and Delete
+    items:
+      - label: Apply manifest
+        command: kubectl apply -f deployment.yaml
+        notes: Declaratively create or update resources from YAML.
+      - label: Apply directory
+        command: kubectl apply -f k8s/
+        notes: Apply every manifest file under the target directory.
+      - label: Delete manifest
+        command: kubectl delete -f deployment.yaml
+        notes: Remove resources defined by the manifest.
+      - label: Edit live resource
+        command: kubectl edit deploy web
+        notes: Open the current server-side object in an editor for immediate changes.
+      - label: Diff local vs cluster state
+        command: kubectl diff -f k8s/
+        notes: Preview manifest changes before applying them.
+
+  - group: Logs, Exec, and Debugging
+    items:
+      - label: Follow pod logs
+        command: kubectl logs -f deploy/web
+        notes: Stream logs from the selected workload or Pod.
+      - label: Show previous container logs
+        command: kubectl logs pod/web-abc123 --previous
+        notes: Useful for CrashLoopBackOff debugging after restarts.
+      - label: Exec shell in pod
+        command: kubectl exec -it pod/web-abc123 -- sh
+        notes: Open an interactive shell in a running container.
+      - label: Port-forward local to pod
+        command: kubectl port-forward svc/web 8080:80
+        notes: Expose a cluster service or Pod locally for debugging.
+      - label: Watch rollout status
+        command: kubectl rollout status deploy/web
+        notes: Follow rollout progress until completion or failure.
+
+  - group: Scaling and Rollouts
+    items:
+      - label: Scale deployment
+        command: kubectl scale deploy/web --replicas=5
+        notes: Adjust the replica count imperatively.
+      - label: Restart deployment
+        command: kubectl rollout restart deploy/web
+        notes: Trigger a rolling restart without changing the image tag manually.
+      - label: Show rollout history
+        command: kubectl rollout history deploy/web
+        notes: Inspect prior rollout revisions for a Deployment.
+      - label: Undo rollout
+        command: kubectl rollout undo deploy/web
+        notes: Roll back to the previous Deployment revision.
+      - label: Set image
+        command: kubectl set image deploy/web web=registry.example.com/web:v2
+        notes: Imperatively update a container image on a controller-managed workload.
+
+  - group: Common Workflows
+    items:
+      - label: Target namespace explicitly
+        command: kubectl -n staging get pods
+        notes: Avoid mistakes by specifying namespace in scripts and incident workflows.
+      - label: Quick event review
+        command: kubectl get events --sort-by=.lastTimestamp
+        notes: Fast way to see recent scheduling, image pull, and probe failures.
+      - label: Validate manifest server-side
+        command: kubectl apply --dry-run=server -f deployment.yaml
+        notes: Check schema and admission behavior without persisting changes.
+      - label: Explain resource fields
+        command: kubectl explain deployment.spec.template.spec.containers
+        notes: Built-in schema help for resource authoring and review.
+      - label: Show help
+        command: kubectl --help
+        notes: kubectl is the main operational interface for Kubernetes and has a wide command surface.

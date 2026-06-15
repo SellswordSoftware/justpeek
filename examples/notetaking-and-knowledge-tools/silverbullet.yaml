@@ -1,0 +1,228 @@
+name: SilverBullet
+group: notetaking and knowledge tools
+search_terms:
+  - programmable notes
+  - browser markdown wiki
+  - sliq
+  - space lua
+references:
+  - group: Core Model and Space Layout
+    items:
+      - label: Main shape
+        value: Browser-based self-hosted personal knowledge database
+      - label: Space
+        value: Top-level folder of Markdown files assets and configuration
+      - label: Primary content format
+        value: Markdown pages
+      - label: Index page
+        value: index.md
+      - label: Main config page
+        value: CONFIG.md
+      - label: Common extension folder
+        value: Library/
+      - label: Local ownership
+        value: Space files can be backed up or versioned directly with tools like Git
+
+  - group: Navigation Pickers and Commanding
+    items:
+      - label: Page Picker
+        keys: Ctrl+K
+        keys_by_os:
+          macos: Cmd+K
+        notes: Quick-open dialog for navigation and page creation.
+      - label: Page Picker create exact page
+        keys: Shift+Enter
+        notes: Creates or opens the page exactly matching the typed name.
+      - label: Page Picker filter by tags
+        value: Include #tags in the filter phrase
+      - label: Page Picker smart Space behavior
+        keys: Space
+        notes: With empty filter it may fill the current folder, current emoji prefix, or current page name.
+      - label: Page Picker cycle pickers
+        value: Type caret when filter is empty
+        notes: Cycles Page Picker -> Meta Picker -> Anything Picker.
+      - label: Anything Picker
+        value: Opens any page including hidden or meta pages
+      - label: Meta Picker
+        value: Shows only pages tagged with a meta tag prefix
+      - label: Command Palette
+        keys: Ctrl+Slash
+        keys_by_os:
+          macos: Cmd+Slash
+        notes: Search and execute commands; shortcut and priority are shown per command.
+
+  - group: Quick Notes Journals and Daily Capture
+    items:
+      - label: Quick note shortcut
+        keys: Ctrl+Q Ctrl+Q
+      - label: Journal today shortcut
+        keys: Ctrl+Q J
+      - label: Quick note path pattern
+        value: Inbox/<timestamp>
+      - label: Journal page path pattern
+        value: Journal/<date>
+      - label: Rename quick note
+        value: Click page title edit it and press Enter
+      - label: Home or index workflow
+        value: Return to index page to see recent quick notes recent journal entries recent incomplete tasks and recently modified pages
+      - label: Journal navigation
+        value: "Use Journal: Previous Day, Journal: Next Day, and Journal: Picker commands"
+
+  - group: Linking Backlinks and String Refs
+    items:
+      - label: Internal wiki link
+        value: "[page](page)"
+      - label: Internal link alias
+        value: "[page|Display Label](page|Display Label)"
+      - label: Relative link
+        value: "[title](../relative/path)"
+      - label: Meta page link
+        value: "[^Library/Std](^Library/Std)"
+      - label: Link to heading
+        value: "Page#Heading"
+      - label: Link to line and column
+        value: "CHANGELOG@L12c42"
+      - label: Link to character offset
+        value: "CHANGELOG@123"
+      - label: Linked Mentions
+        value: Backlinks section appears on pages with incoming links
+      - label: Disable linked mentions widget
+        command: config.set("std.widgets.linkedMentions.enabled", false)
+
+  - group: Tasks Objects and Indexed Data
+    items:
+      - label: Basic task syntax
+        value: "* [ ] My task"
+      - label: Toggle task
+        value: Click the checkbox
+      - label: Custom task states
+        value: Supported, e.g. [IN PROGRESS]
+      - label: Custom state restriction
+        value: Task state names cannot contain colon
+      - label: Object index
+        value: SilverBullet indexes pages tasks links items and other structures as queryable objects
+      - label: Markdown as source of truth
+        value: Indexed objects can always be rebuilt from Markdown
+      - label: Rebuild object index
+        command: "Space: Reindex"
+      - label: Common object fields
+        value: ref, tag, tags, itags plus tag-specific attributes
+      - label: X-Ray
+        command: "Editor: Toggle X-Ray"
+        notes: Visualizes indexed objects and their extracted attributes inside the editor.
+
+  - group: Queries Templates and Programmable Content
+    items:
+      - label: Query language
+        value: SLIQ (Space Lua Integrated Query)
+      - label: Common query pattern
+        command: |
+          query[
+            from p = index.pages()
+            order by p.lastModified desc
+            limit 5
+            select templates.pageItem(p)
+          ](
+            from p = index.pages()
+            order by p.lastModified desc
+            limit 5
+            select templates.pageItem(p)
+          )
+      - label: Task query pattern
+        command: |
+          ${query from t = tags.task where not t.done limit 3 select templates.taskItem(t)}
+      - label: Template placeholder syntax
+        value: "${expression}"
+      - label: Create template function
+        command: templates.greet = template.new[==[Hello, ${name}!]==]
+      - label: Standard templates
+        value: templates.pageItem, fullPageItem, taskItem, itemItem, paragraphItem, tagItem
+      - label: Alt-click inspection
+        value: Alt-click query-backed widgets to inspect underlying code on supported pages
+
+  - group: Slash Templates and Page Templates
+    items:
+      - label: Slash template tag
+        value: "#meta/template/slash"
+      - label: Slash template naming rule
+        value: Last component of page name becomes the slash command name
+      - label: Slash template example
+        command: |
+          ---
+          tags: meta/template/slash
+          description: Insert a standard action items section
+          ---
+          # Action items
+          * [ ] |^|
+      - label: Slash template frontmatter
+        value: description, priority, onlyContexts, exceptContexts
+      - label: Page template tag
+        value: "#meta/template/page"
+      - label: Create page from template
+        command: "Page: From Template"
+      - label: Cursor placement token
+        value: "|^|"
+      - label: Page template frontmatter
+        value: suggestedName, confirmName, openIfExists, command, key, mac, frontmatter, priority
+      - label: Daily note page template pattern
+        value: suggestedName with ${date.today()} and openIfExists true
+      - label: Override built-in template
+        value: Reuse same command name with higher effective load order
+
+  - group: Space Lua Config and Libraries
+    items:
+      - label: Space Lua
+        value: Embedded Lua dialect used for commands templates widgets and configuration
+      - label: CONFIG page role
+        value: Main place to customize site behavior actions tags and settings
+      - label: Action button example
+        command: |
+          actionButton.define {
+            icon = "search",
+            description = "Search",
+            priority = 1.5,
+            run = function()
+              editor.invokeCommand("Silversearch: Search")
+            end
+          }
+      - label: Tag schema example
+        value: tag.define supports schema validate and transform hooks
+      - label: Library
+        value: Reusable collection of Space Lua scripts templates pages and plugs
+      - label: Built-in standard library
+        value: ^Library/Std
+      - label: Library manager
+        value: Built-in manager for discovering installing and updating libraries
+      - label: Library update caveat
+        value: Updating manually installed libraries can overwrite local changes
+
+  - group: Install Hosting and File System Caveats
+    items:
+      - label: Localhost URL
+        value: http://localhost:3000
+      - label: Deployment options
+        value: Single self-contained binary, Docker container, or hosted option like PikaPods
+      - label: Security requirement
+        value: Enable authentication
+      - label: Remote hosting requirement
+        value: Put TLS in front of SilverBullet
+        notes: Remote plain HTTP breaks service worker, crypto, and clipboard APIs.
+      - label: Recommended server OS
+        value: Linux on a case-sensitive file system
+      - label: Case-insensitive file system warning
+        value: macOS default APFS and Windows NTFS are discouraged for real deployments
+      - label: External sync engine caveat
+        value: NAS or tools like SyncThing may cause issues if they disturb last-modified timestamps
+      - label: Debug sync issues habit
+        value: Disable external sync layers and test on a local file system first
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Self-hosted Markdown knowledge systems with scripting query power and wiki-like backlinks
+      - label: Strongest uncommon surfaces
+        value: Page slash templates, Space Lua, object indexing, X-Ray, and command-driven quick-note workflows
+      - label: Common pitfall
+        value: Treating SilverBullet like a static local note app instead of a small programmable web system with hosting assumptions
+      - label: Official docs
+        value: silverbullet.md

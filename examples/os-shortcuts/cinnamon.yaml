@@ -1,0 +1,61 @@
+name: Cinnamon
+group: os shortcuts
+search_terms:
+  - linux mint cinnamon
+references:
+  - group: Common Desktop and Menu Actions
+    items:
+      - label: Main menu
+        keys: Super
+        notes: Common Linux Mint Cinnamon behavior; vendors or user configs may rebind this.
+      - label: Window switcher
+        keys: Alt+Tab
+      - label: Expo
+        keys: Ctrl+Alt+Up
+        notes: Common Cinnamon overview for workspaces.
+      - label: Scale
+        keys: Ctrl+Alt+Down
+        notes: Common Cinnamon window overview.
+      - label: Run dialog
+        keys: Alt+F2
+      - label: Show desktop
+        keys: Super+D
+
+  - group: Windows and Workspaces
+    items:
+      - label: Close window
+        keys: Alt+F4
+      - label: Maximize
+        keys: Alt+F10
+      - label: Toggle fullscreen
+        keys: F11
+      - label: Move window between monitors
+        keys: Shift+Super+Left / Shift+Super+Right
+        notes: Common modern Mint/Cinnamon convention.
+      - label: Switch workspace
+        keys: Ctrl+Alt+Left / Ctrl+Alt+Right
+      - label: Move window to workspace
+        keys: Ctrl+Alt+Shift+Left / Ctrl+Alt+Shift+Right
+
+  - group: Screenshots and System
+    items:
+      - label: Screenshot full screen
+        keys: Print
+      - label: Screenshot area
+        keys: Shift+Print
+      - label: Screenshot window
+        keys: Alt+Print
+      - label: Lock screen
+        keys: Ctrl+Alt+L
+        notes: Common Mint default, but verify if screensaver or locker was changed.
+      - label: Logout dialog
+        keys: Ctrl+Alt+Delete
+
+  - group: Settings and Customization
+    items:
+      - label: Keyboard shortcuts settings
+        value: System Settings > Keyboard > Shortcuts
+      - label: Hot corners and overview modes
+        value: Configure Expo and Scale from Cinnamon settings
+      - label: Important caveat
+        value: Cinnamon defaults are less centrally documented than GNOME or Windows; treat these as common Mint-oriented defaults and verify on the local install

@@ -1,0 +1,206 @@
+name: Logseq
+group: notetaking and knowledge tools
+process:
+  - Logseq
+  - logseq
+search_terms:
+  - outliner notes
+  - block references
+  - datalog notes
+  - logseq protocol
+references:
+  - group: Core Model and File Layout
+    items:
+      - label: Main interaction style
+        value: Outliner-first notes built from blocks
+      - label: Primary storage formats
+        value: Markdown and org-mode
+      - label: Journal-first workflow
+        value: Daily journal pages are a central navigation and capture pattern
+      - label: Graph
+        value: A graph is the note database for one workspace
+      - label: Cross-graph global config path
+        value: ~/.logseq/config/config.edn
+      - label: Global config scope
+        value: Applies to all graphs
+      - label: Local graph config
+        value: config.edn inside the graph
+      - label: Config merge rule
+        value: Local config overrides global keys and merges map values over them
+
+  - group: Keyboard Shortcuts and Command Semantics
+    items:
+      - label: Shortcuts settings
+        keys: G S
+        notes: Opens the shortcuts page and shows customizable commands by category.
+      - label: Plugins dashboard
+        keys: T P
+        notes: Search install update and remove third-party plugins from here.
+      - label: Slash commands
+        keys: Slash
+        notes: "`/` autocompletes commands when typed at the start of a line or after whitespace."
+      - label: Advanced commands
+        keys: LessThan
+        notes: "`<` inserts advanced block commands like queries, source blocks, and admonitions."
+      - label: Open ref under cursor
+        keys: Ctrl+O
+        notes: When cursor is on a page or block reference, open it; Shift-click opens in right sidebar.
+      - label: Sequential shortcut families
+        value: g = Go, t = Toggle, n = New, c = Close
+      - label: Chord syntax in config
+        value: Space means chord sequence, plus means simultaneous keys
+        notes: "Examples `t t` and `ctrl+shift+a`."
+      - label: Cross-platform mod key
+        value: mod = Ctrl on Linux/Windows, Cmd on macOS
+      - label: Multiple bindings for one action
+        value: "Example: `:editor/down [\"ctrl+j\" \"down\"]`"
+
+  - group: Page Block and Sidebar References
+    items:
+      - label: Page reference syntax
+        value: "[[Page Name]]"
+      - label: Block reference syntax
+        value: "((block-uuid))"
+      - label: Reference autocomplete
+        value: Page and block autocompletion begins after trigger characters
+      - label: Custom display labels
+        value: Supported for both page and block references
+      - label: Hover preview
+        value: Hover over a reference to preview it
+      - label: Open in right sidebar
+        value: Shift-click a reference
+      - label: New page from search
+        value: If target page does not exist, create it from the search picker
+
+  - group: Queries and Datalog
+    items:
+      - label: Simple query purpose
+        value: Ask direct questions over your graph without full Datalog
+      - label: Advanced query language
+        value: Datalog over Datascript
+      - label: Query block
+        command: |
+          #+BEGIN_QUERY
+          {:title "All tasks"
+           :query [:find (pull ?b [*]) :where [?b :block/marker _]]}
+          #+END_QUERY
+      - label: Query result grouping
+        value: group-by-page? and remove-block-children? tune result shape
+      - label: Special inputs
+        value: :current-page, :query-page, :current-block, :parent-block, :today, :yesterday, :tomorrow
+      - label: Relative date inputs
+        value: :+Xd, :-Xw, :+Xm, :-Xy
+      - label: Relative timestamp inputs
+        value: :today-start, :today-end, :+1d-1430, :-2w-000000000
+      - label: Page name query caveat
+        value: Page names are stored as lowercase in the database
+      - label: Developer mode data inspection
+        value: "(Dev) Show page data and (Dev) Show block data"
+        notes: Useful when authoring advanced queries and custom properties.
+
+  - group: Slash and Advanced Block Commands
+    items:
+      - label: Basic command trigger
+        value: Slash command autocomplete
+      - label: Advanced command trigger
+        value: LessThan command autocomplete
+      - label: Source block
+        command: |
+          #+BEGIN_SRC clojure
+          (+ 1 2)
+          #+END_SRC
+      - label: Query block
+        value: Advanced command expands into BEGIN_QUERY ... END_QUERY
+      - label: Admonitions
+        value: Note, Tip, Important, Caution, Warning
+      - label: Example block
+        value: Preserves whitespace with example styling
+      - label: Verse block
+        value: Preserves newlines for poetry or line-sensitive text
+      - label: Comment command
+        value: Inline comment visible only while editing
+
+  - group: Plugins Themes and API
+    items:
+      - label: Plugins availability
+        value: Desktop only
+        notes: Not available on mobile or browser.
+      - label: Open plugins dashboard
+        keys: T P
+      - label: Install from marketplace
+        value: Search and install from the plugins dashboard
+      - label: Load unpacked plugin
+        value: Supported from the plugins dashboard
+      - label: Plugin settings
+        value: Gear icon on each plugin
+      - label: Themes are plugins
+        value: Themes are distributed through the same plugin mechanism
+      - label: Plugin update check interval
+        value: Every 12 hours
+      - label: Plugin API surfaces
+        value: logseq.App, logseq.Editor, logseq.DB, logseq.Git, logseq.UI, logseq.Assets, logseq.FileStorage
+      - label: Plugin API docs
+        value: plugins-doc.logseq.com and logseq.github.io/plugins
+      - label: Sample plugins
+        value: github.com/logseq/logseq-plugin-samples
+
+  - group: Automation Protocol and Local HTTP API
+    items:
+      - label: Open graph by protocol
+        command: logseq://graph/MyGraph
+      - label: Open page by protocol
+        command: logseq://graph/MyGraph?page=My%20Page
+      - label: Open block by protocol
+        command: logseq://graph/MyGraph?block-id=<block-uuid>
+      - label: Quick capture URL
+        command: logseq://x-callback-url/quickCapture?url=https%3A%2F%2Fexample.com&title=Example
+      - label: Quick capture extra params
+        value: url, title, content, append, page
+        notes: "Use `page=TODAY` to capture into today's journal page."
+      - label: Enable local HTTP API
+        value: Settings > Advanced > Developer mode, then Features > HTTP APIs server
+      - label: HTTP API restart requirement
+        value: Restart Logseq after enabling the HTTP APIs server
+      - label: HTTP API auth
+        value: Add an authorization token before using the API
+      - label: Default local HTTP API docs URL
+        value: http://127.0.0.1:12315/
+      - label: Local HTTP API fit
+        value: External scripts and tools can query or update the graph through authorized local access
+
+  - group: Sync and Multi Device Behavior
+    items:
+      - label: Official sync scope
+        value: Up to 10 graphs across desktop Android and iOS
+      - label: Sync encryption
+        value: Each graph is encrypted with its own password
+      - label: Force sync now
+        value: Cloud icon > Sync now
+      - label: Third-party sync warning
+        value: Do not combine Logseq Sync with iCloud Syncthing Dropbox or similar services
+      - label: Per-graph choice
+        value: Some graphs can stay local-only while others sync
+
+  - group: Naming Rules and Operational Hygiene
+    items:
+      - label: Forbidden filename characters
+        value: "/ \\ < > : \" | ? * . and emojis"
+      - label: Path length recommendation
+        value: Keep file and folder paths under 260 characters
+      - label: Trailing space warning
+        value: Do not end file or folder names with spaces
+      - label: Use global config for shared behaviors
+        value: Shortcuts macros query transforms and views belong there when you want them across graphs
+      - label: DB version note
+        value: DB graphs and RTC sync exist, but are newer workflows and should be treated more cautiously than stable file-based graphs
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Block-level PKM, tasks, daily journals, structured queries, and local-first workflows
+      - label: Less ideal fit
+        value: Pure document-first writing where block identity and query power do not matter
+      - label: Official docs
+        value: docs.logseq.com
+      - label: Official app repo
+        value: github.com/logseq/logseq

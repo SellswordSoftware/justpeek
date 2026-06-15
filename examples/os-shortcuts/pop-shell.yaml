@@ -1,0 +1,90 @@
+name: Pop shell
+group: os shortcuts
+search_terms:
+  - pop os tiling
+  - pop shell
+references:
+  - group: Window Focus and Adjustment
+    items:
+      - label: Direction keys
+        value: Arrow keys or Vim H J K L
+      - label: Switch focus between windows
+        keys: Super+Direction keys
+      - label: Enter adjustment mode
+        keys: Super+Enter
+      - label: Move window in adjustment mode
+        keys: Direction keys
+      - label: Resize window in adjustment mode
+        keys: Shift+Direction keys
+      - label: Swap windows in adjustment mode
+        keys: Ctrl+Direction keys
+      - label: Apply or cancel adjustment
+        keys: Enter / Escape
+
+  - group: Window Manipulation
+    items:
+      - label: Toggle stacking
+        keys: Super+S
+      - label: Change orientation in stacking
+        keys: Super+O
+      - label: Float or unfloat
+        keys: Super+G
+      - label: Maximize
+        keys: Super+M
+      - label: Snap left or right
+        keys: Super+Ctrl+Left / Super+Ctrl+Right
+      - label: Close window
+        keys: Super+Q
+      - label: Move window by mouse
+        keys: Super+Left click drag
+      - label: Resize window by mouse
+        keys: Super+Right click drag
+
+  - group: Workspaces and Displays
+    items:
+      - label: Navigate workspaces
+        keys: Super+Ctrl+Up / Super+Ctrl+Down
+      - label: First or last workspace
+        keys: Super+Home / Super+End
+      - label: Move window between workspaces
+        keys: Super+Shift+Up / Super+Shift+Down
+      - label: Move window between displays
+        keys: Super+Shift+Left / Super+Shift+Right
+      - label: Move window between upper or lower displays
+        keys: Super+Ctrl+Shift+Up / Super+Ctrl+Shift+Down
+      - label: Lock screen
+        keys: Super+Escape
+
+  - group: Launcher and App Switching
+    items:
+      - label: Launcher
+        keys: Super
+      - label: Launcher path mode
+        value: "Type `/` or `~/` to browse the filesystem"
+      - label: Launcher terminal command
+        value: "Prefix with `t:`"
+      - label: Launcher shell command
+        value: "Prefix with `:`"
+      - label: Launcher calculator
+        value: "Prefix with `=`"
+      - label: Switch apps
+        keys: Super+Tab
+      - label: Switch windows of current app
+        keys: Super+Backtick
+
+  - group: Miscellaneous
+    items:
+      - label: Workspace menu
+        keys: Super+D
+      - label: Applications menu
+        keys: Super+A
+      - label: Notifications
+        keys: Super+V
+      - label: Open terminal
+        keys: Super+T
+      - label: Open Files
+        keys: Super+F
+      - label: Cycle display layout
+        keys: Super+P
+      - label: Cycle input source
+        keys: Super+Space

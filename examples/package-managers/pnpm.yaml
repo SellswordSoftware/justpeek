@@ -1,0 +1,110 @@
+name: pnpm
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Install project deps
+        command: pnpm install
+        notes: Resolve and install dependencies according to `package.json` and lock state.
+      - label: Add dependency
+        command: pnpm add axios
+        notes: Add a runtime dependency to the current package.
+      - label: Add dev dependency
+        command: pnpm add -D vitest typescript
+        notes: Record dependencies under `devDependencies`.
+      - label: Remove dependency
+        command: pnpm remove axios
+        notes: Remove one or more dependencies from project metadata.
+      - label: Upgrade dependency
+        command: pnpm up axios
+        notes: Update one dependency within the allowed semver range or with explicit flags.
+
+  - group: Lockfiles, Store, and Reproducibility
+    items:
+      - label: Install frozen lockfile
+        command: pnpm install --frozen-lockfile
+        notes: Fail if `pnpm-lock.yaml` and `package.json` are out of sync.
+      - label: Prefer offline install
+        command: pnpm install --prefer-offline
+        notes: Use the content-addressable store aggressively before hitting the network.
+      - label: Show store path
+        command: pnpm store path
+        notes: Print the location of pnpm's global package store.
+      - label: Prune store
+        command: pnpm store prune
+        notes: Remove unreferenced packages from the store to reclaim space.
+      - label: Fetch deps without linking
+        command: pnpm fetch
+        notes: Preload dependency artifacts into the store for CI or container workflows.
+
+  - group: Scripts and Execution
+    items:
+      - label: Run package script
+        command: pnpm run build
+        notes: Execute a script from `package.json`.
+      - label: Run binary directly
+        command: pnpm exec eslint .
+        notes: Execute a dependency-provided binary without leaving the project env.
+      - label: Create project with starter
+        command: pnpm create vite
+        notes: Run package creation flows in the familiar npm-style form.
+      - label: Run one-off package
+        command: pnpm dlx cowsay hello
+        notes: Execute a package temporarily without adding it to dependencies.
+      - label: Explain script environment
+        command: pnpm run env
+        notes: Useful when debugging how scripts see PATH and env vars.
+
+  - group: Workspaces and Monorepos
+    items:
+      - label: Install whole workspace
+        command: pnpm install -r
+        notes: Operate recursively across all workspace packages.
+      - label: Add dep to one workspace pkg
+        command: pnpm --filter web add react
+        notes: Target one workspace package precisely.
+      - label: Run script in filtered package
+        command: pnpm --filter api test
+        notes: Execute one package's script inside a larger monorepo.
+      - label: Run script in all packages
+        command: pnpm -r test
+        notes: Recursively run the named script across workspace members.
+      - label: List workspace packages
+        command: pnpm m list --depth -1
+        notes: Show top-level workspace package inventory.
+
+  - group: Inspection and Troubleshooting
+    items:
+      - label: List installed top-level deps
+        command: pnpm list --depth 0
+        notes: Quick inventory of direct dependencies.
+      - label: Show why package exists
+        command: pnpm why react
+        notes: Trace which dependencies introduced a package into the graph.
+      - label: Audit vulnerabilities
+        command: pnpm audit
+        notes: Review known vulnerabilities in the dependency tree.
+      - label: Check outdated packages
+        command: pnpm outdated
+        notes: Compare installed and latest available versions.
+      - label: Rebuild native packages
+        command: pnpm rebuild
+        notes: Re-run install scripts for native or otherwise build-step dependencies.
+
+  - group: Common Workflows
+    items:
+      - label: CI install
+        command: pnpm install --frozen-lockfile
+        notes: Standard reproducible install mode in CI.
+      - label: Add tooling package
+        command: pnpm add -D eslint prettier typescript
+        notes: Common setup step for JS or TS projects.
+      - label: Bootstrap monorepo
+        command: pnpm install -r && pnpm -r build
+        notes: Typical initial workspace install and build sequence.
+      - label: Inspect pnpm version
+        command: pnpm --version
+        notes: Behavior can vary across major versions, especially around workspaces and lockfiles.
+      - label: Show help
+        command: pnpm --help
+        notes: pnpm's recursive, filter, and store features make the CLI broader than npm's surface.

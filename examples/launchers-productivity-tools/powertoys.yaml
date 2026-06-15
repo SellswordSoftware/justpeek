@@ -1,0 +1,93 @@
+name: PowerToys
+group: launchers / productivity Tools
+search_terms:
+  - microsoft powertoys
+  - windows utilities
+references:
+  - group: Install and Update
+    items:
+      - label: Install with WinGet
+        command: winget install Microsoft.PowerToys -s winget
+      - label: Install with Microsoft Store
+        value: Available in Microsoft Store
+      - label: Install with GitHub release
+        value: Use the latest release installer from the PowerToys GitHub repo
+      - label: Upgrade with WinGet
+        command: winget upgrade Microsoft.PowerToys
+      - label: Settings app
+        value: PowerToys Settings
+
+  - group: Highest-value Utilities
+    items:
+      - label: PowerToys Run
+        keys: Alt+Space
+        notes: Fast launcher with plugins for apps, files, calculations, shell, and more.
+      - label: FancyZones editor
+        keys: Win+Shift+Backtick
+        notes: Edit named layout zones for snapping windows quickly.
+      - label: Snap into FancyZones while dragging
+        keys: Hold Shift while dragging
+        notes: Common default behavior when FancyZones is enabled.
+      - label: Shortcut Guide
+        keys: Hold Win
+        notes: Shows available Windows key shortcuts contextually.
+      - label: Color Picker
+        keys: Win+Shift+C
+      - label: Always On Top
+        keys: Win+Ctrl+T
+      - label: Text Extractor
+        keys: Win+Shift+T
+      - label: Screen Ruler
+        keys: Win+Shift+M
+
+  - group: Keyboard and Window Customization
+    items:
+      - label: Keyboard Manager
+        value: Remap keys and shortcuts system-wide or per app
+      - label: FancyZones
+        value: Create custom tiling layouts beyond standard Windows Snap
+      - label: Grab And Move
+        value: Move or resize windows by dragging from anywhere inside them with a modifier
+      - label: Mouse utilities
+        value: Find My Mouse, Highlighter, Jump, and Crosshairs
+      - label: Mouse Without Borders
+        value: Share mouse and keyboard across multiple Windows machines
+
+  - group: File and Clipboard Helpers
+    items:
+      - label: Advanced Paste
+        value: Paste clipboard text into different formats, including optional AI transforms
+      - label: Peek
+        value: Preview files without opening them
+      - label: PowerRename
+        value: Bulk rename with search replace, regex, and undo
+      - label: Image Resizer
+        value: Resize images from File Explorer context menu
+      - label: File Locksmith
+        value: See which process is holding a file lock
+      - label: New+
+        value: Create files and folders from templates in File Explorer
+
+  - group: Terminal and Power-user Tools
+    items:
+      - label: Command Not Found
+        value: PowerShell 7 helper that suggests WinGet packages when commands fail
+      - label: Hosts File Editor
+        value: Edit the Windows hosts file safely
+      - label: Environment Variables
+        value: Manage environment variables and grouped profiles
+      - label: Awake
+        value: Keep the machine awake without changing system sleep settings
+      - label: Workspaces
+        value: Launch a predefined set of apps into saved positions
+      - label: ZoomIt
+        value: Screen zoom, annotation, and recording tool for demos and support
+
+  - group: Practical Reminders
+    items:
+      - label: Best first modules
+        value: PowerToys Run, FancyZones, Keyboard Manager, Shortcut Guide, Text Extractor
+      - label: Common conflict source
+        value: Other global hotkey tools can collide with PowerToys shortcuts
+      - label: Official docs
+        value: learn.microsoft.com/en-us/windows/powertoys/

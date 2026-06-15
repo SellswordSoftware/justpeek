@@ -1,0 +1,70 @@
+name: Ollama
+group: ai tools
+search_terms:
+  - local models
+  - ollama api
+references:
+  - group: Install and Start
+    items:
+      - label: Install on Linux
+        command: curl -fsSL https://ollama.com/install.sh | sh
+      - label: Start server
+        command: ollama serve
+      - label: Sign in
+        command: ollama signin
+      - label: Sign out
+        command: ollama signout
+      - label: Local API base URL
+        value: http://localhost:11434/api
+      - label: Cloud API base URL
+        value: https://ollama.com/api
+
+  - group: Models and Chat
+    items:
+      - label: Run a model
+        command: ollama run gemma4
+      - label: Pull a model
+        command: ollama pull gemma4
+      - label: Remove a model
+        command: ollama rm gemma4
+      - label: List local models
+        command: ollama ls
+      - label: List running models
+        command: ollama ps
+      - label: Stop a running model
+        command: ollama stop gemma4
+      - label: Multimodal prompt
+        command: ollama run gemma4 "What's in this image? /path/to/file.png"
+
+  - group: Integrations and Apps
+    items:
+      - label: Launch integrations interactively
+        command: ollama launch
+      - label: Launch Claude Code integration
+        command: ollama launch claude
+      - label: Launch with specific model
+        command: ollama launch claude --model qwen3.5
+      - label: Configure without launch
+        command: ollama launch droid --config
+      - label: Supported launch targets
+        value: OpenCode, Claude Code, Codex, VS Code, Droid
+
+  - group: Modelfiles and Custom Models
+    items:
+      - label: Create Modelfile
+        command: |
+          FROM gemma4
+          SYSTEM """You are a happy cat."""
+      - label: Build custom model
+        command: ollama create -f Modelfile
+      - label: Embedding request by CLI
+        command: echo "Hello world" | ollama run nomic-embed-text
+
+  - group: Practical Reminders
+    items:
+      - label: OpenAI-compatible apps
+        value: Many local tools can target Ollama through its local API
+      - label: Offline-first option
+        value: Ollama can run entirely offline for local model use
+      - label: Official docs
+        value: docs.ollama.com

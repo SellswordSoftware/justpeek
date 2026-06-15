@@ -1,0 +1,110 @@
+name: zypper
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Refresh repository metadata
+        command: sudo zypper refresh
+        notes: Update metadata for all enabled repositories.
+      - label: Upgrade installed packages
+        command: sudo zypper update
+        notes: Apply regular package updates from configured repos.
+      - label: Dist-upgrade system
+        command: sudo zypper dup
+        notes: Distribution upgrade workflow often used on Tumbleweed and repo-transition scenarios.
+      - label: Install package
+        command: sudo zypper install ripgrep
+        notes: Install one or more packages by name.
+      - label: Remove package
+        command: sudo zypper remove ripgrep
+        notes: Uninstall a package from the system.
+
+  - group: Search and Information
+    items:
+      - label: Search packages
+        command: zypper search ripgrep
+        notes: Search available packages by name and description.
+      - label: Show package info
+        command: zypper info ripgrep
+        notes: Print version, repo, summary, and dependency details.
+      - label: List installed packages
+        command: zypper search --installed-only
+        notes: Inspect what is currently installed through zypper.
+      - label: List available patches
+        command: zypper list-patches
+        notes: Review patch-oriented updates, especially on enterprise or Leap systems.
+      - label: Find owner of file
+        command: rpm -qf /usr/bin/rg
+        notes: Use RPM directly for installed file ownership lookup.
+
+  - group: Repositories and Services
+    items:
+      - label: List repositories
+        command: zypper repos
+        notes: Show enabled repositories and their priorities.
+      - label: List repositories with URIs
+        command: zypper repos -u
+        notes: Include source URLs for auditing or troubleshooting.
+      - label: Add repository
+        command: sudo zypper addrepo https://download.example.com/repo vendor
+        notes: Register a new repository alias and source URL.
+      - label: Remove repository
+        command: sudo zypper removerepo vendor
+        notes: Delete a repository definition by alias or number.
+      - label: Modify repo priority
+        command: sudo zypper modifyrepo --priority 90 repo-alias
+        notes: Lower numbers mean higher priority in zypper repo ordering.
+
+  - group: Cleanup and Repair
+    items:
+      - label: Clean all caches
+        command: sudo zypper clean --all
+        notes: Remove repository metadata and package caches.
+      - label: Verify dependencies
+        command: sudo zypper verify
+        notes: Check for broken dependencies and offer corrective actions.
+      - label: Install source package
+        command: sudo zypper source-install ripgrep
+        notes: Pull source and build dependencies when supported by the repo setup.
+      - label: Download package only
+        command: sudo zypper install --download-only ripgrep
+        notes: Retrieve packages without completing the install transaction.
+      - label: Search for recommended packages
+        command: zypper search --recommends ripgrep
+        notes: Review package recommendations separately from hard dependencies.
+
+  - group: Patches, Locks, and Updates
+    items:
+      - label: Apply patches only
+        command: sudo zypper patch
+        notes: Install available patches without performing a full package update sweep.
+      - label: Add package lock
+        command: sudo zypper addlock docker
+        notes: Prevent a package from being modified by future transactions.
+      - label: Remove package lock
+        command: sudo zypper removelock docker
+        notes: Allow the package to be updated or changed again.
+      - label: List locks
+        command: zypper locks
+        notes: Review active package locks and their scope.
+      - label: Show update candidates
+        command: zypper list-updates
+        notes: See pending updates before applying them.
+
+  - group: Common Workflows
+    items:
+      - label: Refresh then update
+        command: sudo zypper refresh && sudo zypper update
+        notes: Standard maintenance loop on stable openSUSE or SUSE systems.
+      - label: Perform Tumbleweed style upgrade
+        command: sudo zypper dup
+        notes: Preferred full upgrade mode on rolling-release openSUSE Tumbleweed.
+      - label: Non-interactive install
+        command: sudo zypper --non-interactive install ripgrep
+        notes: Useful for scripts and automation.
+      - label: Show package changelog
+        command: zypper changelog ripgrep
+        notes: Review upstream and packaging history directly from repos.
+      - label: Show help
+        command: zypper help
+        notes: Zypper's subcommand help is broad and worth checking for less common workflows.

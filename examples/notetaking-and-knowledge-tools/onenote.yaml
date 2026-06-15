@@ -1,0 +1,253 @@
+name: OneNote
+group: notetaking and knowledge tools
+process:
+  - ONENOTE
+  - onenote
+  - OneNote
+search_terms:
+  - microsoft onenote
+  - digital notebook
+  - class notebook
+  - onenote ink
+references:
+  - group: Notebook Model and Core Concepts
+    items:
+      - label: Main hierarchy
+        value: Notebooks > Sections > Pages > Subpages
+      - label: Freeform page canvas
+        value: Click anywhere on a page to place a note container
+      - label: Auto save
+        value: OneNote saves automatically while you work
+      - label: Shared editing model
+        value: Multi-user collaboration on shared notebooks
+      - label: Primary sync model
+        value: Shared notebooks are typically synced through OneDrive or Microsoft 365 surfaces
+      - label: Local notebook caveat
+        value: Version and platform differences matter; newer workflows lean cloud-first
+
+  - group: High-value Global Shortcuts
+    items:
+      - label: New OneNote window
+        keys: Ctrl+M
+      - label: Quick Note
+        keys: Ctrl+Shift+M
+        notes: Windows also supports Alt+Win+N for quick note capture.
+      - label: Dock OneNote window
+        keys: Ctrl+Alt+D
+      - label: Paste text only
+        keys: Ctrl+Shift+V
+      - label: Check spelling
+        keys: F7
+      - label: Open thesaurus
+        keys: Shift+F7
+      - label: Play selected audio recording
+        keys: Ctrl+Alt+P
+      - label: Stop audio playback
+        keys: Ctrl+Alt+S
+      - label: Skip audio backward
+        keys: Ctrl+Alt+Y
+      - label: Skip audio forward
+        keys: Ctrl+Alt+U
+
+  - group: Formatting and Outline Editing
+    items:
+      - label: Bold
+        keys: Ctrl+B
+      - label: Italic
+        keys: Ctrl+I
+      - label: Underline
+        keys: Ctrl+U
+      - label: Strikethrough
+        keys: Alt+Hyphen
+      - label: Highlight text
+        keys: Ctrl+Alt+H
+      - label: Insert hyperlink
+        keys: Ctrl+K
+      - label: Bulleted list
+        keys: Ctrl+Period
+      - label: Numbered list
+        keys: Ctrl+Slash
+      - label: Heading levels
+        keys: Ctrl+Alt+1 through Ctrl+Alt+6
+      - label: Increase indent
+        keys: Alt+Shift+Right or Tab at line start
+      - label: Decrease indent
+        keys: Alt+Shift+Left or Shift+Tab at line start
+      - label: Move paragraph up or down
+        keys: Alt+Shift+Up / Alt+Shift+Down
+      - label: Collapse or expand outline
+        keys: Alt+Shift+Minus / Alt+Shift+Equal
+      - label: Expand all outline levels
+        keys: Alt+Shift+0
+
+  - group: Pages Sections and Navigation
+    items:
+      - label: New page
+        keys: Ctrl+N
+      - label: New subpage
+        keys: Ctrl+Shift+Alt+N
+      - label: New section
+        keys: Ctrl+T
+      - label: Open notebook
+        keys: Ctrl+O
+      - label: Open section
+        keys: Ctrl+Alt+Shift+O
+      - label: Next section
+        keys: Ctrl+Tab
+      - label: Previous section
+        keys: Ctrl+Shift+Tab
+      - label: Next page in section
+        keys: Ctrl+PageDown
+      - label: Previous page in section
+        keys: Ctrl+PageUp
+      - label: Previous page visited
+        keys: Alt+Left
+      - label: Next page visited
+        keys: Alt+Right
+      - label: Full page view
+        keys: F11
+      - label: Move selected page up or down
+        keys: Alt+Shift+Up / Alt+Shift+Down
+      - label: Move or copy current page
+        keys: Ctrl+Alt+M
+
+  - group: Search Tags and Retrieval
+    items:
+      - label: Search all notebooks
+        keys: Ctrl+E
+      - label: Search current page
+        keys: Ctrl+F
+      - label: Next search result
+        keys: F3 or Enter from page search
+      - label: Previous search result
+        keys: Shift+F3
+      - label: To Do tag
+        keys: Ctrl+1
+      - label: Important tag
+        keys: Ctrl+2
+      - label: Question tag
+        keys: Ctrl+3
+      - label: Remember for later tag
+        keys: Ctrl+4
+      - label: Definition tag
+        keys: Ctrl+5
+      - label: Highlight tag
+        keys: Ctrl+6
+      - label: Contact tag
+        keys: Ctrl+7
+      - label: Address tag
+        keys: Ctrl+8
+      - label: Phone number tag
+        keys: Ctrl+9
+      - label: Clear note tags
+        keys: Ctrl+0
+
+  - group: Tables Containers and Page Layout
+    items:
+      - label: Create table
+        value: Press Tab after typing a new line of text
+      - label: New column in single-row table
+        keys: Tab
+      - label: New row at end of table
+        keys: Enter
+      - label: New paragraph in same cell
+        keys: Alt+Enter
+      - label: Row below current row
+        keys: Ctrl+Enter
+        notes: When cursor is in a table cell.
+      - label: Column right
+        keys: Ctrl+Alt+R
+      - label: Column left
+        keys: Ctrl+Alt+E
+      - label: Note containers
+        value: OneNote uses movable note containers rather than a strict document flow
+      - label: Reposition containers
+        value: Drag the note container handle on the page canvas
+
+  - group: Ink OCR and Printout Workflows
+    items:
+      - label: Ink and handwriting
+        value: Strong fit for stylus workflows, annotation, and sketching on the page canvas
+      - label: Start math equation
+        keys: Alt+Equal
+      - label: Math workflow
+        value: Convert selected text into a math equation and use Math Assistant where supported
+      - label: Insert printout
+        keys: Alt+N then O
+      - label: Insert picture
+        keys: Alt+N then P
+      - label: Insert sticker
+        keys: Alt+N then S
+      - label: Insert screen clipping
+        keys: Win+Shift+S then Ctrl+V
+      - label: OCR from picture or printout
+        value: OneNote can extract and copy text from pictures and file printouts
+      - label: OCR fit
+        value: Good for scanned handouts, screenshots, and pasted reference material
+
+  - group: Audio Recording and Media Notes
+    items:
+      - label: Audio note workflow
+        value: OneNote supports audio note capture and playback-linked review
+      - label: Playback navigation
+        value: Use the audio shortcuts to jump back and forward while reviewing recorded material
+      - label: Media-rich page model
+        value: Notes may include files, images, printouts, drawings, and audio on the same page
+      - label: File attachment
+        keys: Alt+N then F
+
+  - group: Sharing Collaboration and Education
+    items:
+      - label: Send selected pages by email
+        keys: Ctrl+Shift+E
+      - label: Sync current shared notebook
+        keys: Shift+F9
+      - label: Sync all shared notebooks
+        keys: F9
+      - label: Mark page unread
+        keys: Ctrl+Q
+      - label: Outlook task from note
+        keys: Ctrl+Shift+1 through Ctrl+Shift+5
+        notes: Creates dated Outlook tasks from selected note content.
+      - label: Open linked Outlook task
+        keys: Ctrl+Shift+K
+      - label: Class Notebook fit
+        value: Strong for teaching workflows with content library, collaboration space, and per-student areas
+      - label: Shared whiteboard behavior
+        value: Multiple users can collaborate on the same notebook pages with later sync and merge
+
+  - group: Protection Sync and Version Caveats
+    items:
+      - label: Lock password-protected sections
+        keys: Ctrl+Alt+L
+      - label: Offline behavior
+        value: Offline edits are supported and later synchronized when connectivity returns
+      - label: Conflict caveat
+        value: Collaboration and offline merges are generally strong, but complex simultaneous edits to the same content can still require review
+      - label: Windows version caveat
+        value: Prefer the current desktop OneNote app; the old OneNote for Windows 10 app reached end of support on October 14, 2025
+      - label: Mac and web differences
+        value: Some shortcuts and advanced Office-linked workflows differ by platform
+
+  - group: Automation and API Adjacent Surfaces
+    items:
+      - label: Outlook integration
+        value: Create follow-up tasks from notes with built-in Outlook shortcuts
+      - label: Web clipper style workflow
+        value: OneNote supports clipping or capturing web content into notebooks
+      - label: Service API history
+        value: Microsoft has documented a OneNote service API for third-party integrations
+      - label: Best current assumption
+        value: For new automation work, verify against current Microsoft Graph and Microsoft 365 developer docs before implementation
+        notes: This file is a user reference, not a development contract.
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Freeform notebooks, handwriting, lecture or meeting notes, research capture, and Microsoft 365 collaboration
+      - label: Strongest uncommon surfaces
+        value: OCR from printouts, audio-linked notes, page canvas layout, Outlook task linking, and Class Notebook workflows
+      - label: Official shortcut page
+        value: support.microsoft.com/accessibility/onenote/keyboard-shortcuts-in-onenote
+      - label: Official support hub
+        value: support.microsoft.com/onenote

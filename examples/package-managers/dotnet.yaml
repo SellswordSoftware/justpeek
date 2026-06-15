@@ -1,0 +1,110 @@
+name: dotnet
+group: package managers
+references:
+  - group: Core Project Operations
+    items:
+      - label: Create console app
+        command: dotnet new console -n MyApp
+        notes: Scaffold a new .NET console project with starter files.
+      - label: Restore dependencies
+        command: dotnet restore
+        notes: Download NuGet dependencies for the current solution or project.
+      - label: Build project
+        command: dotnet build
+        notes: Compile the current project or solution.
+      - label: Run project
+        command: dotnet run
+        notes: Build and execute the startup project.
+      - label: Test project
+        command: dotnet test
+        notes: Restore, build, and execute test projects.
+
+  - group: Package and NuGet Management
+    items:
+      - label: Add NuGet package
+        command: dotnet add package Serilog
+        notes: Add a package reference to the current project file.
+      - label: Add specific package version
+        command: dotnet add package Serilog --version 3.1.1
+        notes: Pin a deterministic package version explicitly.
+      - label: Remove package
+        command: dotnet remove package Serilog
+        notes: Delete a package reference from the project.
+      - label: List package references
+        command: dotnet list package
+        notes: Show direct package references and installed versions.
+      - label: List outdated packages
+        command: dotnet list package --outdated
+        notes: Compare installed packages with newer available versions.
+
+  - group: Solutions and Multi-Project Workflows
+    items:
+      - label: Create solution file
+        command: dotnet new sln -n MySolution
+        notes: Start a solution that can contain multiple related projects.
+      - label: Add project to solution
+        command: dotnet sln add src/MyApp/MyApp.csproj
+        notes: Register a project under the active solution.
+      - label: Add project reference
+        command: dotnet add src/Web/Web.csproj reference src/Core/Core.csproj
+        notes: Wire one project to another inside a solution.
+      - label: List solution projects
+        command: dotnet sln list
+        notes: Show which projects belong to the current solution.
+      - label: Remove project from solution
+        command: dotnet sln remove src/Old/Old.csproj
+        notes: Detach a project from the solution without deleting files.
+
+  - group: Publish, Tools, and Execution
+    items:
+      - label: Publish release build
+        command: dotnet publish -c Release
+        notes: Produce deployable output under the publish directory.
+      - label: Publish self-contained app
+        command: dotnet publish -c Release -r linux-x64 --self-contained true
+        notes: Bundle the runtime for deployment to a target RID.
+      - label: Install global tool
+        command: dotnet tool install --global dotnet-ef
+        notes: Install a .NET CLI tool for the current user.
+      - label: Update global tool
+        command: dotnet tool update --global dotnet-ef
+        notes: Upgrade one installed global tool.
+      - label: Run local or global tool
+        command: dotnet tool run dotnetsay
+        notes: Execute a tool managed through the .NET tool system.
+
+  - group: SDK, NuGet Sources, and Diagnostics
+    items:
+      - label: List installed SDKs
+        command: dotnet --list-sdks
+        notes: Show available SDK versions on the machine.
+      - label: List runtimes
+        command: dotnet --list-runtimes
+        notes: Inspect installed shared runtime versions.
+      - label: List NuGet sources
+        command: dotnet nuget list source
+        notes: Review configured package feeds and their enabled state.
+      - label: Add NuGet source
+        command: dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget
+        notes: Register a package source by URL and name.
+      - label: Show environment info
+        command: dotnet --info
+        notes: Print SDK, runtime, RID, and environment details for troubleshooting.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap new app
+        command: dotnet new console -n MyApp && cd MyApp && dotnet add package Serilog && dotnet run
+        notes: Typical quick-start sequence for a new CLI app.
+      - label: CI validation loop
+        command: dotnet restore && dotnet build && dotnet test
+        notes: Standard restore-build-test pipeline for CI.
+      - label: Clean build outputs
+        command: dotnet clean
+        notes: Remove compiled outputs to force a fresh build.
+      - label: Inspect CLI version
+        command: dotnet --version
+        notes: Important because SDK behavior and defaults vary across releases.
+      - label: Show help
+        command: dotnet --help
+        notes: The .NET CLI covers scaffolding, restore, build, test, publish, and tooling.

@@ -1,0 +1,67 @@
+name: i3
+group: os shortcuts
+search_terms:
+  - i3wm
+  - i3 window manager
+references:
+  - group: Core Window Navigation
+    items:
+      - label: Mod key
+        value: Default is Alt; many users switch to Super
+      - label: Open terminal
+        keys: $mod+Enter
+      - label: Focus left down up right
+        keys: $mod+J / $mod+K / $mod+L / $mod+Semicolon
+        notes: i3 uses home-row directions that differ slightly from Vim's hjkl habit.
+      - label: Focus with arrows
+        keys: $mod+Arrow keys
+      - label: Kill window
+        keys: $mod+Shift+Q
+      - label: Fullscreen
+        keys: $mod+F
+
+  - group: Layout and Splits
+    items:
+      - label: Split vertical for next window
+        keys: $mod+V
+      - label: Split horizontal for next window
+        keys: $mod+H
+      - label: Toggle split layout
+        keys: $mod+E
+      - label: Stacking layout
+        keys: $mod+S
+      - label: Tabbed layout
+        keys: $mod+W
+      - label: Toggle floating
+        keys: $mod+Shift+Space
+
+  - group: Workspaces and Moving Windows
+    items:
+      - label: Switch workspace
+        keys: $mod+1..$mod+0
+      - label: Move window to workspace
+        keys: $mod+Shift+1..$mod+Shift+0
+      - label: dmenu launcher
+        keys: $mod+D
+      - label: Restart i3 in place
+        keys: $mod+Shift+R
+      - label: Exit i3
+        keys: $mod+Shift+E
+
+  - group: Mouse and Resize
+    items:
+      - label: Move floating windows
+        value: Drag titlebar or use floating modifier
+      - label: Resize floating windows
+        value: Drag borders or use a resize binding mode from config
+      - label: Drag tiling containers
+        value: Supported in recent i3; can use titlebar or floating modifier drag
+
+  - group: Config and Recovery
+    items:
+      - label: Default config base
+        value: /etc/i3/config
+      - label: User config
+        value: ~/.config/i3/config
+      - label: Config wizard
+        value: i3-config-wizard can generate layout-aware defaults for your keyboard

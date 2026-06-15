@@ -1,0 +1,110 @@
+name: npm
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Install project dependencies
+        command: npm install
+        notes: Resolve and install dependencies declared in `package.json`.
+      - label: Add dependency
+        command: npm install axios
+        notes: Install and record a runtime dependency.
+      - label: Add dev dependency
+        command: npm install --save-dev vitest typescript
+        notes: Record packages under `devDependencies`.
+      - label: Remove dependency
+        command: npm uninstall axios
+        notes: Remove a dependency from both disk and project metadata.
+      - label: Upgrade dependency
+        command: npm update axios
+        notes: Refresh one dependency within the allowed semver range.
+
+  - group: Scripts and Execution
+    items:
+      - label: Run project script
+        command: npm run build
+        notes: Execute a named script from `package.json`.
+      - label: Run test script
+        command: npm test
+        notes: Shortcut for `npm run test` when the script exists.
+      - label: Run one-off package
+        command: npx cowsay hello
+        notes: Execute a package binary temporarily without adding it permanently.
+      - label: Create app from package
+        command: npm create vite@latest
+        notes: Scaffold projects through the package-creation shortcut.
+      - label: Execute local binary
+        command: npx eslint .
+        notes: Common path for running a dependency-installed CLI directly.
+
+  - group: Lockfiles, CI, and Reproducibility
+    items:
+      - label: Clean CI install
+        command: npm ci
+        notes: Install exactly from `package-lock.json` and fail on lock mismatch.
+      - label: Install ignoring scripts
+        command: npm install --ignore-scripts
+        notes: Skip lifecycle scripts during installs for debugging or hardened environments.
+      - label: Rebuild native packages
+        command: npm rebuild
+        notes: Re-run build steps for dependencies with native or postinstall behavior.
+      - label: Explain lockfile source
+        command: cat package-lock.json
+        notes: The lockfile is central to deterministic npm installs.
+      - label: Audit vulnerabilities
+        command: npm audit
+        notes: Review known security issues in installed dependencies.
+
+  - group: Inspection and Dependency Analysis
+    items:
+      - label: List installed top-level deps
+        command: npm list --depth=0
+        notes: Show only direct dependencies for a concise inventory.
+      - label: Show outdated packages
+        command: npm outdated
+        notes: Compare current, wanted, and latest package versions.
+      - label: Explain why package exists
+        command: npm explain react
+        notes: Trace why a dependency is present in the tree.
+      - label: Show package metadata from registry
+        command: npm view react
+        notes: Inspect versions, dist-tags, and package metadata remotely.
+      - label: Show current npm config
+        command: npm config list
+        notes: Review effective configuration, registries, and auth-related settings.
+
+  - group: Workspaces and Multi-Package Repos
+    items:
+      - label: Install all workspaces
+        command: npm install --workspaces
+        notes: Resolve and install dependencies across configured workspaces.
+      - label: Run script in one workspace
+        command: npm run build --workspace web
+        notes: Target one named workspace package directly.
+      - label: Run script in all workspaces
+        command: npm run test --workspaces
+        notes: Execute the same script across all workspace members.
+      - label: Add dep to one workspace
+        command: npm install react --workspace web
+        notes: Install a dependency into one workspace package.
+      - label: List workspaces
+        command: npm query .workspace
+        notes: Query workspace package metadata in modern npm setups.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap project
+        command: npm install && npm run dev
+        notes: Standard first-run flow in many JS or TS repos.
+      - label: CI validation loop
+        command: npm ci && npm test
+        notes: Common reproducible install and validation path for CI.
+      - label: Add lint and format tooling
+        command: npm install --save-dev eslint prettier typescript
+        notes: Typical starter tooling set for JS or TS apps.
+      - label: Inspect npm version
+        command: npm --version
+        notes: Behavior around workspaces, lockfiles, and audit can vary by npm version.
+      - label: Show help
+        command: npm --help
+        notes: npm spans package install, scripts, workspaces, auth, and registry inspection.

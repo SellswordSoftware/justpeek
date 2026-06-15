@@ -1,0 +1,106 @@
+name: Zed
+group: editors and ides
+process:
+  - zed
+  - Zed
+references:
+  - group: Navigation and Commanding
+    items:
+      - label: Command palette
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+      - label: Open file picker
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Search project
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+      - label: Go to line or symbol
+        keys: Ctrl+G
+        keys_by_os:
+          macos: Cmd+G
+      - label: Open keymap editor
+        keys: Ctrl+K Ctrl+S
+        keys_by_os:
+          macos: Cmd+K Cmd+S
+      - label: Open settings
+        keys: Ctrl+Comma
+        keys_by_os:
+          macos: Cmd+Comma
+      - label: Open project symbols
+        command: "zed: project symbols"
+        notes: Action names are often faster to recall than a raw key chord.
+
+  - group: Editing and Multi-cursor
+    items:
+      - label: Format document
+        keys: Shift+Alt+F
+        keys_by_os:
+          macos: Shift+Option+F
+      - label: Rename symbol
+        keys: F2
+      - label: Code actions
+        keys: Ctrl+Period
+        keys_by_os:
+          macos: Cmd+Period
+      - label: Add next match
+        keys: Ctrl+D
+        keys_by_os:
+          macos: Cmd+D
+      - label: Select all matches
+        keys: Ctrl+Shift+L
+        keys_by_os:
+          macos: Cmd+Shift+L
+      - label: Expand syntax selection
+        keys: Ctrl+Right
+        keys_by_os:
+          macos: Cmd+Shift+Right
+      - label: Shrink syntax selection
+        keys: Ctrl+Left
+        keys_by_os:
+          macos: Cmd+Shift+Left
+
+  - group: Panels and Workspace
+    items:
+      - label: Toggle project panel
+        command: "zed: toggle project panel"
+      - label: Toggle terminal panel
+        command: "zed: toggle terminal panel"
+      - label: Toggle outline panel
+        command: "zed: toggle outline panel"
+      - label: Open keymap file
+        command: "zed: open keymap file"
+      - label: Open settings file
+        command: "zed: open settings file"
+      - label: Base keymap selector
+        command: "zed: toggle base keymap selector"
+        notes: Useful when switching from VS Code, Sublime, or JetBrains habits.
+
+  - group: AI and Collaboration
+    items:
+      - label: Open assistant or agent panel
+        command: "zed: open agent panel"
+      - label: Inline assistant
+        command: "zed: inline assist"
+      - label: Start collaboration channel
+        value: Collaboration panel
+        notes: Zed has more built-in collaboration surface than most local-first editors.
+      - label: Share project or call
+        value: Contacts / Channels / Private Calls
+        notes: Keep this in mind when pairing or reviewing remotely.
+
+  - group: Config and Files
+    items:
+      - label: Settings path
+        value: ~/.config/zed/settings.json
+      - label: Keymap path
+        value: ~/.config/zed/keymap.json
+      - label: Install extensions
+        command: "zed: extensions"
+      - label: Use helix mode
+        value: "Enable `helix_mode` in settings"
+      - label: Use vim mode
+        value: "Enable `vim_mode` in settings"

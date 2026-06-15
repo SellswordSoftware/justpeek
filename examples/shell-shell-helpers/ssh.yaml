@@ -1,0 +1,115 @@
+name: ssh
+group: shell / shell helpers
+references:
+  - group: Core Connections
+    items:
+      - label: Connect to a host
+        command: ssh user@host
+        notes: Basic interactive login over SSH.
+      - label: Connect on custom port
+        command: ssh -p 2222 user@host
+        notes: Override the default port 22 when needed.
+      - label: Run one remote command
+        command: ssh user@host 'uname -a'
+        notes: Execute a command non-interactively and return its output locally.
+      - label: Force pseudo-terminal
+        command: ssh -t user@host 'sudo systemctl status nginx'
+        notes: `-t` allocates a TTY for commands that require interactive terminal semantics.
+      - label: Connect quietly
+        command: ssh -q user@host
+        notes: Reduce diagnostic noise in scripts and wrappers.
+
+  - group: Keys and Authentication
+    items:
+      - label: Generate an Ed25519 key
+        command: ssh-keygen -t ed25519 -C 'you@example.com'
+        notes: Modern default choice for personal SSH keys.
+      - label: Copy public key to server
+        command: ssh-copy-id user@host
+        notes: Install the local public key into the remote authorized keys set.
+      - label: Use specific identity file
+        command: ssh -i ~/.ssh/work_ed25519 user@host
+        notes: Select a non-default key for one connection.
+      - label: Add key to ssh-agent
+        command: ssh-add ~/.ssh/work_ed25519
+        notes: Cache decrypted key material in the running agent.
+      - label: List loaded agent keys
+        command: ssh-add -l
+        notes: Confirm which identities the agent can currently offer.
+
+  - group: Config and Host Aliases
+    items:
+      - label: Use SSH config alias
+        command: ssh prod-web
+        notes: Host aliases from `~/.ssh/config` simplify repeated connections.
+      - label: Host config example
+        command: |
+          Host prod-web
+            HostName prod.example.com
+            User deploy
+            Port 2222
+            IdentityFile ~/.ssh/deploy_ed25519
+        notes: Common config block for stable alias-based access.
+      - label: Show effective config
+        command: ssh -G prod-web
+        notes: Print the resolved configuration after all matching directives apply.
+      - label: Restrict identity usage
+        command: ssh -o IdentitiesOnly=yes -i ~/.ssh/key user@host
+        notes: Avoid offering unrelated agent keys to strict servers.
+      - label: Disable strict host check once
+        command: ssh -o StrictHostKeyChecking=no user@host
+        notes: Expedient for ephemeral hosts, but weaker from a security perspective.
+
+  - group: Tunnels and Port Forwarding
+    items:
+      - label: Local port forward
+        command: ssh -L 5432:db.internal:5432 user@bastion
+        notes: Expose a remote service locally through the SSH connection.
+      - label: Remote port forward
+        command: ssh -R 8080:localhost:3000 user@host
+        notes: Publish a local service outward through the remote host.
+      - label: Dynamic SOCKS proxy
+        command: ssh -D 1080 user@host
+        notes: Create a local SOCKS proxy for browser or CLI traffic.
+      - label: Background tunnel only
+        command: ssh -fN -L 5432:db.internal:5432 user@bastion
+        notes: `-N` skips running a remote shell and `-f` backgrounds after auth.
+      - label: Jump through bastion
+        command: ssh -J bastion user@private-host
+        notes: ProxyJump is cleaner than manual nested SSH in many environments.
+
+  - group: Multiplexing and Reliability
+    items:
+      - label: Enable connection multiplexing
+        command: ssh -o ControlMaster=auto -o ControlPersist=10m -o ControlPath=~/.ssh/cm-%r@%h:%p user@host
+        notes: Reuse one TCP connection across multiple SSH invocations.
+      - label: Keepalive probes
+        command: ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 user@host
+        notes: Detect dead sessions more quickly across unstable networks.
+      - label: Batch mode for scripts
+        command: ssh -o BatchMode=yes user@host 'uptime'
+        notes: Fail instead of prompting interactively for passwords or passphrases.
+      - label: Compression on slow links
+        command: ssh -C user@host
+        notes: Can help for text-heavy sessions over limited bandwidth.
+      - label: Escape sequence help
+        value: `~.` disconnects and `~?` shows client escape help at a new line in interactive SSH.
+        notes: Useful when a remote shell is hung but the client still responds.
+
+  - group: Troubleshooting and Inspection
+    items:
+      - label: Verbose connection logs
+        command: ssh -vvv user@host
+        notes: Primary debugging tool for auth, config, and host key issues.
+      - label: Test config syntax
+        command: ssh -T git@github.com
+        notes: Often used to verify auth and host config without requesting an interactive shell.
+      - label: Check remote public key fingerprint
+        command: ssh-keygen -lf ~/.ssh/id_ed25519.pub
+        notes: Print local key fingerprints in a shareable form.
+      - label: Scan remote host keys
+        command: ssh-keyscan host >> ~/.ssh/known_hosts
+        notes: Preload host keys for automation or freshly provisioned servers.
+      - label: Show help
+        command: ssh -h
+        notes: Quick summary of client flags and usage.

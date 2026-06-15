@@ -1,0 +1,256 @@
+name: Joplin
+group: notetaking and knowledge tools
+process:
+  - joplin
+  - Joplin
+  - joplin-desktop
+search_terms:
+  - markdown notes sync
+  - joplin clipper
+  - joplin api
+  - joplin terminal
+references:
+  - group: Core Model and Storage
+    items:
+      - label: Main content model
+        value: Notes notebooks tags and to-dos
+      - label: Format
+        value: Markdown-first with rich text support also available
+      - label: Offline-first
+        value: All data stays available locally even without network access
+      - label: Search
+        value: Full text search on all platforms
+      - label: Portability
+        value: Notes can be modified from Joplin or from your own text editor
+      - label: Resource handling
+        value: Images attachments and note metadata are stored alongside notes
+
+  - group: Desktop Workflows and Shortcuts
+    items:
+      - label: External editor
+        keys: Ctrl+E
+        keys_by_os:
+          macos: Cmd+E
+        notes: Opens the current note in your configured external editor.
+      - label: Text editor command setting
+        value: General Options > Text editor command
+      - label: Link to note dialog
+        command: Tools > Link to note
+        notes: Search a note title and insert an internal note link.
+      - label: Configuration screen
+        value: Main place for sync encryption plugins web clipper OCR and editor settings
+      - label: Desktop plus mobile plugins
+        value: Plugins run on desktop and Android; iOS only allows recommended plugins
+      - label: Note history
+        value: Available on desktop and sync-aware across devices
+
+  - group: Terminal Interface and Command Mode
+    items:
+      - label: Install terminal app
+        command: |
+          NPM_CONFIG_PREFIX=~/.joplin-bin npm install --loglevel=error -g joplin
+          sudo ln -s ~/.joplin-bin/bin/joplin /usr/local/bin/joplin
+      - label: Start terminal app
+        command: joplin
+      - label: Enter command-line mode
+        keys: Colon
+      - label: Help
+        command: help
+      - label: Shortcut list
+        command: help keymap
+      - label: Full command list in shell
+        command: joplin help all
+      - label: Current selected note
+        value: $n
+      - label: Current selected notebook
+        value: $b
+      - label: Current selected item
+        value: $c
+      - label: Create note
+        command: mknote "Wednesday's meeting"
+      - label: Create to-do
+        command: mktodo "Buy bread"
+      - label: Move current note
+        command: mv $n "Personal"
+      - label: Rename current notebook
+        command: ren $b "Something"
+      - label: Edit current note
+        command: edit $n
+      - label: Attach file to current note
+        command: attach $n /path/to/file.pdf
+      - label: Set external editor
+        command: config editor "subl -w"
+
+  - group: Sync Targets and CLI Sync
+    items:
+      - label: Supported sync targets
+        value: Joplin Cloud, Nextcloud, S3, WebDAV, Dropbox, OneDrive, local filesystem
+      - label: Plain text sync model
+        value: Notes notebooks tags and metadata are synced as plain text files
+      - label: Manual UI sync
+        value: Synchronise button
+      - label: Headless sync
+        command: joplin sync
+      - label: Cron example fit
+        value: Run `joplin sync` on a schedule for unattended sync jobs
+      - label: Nextcloud target id
+        value: sync.target 5
+      - label: WebDAV target id
+        value: sync.target 6
+      - label: Dropbox target id
+        value: sync.target 7
+      - label: Local filesystem target id
+        value: sync.target 2
+      - label: Nextcloud config example
+        command: |
+          :config sync.target 5
+          :config sync.5.path https://example.com/nextcloud/remote.php/webdav/Joplin
+          :config sync.5.username YOUR_USERNAME
+          :config sync.5.password YOUR_PASSWORD
+      - label: Local filesystem config example
+        command: |
+          :config sync.target 2
+          :config sync.2.path /path/to/local/sync-dir
+      - label: Dropbox and OneDrive caveat
+        value: Joplin only reads and writes inside /Apps/Joplin
+
+  - group: End to End Encryption
+    items:
+      - label: E2EE availability
+        value: Supported on all applications
+      - label: Enable on first device only
+        value: Start from one desktop or terminal client, then sync other devices after
+      - label: Master key creation
+        value: Enabling encryption creates a master key protected by your password
+      - label: Password recovery caveat
+        value: The master key password cannot be recovered if forgotten
+      - label: Recommended first device
+        value: Desktop or terminal
+        notes: Initial encryption is faster on more powerful devices.
+      - label: Parallel enable warning
+        value: Do not manually enable E2EE on multiple devices in parallel
+      - label: Performance caveat
+        value: Encryption and decryption add some overhead, especially during initial resync
+
+  - group: Search Linking and Retrieval
+    items:
+      - label: Full text search
+        value: Supported on all platforms
+      - label: Search filters
+        value: Search docs cover field and scope filters for narrowing large vaults
+      - label: OCR search
+        value: OCR text from images and PDFs becomes searchable
+      - label: Markdown note links
+        value: Standard Markdown links can point between notes
+      - label: Link to note dialog
+        value: Faster internal note linking from the desktop app
+      - label: Terminal URL open
+        keys: O
+        notes: Opens a highlighted URL in terminal mode when supported by the terminal.
+
+  - group: Web Clipper and Data API
+    items:
+      - label: Web Clipper purpose
+        value: Save web pages and screenshots from the browser
+      - label: Web Clipper setup
+        value: Desktop app > Configuration screen > Web Clipper
+      - label: Clipper troubleshooting basics
+        value: Verify service started, port not blocked, and no proxy is interfering
+      - label: Clipper service port
+        value: Visible in Web Clipper options
+      - label: Clipper service API
+        value: The clipper service can create modify or delete notes notebooks tags and more
+      - label: API auth model
+        value: Uses an authorisation token mechanism
+      - label: Programmatic API doc
+        value: joplinapp.org/help/api/references/rest_api
+      - label: Clipper auth spec
+        value: joplinapp.org/help/dev/spec/clipper_auth
+      - label: API fit
+        value: Local automations, external scripts, browser workflows, note ingestion pipelines
+
+  - group: Plugins Themes and Customization
+    items:
+      - label: Plugin settings page
+        value: Configuration screen > Plugins
+      - label: Search plugin repository
+        value: Type a plugin name or a single space to list all
+      - label: Browse all plugins
+        value: Plugin tools gear > Browse all plugins
+      - label: Install from file
+        value: Plugin tools gear > Install from file
+      - label: Manual plugin directory
+        value: ~/.config/joplin-desktop/plugins
+      - label: Restart requirement
+        value: Installing updating enabling disabling or deleting plugins requires restart
+      - label: Plugin package format
+        value: .jpl
+      - label: Recommended plugin mark
+        value: Gold crown icon
+      - label: Custom CSS files
+        value: userchrome.css and userstyle.css
+      - label: CSS caveat
+        value: HTML structure may change between versions, so custom CSS can break after upgrades
+      - label: Theme and plugin fit
+        value: Use plugins for behavior, CSS for visual control, and note templates for recurring content
+
+  - group: OCR Note History and Recovery
+    items:
+      - label: OCR availability
+        value: Desktop scans documents; mobile consumes OCR data via sync
+      - label: OCR file types
+        value: PNG, JPEG, and PDF
+      - label: OCR reliability
+        value: Best on clear printed text and screenshots; handwritten text is not supported
+      - label: Enable OCR
+        value: Configuration screen > General
+      - label: Note History cadence
+        value: Saves previous note versions every 10 minutes
+      - label: Restore old version workflow
+        value: Information icon > Previous version of this note > Restore
+      - label: Restore result
+        value: Restored version is copied into Restored Notes instead of overwriting the current note
+      - label: Minimum history retention wins
+        value: Across devices, the shortest configured retention period becomes the effective global limit
+
+  - group: Import Export and Migration
+    items:
+      - label: Evernote import
+        command: import /path/to/file.enex
+        notes: Imports formatted content resources and metadata.
+      - label: Markdown import
+        value: Plain Markdown files can be imported
+      - label: Export fit
+        value: Use export and backup flows for migration or archival
+      - label: Migration advantage
+        value: Joplin is designed to avoid hard dependency on one cloud vendor
+      - label: Resource portability
+        value: Attachments and metadata move with notes during documented import flows
+
+  - group: Paths Profiles and Diagnostics
+    items:
+      - label: Home directory Windows
+        value: "%UserProfile%"
+      - label: Home directory Linux
+        value: $HOME
+      - label: Home directory macOS
+        value: $HOME
+      - label: Crash reports Windows
+        value: "%LocalAppData%\\CrashDumps"
+      - label: Crash reports Linux
+        value: "$XDG_STATE_HOME/joplin or ~/.local/state/joplin"
+      - label: Crash reports macOS
+        value: "$HOME/Library/Logs/DiagnosticReports"
+      - label: Terminal profile and logs clue
+        value: "~/.config/joplin is a common place to inspect when terminal sync is failing"
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Portable Markdown notes with sync flexibility, local ownership, optional CLI use, and automation hooks
+      - label: Strongest uncommon surfaces
+        value: Terminal app, Web Clipper API, plugin API, E2EE, OCR, external editor integration
+      - label: Common pitfall
+        value: Mixing multiple sync tools or enabling encryption on several devices independently
+      - label: Official help
+        value: joplinapp.org/help

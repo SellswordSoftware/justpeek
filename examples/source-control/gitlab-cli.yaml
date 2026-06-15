@@ -1,0 +1,56 @@
+name: GitLab CLI
+group: source control
+references:
+  - group: Authentication and Setup
+    items:
+      - label: Log in interactively
+        command: glab auth login
+        notes: Connect the CLI to a GitLab instance and store credentials.
+      - label: Check auth status
+        command: glab auth status
+        notes: Confirm which host and account the CLI is using.
+      - label: Set default host
+        command: glab config set host gitlab.com
+        notes: Useful when you switch between self-hosted and cloud instances.
+
+  - group: Merge Requests
+    items:
+      - label: Create a merge request
+        command: glab mr create
+        notes: Opens an interactive flow for title, description, reviewers, and target branch.
+      - label: View merge request details
+        command: glab mr view <id>
+        notes: Shows status, reviewers, approvals, and discussion summary.
+      - label: Check out a merge request locally
+        command: glab mr checkout <id>
+        notes: Fetches the branch and switches to a local checkout.
+      - label: Merge a merge request
+        command: glab mr merge <id>
+        notes: Complete the merge from the terminal when approvals are satisfied.
+
+  - group: Issues and CI
+    items:
+      - label: Create an issue
+        command: glab issue create
+        notes: Open a new issue from prompts or flags.
+      - label: List pipelines
+        command: glab pipeline list
+        notes: Review recent CI runs for the current project.
+      - label: Watch a running pipeline
+        command: glab pipeline view <id>
+        notes: Inspect stage status and job output summaries.
+      - label: Retry a failed job
+        command: glab ci retry <job-id>
+        notes: Rerun a failed CI job without leaving the terminal.
+
+  - group: Repository Work
+    items:
+      - label: Clone a project
+        command: glab repo clone <group/project>
+        notes: Clone using the current authenticated host.
+      - label: Fork the current repository
+        command: glab repo fork
+        notes: Create a fork and optionally add the upstream remote.
+      - label: Open project in browser
+        command: glab repo view --web
+        notes: Jump from terminal context back to the web UI.

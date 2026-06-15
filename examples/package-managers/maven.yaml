@@ -1,0 +1,110 @@
+name: maven
+group: package managers
+references:
+  - group: Core Build Lifecycle
+    items:
+      - label: Compile project
+        command: mvn compile
+        notes: Run the compile phase and all required earlier lifecycle phases.
+      - label: Run tests
+        command: mvn test
+        notes: Execute unit tests after compiling test sources.
+      - label: Package artifact
+        command: mvn package
+        notes: Build the distributable artifact such as a JAR or WAR.
+      - label: Install to local repo
+        command: mvn install
+        notes: Copy the built artifact into the local Maven repository.
+      - label: Full clean verify
+        command: mvn clean verify
+        notes: Common end-to-end validation before publishing or merging changes.
+
+  - group: Dependency Management
+    items:
+      - label: Resolve dependencies
+        command: mvn dependency:resolve
+        notes: Fetch and resolve declared dependencies into the local repo cache.
+      - label: Show dependency tree
+        command: mvn dependency:tree
+        notes: Inspect transitive dependency structure and conflicts.
+      - label: Copy dependencies to dir
+        command: mvn dependency:copy-dependencies
+        notes: Materialize dependent artifacts into a directory for inspection or packaging.
+      - label: Purge local dependency copies
+        command: mvn dependency:purge-local-repository
+        notes: Re-resolve dependencies by cleaning selected local cache entries.
+      - label: Check for newer versions
+        command: mvn versions:display-dependency-updates
+        notes: Requires the Versions plugin; review available newer dependencies.
+
+  - group: Project Scaffolding and Modules
+    items:
+      - label: Generate project from archetype
+        command: mvn archetype:generate
+        notes: Scaffold a project from Maven archetypes interactively.
+      - label: Build one module
+        command: mvn -pl service-a package
+        notes: Restrict execution to a selected module in a multi-module build.
+      - label: Build with dependencies of one module
+        command: mvn -pl service-a -am package
+        notes: Also build upstream modules required by the selected module.
+      - label: Skip tests in package
+        command: mvn package -DskipTests
+        notes: Build artifacts without running tests, though test compilation may still occur.
+      - label: Show effective POM
+        command: mvn help:effective-pom
+        notes: Expand inherited configuration and profiles into the resolved POM view.
+
+  - group: Profiles, Properties, and Execution
+    items:
+      - label: Activate profile
+        command: mvn package -Pprod
+        notes: Enable a named build profile for environment-specific configuration.
+      - label: Set property on command line
+        command: mvn package -Drevision=1.2.3
+        notes: Override project properties dynamically for one build.
+      - label: Run main class with exec plugin
+        command: mvn exec:java -Dexec.mainClass=com.example.Main
+        notes: Requires appropriate exec plugin configuration or plugin availability.
+      - label: Run integration tests
+        command: mvn verify
+        notes: Common phase where integration-test plugins are bound.
+      - label: Build offline
+        command: mvn -o package
+        notes: Use only local repo contents with no network access.
+
+  - group: Repositories and Settings
+    items:
+      - label: Show local repository path
+        command: mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout
+        notes: Print the resolved local Maven repository directory.
+      - label: Use alternate settings file
+        command: mvn -s ~/.m2/custom-settings.xml package
+        notes: Point Maven at a non-default settings configuration.
+      - label: Show active profiles
+        command: mvn help:active-profiles
+        notes: Confirm which profiles Maven is activating for the current build.
+      - label: Encrypt server password
+        command: mvn --encrypt-password
+        notes: Use Maven's password encryption helpers for settings management.
+      - label: Debug transfer issues
+        command: mvn -X dependency:resolve
+        notes: Enable verbose debug output for repository and resolver troubleshooting.
+
+  - group: Common Workflows
+    items:
+      - label: Standard CI build
+        command: mvn -B clean verify
+        notes: Batch mode reduces interactive noise in CI logs.
+      - label: Fast local rebuild
+        command: mvn test
+        notes: Common inner-loop build when full packaging is unnecessary.
+      - label: Publish snapshot or release
+        command: mvn deploy
+        notes: Upload built artifacts to the configured remote repository.
+      - label: Inspect Maven version
+        command: mvn -version
+        notes: Maven and JDK versions both matter for build reproducibility.
+      - label: Show help
+        command: mvn --help
+        notes: Maven CLI flags, lifecycle phases, and plugin goals are worth checking directly.

@@ -1,0 +1,111 @@
+name: fzf
+group: shell / shell helpers
+references:
+  - group: Core Search Usage
+    items:
+      - label: Pipe a list into fzf
+        command: find . -type f | fzf
+        notes: Canonical fuzzy selector pattern for choosing from command output.
+      - label: Multi-select results
+        command: find . -type f | fzf -m
+        notes: `-m` enables tab-select and returns multiple lines.
+      - label: Reverse layout
+        command: find . -type f | fzf --layout=reverse
+        notes: Common layout that keeps the prompt near the bottom of the terminal.
+      - label: Exact match mode
+        command: find . -type f | fzf --exact
+        notes: Disable fuzzy scoring when literal substring matching is better.
+      - label: ANSI color aware matching
+        command: git branch --color=always | fzf --ansi
+        notes: Preserve colored input while still letting fzf score visible text.
+
+  - group: Preview and UI
+    items:
+      - label: Add a preview window
+        command: find . -type f | fzf --preview 'bat --style=numbers --color=always {}'
+        notes: Preview improves file-picking workflows significantly.
+      - label: Position preview on the right
+        command: find . -type f | fzf --preview 'bat --color=always {}' --preview-window=right:60%
+        notes: Tune width and location for wide file content.
+      - label: Hide preview by default
+        command: find . -type f | fzf --preview 'bat --color=always {}' --preview-window=hidden
+        notes: Useful when preview is valuable but too expensive to render constantly.
+      - label: Bind toggle preview
+        command: find . -type f | fzf --bind 'ctrl-/:toggle-preview'
+        notes: Add interactive preview control without changing the command.
+      - label: Customize height and border
+        command: find . -type f | fzf --height=80% --border=rounded
+        notes: Better embedded layout for shells and tmux panes.
+
+  - group: Key Bindings and Shell Integration
+    items:
+      - label: Trigger path completion in shell
+        keys: Ctrl+T
+        notes: Default shell integration binding for fuzzy file insertion.
+      - label: Search command history
+        keys: Ctrl+R
+        notes: Common shell binding that opens fzf over command history.
+      - label: Fuzzy cd into directory
+        keys: Alt+C
+        notes: Default binding for selecting a directory and changing into it.
+      - label: Install shell integration
+        command: $(brew --prefix)/opt/fzf/install
+        notes: Common Homebrew path for enabling completion and key bindings interactively.
+      - label: Source completion manually
+        command: source /usr/share/fzf/completion.bash
+        notes: Example manual integration path for Bash-based setups.
+
+  - group: Query, Scoring, and Selection
+    items:
+      - label: Seed initial query
+        command: find . -type f | fzf --query 'config'
+        notes: Start with a predefined search term for repeated workflows.
+      - label: Select first match automatically
+        command: find . -type f | fzf --select-1 --exit-0
+        notes: Skip the UI when there is a single unambiguous result.
+      - label: Toggle sort
+        command: seq 1000 | fzf --bind 'ctrl-s:toggle-sort'
+        notes: Switch between ranking by score and preserving input order.
+      - label: Phrase search
+        command: ps -ef | fzf -q "'chrome"
+        notes: Prefix with a quote to force exact term matching.
+      - label: Negate a token
+        command: ps -ef | fzf -q '!root'
+        notes: Exclude matches containing a specific token.
+
+  - group: Reload, Execute, and Dynamic Workflows
+    items:
+      - label: Reload source on query change
+        command: |
+          fzf --bind 'change:reload:rg --files | rg {q} || true'
+        notes: Dynamic reload turns fzf into an interactive frontend for another tool.
+      - label: Open selected file in editor
+        command: fzf --bind 'enter:become(nvim {})'
+        notes: `become(...)` replaces fzf with another process directly.
+      - label: Execute action without leaving
+        command: fzf --bind 'ctrl-o:execute(code {})'
+        notes: `execute(...)` runs a command and returns to the selector afterward.
+      - label: Print selected field
+        command: ps -ef | fzf --with-nth=8.. --delimiter=' ' 
+        notes: Narrow the visible match region to more meaningful columns.
+      - label: Use fzf as a walker
+        command: fzf --walker=file,dir,follow,hidden
+        notes: Newer built-in walker mode can replace external `find` for many cases.
+
+  - group: Environment Variables and Defaults
+    items:
+      - label: Set default command
+        command: export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+        notes: Centralize the file source used by many fzf invocations.
+      - label: Set default options
+        command: export FZF_DEFAULT_OPTS='--height=80% --layout=reverse --border'
+        notes: Apply common UI preferences globally.
+      - label: Customize Ctrl+T source
+        command: export FZF_CTRL_T_COMMAND='fd --type f'
+        notes: Override the shell integration file source independently.
+      - label: Customize Alt+C source
+        command: export FZF_ALT_C_COMMAND='fd --type d'
+        notes: Restrict directory picker input to directories only.
+      - label: Set preview defaults
+        command: export FZF_CTRL_T_OPTS='--preview "bat --color=always {}"'
+        notes: Attach a default preview to specific keybinding flows.

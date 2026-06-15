@@ -1,0 +1,131 @@
+name: Zsh
+group: shell / shell helpers
+references:
+  - group: Startup and Configuration
+    items:
+      - label: Show Zsh version
+        command: zsh --version
+        notes: Confirms the running interpreter version for feature compatibility checks.
+      - label: Reload Zsh config
+        command: source ~/.zshrc
+        notes: Re-read prompt, aliases, functions, and options in the current shell.
+      - label: Launch login shell
+        command: zsh -l
+        notes: Troubleshoot login-only initialization from a terminal.
+      - label: List active options
+        command: setopt
+        notes: Show currently enabled Zsh shell options.
+      - label: Print parameter values
+        command: typeset -p PATH path
+        notes: Helpful when comparing scalar and array-backed parameters.
+
+  - group: Navigation and Globbing
+    items:
+      - label: Jump to previous directory
+        command: cd -
+      - label: Use named directory hash
+        command: hash -d proj=~/src/project
+        notes: Enables shortcuts like `cd ~proj`.
+      - label: Recursive glob
+        command: print -l **/*.md
+        notes: `**` is a powerful built-in recursive glob in Zsh.
+      - label: Qualifier for directories only
+        command: print -l *(/)
+        notes: Glob qualifiers filter matches by type, permissions, age, and more.
+      - label: Newest matching file
+        command: print -l *(om[1])
+        notes: Sort matches by modification time and select the first result.
+
+  - group: Variables, Arrays, and Expansion
+    items:
+      - label: Set an array
+        command: plugins=(git docker kubectl)
+        notes: Arrays are first-class and are frequently used in `.zshrc`.
+      - label: Join array values
+        command: print -r -- "${(j:,:)plugins}"
+        notes: Zsh expansion flags can transform arrays inline.
+      - label: Lowercase a variable
+        command: print -r -- "${(L)NAME}"
+        notes: Expansion flags can case-transform values without an external command.
+      - label: Split into lines
+        command: print -l "${(@f)content}"
+        notes: `(@f)` splits a scalar on newlines into array elements.
+      - label: Substitute text globally
+        command: print -r -- "${NAME//old/new}"
+        notes: Replace every matching substring in the parameter expansion.
+
+  - group: Completion and Interactive Use
+    items:
+      - label: Initialize completion system
+        command: autoload -Uz compinit && compinit
+        notes: Standard setup for programmable completion support.
+      - label: Rebuild completion dump
+        command: rm -f ~/.zcompdump && compinit
+        notes: Useful when completions become stale or corrupted.
+      - label: Expand or complete
+        keys: Tab
+        notes: Zsh completion can expand paths, commands, arguments, and options contextually.
+      - label: List choices without inserting
+        keys: Ctrl+D
+        notes: Common completion widget binding in many Zsh setups.
+      - label: Edit current command in editor
+        keys: Ctrl+X Ctrl+E
+        notes: Open the current multiline buffer in `$EDITOR`.
+
+  - group: Options and Safety
+    items:
+      - label: Enable extended globbing
+        command: setopt extended_glob
+        notes: Unlock advanced pattern syntax and qualifiers.
+      - label: Share history across sessions
+        command: setopt share_history inc_append_history
+        notes: Append commands immediately and import from other shells.
+      - label: Prevent accidental overwrite
+        command: setopt noclobber
+        notes: Stops `>` from overwriting files unless you use `>|`.
+      - label: Correct mistyped commands
+        command: setopt correct
+        notes: Prompts for confirmation before running a guessed correction.
+      - label: Fail on unmatched globs
+        command: setopt nomatch
+        notes: Surface mistakes instead of silently passing literal patterns.
+
+  - group: Functions, Hooks, and Aliases
+    items:
+      - label: Define a function
+        command: |
+          mkcd() {
+            mkdir -p -- "$1" && cd -- "$1"
+          }
+        notes: Zsh functions use the same general form as Bash, with extra hook support available.
+      - label: Add a precmd hook
+        command: |
+          precmd_functions+=(my_precmd)
+        notes: Run custom logic before each prompt is displayed.
+      - label: Add a chpwd hook
+        command: |
+          chpwd_functions+=(my_chpwd)
+        notes: Trigger logic automatically whenever the working directory changes.
+      - label: Define a global alias
+        command: alias -g G='| grep'
+        notes: Global aliases expand anywhere on the command line, not just at the start.
+      - label: List aliases
+        command: alias
+        notes: Print configured aliases for inspection and debugging.
+
+  - group: History and Debugging
+    items:
+      - label: Search history backwards
+        keys: Ctrl+R
+      - label: Show recent history entries
+        command: fc -l -20
+        notes: Print the most recent 20 commands with event numbers.
+      - label: Re-run last command with sudo
+        command: sudo !!
+        notes: Common shorthand when the prior command failed due to permissions.
+      - label: Trace a script
+        command: zsh -x script.zsh
+        notes: Print commands as they execute.
+      - label: Syntax check a script
+        command: zsh -n script.zsh
+        notes: Parse the script without running it.

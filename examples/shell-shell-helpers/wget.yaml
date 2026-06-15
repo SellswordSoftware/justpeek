@@ -1,0 +1,110 @@
+name: wget
+group: shell / shell helpers
+references:
+  - group: Core Downloads
+    items:
+      - label: Download a file
+        command: wget https://example.com/archive.tar.gz
+        notes: Save the URL to a local file using the remote filename by default.
+      - label: Save with custom name
+        command: wget -O package.tgz https://example.com/archive.tar.gz
+        notes: Write the download to a chosen local filename.
+      - label: Continue an interrupted download
+        command: wget -c https://example.com/large.iso
+        notes: Resume partial downloads when the server supports range requests.
+      - label: Download in background
+        command: wget -b https://example.com/backup.sql.gz
+        notes: Background the transfer and log progress to `wget-log`.
+      - label: Show response headers
+        command: wget --server-response --spider https://example.com
+        notes: Inspect response metadata without saving the body.
+
+  - group: Recursive and Mirroring
+    items:
+      - label: Recursive download
+        command: wget -r https://example.com/docs/
+        notes: Follow links recursively starting from the given page.
+      - label: Mirror a site
+        command: wget --mirror https://example.com/docs/
+        notes: Shortcut for recursion, timestamping, and infinite depth suitable for mirroring.
+      - label: Convert links for local browsing
+        command: wget --mirror --convert-links --adjust-extension --page-requisites --no-parent https://example.com/docs/
+        notes: Common offline-docs recipe for browsing mirrored content locally.
+      - label: Stay within one directory tree
+        command: wget -r --no-parent https://example.com/releases/
+        notes: Prevent climbing upward into parent paths.
+      - label: Restrict accepted extensions
+        command: wget -r -A pdf,epub https://example.com/library/
+        notes: Download only files with selected extensions during recursion.
+
+  - group: Authentication, Cookies, and Headers
+    items:
+      - label: Basic auth
+        command: wget --user=user --password=secret https://example.com/private.tar.gz
+        notes: Credentials can also come from `.netrc` for less exposure in shell history.
+      - label: Add authorization header
+        command: wget --header='Authorization: Bearer '$TOKEN https://api.example.com/export
+        notes: Useful for APIs and authenticated artifact downloads.
+      - label: Save cookies
+        command: wget --save-cookies cookies.txt --keep-session-cookies https://example.com/login
+        notes: Persist cookies across login and follow-up requests.
+      - label: Load cookies
+        command: wget --load-cookies cookies.txt https://example.com/dashboard
+        notes: Reuse a cookie jar to stay authenticated.
+      - label: Set custom user agent
+        command: wget --user-agent='Mozilla/5.0 justpeek-bot' https://example.com
+        notes: Some endpoints behave differently based on user agent.
+
+  - group: Rate, Retry, and Reliability
+    items:
+      - label: Limit bandwidth
+        command: wget --limit-rate=500k https://example.com/backup.tar.gz
+        notes: Keep long downloads from saturating the connection.
+      - label: Retry failed downloads
+        command: wget --tries=5 https://example.com/archive.tar.gz
+        notes: Adjust retry count for flaky networks or transient upstream errors.
+      - label: Wait between requests
+        command: wget --wait=2 --random-wait -r https://example.com/data/
+        notes: Add politeness delays during recursive or scripted fetching.
+      - label: Timeout stalled transfer
+        command: wget --timeout=30 https://example.com/large.iso
+        notes: Bound how long wget waits on a network operation.
+      - label: Timestamp downloads
+        command: wget -N https://example.com/releases/latest.json
+        notes: Re-download only if the remote file is newer than the local copy.
+
+  - group: Input Lists and Batch Workflows
+    items:
+      - label: Download from URL list
+        command: wget -i urls.txt
+        notes: Fetch each URL listed in a text file.
+      - label: Reject file patterns
+        command: wget -r -R jpg,png,gif https://example.com/
+        notes: Avoid certain file types during recursive retrieval.
+      - label: Download page requirements
+        command: wget -p https://example.com/article.html
+        notes: Pull supporting assets such as images and stylesheets for one page.
+      - label: Read URLs from stdin
+        command: printf '%s\n' 'https://example.com/a' 'https://example.com/b' | wget -i -
+        notes: Treat stdin as the input list by passing `-` to `-i`.
+      - label: Log to chosen file
+        command: wget -o fetch.log https://example.com/archive.tar.gz
+        notes: Separate diagnostic logs from stdout and stderr in automation.
+
+  - group: Diagnostics and Practical Notes
+    items:
+      - label: Dry-run URL check
+        command: wget --spider https://example.com/archive.tar.gz
+        notes: Validate that a resource exists without downloading it.
+      - label: Debug request behavior
+        command: wget -d https://example.com
+        notes: Emit detailed debugging information.
+      - label: Ignore certificate validation once
+        command: wget --no-check-certificate https://internal.example.com
+        notes: Expedient for broken internal PKI, but not a good default.
+      - label: Use custom CA bundle
+        command: wget --ca-certificate=ca.pem https://internal.example.com
+        notes: Better than disabling TLS verification entirely.
+      - label: Show help
+        command: wget --help
+        notes: wget's recursive and mirroring flags are broad enough that help is often useful.

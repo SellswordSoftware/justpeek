@@ -1,0 +1,81 @@
+name: Sway
+group: os shortcuts
+search_terms:
+  - swaywm
+  - wayland tiling
+references:
+  - group: Default Config Basics
+    items:
+      - label: Mod key
+        value: Default config uses Mod4, usually the Super key
+      - label: Terminal
+        keys: $mod+Return
+      - label: Launcher
+        keys: $mod+D
+      - label: Kill window
+        keys: $mod+Shift+Q
+      - label: Reload config
+        keys: $mod+Shift+C
+      - label: Exit sway
+        keys: $mod+Shift+E
+
+  - group: Focus and Movement
+    items:
+      - label: Focus left down up right
+        keys: $mod+H / $mod+J / $mod+K / $mod+L
+      - label: Focus with arrows
+        keys: $mod+Arrow keys
+      - label: Move window
+        keys: $mod+Shift+H / J / K / L
+      - label: Move window with arrows
+        keys: $mod+Shift+Arrow keys
+      - label: Floating drag modifier
+        value: Hold $mod and drag with mouse
+
+  - group: Workspaces and Layout
+    items:
+      - label: Switch workspace
+        keys: $mod+1..$mod+0
+      - label: Move container to workspace
+        keys: $mod+Shift+1..$mod+Shift+0
+      - label: Horizontal split
+        keys: $mod+B
+      - label: Vertical split
+        keys: $mod+V
+      - label: Stacking layout
+        keys: $mod+S
+      - label: Tabbed layout
+        keys: $mod+W
+      - label: Toggle split layout
+        keys: $mod+E
+      - label: Fullscreen
+        keys: $mod+F
+      - label: Floating toggle
+        keys: $mod+Shift+Space
+      - label: Focus mode toggle
+        keys: $mod+Space
+      - label: Focus parent
+        keys: $mod+A
+
+  - group: Scratchpad and Resize
+    items:
+      - label: Send to scratchpad
+        keys: $mod+Shift+Minus
+      - label: Show scratchpad
+        keys: $mod+Minus
+      - label: Resize mode
+        keys: $mod+R
+      - label: Leave resize mode
+        keys: Return or Escape
+
+  - group: Utility Keys
+    items:
+      - label: Screenshot
+        keys: Print
+        notes: "Default config uses `grim`."
+      - label: Volume keys
+        value: XF86AudioMute / Lower / Raise
+      - label: Brightness keys
+        value: XF86MonBrightnessDown / XF86MonBrightnessUp
+      - label: Config path
+        value: ~/.config/sway/config

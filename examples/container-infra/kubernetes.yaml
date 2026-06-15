@@ -1,0 +1,109 @@
+name: Kubernetes
+group: container / infra
+references:
+  - group: Core Objects and Concepts
+    items:
+      - label: Pod
+        value: Smallest deployable unit; one or more containers sharing network and storage context.
+        notes: Most higher-level controllers ultimately manage Pods.
+      - label: Deployment
+        value: Controller for rolling out and managing stateless replicated Pods.
+        notes: Common default for application workloads.
+      - label: Service
+        value: Stable network endpoint and discovery mechanism for Pods.
+        notes: Decouples clients from ephemeral Pod IPs.
+      - label: ConfigMap and Secret
+        value: Externalized configuration and sensitive data injection primitives.
+        notes: Use Secrets for credentials and tokens, not ConfigMaps.
+      - label: Namespace
+        value: Logical partition for resources, policies, and RBAC scope.
+        notes: Often the first unit of environment separation.
+
+  - group: Workload Patterns
+    items:
+      - label: StatefulSet
+        value: Controller for ordered, stateful workloads with stable identities.
+        notes: Use for databases or services requiring durable network identity.
+      - label: DaemonSet
+        value: Ensures one Pod per node or matching node set.
+        notes: Common for log agents, node metrics, or networking helpers.
+      - label: Job
+        value: Run-to-completion batch workload.
+        notes: Appropriate for one-off tasks such as migrations or reports.
+      - label: CronJob
+        value: Scheduled batch job wrapper.
+        notes: Use for recurring tasks that fit cluster scheduling better than node-local cron.
+      - label: ReplicaSet
+        value: Maintains a target number of Pod replicas.
+        notes: Usually managed indirectly through Deployments.
+
+  - group: Networking and Exposure
+    items:
+      - label: ClusterIP service
+        value: Internal-only service reachable inside the cluster.
+        notes: Default and most common Service type.
+      - label: NodePort service
+        value: Exposes a service on a port on every node.
+        notes: Often used for simple testing, less often for mature production ingress.
+      - label: LoadBalancer service
+        value: Requests an external load balancer from cloud or platform integration.
+        notes: Common for public services in managed clusters.
+      - label: Ingress
+        value: HTTP or HTTPS routing layer into cluster services.
+        notes: Requires an ingress controller to function.
+      - label: NetworkPolicy
+        value: Traffic allow or deny rules between Pods and namespaces.
+        notes: Important for East-West isolation when your CNI supports it.
+
+  - group: Scheduling and Runtime Control
+    items:
+      - label: Requests and limits
+        value: Resource scheduling minimums and maximum allowed usage for containers.
+        notes: Set CPU and memory explicitly to improve scheduling and stability.
+      - label: Probes
+        value: Liveness, readiness, and startup health checks.
+        notes: Separate boot timing from ongoing health semantics.
+      - label: Affinity and anti-affinity
+        value: Scheduling preferences or constraints based on topology or labels.
+        notes: Useful for spreading replicas or co-locating coupled workloads.
+      - label: Taints and tolerations
+        value: Node-level exclusion and opt-in scheduling controls.
+        notes: Often used for GPU, infra, or dedicated workload nodes.
+      - label: PersistentVolume and PVC
+        value: Storage abstraction and claim mechanism for durable data.
+        notes: Most applications consume storage through PVCs rather than direct PV creation.
+
+  - group: Security and Access
+    items:
+      - label: ServiceAccount
+        value: Identity used by Pods when calling the Kubernetes API.
+        notes: Avoid running everything as the default service account.
+      - label: Role and RoleBinding
+        value: Namespace-scoped RBAC rules and identity bindings.
+        notes: Use ClusterRole only when permissions truly span namespaces or cluster resources.
+      - label: Pod Security Context
+        value: User, group, fsGroup, and capability settings at Pod or container level.
+        notes: Needed for least-privilege runtime behavior.
+      - label: Secret management
+        value: Kubernetes Secrets are base64-encoded objects, not encryption by themselves.
+        notes: Back them with external secret tooling or at-rest encryption when needed.
+      - label: Admission and policy
+        value: Cluster policy layers can validate or mutate workloads before admission.
+        notes: Common tooling includes Gatekeeper, Kyverno, and built-in admission controls.
+
+  - group: Common Operational Model
+    items:
+      - label: Declarative apply workflow
+        value: Store manifests in version control and apply them through reviewed changes.
+        notes: Ad hoc imperative changes drift unless folded back into source of truth.
+      - label: Rollouts and rollback
+        value: Prefer controller-managed rolling updates with explicit image and config versions.
+        notes: Rollback should be thought about before incidents, not during them.
+      - label: Observe events and logs
+        value: Most debugging starts with object describe output, events, logs, and controller status.
+        notes: Kubernetes problems are often reconciliation or scheduling problems, not just app crashes.
+      - label: Separate environments
+        value: Namespaces alone may not be enough; consider clusters, tenants, and blast radius.
+        notes: The right isolation boundary depends on trust, scale, and compliance.
+      - label: Show help
+        notes: Kubernetes itself is a platform model; `kubectl` is the operational command surface layered on top.

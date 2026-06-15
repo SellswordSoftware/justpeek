@@ -1,0 +1,110 @@
+name: sed
+group: shell / shell helpers
+references:
+  - group: Core Printing and Selection
+    items:
+      - label: Print matching lines
+        command: sed -n '/pattern/p' file.txt
+        notes: `-n` suppresses default printing so only explicit matches are emitted.
+      - label: Print line range
+        command: sed -n '10,20p' file.txt
+        notes: Select inclusive line ranges by line number.
+      - label: Print every line by default
+        command: sed '' file.txt
+        notes: Sed streams input through unchanged when no script alters it.
+      - label: Print last line
+        command: sed -n '$p' file.txt
+        notes: `$` addresses the final input line.
+      - label: Print non-matching lines
+        command: sed -n '/pattern/!p' file.txt
+        notes: Negate an address match with `!`.
+
+  - group: Substitution
+    items:
+      - label: Replace first match on each line
+        command: sed 's/old/new/' file.txt
+        notes: Default substitution changes only the first match per line.
+      - label: Replace all matches on each line
+        command: sed 's/old/new/g' file.txt
+        notes: Add `g` for global replacement across the line.
+      - label: Case-insensitive replace
+        command: sed 's/old/new/Ig' file.txt
+        notes: GNU sed supports `I` for case-insensitive matching.
+      - label: Capture groups in replacement
+        command: sed -E 's/(user_)([0-9]+)/\\1id-\\2/' file.txt
+        notes: Use extended regex with `-E` for cleaner grouping syntax.
+      - label: Replace only on matching lines
+        command: sed '/ERROR/s/id=[0-9]+/id=REDACTED/' app.log
+        notes: Combine an address and a substitution for targeted edits.
+
+  - group: In-Place Editing and Files
+    items:
+      - label: Edit file in place
+        command: sed -i 's/old/new/g' file.txt
+        notes: GNU sed edits inline; BSD sed often requires `-i ''`.
+      - label: Edit with backup
+        command: sed -i.bak 's/old/new/g' file.txt
+        notes: Keep the original file as `file.txt.bak`.
+      - label: Delete blank lines
+        command: sed -i '/^$/d' file.txt
+        notes: Common cleanup for generated or copied text files.
+      - label: Remove trailing whitespace
+        command: sed -i 's/[[:space:]]\\+$//' file.txt
+        notes: Practical formatting cleanup step in scripts.
+      - label: Comment out matching lines
+        command: sed -i '/^ListenAddress /s/^/#/' sshd_config
+        notes: Prefix matching lines instead of deleting them.
+
+  - group: Insert, Append, and Delete
+    items:
+      - label: Delete matching lines
+        command: sed '/pattern/d' file.txt
+        notes: Drop lines that match the address expression.
+      - label: Insert line before match
+        command: sed '/pattern/i\\Inserted line' file.txt
+        notes: Add content before each matching line.
+      - label: Append line after match
+        command: sed '/pattern/a\\Appended line' file.txt
+        notes: Add content after each matching line.
+      - label: Replace entire matching line
+        command: sed '/pattern/c\\Replacement line' file.txt
+        notes: `c\` changes the full addressed line content.
+      - label: Delete line range
+        command: sed '5,12d' file.txt
+        notes: Remove a block of lines by line number.
+
+  - group: Addresses, Regex, and Multiline Tricks
+    items:
+      - label: Operate between two patterns
+        command: sed '/BEGIN/,/END/s/foo/bar/' file.txt
+        notes: Restrict changes to a matched address range.
+      - label: Use alternate delimiter
+        command: sed 's|/usr/local/bin|/opt/bin|g' file.txt
+        notes: Alternate delimiters reduce escaping in path replacements.
+      - label: Match start and end of line
+        command: sed -n '/^prefix.*suffix$/p' file.txt
+        notes: Standard regex anchors work inside sed addresses and substitutions.
+      - label: Join next line into pattern space
+        command: sed 'N;s/\\n/ /' file.txt
+        notes: Multiline processing relies on `N`, `H`, `G`, and related pattern-space commands.
+      - label: Print line numbers with content
+        command: sed = file.txt | sed 'N;s/\\n/: /'
+        notes: Combine line-number output with the original content.
+
+  - group: Common Workflows and Debugging
+    items:
+      - label: Extract section from config
+        command: sed -n '/^\\[section\\]/,/^\\[/p' config.ini
+        notes: Grab a named INI-style section by address range.
+      - label: Convert tabs to spaces
+        command: sed 's/\\t/    /g' file.txt
+        notes: Useful when normalizing copied text or code snippets.
+      - label: Strip ANSI color codes
+        command: sed -r 's/\\x1B\\[[0-9;]*[mK]//g' output.log
+        notes: Remove terminal escape sequences for clean logging.
+      - label: Preview without editing file
+        command: sed 's/old/new/g' file.txt | less
+        notes: Sanity-check a transformation before using in-place editing.
+      - label: Show help
+        command: sed --help
+        notes: Important because GNU and BSD sed differ in flags and in-place behavior.

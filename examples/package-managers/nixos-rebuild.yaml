@@ -1,0 +1,110 @@
+name: nixos-rebuild
+group: package managers
+references:
+  - group: Core System Rebuilds
+    items:
+      - label: Build and switch configuration
+        command: sudo nixos-rebuild switch
+        notes: Build the system configuration and activate it immediately.
+      - label: Build without activating
+        command: sudo nixos-rebuild build
+        notes: Compile the system closure but do not switch the running system.
+      - label: Test configuration
+        command: sudo nixos-rebuild test
+        notes: Activate the configuration temporarily until the next reboot.
+      - label: Boot into next reboot only
+        command: sudo nixos-rebuild boot
+        notes: Make the config available in the bootloader without switching immediately.
+      - label: Roll back to previous generation
+        command: sudo nixos-rebuild switch --rollback
+        notes: Revert to the previously activated system generation.
+
+  - group: Flake-Based Rebuilds
+    items:
+      - label: Switch from flake
+        command: sudo nixos-rebuild switch --flake .#hostname
+        notes: Use a flake output for the target machine configuration.
+      - label: Test flake config
+        command: sudo nixos-rebuild test --flake .#hostname
+        notes: Validate a flake-based config before committing to it permanently.
+      - label: Update lock then switch
+        command: nix flake update && sudo nixos-rebuild switch --flake .#hostname
+        notes: Common workflow when intentionally moving inputs forward.
+      - label: Impure flake rebuild
+        command: sudo nixos-rebuild switch --flake .#hostname --impure
+        notes: Needed when the config intentionally reads from ambient environment or local state.
+      - label: Build remote flake host
+        command: sudo nixos-rebuild switch --flake github:me/system#laptop
+        notes: Resolve a remote flake reference directly.
+
+  - group: Inspection and Validation
+    items:
+      - label: Dry build derivations
+        command: sudo nixos-rebuild dry-build
+        notes: Build the system closure without switching, useful for validation and CI.
+      - label: Show what would be built
+        command: sudo nixos-rebuild dry-activate
+        notes: Compute activation differences without applying them.
+      - label: Check config expression
+        command: nix-instantiate --parse /etc/nixos/configuration.nix
+        notes: Low-level syntax validation for classic non-flake configs.
+      - label: Format nix files
+        command: alejandra /etc/nixos
+        notes: Keep Nix configuration readable before rebuilds.
+      - label: Inspect current generation
+        command: sudo nix-env -p /nix/var/nix/profiles/system --list-generations
+        notes: Show available system generations for rollback context.
+
+  - group: Remote and Cross-Host Workflows
+    items:
+      - label: Rebuild remote target over SSH
+        command: sudo nixos-rebuild switch --target-host root@host
+        notes: Push and activate configuration on another NixOS machine.
+      - label: Build on remote host
+        command: sudo nixos-rebuild switch --build-host builder@host --target-host root@host
+        notes: Offload builds to another machine while deploying to the target.
+      - label: Use substitute builders
+        command: sudo nixos-rebuild switch --builders 'ssh://builder x86_64-linux - 8 1'
+        notes: Configure ad hoc distributed builds for a rebuild command.
+      - label: Build VM from config
+        command: nixos-rebuild build-vm
+        notes: Produce a VM runner for testing system config changes in isolation.
+      - label: Build ISO image
+        command: nix build .#nixosConfigurations.host.config.system.build.isoImage
+        notes: Common flake path for installer or recovery image generation.
+
+  - group: Bootloader, Generations, and Recovery
+    items:
+      - label: List boot entries at runtime
+        command: bootctl list
+        notes: Useful when systemd-boot manages generations in the bootloader.
+      - label: Delete old generations
+        command: sudo nix-collect-garbage -d
+        notes: Remove obsolete system generations and free store space.
+      - label: Inspect system closure size
+        command: nix path-info -Sh /run/current-system
+        notes: Estimate the active system closure footprint.
+      - label: Verify current config symlink
+        command: readlink -f /run/current-system
+        notes: Show which store path the active system points to.
+      - label: Rebuild after channel update
+        command: sudo nix-channel --update && sudo nixos-rebuild switch
+        notes: Classic non-flake workflow for channel-based systems.
+
+  - group: Common Workflows
+    items:
+      - label: Edit then switch
+        command: sudoedit /etc/nixos/configuration.nix && sudo nixos-rebuild switch
+        notes: Classic single-host maintenance loop.
+      - label: Test risky change first
+        command: sudo nixos-rebuild test
+        notes: Safer when networking, bootloader, or display config may break the session.
+      - label: Flake-based laptop deploy
+        command: sudo nixos-rebuild switch --flake .#laptop
+        notes: Standard modern workflow for multi-host repos.
+      - label: Debug evaluation issues
+        command: nixos-rebuild switch --show-trace
+        notes: Expand stack traces when evaluation errors are too shallow.
+      - label: Show help
+        command: nixos-rebuild --help
+        notes: Important because flags differ across rebuild actions and flake usage.

@@ -1,0 +1,110 @@
+name: winget
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Search packages
+        command: winget search ripgrep
+        notes: Search the configured package sources by name, moniker, or description.
+      - label: Show package details
+        command: winget show ripgrep
+        notes: Inspect available versions, installer type, publisher, and source metadata.
+      - label: Install a package
+        command: winget install BurntSushi.ripgrep.MSVC
+        notes: Use the exact package ID for deterministic installs.
+      - label: Upgrade one package
+        command: winget upgrade Microsoft.PowerToys
+        notes: Upgrade one installed package when a newer version is available.
+      - label: Upgrade everything
+        command: winget upgrade --all
+        notes: Apply all available upgrades from enabled sources.
+
+  - group: Discovery and Inventory
+    items:
+      - label: List installed packages
+        command: winget list
+        notes: Show packages known to winget across supported installer sources.
+      - label: List upgrade candidates
+        command: winget upgrade
+        notes: Review pending upgrades before applying them.
+      - label: Search exact ID
+        command: winget search --id Microsoft.PowerShell --exact
+        notes: Narrow matches when names are ambiguous.
+      - label: Filter by source
+        command: winget search --source winget ripgrep
+        notes: Restrict results to one package source such as the community repo or Microsoft Store.
+      - label: Export installed packages
+        command: winget export -o packages.json
+        notes: Snapshot the current package set for later reuse on another system.
+
+  - group: Install Variants and Control
+    items:
+      - label: Install exact version
+        command: winget install --id Git.Git --version 2.45.1 --exact
+        notes: Pin a known version when reproducibility matters.
+      - label: Install silently
+        command: winget install --id Microsoft.PowerToys --silent --exact
+        notes: Prefer silent mode in automation and scripted provisioning.
+      - label: Install from local manifest
+        command: winget install --manifest .\\manifests\\mypackage
+        notes: Test custom or local manifest definitions before publication.
+      - label: Override installer arguments
+        command: winget install --id Python.Python.3.12 --override '/quiet InstallAllUsers=1'
+        notes: Pass installer-specific flags through winget when necessary.
+      - label: Reinstall a package
+        command: winget install --id Microsoft.PowerToys --force --exact
+        notes: Force a reinstall or repair-like install when the package is already present.
+
+  - group: Uninstall and Repair
+    items:
+      - label: Uninstall by ID
+        command: winget uninstall --id Microsoft.PowerToys --exact
+        notes: Remove a package deterministically by its package identifier.
+      - label: Uninstall by name
+        command: winget uninstall PowerToys
+        notes: Name-based uninstall is convenient but can be ambiguous.
+      - label: Validate source agreement prompts
+        command: winget install --id Git.Git --accept-source-agreements --accept-package-agreements
+        notes: Required in non-interactive or first-run scenarios.
+      - label: Repair package if supported
+        command: winget repair --id Microsoft.PowerToys
+        notes: Available for some installer technologies and package definitions.
+      - label: Confirm winget version
+        command: winget --version
+        notes: Useful when behavior differs across Windows App Installer releases.
+
+  - group: Sources and Configuration
+    items:
+      - label: List sources
+        command: winget source list
+        notes: Show configured package sources and their status.
+      - label: Reset sources
+        command: winget source reset --force
+        notes: Recover from corrupted or misconfigured source state.
+      - label: Add custom source
+        command: winget source add --name Contoso --arg https://packages.contoso.example/index.json --type Microsoft.Rest
+        notes: Register a private or enterprise winget source.
+      - label: Remove source
+        command: winget source remove Contoso
+        notes: Delete a configured source by name.
+      - label: Show settings file
+        command: winget settings
+        notes: Open or generate the settings JSON for experimental and behavior flags.
+
+  - group: Common Workflows
+    items:
+      - label: Restore from export
+        command: winget import -i packages.json
+        notes: Recreate an environment from a previously exported package manifest.
+      - label: Script-friendly install
+        command: winget install --id Git.Git --exact --silent --accept-source-agreements --accept-package-agreements
+        notes: Common unattended installation pattern.
+      - label: Inspect package agreements
+        command: winget show --id Microsoft.PowerToys --exact
+        notes: Review metadata before automating installs that require agreement flags.
+      - label: Troubleshoot one package install
+        command: winget install --id Git.Git --exact --verbose-logs
+        notes: Emit detailed logs for installer and resolver debugging.
+      - label: Show help
+        command: winget --help
+        notes: winget's subcommand set is broad enough that built-in help stays useful.

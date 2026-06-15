@@ -1,0 +1,109 @@
+name: rsync
+group: shell / shell helpers
+references:
+  - group: Core Copy and Sync
+    items:
+      - label: Archive copy directory
+        command: rsync -a src/ dest/
+        notes: `-a` preserves permissions, times, symlinks, and recursion in one common flag set.
+      - label: Verbose archive copy
+        command: rsync -av src/ dest/
+        notes: Add progress visibility during normal sync operations.
+      - label: Copy local directory to remote host
+        command: rsync -av ./project/ user@host:/srv/project/
+        notes: Trailing slash on the source means copy contents, not the parent directory itself.
+      - label: Copy remote directory locally
+        command: rsync -av user@host:/srv/project/ ./project/
+        notes: Pull data from a remote system over SSH.
+      - label: Preserve hard links too
+        command: rsync -aH src/ dest/
+        notes: `-H` is useful for backup-style syncs where hard-link structure matters.
+
+  - group: Safety and Preview
+    items:
+      - label: Dry run a sync
+        command: rsync -av --dry-run src/ dest/
+        notes: Always preview deletes and large sync changes before running them live.
+      - label: Show transfer progress
+        command: rsync -av --progress src/ dest/
+        notes: Per-file progress is useful for large files or slow links.
+      - label: Show human-readable totals
+        command: rsync -avh src/ dest/
+        notes: `-h` makes sizes easier to interpret while reviewing output.
+      - label: Itemize changes
+        command: rsync -avi src/ dest/
+        notes: `-i` shows what changed and why for each file.
+      - label: Protect newer destination files
+        command: rsync -avu src/ dest/
+        notes: `-u` skips destination files that are newer than the source.
+
+  - group: Deletes, Excludes, and Filtering
+    items:
+      - label: Delete files removed from source
+        command: rsync -av --delete src/ dest/
+        notes: Makes destination mirror the source; use carefully.
+      - label: Exclude a directory
+        command: rsync -av --exclude 'node_modules/' src/ dest/
+        notes: Avoid transferring generated or vendor directories.
+      - label: Exclude from file
+        command: rsync -av --exclude-from=.rsyncignore src/ dest/
+        notes: Keep larger ignore rule sets in a reusable file.
+      - label: Include only matching files
+        command: rsync -av --include '*/' --include '*.jpg' --exclude '*' src/ dest/
+        notes: Include rules are processed before later excludes.
+      - label: Prune empty dirs
+        command: rsync -avm --include '*/' --include '*.log' --exclude '*' src/ dest/
+        notes: `-m` omits empty directories created only by filter traversal.
+
+  - group: Remote Transport and Performance
+    items:
+      - label: Use custom SSH port
+        command: rsync -av -e 'ssh -p 2222' src/ user@host:/dest/
+        notes: Pass remote-shell transport options with `-e`.
+      - label: Compress during transfer
+        command: rsync -avz src/ user@host:/dest/
+        notes: Helpful over slower networks, less so on very fast local links.
+      - label: Limit bandwidth
+        command: rsync -av --bwlimit=5m src/ user@host:/dest/
+        notes: Throttle transfers so they do not saturate shared connections.
+      - label: Partial transfers
+        command: rsync -av --partial src/ user@host:/dest/
+        notes: Keep partially transferred files when an interrupted transfer resumes later.
+      - label: In-place updates
+        command: rsync -av --inplace bigfile.img user@host:/dest/
+        notes: Useful for very large files but changes how rsync writes data on the target.
+
+  - group: Backup and Snapshot Patterns
+    items:
+      - label: Backup changed files with suffix
+        command: rsync -av --backup --suffix=.bak src/ dest/
+        notes: Keep overwritten destination files rather than replacing them silently.
+      - label: Backup to dated dir
+        command: rsync -av --backup --backup-dir="backups/$(date +%F)" src/ dest/
+        notes: Move replaced or deleted files into a snapshot-style archive path.
+      - label: Link unchanged files to prior snapshot
+        command: rsync -a --delete --link-dest=/snapshots/prev src/ /snapshots/current
+        notes: Foundation for efficient hard-link based snapshot backups.
+      - label: Sync one filesystem only
+        command: rsync -avx / /backup/root/
+        notes: `-x` avoids crossing filesystem boundaries during full-tree syncs.
+      - label: Preserve numeric IDs
+        command: rsync -a --numeric-ids src/ dest/
+        notes: Important when user or group names differ across systems.
+
+  - group: Troubleshooting and Inspection
+    items:
+      - label: Show rsync version
+        command: rsync --version
+      - label: Explain transfer stats
+        command: rsync -av --stats src/ dest/
+        notes: Summary statistics help validate what a run actually transferred.
+      - label: Ignore permission failures on source list
+        command: rsync -av --ignore-errors --delete src/ dest/
+        notes: Primarily relevant when deletes would otherwise be skipped after read errors.
+      - label: Compare checksum instead of mtime
+        command: rsync -avc src/ dest/
+        notes: Slower but more accurate when timestamps are unreliable.
+      - label: Show help
+        command: rsync --help
+        notes: Worth checking because rsync has many subtle transport and filtering options.

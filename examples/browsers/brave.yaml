@@ -1,0 +1,120 @@
+name: Brave
+group: browsers
+process:
+  - brave
+  - brave-browser
+  - brave.exe
+references:
+  - group: Tabs and Windows
+    items:
+      - label: New tab
+        keys: Ctrl+T
+        keys_by_os:
+          macos: Cmd+T
+      - label: Reopen closed tab
+        keys: Ctrl+Shift+T
+        keys_by_os:
+          macos: Cmd+Shift+T
+      - label: New window
+        keys: Ctrl+N
+        keys_by_os:
+          macos: Cmd+N
+      - label: New private window
+        keys: Ctrl+Shift+N
+        keys_by_os:
+          macos: Cmd+Shift+N
+      - label: New private window with Tor
+        notes: Brave offers a Tor-backed private mode for additional routing privacy.
+
+  - group: Navigation and Page
+    items:
+      - label: Focus address bar
+        keys: Ctrl+L
+        keys_by_os:
+          macos: Cmd+L
+      - label: Reload page
+        keys: Ctrl+R
+        keys_by_os:
+          macos: Cmd+R
+      - label: Back
+        keys: Alt+LeftArrow
+        keys_by_os:
+          macos: Cmd+LeftBracket
+      - label: Forward
+        keys: Alt+RightArrow
+        keys_by_os:
+          macos: Cmd+RightBracket
+      - label: Find in page
+        keys: Ctrl+F
+        keys_by_os:
+          macos: Cmd+F
+
+  - group: Privacy and Shields
+    items:
+      - label: Open shields panel
+        notes: Brave Shields control trackers, cookies, scripts, and fingerprinting protections per site.
+      - label: Toggle shields for site
+        notes: Disable shields selectively when a site breaks instead of globally weakening the browser.
+      - label: Clear browsing data
+        keys: Ctrl+Shift+Delete
+        keys_by_os:
+          macos: Cmd+Shift+Backspace
+      - label: Use private Tor window
+        notes: Useful for extra routing privacy, but still not a full Tor Browser replacement.
+      - label: Review blocked trackers
+        notes: The Shields panel is the main operational view for privacy behavior on a site.
+
+  - group: Profiles, Sessions, and Utility
+    items:
+      - label: Open history
+        keys: Ctrl+H
+        keys_by_os:
+          macos: Cmd+Y
+      - label: Open downloads
+        keys: Ctrl+J
+        keys_by_os:
+          macos: Cmd+Shift+J
+      - label: Use profile switching
+        notes: Separate work and personal browsing state through profiles.
+      - label: Open tab search
+        keys: Ctrl+Shift+A
+        keys_by_os:
+          macos: Cmd+Shift+A
+      - label: Restore previous session
+        notes: Important if you rely on long-lived research or monitoring tabs.
+
+  - group: DevTools and Inspection
+    items:
+      - label: Toggle DevTools
+        keys: Ctrl+Shift+I
+        keys_by_os:
+          macos: Cmd+Option+I
+      - label: Inspect element
+        keys: Ctrl+Shift+C
+        keys_by_os:
+          macos: Cmd+Shift+C
+      - label: Open console
+        keys: Ctrl+Shift+J
+        keys_by_os:
+          macos: Cmd+Option+J
+      - label: View page source
+        keys: Ctrl+U
+        keys_by_os:
+          macos: Cmd+Option+U
+      - label: Hard reload
+        keys: Ctrl+Shift+R
+        keys_by_os:
+          macos: Cmd+Shift+R
+
+  - group: Common Workflows
+    items:
+      - label: Diagnose broken site by shields
+        notes: First disable one privacy control at a time rather than turning everything off at once.
+      - label: Use Tor window sparingly
+        notes: Tor mode changes routing, but account logins and fingerprinting choices still matter.
+      - label: Pin stable reference tabs
+        notes: Good for dashboards, docs, and issue queues that stay open all day.
+      - label: Tune search and privacy defaults
+        notes: Brave's defaults are part of its value proposition, so changing them should be intentional.
+      - label: Show help
+        notes: Brave is most valuable when you actually use Shields and privacy controls deliberately rather than as passive defaults.

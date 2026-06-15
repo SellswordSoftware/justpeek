@@ -1,0 +1,110 @@
+name: jq
+group: shell / shell helpers
+references:
+  - group: Core Filtering
+    items:
+      - label: Pretty-print JSON
+        command: jq '.' data.json
+        notes: Identity filter formats JSON with indentation and colors in many terminals.
+      - label: Select a top-level field
+        command: jq '.name' data.json
+        notes: Dot notation navigates object keys directly.
+      - label: Select nested field
+        command: jq '.user.profile.email' data.json
+        notes: Chain keys for nested objects.
+      - label: Array element by index
+        command: jq '.[0]' data.json
+        notes: Zero-based indexing for arrays.
+      - label: Raw string output
+        command: jq -r '.name' data.json
+        notes: Strip JSON quotes when piping values to other shell commands.
+
+  - group: Arrays and Iteration
+    items:
+      - label: Iterate array items
+        command: jq '.items[]' data.json
+        notes: Expand each array element as its own output item.
+      - label: Select field from array items
+        command: jq '.items[] | .id' data.json
+        notes: Combine expansion and field access in a pipeline.
+      - label: Map a transformation
+        command: jq '.items | map(.name)' data.json
+        notes: Apply a filter to every element and rebuild the array.
+      - label: Filter array by condition
+        command: jq '.items | map(select(.active == true))' data.json
+        notes: Keep only matching objects while preserving array structure.
+      - label: Get array length
+        command: jq '.items | length' data.json
+        notes: Useful for counts without external tools.
+
+  - group: Objects and Reshaping
+    items:
+      - label: Build a new object
+        command: jq '{name: .user.name, email: .user.email}' data.json
+        notes: Construct a new JSON shape from selected source fields.
+      - label: Rename keys while projecting
+        command: jq '{id: .user_id, login: .username}' data.json
+        notes: Common API normalization pattern.
+      - label: Delete a field
+        command: jq 'del(.debug)' data.json
+        notes: Remove keys from an object non-destructively in output.
+      - label: Merge objects
+        command: jq '.defaults + .override' data.json
+        notes: Later object values win for overlapping keys.
+      - label: Convert object to entries
+        command: jq 'to_entries' data.json
+        notes: Helpful when iterating dynamic keys as data.
+
+  - group: Selection and Predicates
+    items:
+      - label: Select matching objects
+        command: jq '.items[] | select(.status == "open")' data.json
+        notes: Emit only objects that satisfy the predicate.
+      - label: Check key existence
+        command: jq 'has("name")' data.json
+        notes: Boolean test for object keys or array indexes.
+      - label: Provide default value
+        command: jq '.name // "unknown"' data.json
+        notes: Fallback when a field is null or missing.
+      - label: Optional chaining style access
+        command: jq '.user?.profile?.email' data.json
+        notes: Avoid errors when nested keys may be absent.
+      - label: Regex test on strings
+        command: jq '.items[] | select(.email | test("@example.com$"))' data.json
+        notes: Use built-in regex helpers for string filtering.
+
+  - group: Inputs, Outputs, and Files
+    items:
+      - label: Read from stdin
+        command: curl -s https://example.test/data.json | jq '.items'
+        notes: jq is commonly used as a structured post-processor for API output.
+      - label: Slurp multiple JSON docs into array
+        command: jq -s '.' file1.json file2.json
+        notes: Read multiple inputs and expose them as a single array.
+      - label: Compact output
+        command: jq -c '.items[]' data.json
+        notes: Emit one compact JSON object per line.
+      - label: Sort keys
+        command: jq -S '.' data.json
+        notes: Stable key ordering helps diffs and snapshots.
+      - label: Update file via temp path
+        command: jq '.enabled = true' config.json > config.tmp && mv config.tmp config.json
+        notes: jq does not edit files in place; write to a temp file and replace explicitly.
+
+  - group: Advanced Workflows
+    items:
+      - label: Group by key
+        command: jq '.items | group_by(.team)' data.json
+        notes: Input should generally be pre-sorted by the grouping key.
+      - label: Reduce to summary object
+        command: jq 'reduce .items[] as $i ({}; .[$i.status] += 1)' data.json
+        notes: Build aggregate objects programmatically from a stream of values.
+      - label: Join strings from array
+        command: jq -r '.tags | join(", ")' data.json
+        notes: Produce shell-friendly textual summaries.
+      - label: Parse JSON lines
+        command: jq -c '.' input.jsonl
+        notes: Works naturally when each line is a complete JSON document.
+      - label: Show help
+        command: jq --help
+        notes: jq's filter language is broad enough that the help text is often worth revisiting.

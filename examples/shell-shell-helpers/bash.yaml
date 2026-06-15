@@ -1,0 +1,154 @@
+name: Bash
+group: shell / shell helpers
+references:
+  - group: Startup and Environment
+    items:
+      - label: Show current shell
+        command: echo "$SHELL"
+        notes: Prints the login shell path, which may differ from the current running process.
+      - label: Show Bash version
+        command: bash --version
+        notes: Useful when checking feature availability across macOS and Linux systems.
+      - label: Reload current shell config
+        command: source ~/.bashrc
+        notes: Re-read Bash configuration in the current shell without opening a new terminal.
+      - label: Launch a login shell
+        command: bash -l
+        notes: Start Bash with login profile loading for troubleshooting init files.
+      - label: Print environment variables
+        command: env | sort
+        notes: Inspect inherited environment state in a stable sorted order.
+
+  - group: Navigation and Files
+    items:
+      - label: Change to previous directory
+        command: cd -
+        notes: Jump back to the last working directory.
+      - label: Push directory on stack
+        command: pushd <dir>
+        notes: Change directories while saving the previous location on the directory stack.
+      - label: Pop directory from stack
+        command: popd
+        notes: Return to the most recent `pushd` location.
+      - label: Show directory stack
+        command: dirs -v
+        notes: List indexed stack entries for quick stack navigation.
+      - label: Expand matching paths
+        command: echo *.log
+        notes: Preview glob expansion without invoking another file-manipulating command.
+
+  - group: Variables and Parameter Expansion
+    items:
+      - label: Set a shell variable
+        command: name="value"
+        notes: No spaces around `=` for shell assignment syntax.
+      - label: Export a variable
+        command: export NAME=value
+        notes: Make the variable available to child processes.
+      - label: Default a missing variable
+        command: echo "${NAME:-default}"
+        notes: Use a fallback when the variable is unset or empty.
+      - label: Fail if variable is missing
+        command: echo "${NAME:?missing NAME}"
+        notes: Stop the command with a message if the variable is unset or empty.
+      - label: Length of variable
+        command: echo "${#NAME}"
+        notes: Print character count for the current value.
+      - label: Replace in variable
+        command: echo "${NAME/old/new}"
+        notes: Substitute the first matching substring during expansion.
+
+  - group: Arrays and Loops
+    items:
+      - label: Define an array
+        command: files=("a.txt" "b.txt" "c.txt")
+        notes: Bash arrays are zero-indexed and space-delimited inside parentheses.
+      - label: Iterate an array safely
+        command: |
+          for file in "${files[@]}"; do
+            echo "$file"
+          done
+        notes: Quoted `"${files[@]}"` preserves array element boundaries.
+      - label: Iterate command output safely
+        command: |
+          while IFS= read -r line; do
+            echo "$line"
+          done < input.txt
+        notes: Preferred pattern when whitespace and backslashes must stay intact.
+      - label: Numeric for loop
+        command: |
+          for ((i = 0; i < 10; i++)); do
+            echo "$i"
+          done
+        notes: C-style loop syntax is Bash-specific and convenient for counters.
+      - label: Case statement
+        command: |
+          case "$answer" in
+            y|Y) echo "yes" ;;
+            n|N) echo "no" ;;
+            *) echo "unknown" ;;
+          esac
+        notes: Clear pattern-matching alternative to long `if` chains.
+
+  - group: Conditionals and Tests
+    items:
+      - label: Test file existence
+        command: '[ -f "$path" ]'
+        notes: Use `-d` for directories and `-e` for any path.
+      - label: String comparison
+        command: '[[ "$left" == "$right" ]]'
+        notes: `[[ ... ]]` is safer than `[` for pattern matching and quoting edge cases.
+      - label: Numeric comparison
+        command: '(( count > 10 ))'
+        notes: Arithmetic contexts avoid quoting noise for integer comparisons.
+      - label: Compound conditional
+        command: '[[ -n "$name" && -f "$file" ]]'
+        notes: Check multiple conditions in a single expression.
+      - label: Negate a test
+        command: 'if ! grep -q pattern file; then echo "missing"; fi'
+        notes: Common pattern for guard clauses around commands.
+
+  - group: Functions and Exit Handling
+    items:
+      - label: Define a function
+        command: |
+          greet() {
+            echo "hello $1"
+          }
+        notes: `$1`, `$2`, and `$@` expose positional parameters inside functions.
+      - label: Return an error from a function
+        command: |
+          do_work() {
+            [[ -f "$1" ]] || return 1
+          }
+        notes: `return` sets the function exit status without leaving the shell.
+      - label: Trap on shell exit
+        command: trap 'rm -f "$tmpfile"' EXIT
+        notes: Reliable cleanup pattern for temporary files.
+      - label: Trap interrupt signal
+        command: trap 'echo "interrupted"; exit 130' INT
+        notes: Handle Ctrl+C explicitly during longer scripts.
+      - label: Exit on failure mode
+        command: set -euo pipefail
+        notes: Common strict-mode baseline for scripts, with caveats around compound commands.
+
+  - group: History, Jobs, and Debugging
+    items:
+      - label: Search command history
+        keys: Ctrl+R
+        notes: Reverse incremental history search in interactive Bash.
+      - label: List background jobs
+        command: jobs -l
+        notes: Show job IDs and process IDs for shell-managed tasks.
+      - label: Resume a stopped job
+        command: fg %1
+        notes: Bring a numbered background or stopped job into the foreground.
+      - label: Run job in background
+        command: bg %1
+        notes: Resume a stopped job without reclaiming the terminal.
+      - label: Trace a script
+        command: bash -x script.sh
+        notes: Print commands as they execute for debugging.
+      - label: Check script syntax
+        command: bash -n script.sh
+        notes: Parse a script for syntax errors without executing it.

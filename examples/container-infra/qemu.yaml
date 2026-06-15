@@ -1,0 +1,107 @@
+name: QEMU
+group: container / infra
+references:
+  - group: Core VM Execution
+    items:
+      - label: Start basic VM image
+        command: qemu-system-x86_64 -m 4096 -drive file=disk.qcow2,format=qcow2
+        notes: Launch a simple VM from a qcow2 disk image.
+      - label: Boot from ISO installer
+        command: qemu-system-x86_64 -m 4096 -cdrom ubuntu.iso -boot d -drive file=disk.qcow2,format=qcow2
+        notes: Install an OS by booting first from the CDROM ISO.
+      - label: Enable KVM acceleration
+        command: qemu-system-x86_64 -enable-kvm -m 4096 -drive file=disk.qcow2,format=qcow2
+        notes: Use hardware virtualization for much better performance on Linux hosts.
+      - label: Use UEFI firmware
+        command: qemu-system-x86_64 -bios /usr/share/OVMF/OVMF_CODE.fd -drive file=disk.qcow2,format=qcow2
+        notes: Boot the VM using UEFI instead of legacy BIOS.
+      - label: Headless serial-friendly boot
+        command: qemu-system-x86_64 -nographic -serial mon:stdio -drive file=disk.qcow2,format=qcow2
+        notes: Useful for server or CI-oriented guest workflows.
+
+  - group: Disk Images and Storage
+    items:
+      - label: Create qcow2 disk
+        command: qemu-img create -f qcow2 disk.qcow2 40G
+        notes: Create a sparse qcow2 virtual disk image.
+      - label: Inspect disk image
+        command: qemu-img info disk.qcow2
+        notes: Show size, format, backing files, and snapshot metadata.
+      - label: Resize disk image
+        command: qemu-img resize disk.qcow2 +20G
+        notes: Expand a virtual disk before resizing partitions inside the guest.
+      - label: Convert image format
+        command: qemu-img convert -f qcow2 -O raw disk.qcow2 disk.raw
+        notes: Transform images between qcow2, raw, VMDK, and other supported formats.
+      - label: Create backing-file overlay
+        command: qemu-img create -f qcow2 -b base.qcow2 overlay.qcow2
+        notes: Useful for disposable test instances that share a base image.
+
+  - group: Networking and Access
+    items:
+      - label: User-mode networking with SSH forward
+        command: qemu-system-x86_64 -nic user,hostfwd=tcp::2222-:22 -drive file=disk.qcow2,format=qcow2
+        notes: Simplest path to SSH into a guest without bridge setup.
+      - label: SSH into forwarded guest
+        command: ssh -p 2222 user@127.0.0.1
+        notes: Common pairing with user-mode networking.
+      - label: Tap networking
+        command: qemu-system-x86_64 -netdev tap,id=net0,ifname=tap0,script=no,downscript=no -device virtio-net-pci,netdev=net0
+        notes: Use bridged or tap networking for more realistic network integration.
+      - label: Expose VNC display
+        command: qemu-system-x86_64 -vnc :1 -drive file=disk.qcow2,format=qcow2
+        notes: Offer a remote graphical console via VNC.
+      - label: QMP socket
+        command: qemu-system-x86_64 -qmp unix:/tmp/qmp.sock,server,nowait -drive file=disk.qcow2,format=qcow2
+        notes: Enable machine-readable external control over the VM.
+
+  - group: CPU, Memory, and Devices
+    items:
+      - label: Set vCPU count
+        command: qemu-system-x86_64 -smp 4 -m 8192 -drive file=disk.qcow2,format=qcow2
+        notes: Configure guest CPU topology and memory size.
+      - label: Use host CPU model
+        command: qemu-system-x86_64 -enable-kvm -cpu host -drive file=disk.qcow2,format=qcow2
+        notes: Expose host CPU features to the guest where appropriate.
+      - label: Attach virtio block disk
+        command: qemu-system-x86_64 -drive if=virtio,file=disk.qcow2,format=qcow2
+        notes: Virtio devices usually provide better guest performance.
+      - label: Use virtio RNG
+        command: qemu-system-x86_64 -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0
+        notes: Improve guest entropy availability.
+      - label: Attach USB device
+        command: qemu-system-x86_64 -device usb-host,hostbus=1,hostaddr=2
+        notes: Pass through a specific host USB device to the guest.
+
+  - group: Snapshots and Troubleshooting
+    items:
+      - label: Start with temporary snapshot mode
+        command: qemu-system-x86_64 -snapshot -drive file=disk.qcow2,format=qcow2
+        notes: Discard guest disk changes when the VM exits.
+      - label: Monitor console
+        command: qemu-system-x86_64 -monitor stdio -drive file=disk.qcow2,format=qcow2
+        notes: Use the QEMU monitor for low-level runtime inspection and control.
+      - label: Log guest debug output
+        command: qemu-system-x86_64 -d guest_errors -D qemu.log -drive file=disk.qcow2,format=qcow2
+        notes: Emit debug traces to a file when guests fail mysteriously.
+      - label: Show QEMU version
+        command: qemu-system-x86_64 --version
+        notes: Important because device support and flags vary across releases.
+      - label: Show help for system binary
+        command: qemu-system-x86_64 --help
+        notes: QEMU's CLI is very broad and architecture-specific.
+
+  - group: Common Workflows
+    items:
+      - label: Create disposable overlay VM
+        command: qemu-img create -f qcow2 -b base.qcow2 test.qcow2 && qemu-system-x86_64 -enable-kvm -drive file=test.qcow2,format=qcow2
+        notes: Good pattern for repeatable test boots on top of a base image.
+      - label: Local server VM with SSH access
+        command: qemu-system-x86_64 -enable-kvm -m 4096 -nic user,hostfwd=tcp::2222-:22 -drive file=server.qcow2,format=qcow2
+        notes: Simple host-only server testing workflow.
+      - label: Expand disk then grow guest FS
+        notes: Resize the image with `qemu-img`, then extend partitions and filesystems inside the guest.
+      - label: Prefer virtio devices
+        notes: Virtio usually gives better disk and network performance than legacy emulated devices.
+      - label: Show help
+        notes: QEMU is a low-level virtualization tool; expect to combine it with libvirt or wrappers for larger workflows.

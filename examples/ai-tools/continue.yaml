@@ -1,0 +1,56 @@
+name: Continue
+group: ai tools
+search_terms:
+  - continue cli
+  - continue checks
+  - continue extension
+references:
+  - group: Current Product Shape
+    items:
+      - label: Primary current docs focus
+        value: AI checks on pull requests
+      - label: What a check is
+        value: A markdown file that becomes a GitHub status check on PRs
+      - label: Checks directory
+        value: .continue/checks/
+      - label: Result model
+        value: Green when code passes, red with a suggested fix when it fails
+      - label: Web entry point
+        value: continue.dev/check
+
+  - group: Check Authoring
+    items:
+      - label: Check file format
+        value: Markdown with frontmatter and a prompt body
+      - label: Typical frontmatter
+        command: |
+          ---
+          name: Security Review
+          description: Flag hardcoded secrets and missing input validation
+          ---
+      - label: Prompt body
+        value: Describe what the AI should review and what conditions should fail the check
+      - label: Diff-based review
+        value: Checks run against the pull request diff, not the whole repo by default
+
+  - group: CLI, IDE, and Repo Status
+    items:
+      - label: Product surfaces
+        value: Continue is available as a CLI, VS Code extension, and JetBrains plugin
+      - label: Repository status
+        value: "The `continuedev/continue` repository is read-only and no longer actively maintained"
+      - label: Final extension release note
+        value: The repo documents a final 2.0.0 release of the VS Code extension, CLI, and JetBrains plugin
+      - label: JetBrains note
+        value: The repo recommends using the Continue CLI instead of the JetBrains plugin
+
+  - group: Practical Reminders
+    items:
+      - label: Best use case
+        value: Repository-enforced review checks and CI-visible policy automation
+      - label: Less ideal use case
+        value: Ad hoc local coding chat only; current public docs emphasize checks more than editor-side workflows
+      - label: Official docs
+        value: docs.continue.dev
+      - label: Official repo
+        value: github.com/continuedev/continue

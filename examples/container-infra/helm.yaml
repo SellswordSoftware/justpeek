@@ -1,0 +1,109 @@
+name: Helm
+group: container / infra
+references:
+  - group: Repositories and Discovery
+    items:
+      - label: Add chart repository
+        command: helm repo add bitnami https://charts.bitnami.com/bitnami
+        notes: Register a chart repository for later installs and searches.
+      - label: Refresh repo indexes
+        command: helm repo update
+        notes: Download the latest chart metadata from configured repos.
+      - label: Search repos
+        command: helm search repo nginx
+        notes: Find charts by keyword across configured repositories.
+      - label: Search Hub
+        command: helm search hub redis
+        notes: Search Artifact Hub or compatible hub sources from the CLI.
+      - label: List configured repos
+        command: helm repo list
+        notes: Show the chart repositories currently configured locally.
+
+  - group: Install and Upgrade Lifecycle
+    items:
+      - label: Install release
+        command: helm install web bitnami/nginx
+        notes: Create a new release from a chart.
+      - label: Install with custom values
+        command: helm install web bitnami/nginx -f values.prod.yaml
+        notes: Supply one or more values files at install time.
+      - label: Upgrade release
+        command: helm upgrade web bitnami/nginx -f values.prod.yaml
+        notes: Apply new chart or values changes to an existing release.
+      - label: Install or upgrade idempotently
+        command: helm upgrade --install web bitnami/nginx -f values.prod.yaml
+        notes: Common CI or GitOps-friendly imperative deployment pattern.
+      - label: Uninstall release
+        command: helm uninstall web
+        notes: Remove the Helm release and its managed resources.
+
+  - group: Values, Templates, and Rendering
+    items:
+      - label: Show chart defaults
+        command: helm show values bitnami/nginx
+        notes: Inspect the chart's default values before overriding them.
+      - label: Render templates locally
+        command: helm template web bitnami/nginx -f values.prod.yaml
+        notes: Print rendered Kubernetes manifests without installing them.
+      - label: Lint chart
+        command: helm lint ./chart
+        notes: Validate chart structure, templates, and common packaging problems.
+      - label: Dry-run install
+        command: helm install web ./chart --dry-run --debug
+        notes: Preview rendered manifests and hook behavior before changing the cluster.
+      - label: Override one value inline
+        command: helm upgrade --install web ./chart --set image.tag=v2
+        notes: Convenient for small overrides, though large config belongs in values files.
+
+  - group: Release Inspection and Troubleshooting
+    items:
+      - label: List releases
+        command: helm list -A
+        notes: Show releases across all namespaces.
+      - label: Show release status
+        command: helm status web
+        notes: Inspect deployed resources, notes, and current state.
+      - label: Show release values
+        command: helm get values web
+        notes: Print user-supplied values for the release.
+      - label: Show release manifest
+        command: helm get manifest web
+        notes: Retrieve the rendered manifests currently stored for the release.
+      - label: Show release history
+        command: helm history web
+        notes: Review revision history for rollback context.
+
+  - group: Packaging and Chart Development
+    items:
+      - label: Create new chart
+        command: helm create mychart
+        notes: Scaffold a starter chart structure with templates and values.
+      - label: Package chart
+        command: helm package ./mychart
+        notes: Build a distributable `.tgz` chart archive.
+      - label: Package with version override
+        command: helm package ./mychart --version 1.2.3
+        notes: Stamp a release version onto the packaged chart.
+      - label: Show chart metadata
+        command: helm show chart bitnami/nginx
+        notes: Inspect chart name, version, app version, and dependencies.
+      - label: Build chart dependencies
+        command: helm dependency build ./mychart
+        notes: Download and lock dependent charts into the local chart tree.
+
+  - group: Common Workflows
+    items:
+      - label: Roll back release
+        command: helm rollback web 3
+        notes: Revert to a chosen revision from release history.
+      - label: Render then validate with kubectl
+        command: helm template web ./chart | kubectl apply --dry-run=server -f -
+        notes: Combine Helm rendering with Kubernetes API validation.
+      - label: Namespace-scoped install
+        command: helm upgrade --install web ./chart -n staging --create-namespace
+        notes: Common per-environment deployment pattern.
+      - label: Diff values-driven changes
+        notes: Use `helm template`, `helm get manifest`, or a diff plugin to review release changes before upgrade.
+      - label: Show help
+        command: helm --help
+        notes: Helm spans chart repos, templating, release lifecycle, and chart development in one CLI.

@@ -1,0 +1,92 @@
+name: fnm
+group: package managers
+references:
+  - group: Core Node Version Operations
+    items:
+      - label: Install Node version
+        command: fnm install 22
+        notes: Download and install a specific Node.js major or exact version.
+      - label: Use Node version
+        command: fnm use 22
+        notes: Switch the current shell to an installed Node.js version.
+      - label: Set default version
+        command: fnm default 22
+        notes: Make a chosen version the default for future shells.
+      - label: List installed versions
+        command: fnm list
+        notes: Show Node versions currently installed under fnm management.
+      - label: Remove Node version
+        command: fnm uninstall 20.11.1
+        notes: Delete one installed Node.js version from fnm storage.
+
+  - group: Shell Integration
+    items:
+      - label: Init for Bash
+        command: eval "$(fnm env --use-on-cd --shell bash)"
+        notes: Enable PATH setup and auto-switching in Bash.
+      - label: Init for Zsh
+        command: eval "$(fnm env --use-on-cd --shell zsh)"
+        notes: Common startup line for `.zshrc`.
+      - label: Init for Fish
+        command: fnm env --use-on-cd --shell fish | source
+        notes: Fish-specific shell integration path.
+      - label: Init for PowerShell
+        command: fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
+        notes: PowerShell integration path for session startup.
+      - label: Print env setup only
+        command: fnm env
+        notes: Show the environment exports or shell code without evaluating it.
+
+  - group: Version Resolution and Project Files
+    items:
+      - label: Use version from .node-version
+        command: fnm use
+        notes: Auto-detect the version file in the current directory when supported.
+      - label: Install from .node-version
+        command: fnm install --latest
+        notes: Pair with local version files when bootstrapping a repo.
+      - label: Show current version
+        command: fnm current
+        notes: Print the active Node.js version for the shell.
+      - label: Resolve alias to version
+        command: fnm list-remote
+        notes: Inspect available remote versions before selecting one.
+      - label: Use LTS release
+        command: fnm install --lts
+        notes: Install the current long-term support Node release.
+
+  - group: Aliases and Multi-Version Workflows
+    items:
+      - label: Alias a version
+        command: fnm alias 20 stable
+        notes: Give a memorable alias to a chosen Node version.
+      - label: Use alias
+        command: fnm use stable
+        notes: Switch based on an alias rather than a raw version number.
+      - label: Install latest current release
+        command: fnm install --latest
+        notes: Pull the newest generally available Node release.
+      - label: Reinstall npm on active version
+        value: npm ships with Node; use the selected Node version's bundled npm or external upgrade flows as needed.
+        notes: fnm manages Node versions, not npm package graphs directly.
+      - label: Compare available versions
+        command: fnm list-remote | tail
+        notes: Review recent remote versions before upgrading teams or CI.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap repo with local Node version
+        command: fnm install && fnm use && npm install
+        notes: Common first-run flow for repos with version files.
+      - label: Set global default then open new shell
+        command: fnm default 22
+        notes: Establish the baseline version for future sessions.
+      - label: Auto-switch on directory change
+        command: fnm env --use-on-cd
+        notes: Handy for multi-project environments with different Node versions.
+      - label: Inspect fnm version
+        command: fnm --version
+        notes: Helpful when shell integration behavior differs across installs.
+      - label: Show help
+        command: fnm --help
+        notes: fnm is smaller than nvm, but shell init and version resolution flags still matter.

@@ -1,0 +1,110 @@
+name: Ansible
+group: container / infra
+references:
+  - group: Core Playbook Workflow
+    items:
+      - label: Run playbook
+        command: ansible-playbook site.yml
+        notes: Execute the tasks defined in the playbook against the target inventory.
+      - label: Run playbook on one inventory
+        command: ansible-playbook -i inventory.ini site.yml
+        notes: Use an explicit inventory file instead of defaults.
+      - label: Dry-run playbook
+        command: ansible-playbook --check site.yml
+        notes: Show what would change without applying most tasks.
+      - label: Diff templated or file changes
+        command: ansible-playbook --check --diff site.yml
+        notes: Preview content changes when modules support diff output.
+      - label: Limit to one host or group
+        command: ansible-playbook site.yml --limit web01
+        notes: Narrow execution to one host or inventory subset.
+
+  - group: Ad Hoc Commands
+    items:
+      - label: Ping hosts
+        command: ansible all -m ping
+        notes: Validate connectivity, auth, and Python availability on targets.
+      - label: Run shell command
+        command: ansible web -m shell -a 'uptime'
+        notes: Execute arbitrary shell commands across matching hosts.
+      - label: Gather package facts
+        command: ansible all -m package_facts
+        notes: Collect installed package information via a module rather than raw shell.
+      - label: Copy file to hosts
+        command: ansible web -m copy -a 'src=nginx.conf dest=/etc/nginx/nginx.conf'
+        notes: Use modules instead of shell whenever possible for idempotence.
+      - label: Become root in ad hoc run
+        command: ansible web -b -m service -a 'name=nginx state=restarted'
+        notes: Use privilege escalation explicitly when remote tasks require it.
+
+  - group: Inventory and Targeting
+    items:
+      - label: List inventory hosts
+        command: ansible-inventory -i inventory.ini --list
+        notes: Show the resolved inventory structure in JSON.
+      - label: Graph inventory groups
+        command: ansible-inventory -i inventory.ini --graph
+        notes: Visualize groups and host membership relationships.
+      - label: Use host pattern intersection
+        command: ansible 'web:&prod' -m ping
+        notes: Combine groups with pattern syntax to target more precisely.
+      - label: Use inventory vars
+        command: ansible-playbook -i inventory.ini site.yml -e env=prod
+        notes: Pass extra vars to influence role or task behavior.
+      - label: Test one tag only
+        command: ansible-playbook site.yml --tags nginx
+        notes: Restrict execution to tagged tasks or roles.
+
+  - group: Roles, Vault, and Variables
+    items:
+      - label: Create role skeleton
+        command: ansible-galaxy init roles/nginx
+        notes: Scaffold a conventional role directory structure.
+      - label: Install roles from requirements
+        command: ansible-galaxy install -r requirements.yml
+        notes: Download external roles declared for the project.
+      - label: Encrypt file with vault
+        command: ansible-vault encrypt group_vars/prod/secrets.yml
+        notes: Protect sensitive variables at rest.
+      - label: Edit vaulted file
+        command: ansible-vault edit group_vars/prod/secrets.yml
+        notes: Modify encrypted content without manual decrypt or re-encrypt steps.
+      - label: Pass vault password file
+        command: ansible-playbook site.yml --vault-password-file .vault-pass
+        notes: Common automation path for non-interactive secret decryption.
+
+  - group: Debugging and Validation
+    items:
+      - label: Check playbook syntax
+        command: ansible-playbook site.yml --syntax-check
+        notes: Validate YAML and play structure before a real run.
+      - label: List tasks
+        command: ansible-playbook site.yml --list-tasks
+        notes: Preview the execution plan at the task level.
+      - label: List hosts matched by play
+        command: ansible-playbook site.yml --list-hosts
+        notes: Confirm targeting before making changes.
+      - label: Increase verbosity
+        command: ansible-playbook -vvv site.yml
+        notes: Emit detailed logs for SSH, variable resolution, and task debugging.
+      - label: Validate with lint
+        command: ansible-lint
+        notes: Use ansible-lint to catch idempotence, style, and safety issues.
+
+  - group: Common Workflows
+    items:
+      - label: Safe review loop
+        command: ansible-playbook --syntax-check site.yml && ansible-playbook --check --diff site.yml
+        notes: Good default workflow before a real infra change.
+      - label: Roll one host first
+        command: ansible-playbook site.yml --limit web01
+        notes: Reduce blast radius before expanding to an entire group.
+      - label: Use serial rolling updates
+        value: Set `serial:` in plays to batch host changes.
+        notes: Important for stateful or user-facing workloads during updates.
+      - label: Re-run failed hosts only
+        command: ansible-playbook site.yml --limit @site.retry
+        notes: Retry pattern when a prior run emitted a retry file.
+      - label: Show help
+        command: ansible-playbook --help
+        notes: Ansible's flags for inventory, vault, tags, limits, and privilege escalation are worth keeping close.

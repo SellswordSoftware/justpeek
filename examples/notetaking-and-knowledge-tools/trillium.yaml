@@ -1,0 +1,281 @@
+name: Trilium
+group: notetaking and knowledge tools
+process:
+  - trilium
+  - Trilium
+  - Trilium Notes
+search_terms:
+  - trilium notes
+  - triliumnext
+  - hierarchical notes
+  - etapi
+references:
+  - group: Core Model and Mental Model
+    items:
+      - label: Main shape
+        value: Offline-first hierarchical personal knowledge base
+      - label: Upstream
+        value: TriliumNext/Trilium
+      - label: Tree model
+        value: Notes live in an arbitrarily deep tree and one note can appear in multiple places via cloning
+      - label: Local-first behavior
+        value: Desktop keeps data locally in a single data directory and can optionally sync to a self-hosted server
+      - label: In-app docs
+        keys: F1
+        notes: Opens the same user guide from inside the app.
+
+  - group: Navigation Tree and Global Shortcuts
+    items:
+      - label: Jump to note
+        keys: Ctrl+J
+        notes: Search by note title, open recent notes, create a child note if there is no exact match.
+      - label: Command palette
+        keys: Ctrl+Shift+J
+        notes: "Runs built-in commands; inside Jump to, type `>` to switch into command mode."
+      - label: Search dialog
+        keys: Ctrl+F
+        notes: Electron runtime shortcut to open search.
+      - label: Go back and forward
+        keys: Alt+Left / Alt+Right
+      - label: Scroll tree to current note
+        keys: Ctrl+Period
+      - label: Jump to parent note
+        keys: Backspace
+      - label: Collapse entire tree
+        keys: Alt+C
+      - label: Collapse subtree
+        keys: Alt+Minus
+      - label: Reload frontend
+        keys: F5 or Ctrl+R
+      - label: Developer tools
+        keys: Ctrl+Shift+I
+      - label: Zoom
+        keys: Ctrl+Equals / Ctrl+Minus
+      - label: Global shortcut customization
+        value: Options > Keyboard shortcuts
+        notes: "Most shortcuts are rebindable. Prefix with `global:` to make a desktop-wide shortcut; app restart required."
+      - label: Note-level jump shortcut
+        value: "Define label `#keyboardShortcut` on a note"
+        notes: "Example value `Ctrl+I`. Reload after changing it so the binding becomes active."
+
+  - group: Note Tree Editing and Multi-select
+    items:
+      - label: Open note in current tab
+        value: Click
+      - label: Open note in new tab
+        keys: Ctrl+Click or Middle click
+      - label: Open note in Quick edit
+        keys: Ctrl+Right click
+      - label: Move through tree
+        keys: Up / Down
+      - label: Collapse or expand branch
+        keys: Left / Right
+      - label: Copy, cut, paste notes
+        keys: Ctrl+C / Ctrl+X / Ctrl+V
+      - label: Multi-select additive
+        keys: Alt+Click
+      - label: Multi-select range
+        keys: Shift+Click
+      - label: Clone note quickly
+        value: Copy and paste a note into another branch
+        notes: A clone is another placement of the same note, not a duplicated copy.
+      - label: Clone inspection
+        value: Ribbon > Note Paths
+        notes: Shows every location where the current note appears.
+      - label: Clone deletion rule
+        value: Deleting one placement removes that clone first; the note is deleted only when no clones remain
+
+  - group: Search Saved Searches and Retrieval
+    items:
+      - label: Open search from subtree
+        keys: Ctrl+Shift+S
+        notes: Searches a selected note and its descendants.
+      - label: Search scope
+        value: Title, content, and attributes
+      - label: Ancestor filter
+        value: Set an ancestor note to limit the search to a branch
+      - label: Depth filter
+        value: Restrict how many hierarchy levels below the ancestor are searched
+      - label: Saved search note
+        value: Search can be saved as a special note whose children are live results
+      - label: Hoist or workspace interaction
+        value: Search ancestor is prefilled when searching from a hoisted note or workspace
+      - label: Search for attributes too
+        value: Use labels and relations to make notes more queryable
+      - label: Archived subtree trick
+        value: "Inheritable `#archived` can hide a whole subtree from searches and dialogs"
+
+  - group: Rich Text and Editor Shortcuts
+    items:
+      - label: Create external link
+        keys: Ctrl+K
+      - label: Create internal note link
+        keys: Ctrl+L
+      - label: Insert current date and time
+        keys: Alt+T
+      - label: Paragraph indent
+        keys: Tab / Shift+Tab
+      - label: Inline or block formatting toolbar
+        keys: Alt+F10
+      - label: Accessibility help for editor
+        keys: Alt+0
+      - label: Widget edge navigation
+        value: Arrow keys move caret around embedded widgets; Tab then Esc selects the surrounding widget
+      - label: Table navigation
+        value: Tab moves to next cell and adds a new row from the final cell
+      - label: General note types
+        value: Text, Code, Saved Search, Relation Map, Note Map, Render Note, Mermaid, Canvas, Web View, Mind Map, File, Spreadsheet, Markdown
+      - label: Code notes
+        value: Use for scripts, widgets, or source-heavy reference material with syntax highlighting
+
+  - group: Attributes Relations and Inheritance
+    items:
+      - label: Attribute model
+        value: Key-value metadata attached to notes
+      - label: Two attribute families
+        value: Labels and relations
+      - label: Label prefix
+        value: "#"
+      - label: Relation prefix
+        value: "~"
+      - label: Attribute editor location
+        value: Ribbon > Owned Attributes and Inherited Attributes
+      - label: System attribute examples
+        value: "`#color` changes tree or link color and `#iconClass` changes the note icon"
+      - label: Relations
+        value: Note-to-note connections used for metadata and scripting
+      - label: Standard inheritance
+        value: Attributes on a parent cascade through descendants
+      - label: Copying inheritance
+        value: "Use `#child:attributeName` or `~child:relationName`"
+        notes: New children get their own copied attribute or relation instead of live inherited linkage.
+      - label: Promoted attributes
+        value: Surface important attributes more prominently in the UI for a note type or section
+      - label: Script configuration pattern
+        value: Use labels and promoted attributes as parameters for scripts and widgets
+
+  - group: Templates Workspaces and High-leverage Note Structure
+    items:
+      - label: Templates
+        value: Reusable note blueprints with prefilled structure and metadata
+      - label: Workspaces
+        value: Preserve focused navigation contexts for a subset of the tree
+      - label: Hoisting
+        value: Temporarily treat a subtree as the top-level workspace
+      - label: Day notes
+        value: Built-in documented showcase for daily journaling or log workflows
+      - label: Collections and views
+        value: Calendar, Table, Kanban, Geo Map, Presentation, Grid View, List View
+      - label: Relation map and note map
+        value: Visualize links, relations, and structural connections instead of relying only on the tree
+
+  - group: Sharing Sync and Publishing
+    items:
+      - label: Sync topology
+        value: Star topology with one sync server and one or more desktop clients
+      - label: Sync mode
+        value: Automatic after setup
+      - label: Security requirement
+        value: Use HTTPS with a valid TLS certificate for sync servers
+      - label: Desktop to server setup
+        value: Initialize an empty server, enter server address and credentials on desktop, then use Test sync
+      - label: Browser and mobile model
+        value: Server install exposes a web UI; mobile is primarily via browser or third-party native clients
+      - label: Sharing
+        value: Publish notes publicly or export static HTML
+      - label: Serve a note directly
+        value: Supported as a documented sharing mode for note content
+      - label: Web clipper
+        value: Browser extension for text, screenshots, whole pages, and short notes
+      - label: Web clipper inbox override
+        value: "Set label `#clipperInbox` on a note to receive clipped content instead of the default day note"
+      - label: Supported clipper browsers
+        value: Firefox and Chrome, with Chromium-based browsers generally working
+
+  - group: ETAPI and Automation
+    items:
+      - label: Public REST API name
+        value: ETAPI
+      - label: Base path
+        value: /etapi
+      - label: Auth token source
+        value: "Options > ETAPI or `/auth/login`"
+      - label: Authorization header
+        value: "`Authorization: ETAPITOKEN` or `Authorization: Bearer ETAPITOKEN`"
+      - label: Quick health-style call
+        command: GET /etapi/app-info
+      - label: Download note content
+        command: GET /etapi/notes/{noteId}/content
+      - label: Export note as zip
+        command: GET /etapi/notes/{noteId}/export
+      - label: Shell automation pattern
+        value: curl scripts against localhost or the sync server with an ETAPI token
+      - label: Python client
+        value: trilium-py
+      - label: Best fit
+        value: External automation, bulk export, scripted ingestion, and integration with local tools
+
+  - group: Scripting Widgets and Internal Extensibility
+    items:
+      - label: Frontend scripts
+        value: Run in the client and can extend UI behavior
+      - label: Backend scripts
+        value: Run on the Node.js server environment
+      - label: Backend script language
+        value: JS backend code note
+      - label: Backend script power
+        value: Can access the system, read files, execute processes, and access notes already loaded in memory
+      - label: Backend execution
+        value: Run manually with Execute or trigger by events, startup, intervals, or attribute changes
+      - label: Backend API surface
+        value: "`api` object exposed to scripts"
+      - label: Custom widget setup
+        value: "Create a Code note and add label `#widget`"
+      - label: Widget languages
+        value: JavaScript frontend for legacy widgets or JSX for Preact widgets
+      - label: Widget locations
+        value: left-pane, center-pane, note-detail-pane, right-pane
+      - label: Widget placement control
+        value: "parent widget plus a numeric `position`"
+      - label: Preact support
+        value: Supported since newer releases; preferred for more modern widget authoring
+      - label: Launch bar widgets
+        value: Supported for custom actions and lightweight controls
+      - label: Common advanced use
+        value: Task buttons, contextual right-pane widgets, metadata-driven dashboards, request handlers, and resource providers
+
+  - group: Storage Backup and Recovery
+    items:
+      - label: Data directory contents
+        value: document.db, config.ini, backup, log
+      - label: Linux default data dir
+        value: /home/[user]/.local/share/trilium-data
+      - label: Windows default data dir
+        value: C:\\Users\\[user]\\AppData\\Roaming\\trilium-data
+      - label: macOS default data dir
+        value: /Users/[user]/Library/Application Support/trilium-data
+      - label: Backup scope
+        value: Back up the whole data directory for a complete local backup
+      - label: Automatic backup cadence
+        value: Daily, weekly, monthly, and before database migration
+      - label: Backup retention shape
+        value: At most four generated backup snapshots by default
+      - label: Download backup
+        value: Settings > Backup > Existing backups > Download
+      - label: Restore path
+        value: "Replace `document.db` with a chosen backup after stopping Trilium"
+      - label: Important restore files
+        value: "Remove `document.db`, `document.db-wal`, and `document.db-shm` before restoring the backup database"
+      - label: Config env vars
+        value: TRILIUM_DOCUMENT_PATH, TRILIUM_BACKUP_DIR, TRILIUM_LOG_DIR
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Deep personal knowledge trees, local archives, metadata-heavy notes, and scriptable self-hosted knowledge systems
+      - label: Highest-value uncommon surfaces
+        value: Cloning, inheritable labels and relations, ETAPI, backend scripts, widgets, note maps, and the single-directory backup model
+      - label: Common pitfall
+        value: Treating clones like copies; editing one clone edits the same underlying note everywhere
+      - label: Official docs
+        value: docs.triliumnotes.org

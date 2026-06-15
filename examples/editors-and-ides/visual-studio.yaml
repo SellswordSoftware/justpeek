@@ -1,0 +1,114 @@
+name: Visual Studio
+group: editors and ides
+process:
+  - devenv
+  - devenv.exe
+search_terms:
+  - vs ide
+  - visual studio ide
+references:
+  - group: Navigation and Search
+    items:
+      - label: Go to all
+        keys: Ctrl+T
+        notes: Search files, types, members, and symbols from one entry point.
+      - label: Go to line
+        keys: Ctrl+G
+      - label: Find in file
+        keys: Ctrl+F
+      - label: Replace in file
+        keys: Ctrl+H
+      - label: Find in files
+        keys: Ctrl+Shift+F
+      - label: Replace in files
+        keys: Ctrl+Shift+H
+      - label: Go to definition
+        keys: F12
+      - label: Peek definition
+        keys: Alt+F12
+      - label: Navigate backward
+        keys: Ctrl+Minus
+      - label: Navigate forward
+        keys: Ctrl+Shift+Minus
+
+  - group: Editing and Refactoring
+    items:
+      - label: Quick Actions and Refactorings
+        keys: Ctrl+Period
+      - label: Rename
+        keys: Ctrl+R Ctrl+R
+      - label: Format document
+        keys: Ctrl+K Ctrl+D
+      - label: Format selection
+        keys: Ctrl+K Ctrl+F
+      - label: Comment selection
+        keys: Ctrl+K Ctrl+C
+      - label: Uncomment selection
+        keys: Ctrl+K Ctrl+U
+      - label: Surround with
+        keys: Ctrl+K Ctrl+S
+        notes: "Insert snippets like `if`, `try`, or region wrappers around the selection."
+      - label: Multi-caret box selection
+        keys: Shift+Alt+Arrow or mouse drag
+        notes: Column editing is easy to forget when editing aligned text.
+
+  - group: Solution and Windows
+    items:
+      - label: Solution Explorer
+        keys: Ctrl+Alt+L
+      - label: Properties window
+        keys: F4
+      - label: Error List
+        keys: Ctrl+Backslash Ctrl+E
+      - label: Output window
+        keys: Ctrl+Alt+O
+      - label: Team Explorer
+        keys: Ctrl+Backslash Ctrl+M
+      - label: Close document
+        keys: Ctrl+F4
+      - label: Navigate open documents
+        keys: Ctrl+Tab
+      - label: Full screen
+        keys: Shift+Alt+Enter
+
+  - group: Build, Run, and Debug
+    items:
+      - label: Build solution
+        keys: Ctrl+Shift+B
+      - label: Rebuild solution
+        command: Build > Rebuild Solution
+      - label: Start debugging
+        keys: F5
+      - label: Start without debugging
+        keys: Ctrl+F5
+      - label: Stop debugging
+        keys: Shift+F5
+      - label: Toggle breakpoint
+        keys: F9
+      - label: Step over
+        keys: F10
+      - label: Step into
+        keys: F11
+      - label: Step out
+        keys: Shift+F11
+      - label: Immediate window
+        keys: Ctrl+Alt+I
+        notes: Useful for evaluating expressions mid-debug session.
+
+  - group: Command Line and Maintenance
+    items:
+      - label: Developer Command Prompt
+        command: devenv /Command File.OpenFile
+        notes: Run a command after Visual Studio starts.
+      - label: Safe mode
+        command: devenv /SafeMode
+        notes: Starts with minimal extensions for troubleshooting.
+      - label: Reset settings
+        command: devenv /ResetSettings
+        notes: Restores a chosen settings profile.
+      - label: Log startup activity
+        command: devenv /Log
+        notes: "Writes `ActivityLog.xml` for extension and package diagnostics."
+      - label: Become aware of keybinding scopes
+        value: Tools > Options > Environment > Keyboard
+        notes: Visual Studio shortcuts are command-scoped and often customizable per context.

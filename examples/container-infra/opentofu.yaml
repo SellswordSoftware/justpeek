@@ -1,0 +1,110 @@
+name: OpenTofu
+group: container / infra
+references:
+  - group: Core Workflow
+    items:
+      - label: Initialize working directory
+        command: tofu init
+        notes: Download providers, modules, and backend integration for the config.
+      - label: Validate configuration
+        command: tofu validate
+        notes: Check configuration syntax and consistency after initialization.
+      - label: Preview changes
+        command: tofu plan
+        notes: Compute an execution plan without mutating infrastructure.
+      - label: Apply changes
+        command: tofu apply
+        notes: Create, update, or destroy resources to match configuration.
+      - label: Destroy managed resources
+        command: tofu destroy
+        notes: Remove all infrastructure represented by the current state.
+
+  - group: Formatting, Inspection, and JSON Output
+    items:
+      - label: Format configuration
+        command: tofu fmt -recursive
+        notes: Normalize formatting across all OpenTofu files under the repo tree.
+      - label: Show current state
+        command: tofu show
+        notes: Render the active state or a saved plan in readable form.
+      - label: Show plan as JSON
+        command: tofu show -json plan.out
+        notes: Emit machine-readable plan data for CI or policy tooling.
+      - label: Show provider graph
+        command: tofu providers
+        notes: Inspect which providers and sources the configuration depends on.
+      - label: List tracked resources
+        command: tofu state list
+        notes: Print every resource address currently in state.
+
+  - group: Variables, Plans, and Execution Control
+    items:
+      - label: Save plan to file
+        command: tofu plan -out plan.out
+        notes: Create a plan artifact for reviewed apply later.
+      - label: Apply saved plan
+        command: tofu apply plan.out
+        notes: Execute the exact saved plan file contents.
+      - label: Use variable file
+        command: tofu plan -var-file=prod.tfvars
+        notes: Common path for environment-specific inputs.
+      - label: Set one variable inline
+        command: tofu apply -var 'region=us-east-1'
+        notes: Override one variable directly on the CLI.
+      - label: Auto-approve apply
+        command: tofu apply -auto-approve
+        notes: Useful in automation; avoid casual use in shared production environments.
+
+  - group: State, Import, and Refactors
+    items:
+      - label: Pull backend state
+        command: tofu state pull
+        notes: Retrieve the current state snapshot from the configured backend.
+      - label: Import existing resource
+        command: tofu import aws_s3_bucket.logs my-bucket-name
+        notes: Bring pre-existing infrastructure under OpenTofu management.
+      - label: Move resource address
+        command: tofu state mv old.addr new.addr
+        notes: Preserve state across module or resource refactors.
+      - label: Remove resource from state
+        command: tofu state rm aws_s3_bucket.logs
+        notes: Stop tracking a resource without deleting it remotely.
+      - label: Force replacement
+        command: tofu apply -replace=aws_instance.web
+        notes: Recreate one resource on the next apply intentionally.
+
+  - group: Workspaces and Backends
+    items:
+      - label: List workspaces
+        command: tofu workspace list
+        notes: Show isolated workspace namespaces under the current backend.
+      - label: Create workspace
+        command: tofu workspace new staging
+        notes: Start a new isolated state for another environment or tenant.
+      - label: Select workspace
+        command: tofu workspace select prod
+        notes: Change the active workspace context.
+      - label: Upgrade dependencies
+        command: tofu init -upgrade
+        notes: Refresh allowed provider and module versions.
+      - label: Reconfigure backend
+        command: tofu init -reconfigure
+        notes: Reinitialize backend settings after changing backend configuration.
+
+  - group: Common Workflows
+    items:
+      - label: Standard review loop
+        command: tofu fmt -recursive && tofu validate && tofu plan
+        notes: Typical local workflow before proposing changes.
+      - label: Refresh-only reconciliation
+        command: tofu plan -refresh-only
+        notes: Update state from real infrastructure without applying config drift back.
+      - label: Target one resource carefully
+        command: tofu apply -target=module.web.aws_instance.app
+        notes: Useful in emergencies, but can create drift if treated as normal workflow.
+      - label: Wait for backend lock
+        command: tofu apply -lock-timeout=5m
+        notes: Prevent immediate failure when another operator holds the state lock.
+      - label: Show help
+        command: tofu --help
+        notes: OpenTofu tracks the Terraform model closely, including state and workspace complexity.

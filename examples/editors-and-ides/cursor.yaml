@@ -1,0 +1,84 @@
+name: Cursor
+group: editors and ides
+process:
+  - cursor
+  - Cursor
+search_terms:
+  - cursor ai
+references:
+  - group: Core Editing
+    items:
+      - label: Quick Open
+        keys: Ctrl+P
+        keys_by_os:
+          macos: Cmd+P
+      - label: Command Palette
+        keys: Ctrl+Shift+P
+        keys_by_os:
+          macos: Cmd+Shift+P
+      - label: Format document
+        keys: Shift+Alt+F
+        keys_by_os:
+          macos: Shift+Option+F
+      - label: Rename symbol
+        keys: F2
+      - label: Quick fix
+        keys: Ctrl+Period
+        keys_by_os:
+          macos: Cmd+Period
+      - label: Find in files
+        keys: Ctrl+Shift+F
+        keys_by_os:
+          macos: Cmd+Shift+F
+
+  - group: AI Workflows
+    items:
+      - label: Inline edit selected code
+        command: Edit selection with Cursor
+        notes: Use the inline AI edit flow for localized rewrites rather than full-chat prompts.
+      - label: Open chat sidebar
+        command: "Cursor: Focus Chat"
+      - label: Apply suggested diff
+        value: Accept partial or full patch from chat response
+      - label: Reference files in prompt
+        value: Add files, symbols, or code blocks into context explicitly.
+      - label: Ask about current selection
+        value: Highlight code first, then invoke chat for tighter context.
+      - label: Review generated edits before save
+        notes: Cursor can propose broad edits; the review step matters more than in plain VS Code.
+
+  - group: Multi-file and Project Work
+    items:
+      - label: Open folder
+        keys: Ctrl+K Ctrl+O
+        keys_by_os:
+          macos: Cmd+K Cmd+O
+      - label: Split editor
+        keys: Ctrl+Backslash
+        keys_by_os:
+          macos: Cmd+Backslash
+      - label: Toggle terminal
+        keys: Ctrl+Backtick
+        keys_by_os:
+          macos: Ctrl+Backtick
+      - label: Run build task
+        keys: Ctrl+Shift+B
+        keys_by_os:
+          macos: Cmd+Shift+B
+      - label: Open source control view
+        keys: Ctrl+Shift+G
+        keys_by_os:
+          macos: Ctrl+Shift+G
+
+  - group: Config and CLI
+    items:
+      - label: Open current directory
+        command: cursor .
+      - label: Wait for editor close
+        command: cursor --wait <path>
+      - label: Open diff
+        command: cursor --diff <left> <right>
+      - label: Settings path
+        value: Cursor follows the VS Code-style user settings model.
+      - label: Extensions
+        value: Uses VS Code extension ecosystem with Cursor-specific AI surface on top.

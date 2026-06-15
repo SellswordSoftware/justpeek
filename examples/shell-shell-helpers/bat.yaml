@@ -1,0 +1,110 @@
+name: bat
+group: shell / shell helpers
+references:
+  - group: Core Viewing
+    items:
+      - label: View a file with syntax highlighting
+        command: bat file.rs
+        notes: Bat is a `cat` replacement that adds syntax highlighting, paging, and git integration.
+      - label: Print plain output without pager
+        command: bat --paging=never file.txt
+        notes: Useful in scripts or when stdout is already being piped elsewhere.
+      - label: Show line numbers
+        command: bat --style=numbers file.txt
+        notes: Narrow style selection to only the features you need.
+      - label: Show changes from git
+        command: bat --style=changes file.txt
+        notes: Display modified line markers relative to git index or worktree state.
+      - label: Read from stdin
+        command: git show HEAD~1 | bat -l diff
+        notes: Force a language with `-l` when bat cannot infer syntax from a filename.
+
+  - group: Paging, Ranges, and Navigation
+    items:
+      - label: View a line range
+        command: bat --line-range 40:120 file.py
+        notes: Print only a selected region of a larger file.
+      - label: Highlight a specific line
+        command: bat --highlight-line 87 file.py
+        notes: Emphasize a specific location during debugging or review.
+      - label: Disable pager wrapping
+        command: bat --wrap=never file.log
+        notes: Keep long lines unwrapped when horizontal scrolling is preferable.
+      - label: Show tabs visibly
+        command: bat --tabs 4 file.txt
+        notes: Control tab display width for alignment-sensitive content.
+      - label: Print multiple files with separators
+        command: bat file1.txt file2.txt
+        notes: Bat inserts headers and separators automatically when reading multiple files.
+
+  - group: Themes, Styles, and Output
+    items:
+      - label: List available themes
+        command: bat --list-themes
+        notes: Inspect bundled and custom syntax highlighting themes.
+      - label: Pick a theme
+        command: bat --theme='OneHalfDark' file.rs
+        notes: Override the configured theme for one invocation.
+      - label: Use plain style
+        command: bat --style=plain file.txt
+        notes: Disable decorations while keeping syntax highlighting.
+      - label: Show all style components
+        command: bat --style=full file.txt
+        notes: Full style includes header, grid, line numbers, and change markers.
+      - label: Colorize output always
+        command: bat --color=always file.txt
+        notes: Required when piping into tools like `less -R` or fzf preview windows.
+
+  - group: Diffs and Git Workflows
+    items:
+      - label: Use bat as git pager
+        command: git config --global core.pager 'bat --paging=always'
+        notes: One way to route git output through bat, though `delta` may be better for diffs specifically.
+      - label: Preview staged diff
+        command: git diff --cached | bat -l diff --paging=always
+        notes: Common review flow before creating a commit.
+      - label: Preview commit contents
+        command: git show --stat --patch HEAD | bat -l diff
+        notes: Improve readability of patch output in the terminal.
+      - label: Combine with fd and fzf
+        command: fd -t f | fzf --preview 'bat --color=always {}'
+        notes: Extremely common interactive file-picker stack.
+      - label: Show blame-adjacent context
+        command: bat --style=numbers,changes file.rs
+        notes: Highlight modified lines alongside stable numbering.
+
+  - group: Config, Cache, and Custom Assets
+    items:
+      - label: Show config file path
+        command: bat --config-file
+        notes: Prints the path to the config file bat will use.
+      - label: Edit config file
+        command: $EDITOR "$(bat --config-file)"
+        notes: Configure theme, style, pager, tabs, and mappings persistently.
+      - label: Show config directory
+        command: bat --config-dir
+        notes: Contains themes, syntaxes, and cache-managed assets.
+      - label: Rebuild cache
+        command: bat cache --build
+        notes: Required after adding custom themes or syntax definitions.
+      - label: List languages and mappings
+        command: bat --list-languages
+        notes: Inspect file extension to syntax associations.
+
+  - group: Troubleshooting and Scripting
+    items:
+      - label: Use as cat drop-in
+        command: alias cat='bat --paging=never'
+        notes: Common alias when you want colored output without a pager.
+      - label: Strip decorations for scripts
+        command: bat --style=plain --paging=never file.txt
+        notes: Safer machine-oriented output pattern.
+      - label: Diagnose pager issues
+        command: PAGER=less bat file.txt
+        notes: Override the pager environment for troubleshooting.
+      - label: Force a language manually
+        command: bat -l yaml unknown-extension.txt
+        notes: Useful when content type and extension do not match.
+      - label: Show help for subcommands
+        command: bat cache --help
+        notes: Bat has focused subcommand help for cache and asset management tasks.

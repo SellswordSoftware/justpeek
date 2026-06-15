@@ -1,0 +1,70 @@
+name: llama.cpp server
+group: ai tools
+search_terms:
+  - llama server
+  - llama.cpp
+  - gguf server
+references:
+  - group: Core Binaries
+    items:
+      - label: Interactive local CLI
+        command: llama-cli -m model.gguf
+      - label: Run from Hugging Face directly
+        command: llama-cli -hf ggml-org/gemma-3-1b-it-GGUF
+      - label: Start HTTP server
+        command: llama-server -m model.gguf --port 8080
+      - label: Chat completions endpoint
+        value: http://localhost:8080/v1/chat/completions
+      - label: Built-in basic UI
+        value: http://localhost:8080
+
+  - group: Model Format and Sources
+    items:
+      - label: Required model format
+        value: GGUF
+      - label: Download compatible model directly
+        command: llama-cli -hf <user>/<model>[:quant]
+      - label: Alternate model host
+        command: export MODEL_ENDPOINT="<hf-compatible-endpoint>"
+      - label: Convert non-GGUF models
+        value: "Use the `convert_*.py` scripts in the repo"
+
+  - group: Server Tuning
+    items:
+      - label: Parallel requests
+        command: llama-server -m model.gguf -c 16384 -np 4
+      - label: Speculative decoding
+        command: llama-server -m model.gguf -md draft.gguf
+      - label: Embedding server
+        command: llama-server -m model.gguf --embedding --pooling cls -ub 8192
+      - label: Reranking server
+        command: llama-server -m model.gguf --reranking
+      - label: JSON grammar constraint
+        command: llama-server -m model.gguf --grammar-file grammars/json.gbnf
+
+  - group: Conversation and Prompt Control
+    items:
+      - label: Force conversation mode
+        command: llama-cli -m model.gguf -cnv
+      - label: Use custom chat template
+        command: llama-cli -m model.gguf -cnv --chat-template chatml
+      - label: Custom prefixes
+        command: "llama-cli -m model.gguf -cnv --in-prefix 'User: ' --reverse-prompt 'User:'"
+      - label: Grammar constrained generation
+        command: "llama-cli -m model.gguf -n 256 --grammar-file grammars/json.gbnf -p 'Request: schedule a call at 8pm; Command:'"
+
+  - group: Benchmarking and Completion
+    items:
+      - label: Benchmark model
+        command: llama-bench -m model.gguf
+      - label: Measure perplexity
+        command: llama-perplexity -m model.gguf -f file.txt
+      - label: Bash completion
+        command: build/bin/llama-cli --completion-bash > ~/.llama-completion.bash
+
+  - group: Practical Reminders
+    items:
+      - label: Best fit
+        value: Low-level local inference and an OpenAI-compatible local server
+      - label: Official repo docs
+        value: github.com/ggml-org/llama.cpp

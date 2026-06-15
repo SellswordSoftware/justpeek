@@ -1,0 +1,118 @@
+name: PowerShell
+group: shell / shell helpers
+references:
+  - group: Startup and Profiles
+    items:
+      - label: Show PowerShell version
+        command: $PSVersionTable
+        notes: Print engine, edition, and platform details.
+      - label: Show profile paths
+        command: $PROFILE | Select-Object *
+        notes: Reveal current-user, all-users, and host-specific profile script locations.
+      - label: Edit current profile
+        command: code $PROFILE
+        notes: Replace `code` with your editor if VS Code is not your default.
+      - label: Reload current profile
+        command: . $PROFILE
+        notes: Dot-source the profile to re-import functions, aliases, and modules.
+      - label: List imported modules
+        command: Get-Module
+        notes: Show modules loaded into the current session.
+
+  - group: Help and Discovery
+    items:
+      - label: Get help for a command
+        command: Get-Help Get-ChildItem -Full
+        notes: Use `-Examples` or `-Online` when you need narrower help output.
+      - label: Update local help
+        command: Update-Help
+        notes: Refresh installed help content when documentation is missing or outdated.
+      - label: Search commands by verb or noun
+        command: Get-Command *Process*
+        notes: Discover cmdlets, functions, aliases, and applications by pattern.
+      - label: Show command syntax
+        command: Get-Command Get-ChildItem -Syntax
+        notes: Fast way to inspect parameter sets.
+      - label: List aliases
+        command: Get-Alias
+        notes: Inspect shorthand names and what real commands they resolve to.
+
+  - group: Objects, Pipeline, and Selection
+    items:
+      - label: List processes by memory
+        command: Get-Process | Sort-Object WorkingSet -Descending | Select-Object -First 10 Name,WorkingSet
+        notes: PowerShell pipelines pass structured objects, not plain text.
+      - label: Filter objects
+        command: Get-Service | Where-Object Status -eq Running
+        notes: Filter pipeline objects by property values.
+      - label: Project selected fields
+        command: Get-ChildItem | Select-Object Name,Length,LastWriteTime
+        notes: Choose the properties you want to display or export.
+      - label: Group objects
+        command: Get-Process | Group-Object Company
+        notes: Aggregate by property for quick inspection.
+      - label: Format as table
+        command: Get-Service | Format-Table Name,Status -AutoSize
+        notes: Use formatting only at the display edge of a pipeline.
+
+  - group: Variables, Functions, and Scripting
+    items:
+      - label: Set a variable
+        command: $name = "value"
+      - label: Read from stdin
+        command: $value = Read-Host "Enter value"
+        notes: Prompt interactively for runtime input.
+      - label: Define a function
+        command: |
+          function Invoke-Greet {
+              param([string]$Name)
+              "Hello $Name"
+          }
+        notes: `param(...)` provides explicit typed parameters for reusable functions.
+      - label: Dot-source a script
+        command: . .\helpers.ps1
+        notes: Load the script into the current scope so its functions stay available.
+      - label: Run a script with execution policy bypass
+        command: pwsh -ExecutionPolicy Bypass -File .\script.ps1
+        notes: Useful for one-off local runs when policy blocks script execution.
+
+  - group: Files, Providers, and Remoting
+    items:
+      - label: Recursive file search
+        command: Get-ChildItem -Recurse -File *.log
+        notes: Works across providers, though file system usage is the common case.
+      - label: Read a file
+        command: Get-Content .\file.txt
+      - label: Tail a file
+        command: Get-Content .\app.log -Wait -Tail 50
+        notes: Follow appended log lines similarly to `tail -f`.
+      - label: Copy items recursively
+        command: Copy-Item .\src -Destination .\backup -Recurse
+      - label: Enter a remote session
+        command: Enter-PSSession -ComputerName server01
+        notes: Start an interactive PowerShell remoting session.
+      - label: Run command remotely
+        command: Invoke-Command -ComputerName server01 -ScriptBlock { Get-Service }
+        notes: Execute a script block on a remote machine without staying interactive.
+
+  - group: Errors, Debugging, and Jobs
+    items:
+      - label: Stop on non-terminating errors
+        command: $ErrorActionPreference = "Stop"
+        notes: Promote recoverable cmdlet errors into terminating exceptions.
+      - label: Try catch pattern
+        command: |
+          try {
+              Get-Item .\missing.txt -ErrorAction Stop
+          } catch {
+              $_
+          }
+        notes: Standard exception handling for robust scripts.
+      - label: Start a background job
+        command: Start-Job -ScriptBlock { Get-Process }
+      - label: Receive job results
+        command: Receive-Job -Id 1 -Keep
+        notes: Pull output from a completed or running background job.
+      - label: Trace parameter binding
+        command: Trace-Command -Name ParameterBinding -Expression { Get-ChildItem } -PSHost
+        notes: Deep troubleshooting tool for confusing pipeline and parameter behavior.

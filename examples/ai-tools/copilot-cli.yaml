@@ -1,0 +1,54 @@
+name: Copilot CLI
+group: ai tools
+search_terms:
+  - github copilot cli
+  - gh copilot
+references:
+  - group: Current State
+    items:
+      - label: Old gh-copilot extension status
+        value: Deprecated October 25, 2025
+      - label: Legacy repo status
+        value: github/gh-copilot is archived and read-only
+      - label: Migration direction
+        value: Migrate to the newer GitHub Copilot CLI
+      - label: GitHub Docs area
+        value: docs.github.com/en/copilot
+        notes: Current GitHub Docs now have a full Copilot CLI section.
+
+  - group: Legacy gh Copilot Commands
+    items:
+      - label: Suggest a shell command
+        command: gh copilot suggest "Install and configure git lfs"
+      - label: Explain a command
+        command: gh copilot explain 'git lfs migrate import --everything --include="*.gz,*.png,*.jar"'
+      - label: Install extension
+        command: gh extension install github/gh-copilot --force
+      - label: Authenticate gh first
+        command: gh auth login --web
+      - label: Multi-account host override
+        command: gh copilot suggest --hostname <host> "<prompt>"
+
+  - group: Helper Aliases
+    items:
+      - label: Generate bash helpers
+        command: gh copilot alias -- bash
+      - label: Generate zsh helpers
+        command: gh copilot alias -- zsh
+      - label: Generate PowerShell helpers
+        command: gh copilot alias -- pwsh
+      - label: Short helper names
+        value: ghcs for suggest, ghce for explain
+      - label: Execution confirmation
+        value: "Use `gh copilot config` to change command execution confirmation behavior"
+
+  - group: Practical Reminders
+    items:
+      - label: Subscription requirement
+        value: Requires an active GitHub Copilot subscription
+      - label: Token caveat
+        value: Classic and fine-grained PAT flows are not the preferred auth path for the legacy extension
+      - label: Treat suggestions as untrusted
+        value: Review generated shell commands before execution
+      - label: Prefer current docs
+        value: Use GitHub Docs for the newer Copilot CLI feature set, not only the archived extension README

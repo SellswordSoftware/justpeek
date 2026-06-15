@@ -1,0 +1,114 @@
+name: apt
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Refresh package indexes
+        command: sudo apt update
+        notes: Fetch the latest package metadata from configured repositories.
+      - label: Upgrade installed packages
+        command: sudo apt upgrade
+        notes: Upgrade installed packages without removing or newly installing others unless required.
+      - label: Full upgrade
+        command: sudo apt full-upgrade
+        notes: Allow dependency-driven package removals or additions during a larger system upgrade.
+      - label: Install a package
+        command: sudo apt install ripgrep
+        notes: Install one or more packages by name.
+      - label: Remove a package
+        command: sudo apt remove ripgrep
+        notes: Uninstall the package but keep its system-wide configuration files.
+
+  - group: Search and Discovery
+    items:
+      - label: Search package names and summaries
+        command: apt search ripgrep
+        notes: Find matching packages by name or package description.
+      - label: Show package details
+        command: apt show ripgrep
+        notes: Print version, dependencies, repository, and package description.
+      - label: List installed packages
+        command: apt list --installed
+        notes: Enumerate currently installed packages known to APT.
+      - label: List upgradable packages
+        command: apt list --upgradable
+        notes: See what would change before running an upgrade.
+      - label: Find owning package for file
+        command: dpkg -S /usr/bin/rg
+        notes: Use `dpkg` when you need file-to-package ownership lookup.
+
+  - group: Install Variants and Version Control
+    items:
+      - label: Install specific version
+        command: sudo apt install ripgrep=13.0.0-4
+        notes: Pin an exact version when reproducibility matters.
+      - label: Reinstall a package
+        command: sudo apt install --reinstall ripgrep
+        notes: Replace package files without first removing the package.
+      - label: Install local deb file
+        command: sudo apt install ./package.deb
+        notes: Let apt resolve dependencies while installing a local `.deb`.
+      - label: Mark package on hold
+        command: sudo apt-mark hold docker-ce
+        notes: Prevent the package from being upgraded automatically.
+      - label: Remove hold
+        command: sudo apt-mark unhold docker-ce
+        notes: Allow future upgrades again.
+
+  - group: Cleanup and Repair
+    items:
+      - label: Remove package and config
+        command: sudo apt purge ripgrep
+        notes: Uninstall the package and its system-level config files.
+      - label: Remove unneeded dependencies
+        command: sudo apt autoremove
+        notes: Clean up orphaned packages left behind after removals.
+      - label: Clean package cache
+        command: sudo apt clean
+        notes: Remove downloaded package archives from the local cache.
+      - label: Fix broken dependencies
+        command: sudo apt --fix-broken install
+        notes: Attempt recovery from interrupted or inconsistent package states.
+      - label: Reconfigure half-installed packages
+        command: sudo dpkg --configure -a
+        notes: Common recovery step after interrupted installs or upgrades.
+
+  - group: Repositories and Policy
+    items:
+      - label: Show package policy
+        command: apt policy ripgrep
+        notes: Inspect candidate version and which repos are contributing versions.
+      - label: List configured sources
+        command: grep -R '^deb ' /etc/apt/sources.list /etc/apt/sources.list.d/
+        notes: Review active binary package repositories.
+      - label: Add keyring-backed source
+        command: |
+          echo 'deb [signed-by=/usr/share/keyrings/vendor.gpg] https://repo.example.com stable main' | sudo tee /etc/apt/sources.list.d/vendor.list
+        notes: Modern approach uses dedicated keyrings instead of deprecated global trust.
+      - label: Pin package priority
+        command: |
+          Package: *
+          Pin: release n=stable
+          Pin-Priority: 700
+        notes: Use files under `/etc/apt/preferences.d/` to influence source selection.
+      - label: Update after repo changes
+        command: sudo apt update
+        notes: Refresh indexes after editing sources or preferences.
+
+  - group: Common Workflows
+    items:
+      - label: Upgrade whole system safely
+        command: sudo apt update && sudo apt upgrade
+        notes: Standard conservative maintenance cycle on Debian or Ubuntu systems.
+      - label: Inspect why package is installed
+        command: apt-mark showmanual | rg ripgrep
+        notes: See whether a package was manually installed or pulled as a dependency.
+      - label: Download package without installing
+        command: apt download ripgrep
+        notes: Fetch a `.deb` file for offline inspection or transfer.
+      - label: Simulate install
+        command: sudo apt install --simulate ripgrep
+        notes: Preview dependency actions without changing the system.
+      - label: Show help
+        command: apt --help
+        notes: APT and `apt-get` overlap, but the `apt` frontend is the usual interactive entry point.

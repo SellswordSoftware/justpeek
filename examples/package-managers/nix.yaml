@@ -1,0 +1,110 @@
+name: nix
+group: package managers
+references:
+  - group: Core Package Operations
+    items:
+      - label: Search packages
+        command: nix search nixpkgs ripgrep
+        notes: Search the `nixpkgs` flake output for matching packages.
+      - label: Run package without installing
+        command: nix run nixpkgs#ripgrep
+        notes: Execute a package directly from the store or cache.
+      - label: Open shell with package
+        command: nix shell nixpkgs#ripgrep
+        notes: Enter an environment where the package is available on `PATH`.
+      - label: Install profile package
+        command: nix profile install nixpkgs#ripgrep
+        notes: Add a package to the current user's profile with the new CLI.
+      - label: Remove profile package
+        command: nix profile remove nixpkgs#ripgrep
+        notes: Remove an installed profile package reference.
+
+  - group: Discovery and Inventory
+    items:
+      - label: List installed profile packages
+        command: nix profile list
+        notes: Show packages currently installed into the user profile.
+      - label: Show package metadata
+        command: nix path-info -S nixpkgs#ripgrep
+        notes: Inspect the store path and closure size for a package.
+      - label: Evaluate attribute
+        command: nix eval nixpkgs#ripgrep.version
+        notes: Query package metadata or expressions without building them.
+      - label: Show flake outputs
+        command: nix flake show nixpkgs
+        notes: Inspect what a flake exposes: packages, dev shells, apps, and more.
+      - label: Show store path for package
+        command: nix build nixpkgs#ripgrep --print-out-paths
+        notes: Build or fetch the package and print the resulting store path.
+
+  - group: Shells, Builds, and Development
+    items:
+      - label: Open dev shell from flake
+        command: nix develop
+        notes: Enter the development shell defined by the current flake.
+      - label: Open explicit dev shell
+        command: nix develop nixpkgs#hello
+        notes: Enter a development environment from a chosen flake output.
+      - label: Build flake package
+        command: nix build .#package
+        notes: Build a package defined in the current flake.
+      - label: Run command in nix shell
+        command: nix shell nixpkgs#jq nixpkgs#yq -c bash
+        notes: Compose temporary environments from multiple packages.
+      - label: Print flake metadata
+        command: nix flake metadata
+        notes: Inspect lock state, inputs, and resolved URLs for the current flake.
+
+  - group: Flakes and Inputs
+    items:
+      - label: Initialize flake template
+        command: nix flake init -t templates#default
+        notes: Create a starter flake from a template.
+      - label: Update flake lock file
+        command: nix flake update
+        notes: Refresh locked input revisions to their latest allowed versions.
+      - label: Update one flake input
+        command: nix flake lock --update-input nixpkgs
+        notes: Refresh only one dependency input in `flake.lock`.
+      - label: Check flake outputs
+        command: nix flake check
+        notes: Build and validate checks, packages, and declared outputs.
+      - label: Show flake archive info
+        command: nix flake metadata github:NixOS/nixpkgs
+        notes: Resolve and inspect remote flakes directly.
+
+  - group: Garbage Collection and Store
+    items:
+      - label: Delete old generations
+        command: nix-collect-garbage -d
+        notes: Remove old profile generations and collect unreachable store paths.
+      - label: Optimize store
+        command: nix store optimise
+        notes: Deduplicate store contents via hardlink optimization.
+      - label: Verify store integrity
+        command: nix store verify --all
+        notes: Check all store paths for corruption or missing references.
+      - label: Show store generations
+        command: nix profile history
+        notes: Review profile generation history for rollback context.
+      - label: Roll back profile
+        command: nix profile rollback
+        notes: Revert the current profile to the prior generation.
+
+  - group: Common Workflows
+    items:
+      - label: Install then inspect package
+        command: nix profile install nixpkgs#ripgrep && nix profile list
+        notes: Common user-package workflow with the new CLI.
+      - label: One-off tool execution
+        command: nix run nixpkgs#hello
+        notes: Good for trying tools without polluting the profile.
+      - label: Enter reproducible project env
+        command: nix develop
+        notes: Standard flake-based development loop.
+      - label: Diagnose feature support
+        command: nix --version
+        notes: Important because flakes and new CLI features depend on the installed Nix version and config.
+      - label: Show help
+        command: nix --help
+        notes: The new CLI is broad and subcommand-specific help is frequently useful.

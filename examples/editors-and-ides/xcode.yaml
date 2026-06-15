@@ -1,0 +1,90 @@
+name: Xcode
+group: editors and ides
+process:
+  - Xcode
+references:
+  - group: Navigation and Search
+    items:
+      - label: Open Quickly
+        keys: Cmd+Shift+O
+      - label: Find in workspace
+        keys: Cmd+Shift+F
+      - label: Find selected text
+        keys: Cmd+E then Cmd+G
+      - label: Jump to definition
+        keys: Cmd+Click or Ctrl+Cmd+J
+      - label: Assistant editor
+        keys: Option+Cmd+Enter
+      - label: Jump bar
+        value: Use the path bar above the editor for quick scope changes.
+      - label: Open symbol navigator
+        keys: Cmd+3
+
+  - group: Editing and Refactoring
+    items:
+      - label: Show code completion
+        keys: Ctrl+Space
+      - label: Re-indent
+        keys: Ctrl+I
+      - label: Comment selection
+        keys: Cmd+Slash
+      - label: Rename symbol
+        command: Editor > Refactor > Rename
+      - label: Fix all in scope
+        value: Editor fixes and issue navigator actions
+      - label: Edit all in scope
+        command: Editor > Edit All in Scope
+        notes: Useful for repeated identifier edits without a formal rename.
+
+  - group: Navigators and Panels
+    items:
+      - label: Project navigator
+        keys: Cmd+1
+      - label: Source control navigator
+        keys: Cmd+2
+      - label: Issue navigator
+        keys: Cmd+4
+      - label: Debug area
+        keys: Cmd+Shift+Y
+      - label: Inspectors
+        keys: Option+Cmd+0
+      - label: Show canvas
+        keys: Option+Cmd+Enter
+        notes: Common in SwiftUI preview workflows.
+
+  - group: Build, Run, and Debug
+    items:
+      - label: Build
+        keys: Cmd+B
+      - label: Run
+        keys: Cmd+R
+      - label: Test
+        keys: Cmd+U
+      - label: Profile
+        keys: Cmd+I
+      - label: Analyze
+        keys: Cmd+Shift+B
+      - label: Clean build folder
+        keys: Option+Cmd+Shift+K
+      - label: Stop
+        keys: Cmd+Period
+      - label: Step over
+        keys: F6
+      - label: Step into
+        keys: F7
+      - label: Step out
+        keys: F8
+
+  - group: Simulators, Signing, and Maintenance
+    items:
+      - label: Open Devices and Simulators
+        value: Window > Devices and Simulators
+      - label: Open Organizer
+        value: Window > Organizer
+      - label: Resolve package versions
+        value: File > Packages > Resolve Package Versions
+      - label: Manage signing
+        value: Target settings > Signing and Capabilities
+      - label: DerivedData cleanup
+        value: ~/Library/Developer/Xcode/DerivedData
+        notes: Useful when indexing or stale build artifacts misbehave.

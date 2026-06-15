@@ -1,0 +1,116 @@
+name: Vagrant
+group: container / infra
+references:
+  - group: Core VM Lifecycle
+    items:
+      - label: Initialize Vagrantfile
+        command: vagrant init hashicorp/bionic64
+        notes: Scaffold a starter `Vagrantfile` using a base box.
+      - label: Start VM
+        command: vagrant up
+        notes: Create and boot the configured virtual machine.
+      - label: SSH into VM
+        command: vagrant ssh
+        notes: Open a shell using the automatically managed SSH config.
+      - label: Halt VM
+        command: vagrant halt
+        notes: Gracefully stop the running VM without destroying it.
+      - label: Destroy VM
+        command: vagrant destroy
+        notes: Delete the VM instance while keeping the Vagrantfile and project directory.
+
+  - group: Boxes and Providers
+    items:
+      - label: List installed boxes
+        command: vagrant box list
+        notes: Show locally cached base boxes and versions.
+      - label: Add box manually
+        command: vagrant box add generic/ubuntu2204
+        notes: Preload a base box before bringing up a machine.
+      - label: Remove box
+        command: vagrant box remove generic/ubuntu2204
+        notes: Delete a cached base box when it is no longer needed.
+      - label: Use specific provider
+        command: vagrant up --provider=libvirt
+        notes: Override the default provider when multiple are installed.
+      - label: Update box metadata
+        command: vagrant box update
+        notes: Check for and apply newer base box versions.
+
+  - group: Provisioning and Configuration
+    items:
+      - label: Re-run provisioning
+        command: vagrant provision
+        notes: Execute configured provisioners again on an existing VM.
+      - label: Provision only one provisioner
+        command: vagrant provision --provision-with shell
+        notes: Target one provisioner type or named provisioner.
+      - label: Reload config changes
+        command: vagrant reload
+        notes: Restart the VM and apply updated Vagrantfile settings.
+      - label: Reload with provisioning
+        command: vagrant reload --provision
+        notes: Apply both boot-time config changes and provisioners after restart.
+      - label: Validate Vagrantfile
+        command: vagrant validate
+        notes: Check Vagrantfile syntax and basic structure.
+
+  - group: SSH, Networking, and Sharing
+    items:
+      - label: Show SSH config
+        command: vagrant ssh-config
+        notes: Print SSH parameters for use with external tools or editors.
+      - label: Port forward in Vagrantfile
+        command: |
+          config.vm.network "forwarded_port", guest: 80, host: 8080
+        notes: Expose guest ports to the host machine.
+      - label: Private network in Vagrantfile
+        command: |
+          config.vm.network "private_network", ip: "192.168.56.10"
+        notes: Give the VM a stable host-only IP address.
+      - label: Synced folder in Vagrantfile
+        command: |
+          config.vm.synced_folder ".", "/vagrant"
+        notes: Share project files between host and guest.
+      - label: Multi-machine definition
+        command: |
+          config.vm.define "web" do |web|
+            web.vm.hostname = "web"
+          end
+        notes: Model small multi-node environments from one Vagrantfile.
+
+  - group: Status and Troubleshooting
+    items:
+      - label: Show machine status
+        command: vagrant status
+        notes: Report the lifecycle state of configured machines.
+      - label: Global status
+        command: vagrant global-status
+        notes: List all Vagrant environments known on the local machine.
+      - label: Resume suspended VM
+        command: vagrant resume
+        notes: Wake a previously suspended machine.
+      - label: Suspend VM
+        command: vagrant suspend
+        notes: Save VM memory state for a faster resume later.
+      - label: Enable debug logs
+        command: VAGRANT_LOG=debug vagrant up
+        notes: Increase diagnostic detail when provider or provisioning fails.
+
+  - group: Common Workflows
+    items:
+      - label: Bootstrap local VM env
+        command: vagrant up && vagrant ssh
+        notes: Common first-run workflow for a local reproducible VM.
+      - label: Refresh after config edit
+        command: vagrant reload --provision
+        notes: Standard path after changing networking, synced folders, or provisioning logic.
+      - label: Clean reset machine
+        command: vagrant destroy -f && vagrant up
+        notes: Good recovery path when drift or provisioning failures leave the VM in a bad state.
+      - label: Target one machine in multi-machine env
+        command: vagrant up web
+        notes: Operate on one named machine instead of the full environment.
+      - label: Show help
+        command: vagrant --help
+        notes: Vagrant's workflows center on boxes, providers, provisioning, and reproducible local environments.

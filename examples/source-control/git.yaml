@@ -1,0 +1,163 @@
+name: Git Reference
+group: source control
+references:
+  - group: Inspect
+    items:
+      - label: Status
+        command: git status
+        notes: Shows staged, unstaged, and untracked changes.
+      - label: Short status with branch
+        command: git status -sb
+        notes: Compact status output with the current branch and upstream state.
+      - label: Diff unstaged changes
+        command: git diff
+        notes: Compare working tree changes against the index.
+      - label: Diff staged changes
+        command: git diff --cached
+        notes: Compare staged changes against the last commit.
+      - label: Show one commit
+        command: git show <commit>
+        notes: Displays the commit message, patch, and metadata for a specific commit.
+
+  - group: Branching
+    items:
+      - label: List local and remote branches
+        command: git branch -a
+        notes: Shows local branches plus remote-tracking branches.
+      - label: Create and switch to a new branch
+        command: git switch -c <branch>
+        notes: Modern shortcut for creating a branch and checking it out.
+      - label: Switch to an existing branch
+        command: git switch <branch>
+        notes: Move to another local branch without detached HEAD syntax.
+      - label: Rename current branch
+        command: git branch -m <new-name>
+        notes: Renames the branch you are currently on.
+      - label: Delete a merged branch
+        command: git branch -d <branch>
+        notes: Safe delete. Refuses if the branch has unmerged commits.
+
+  - group: Sync
+    items:
+      - label: Fetch all remotes and prune deleted branches
+        command: git fetch --all --prune
+        notes: Refreshes remote state and removes stale remote-tracking refs.
+      - label: Pull with rebase
+        command: git pull --rebase
+        notes: Replays local commits on top of the updated upstream branch.
+      - label: Push current branch and set upstream
+        command: git push -u origin HEAD
+        notes: Common first push for a new branch.
+      - label: Push after rewriting local commits
+        command: git push --force-with-lease
+        notes: Safer force push. Fails if the remote changed unexpectedly.
+
+  - group: Stage and Commit
+    items:
+      - label: Stage specific files
+        command: git add <file> <file>
+        notes: Add only the files you want in the next commit.
+      - label: Stage all tracked and untracked changes
+        command: git add -A
+        notes: Stages new files, deletions, and modifications.
+      - label: Stage interactively by hunk
+        command: git add -p
+        notes: Useful when one file contains multiple unrelated changes.
+      - label: Commit with a message
+        command: git commit -m "<message>"
+        notes: Creates a commit from the staged changes.
+      - label: Amend the last commit
+        command: git commit --amend
+        notes: Replaces the most recent commit with a corrected version.
+      - label: Amend without changing the message
+        command: git commit --amend --no-edit
+        notes: Add forgotten staged changes to the last commit.
+
+  - group: Stash
+    items:
+      - label: Stash tracked changes
+        command: git stash push -m "<label>"
+        notes: Save current work temporarily with a readable label.
+      - label: Stash including untracked files
+        command: git stash push -u -m "<label>"
+        notes: Includes new files that are not yet tracked.
+      - label: List stashes
+        command: git stash list
+        notes: Shows the stack of saved stash entries.
+      - label: Apply latest stash and remove it
+        command: git stash pop
+        notes: Restores the most recent stash and drops it from the list.
+      - label: Apply a specific stash
+        command: git stash apply stash@{<n>}
+        notes: Restores a stash without deleting it.
+
+  - group: History
+    items:
+      - label: One-line log graph
+        command: git log --oneline --graph --decorate --all
+        notes: Great default view for understanding branch history.
+      - label: File history
+        command: git log -- <path>
+        notes: Shows commits that affected a specific file.
+      - label: Search commit messages
+        command: git log --grep "<pattern>"
+        notes: Find commits by message text.
+      - label: See who changed each line
+        command: git blame <path>
+        notes: Line-by-line author and commit attribution for a file.
+
+  - group: Undo and Recovery
+    items:
+      - label: Unstage a file
+        command: git restore --staged <file>
+        notes: Removes a file from the index without touching the working tree.
+      - label: Discard unstaged changes in a file
+        command: git restore <file>
+        notes: Reverts working tree changes for one file.
+      - label: Revert a commit safely
+        command: git revert <commit>
+        notes: Creates a new commit that undoes an earlier commit. Safe for shared history.
+      - label: Reset current branch to a commit and keep changes
+        command: git reset --soft <commit>
+        notes: Moves HEAD back but keeps all changes staged.
+      - label: Reset current branch to a commit and unstage changes
+        command: git reset --mixed <commit>
+        notes: Default reset mode. Keeps file changes but removes them from the index.
+      - label: Reset hard
+        command: git reset --hard <commit>
+        notes: Rewrites local state and discards working tree changes. Use with care.
+      - label: Recover lost commits with reflog
+        command: git reflog
+        notes: Find prior HEAD positions after reset, rebase, or branch deletion.
+
+  - group: Rebase and Cherry-pick
+    items:
+      - label: Rebase current branch onto main
+        command: |
+          git fetch origin
+          git rebase origin/main
+        notes: Common way to update a feature branch before merging.
+      - label: Interactive rebase recent commits
+        command: git rebase -i HEAD~<n>
+        notes: Reorder, squash, drop, or edit recent local commits.
+      - label: Continue a rebase after conflict resolution
+        command: git rebase --continue
+        notes: Run after fixing conflicts and staging the resolved files.
+      - label: Abort the current rebase
+        command: git rebase --abort
+        notes: Return to the pre-rebase state.
+      - label: Cherry-pick one commit
+        command: git cherry-pick <commit>
+        notes: Apply a specific commit from another branch onto the current branch.
+
+  - group: Tagging and Release
+    items:
+      - label: Create an annotated tag
+        command: git tag -a v1.2.3 -m "Release v1.2.3"
+        notes: Annotated tags are the usual choice for releases.
+      - label: Push one tag
+        command: git push origin v1.2.3
+        notes: Publish a single release tag.
+      - label: Push all tags
+        command: git push --tags
+        notes: Push every local tag that does not exist on the remote.

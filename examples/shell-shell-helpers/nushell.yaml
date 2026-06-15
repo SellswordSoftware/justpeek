@@ -1,0 +1,119 @@
+name: Nushell
+group: shell / shell helpers
+references:
+  - group: Startup and Configuration
+    items:
+      - label: Show Nushell version
+        command: version
+      - label: Show config path
+        command: $nu.config-path
+        notes: Print the current config file path used by Nushell.
+      - label: Edit main config
+        command: $env.EDITOR $nu.config-path
+        notes: Open the configuration file with the editor defined in the environment.
+      - label: Edit environment config
+        command: $env.EDITOR $nu.env-path
+        notes: Separate file for environment setup and login-like initialization.
+      - label: Reload config
+        command: source $nu.config-path
+        notes: Re-read config definitions in the current shell session.
+
+  - group: Tables, Pipelines, and Inspection
+    items:
+      - label: List directory as a table
+        command: ls
+        notes: Nushell produces structured tables by default instead of raw text streams.
+      - label: Describe a value
+        command: ls | describe
+        notes: Show the type flowing through the pipeline.
+      - label: Select columns
+        command: ls | select name size modified
+        notes: Project only the table columns you care about.
+      - label: Filter rows
+        command: ps | where cpu > 10
+        notes: Use row-aware expressions instead of text-grep patterns.
+      - label: Sort structured data
+        command: ls | sort-by size
+        notes: Sort by a named field rather than parsing text output.
+      - label: Convert to JSON
+        command: open data.toml | to json
+        notes: Structured conversions are a core Nushell workflow.
+
+  - group: Variables and Records
+    items:
+      - label: Set a variable
+        command: let name = "value"
+        notes: `let` binds immutable variables in the current scope.
+      - label: Set an environment variable
+        command: $env.EDITOR = "nvim"
+        notes: Environment variables are set through the `$env` record.
+      - label: Create a list
+        command: let items = [a b c]
+      - label: Create a record
+        command: let person = {name: "Sam", role: "SRE"}
+        notes: Records are keyed data structures similar to JSON objects.
+      - label: Access nested fields
+        command: $person.name
+        notes: Dot access works naturally with records and table rows.
+
+  - group: Files and Data Formats
+    items:
+      - label: Open and parse JSON
+        command: open package.json
+        notes: Nushell auto-detects many structured file formats.
+      - label: Save data as YAML
+        command: ls | to yaml | save output.yaml
+        notes: Convert structured pipeline data before writing it to disk.
+      - label: Read CSV and filter
+        command: open users.csv | where active == true
+        notes: Table-oriented filtering avoids manual parsing.
+      - label: Append text to a file
+        command: '"hello" | save --append notes.txt'
+        notes: Save pipeline output directly to disk.
+      - label: Find files recursively
+        command: ls **/*
+        notes: Recursive globbing can be used directly in path expressions.
+
+  - group: Custom Commands and Control Flow
+    items:
+      - label: Define a custom command
+        command: |
+          def greet [name: string] {
+            $"hello ($name)"
+          }
+        notes: Commands can declare typed parameters and structured output.
+      - label: Define an environment command
+        command: |
+          def --env activate-project [] {
+            cd ~/src/project
+          }
+        notes: `--env` is required when a custom command mutates shell environment state.
+      - label: If expression
+        command: if ($count > 10) { "large" } else { "small" }
+        notes: Conditionals are expressions and return values.
+      - label: For loop
+        command: |
+          for item in [a b c] {
+            print $item
+          }
+        notes: Loop bodies use block syntax with braces.
+      - label: Each over pipeline rows
+        command: ls | each {|row| $row.name }
+        notes: Apply a closure to each row in structured pipeline data.
+
+  - group: Help, Discovery, and Debugging
+    items:
+      - label: Get help for a command
+        command: help open
+      - label: List available commands
+        command: scope commands
+        notes: Inspect built-in and loaded command definitions.
+      - label: Show environment values
+        command: $env | transpose key value
+        notes: Convert the environment record into a table for scanning.
+      - label: Explain parse errors
+        command: nu --commands 'open missing.json'
+        notes: Run a one-off command string for quick debugging and reproduction.
+      - label: Benchmark a pipeline
+        command: timeit { ls | where size > 1kb }
+        notes: Measure execution time for a block or pipeline.

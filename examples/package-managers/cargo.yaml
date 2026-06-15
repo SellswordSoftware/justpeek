@@ -1,0 +1,110 @@
+name: cargo
+group: package managers
+references:
+  - group: Core Project Operations
+    items:
+      - label: Create binary project
+        command: cargo new myapp
+        notes: Scaffold a new Rust binary crate with `Cargo.toml` and `src/main.rs`.
+      - label: Create library project
+        command: cargo new mylib --lib
+        notes: Scaffold a reusable library crate instead of an executable.
+      - label: Build project
+        command: cargo build
+        notes: Compile the current crate in debug mode by default.
+      - label: Run project
+        command: cargo run
+        notes: Build and execute the default binary target.
+      - label: Test project
+        command: cargo test
+        notes: Build and run unit, integration, and doc tests.
+
+  - group: Dependencies and Manifests
+    items:
+      - label: Add dependency
+        command: cargo add serde
+        notes: Requires `cargo-edit`; updates `Cargo.toml` automatically.
+      - label: Add feature on dependency
+        command: cargo add tokio --features full
+        notes: Enable dependency features declaratively during add.
+      - label: Remove dependency
+        command: cargo rm serde
+        notes: Requires `cargo-edit`; removes dependency entries from the manifest.
+      - label: Show dependency tree
+        command: cargo tree
+        notes: Inspect transitive dependencies and feature activation.
+      - label: Update lockfile deps
+        command: cargo update
+        notes: Refresh dependency versions within semver constraints in `Cargo.lock`.
+
+  - group: Build Modes and Targets
+    items:
+      - label: Release build
+        command: cargo build --release
+        notes: Compile with optimizations for production binaries.
+      - label: Run release binary
+        command: cargo run --release
+        notes: Execute the optimized build output.
+      - label: Build specific target
+        command: cargo build --target x86_64-unknown-linux-gnu
+        notes: Compile for a chosen target triple when toolchains support it.
+      - label: Check without full build
+        command: cargo check
+        notes: Faster compile pass for type-checking and borrow checking.
+      - label: Clean build artifacts
+        command: cargo clean
+        notes: Remove `target/` outputs to force a fresh rebuild.
+
+  - group: Workspaces, Binaries, and Execution
+    items:
+      - label: Build workspace
+        command: cargo build --workspace
+        notes: Compile all members of a Cargo workspace.
+      - label: Test one package in workspace
+        command: cargo test -p mycrate
+        notes: Target one workspace member precisely.
+      - label: Run one binary target
+        command: cargo run --bin server
+        notes: Choose a specific binary when the crate defines multiple executables.
+      - label: Run example target
+        command: cargo run --example demo
+        notes: Execute an example under `examples/`.
+      - label: Bench project
+        command: cargo bench
+        notes: Run benchmark targets where benchmark support is configured.
+
+  - group: Publishing and Tooling
+    items:
+      - label: Package crate
+        command: cargo package
+        notes: Build the source tarball that would be uploaded to crates.io.
+      - label: Publish crate
+        command: cargo publish
+        notes: Upload the crate to the configured registry.
+      - label: Login to crates.io
+        command: cargo login <token>
+        notes: Store an API token for publish operations.
+      - label: Install CLI from crates.io
+        command: cargo install ripgrep
+        notes: Install a Rust CLI tool globally for the current user.
+      - label: Install locked CLI version
+        command: cargo install ripgrep --locked
+        notes: Use the crate's lockfile for more reproducible installs when supported.
+
+  - group: Common Workflows
+    items:
+      - label: Fast edit-build loop
+        command: cargo check && cargo test
+        notes: Common development cycle before a full optimized build.
+      - label: Lint with Clippy
+        command: cargo clippy --all-targets --all-features
+        notes: Run Rust lints across binaries, tests, and examples.
+      - label: Format source
+        command: cargo fmt
+        notes: Apply standard Rust formatting through rustfmt.
+      - label: Generate docs
+        command: cargo doc --open
+        notes: Build API docs and open them locally in a browser.
+      - label: Show help
+        command: cargo --help
+        notes: Cargo has many subcommands, target selectors, and workspace flags worth checking directly.

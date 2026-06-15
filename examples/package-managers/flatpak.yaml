@@ -1,0 +1,110 @@
+name: flatpak
+group: package managers
+references:
+  - group: Core App Operations
+    items:
+      - label: Search apps
+        command: flatpak search firefox
+        notes: Search apps and runtimes across configured remotes.
+      - label: Install app from Flathub
+        command: flatpak install flathub org.mozilla.firefox
+        notes: Install by remote and application ID for deterministic results.
+      - label: Run installed app
+        command: flatpak run org.mozilla.firefox
+        notes: Launch an installed Flatpak app directly by its application ID.
+      - label: Update installed apps
+        command: flatpak update
+        notes: Upgrade installed apps and runtimes from enabled remotes.
+      - label: Uninstall app
+        command: flatpak uninstall org.mozilla.firefox
+        notes: Remove one installed Flatpak application.
+
+  - group: Discovery and Inventory
+    items:
+      - label: List installed apps and runtimes
+        command: flatpak list
+        notes: Show installed refs, remotes, and architectures.
+      - label: List apps only
+        command: flatpak list --app
+        notes: Restrict output to application refs and hide runtimes.
+      - label: Show app info
+        command: flatpak info org.mozilla.firefox
+        notes: Print origin, install path, permissions, and version details.
+      - label: List updates
+        command: flatpak remote-ls --updates flathub
+        notes: Inspect available updates from one remote without applying them.
+      - label: Show history-like repair context
+        command: flatpak history
+        notes: Review recorded Flatpak operations when troubleshooting changes.
+
+  - group: Remotes and Sources
+    items:
+      - label: List remotes
+        command: flatpak remotes
+        notes: Show configured repositories such as Flathub or internal remotes.
+      - label: Add Flathub remote
+        command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        notes: Standard setup path for the most common Flatpak source.
+      - label: Remove remote
+        command: flatpak remote-delete flathub
+        notes: Delete a configured remote repository.
+      - label: Show refs in remote
+        command: flatpak remote-ls flathub
+        notes: Browse what one remote offers before installing.
+      - label: Disable remote GPG verify once
+        command: flatpak remote-modify --no-gpg-verify internal
+        notes: Expedient for testing internal remotes, but weaker for trust verification.
+
+  - group: Cleanup and Repair
+    items:
+      - label: Remove unused runtimes
+        command: flatpak uninstall --unused
+        notes: Clean up runtimes and refs no longer required by installed apps.
+      - label: Repair installation
+        command: flatpak repair
+        notes: Check refs, prune invalid data, and repair some damaged state.
+      - label: Delete app data too
+        command: flatpak uninstall --delete-data org.mozilla.firefox
+        notes: Remove per-app data directories along with the app.
+      - label: Clear one app override
+        command: flatpak override --reset org.mozilla.firefox
+        notes: Remove custom permission overrides for one app.
+      - label: Show disk usage context
+        command: du -sh ~/.local/share/flatpak
+        notes: Inspect local user installation size directly from disk usage tools.
+
+  - group: Permissions and Overrides
+    items:
+      - label: Show app permissions
+        command: flatpak info --show-permissions org.mozilla.firefox
+        notes: Inspect filesystem, socket, device, and bus permissions.
+      - label: Grant home filesystem access
+        command: flatpak override --user --filesystem=home org.mozilla.firefox
+        notes: Add a broader filesystem permission override for one app.
+      - label: Grant one directory access
+        command: flatpak override --user --filesystem=$HOME/Documents org.mozilla.firefox
+        notes: Prefer narrower permissions when possible.
+      - label: Remove filesystem override
+        command: flatpak override --user --nofilesystem=home org.mozilla.firefox
+        notes: Revoke a previously granted broad filesystem override.
+      - label: Open app shell
+        command: flatpak run --command=sh org.mozilla.firefox
+        notes: Launch a shell inside the app sandbox for debugging.
+
+  - group: Common Workflows
+    items:
+      - label: Install app non-interactively
+        command: flatpak install -y flathub org.mozilla.firefox
+        notes: Useful in provisioning or scripted setup.
+      - label: Update one app
+        command: flatpak update org.mozilla.firefox
+        notes: Restrict updates to one application when needed.
+      - label: Export permission inspection
+        command: flatpak info --show-permissions org.mozilla.firefox
+        notes: First stop when apps cannot see expected files or devices.
+      - label: Compare system vs user installs
+        command: flatpak list --user && flatpak list --system
+        notes: Understand whether apps are installed per-user or system-wide.
+      - label: Show help
+        command: flatpak --help
+        notes: Flatpak's subcommand surface is broad across remotes, refs, and overrides.

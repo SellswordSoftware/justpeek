@@ -1,0 +1,110 @@
+name: go
+group: package managers
+references:
+  - group: Modules and Dependency Basics
+    items:
+      - label: Initialize module
+        command: go mod init example.com/myapp
+        notes: Create a new `go.mod` file for the project module.
+      - label: Add dependency by import use
+        command: go get github.com/spf13/cobra@latest
+        notes: Add or upgrade a module requirement explicitly.
+      - label: Tidy module graph
+        command: go mod tidy
+        notes: Add missing requirements and remove unused ones from `go.mod` and `go.sum`.
+      - label: Download dependencies
+        command: go mod download
+        notes: Pre-fetch module dependencies into the local module cache.
+      - label: Verify dependency checksums
+        command: go mod verify
+        notes: Confirm cached modules match the recorded checksums.
+
+  - group: Build, Run, and Test
+    items:
+      - label: Build package
+        command: go build ./...
+        notes: Compile all packages in the module recursively.
+      - label: Run program
+        command: go run .
+        notes: Build and execute the main package in the current directory.
+      - label: Run tests
+        command: go test ./...
+        notes: Execute tests across all packages in the module.
+      - label: Benchmark tests
+        command: go test -bench=. ./...
+        notes: Run benchmark functions in matching packages.
+      - label: Cross-compile binary
+        command: GOOS=linux GOARCH=amd64 go build -o app-linux .
+        notes: Target a different OS and architecture with environment variables.
+
+  - group: Inspection and Module Tools
+    items:
+      - label: List modules
+        command: go list -m all
+        notes: Show the full module dependency graph.
+      - label: Explain why module is needed
+        command: go mod why github.com/spf13/cobra
+        notes: Trace the import path reason a module is in the graph.
+      - label: Show available updates
+        command: go list -m -u all
+        notes: Compare current and newer available module versions.
+      - label: Inspect package docs
+        command: go doc fmt.Printf
+        notes: Query package or symbol documentation from the CLI.
+      - label: Show environment
+        command: go env
+        notes: Print Go toolchain, module, and cache-related environment settings.
+
+  - group: Versioning and Install Workflows
+    items:
+      - label: Install tool from module
+        command: go install golang.org/x/tools/cmd/stringer@latest
+        notes: Install a versioned CLI tool into `GOBIN` or `$GOPATH/bin`.
+      - label: Get specific version
+        command: go get github.com/spf13/cobra@v1.8.1
+        notes: Pin or downgrade a dependency version explicitly.
+      - label: Vendor dependencies
+        command: go mod vendor
+        notes: Copy dependencies into a local `vendor/` directory for vendored builds.
+      - label: Build with vendor mode
+        command: go build -mod=vendor ./...
+        notes: Force builds to use vendored dependencies instead of the module cache.
+      - label: Clean module cache
+        command: go clean -modcache
+        notes: Remove cached downloaded modules for a fresh dependency fetch.
+
+  - group: Workspaces and Multi-Module Repos
+    items:
+      - label: Initialize workspace
+        command: go work init ./module-a ./module-b
+        notes: Create a `go.work` file to compose multiple local modules.
+      - label: Add module to workspace
+        command: go work use ./tools
+        notes: Extend the active workspace with another local module path.
+      - label: Sync workspace deps
+        command: go work sync
+        notes: Align workspace state with module dependency requirements.
+      - label: Show workspace file
+        command: cat go.work
+        notes: Inspect which modules are currently linked into the workspace.
+      - label: Disable workspace mode
+        command: GOWORK=off go test ./...
+        notes: Temporarily ignore `go.work` for debugging or CI comparisons.
+
+  - group: Common Workflows
+    items:
+      - label: New project bootstrap
+        command: go mod init example.com/myapp && go mod tidy
+        notes: Standard starting point for a new Go module.
+      - label: Full validation loop
+        command: go test ./... && go vet ./...
+        notes: Common pre-commit or CI validation sequence.
+      - label: Format source
+        command: gofmt -w .
+        notes: Apply canonical Go formatting across source files.
+      - label: Inspect toolchain version
+        command: go version
+        notes: Important because module and workspace behavior varies across Go releases.
+      - label: Show help
+        command: go help
+        notes: The Go tool spans modules, workspaces, builds, docs, and cross-compilation.

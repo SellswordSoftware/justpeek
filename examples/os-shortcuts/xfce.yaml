@@ -1,0 +1,56 @@
+name: XFCE
+group: os shortcuts
+search_terms:
+  - xfce4
+references:
+  - group: Common Desktop Actions
+    items:
+      - label: Run dialog
+        keys: Alt+F2
+      - label: Window menu
+        keys: Alt+Space
+      - label: Close window
+        keys: Alt+F4
+      - label: Switch windows
+        keys: Alt+Tab
+      - label: Show desktop
+        keys: Super+D
+        notes: Common XFCE default on many setups, but distributions sometimes vary.
+      - label: Workspace switching
+        keys: Ctrl+Alt+Left / Ctrl+Alt+Right
+        notes: Common default; verify in your current window manager bindings.
+
+  - group: Window Manager Actions
+    items:
+      - label: Tile left or right
+        keys: Super+Left / Super+Right
+      - label: Maximize
+        keys: Alt+F10
+      - label: Toggle fullscreen
+        keys: F11
+      - label: Move window
+        keys: Alt+F7
+      - label: Resize window
+        keys: Alt+F8
+      - label: Minimize
+        keys: Alt+F9
+
+  - group: Panels and Session
+    items:
+      - label: Lock screen
+        value: Usually configured through xfce4-session or screensaver shortcut
+      - label: Log out dialog
+        value: Usually Ctrl+Alt+Delete on Mint and some distro defaults, but configurable
+      - label: Panel launcher habits
+        value: XFCE relies heavily on panel launchers and app menu bindings rather than a single shell overview
+
+  - group: Keyboard Settings
+    items:
+      - label: Keyboard preferences
+        value: Settings > Keyboard
+      - label: Application shortcuts tab
+        value: Application Shortcuts
+      - label: Add custom app shortcut
+        value: Type the application name or browse to it from the add shortcut dialog
+      - label: Best habit
+        value: Keep a few custom launchers for terminal, file manager, browser, and screenshot tool

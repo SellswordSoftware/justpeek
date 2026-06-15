@@ -1,0 +1,98 @@
+name: AutoHotkey
+group: launchers / productivity Tools
+search_terms:
+  - ahk
+  - ahk v2
+references:
+  - group: Core Concepts
+    items:
+      - label: Main purpose
+        value: Windows automation via hotkeys, hotstrings, remaps, macros, and small scripts
+      - label: Current major version
+        value: v2
+        notes: v2 is the main current language line; v1 is legacy.
+      - label: Script file extension
+        value: .ahk
+      - label: Run a script
+        command: AutoHotkey.exe myscript.ahk
+      - label: Community and support
+        value: autohotkey.com forums
+
+  - group: Small Useful Patterns
+    items:
+      - label: Launch app with hotkey
+        command: |
+          #t::Run "wt.exe"
+      - label: Search clipboard on web
+        command: |
+          #g::Run "https://www.google.com/search?q=" . A_Clipboard
+      - label: Hotstring expansion
+        command: |
+          ::afaik::as far as I know
+      - label: Simple remap
+        command: |
+          CapsLock::Ctrl
+      - label: Disable a key
+        command: |
+          CapsLock::Return
+
+  - group: Window and Input Automation
+    items:
+      - label: Send keystrokes
+        command: |
+          Send "^c"
+      - label: Activate a window
+        command: |
+          WinActivate "ahk_exe notepad.exe"
+      - label: Wait for a window
+        command: |
+          WinWait "ahk_exe notepad.exe"
+      - label: Mouse click
+        command: |
+          Click 100, 200
+      - label: Sleep between actions
+        command: |
+          Sleep 500
+        notes: Useful when automating apps with fragile timing.
+
+  - group: Script Structure and Flow
+    items:
+      - label: Conditional hotkey
+        command: |
+          #HotIf WinActive("ahk_exe code.exe")
+          ^j::Send "{Down}"
+          #HotIf
+      - label: Message box
+        command: |
+          MsgBox "Done"
+      - label: Loop example
+        command: |
+          Loop 5
+              Send "Hello`n"
+      - label: Function example
+        command: |
+          LaunchDocs() {
+              Run "https://example.com/docs"
+          }
+
+  - group: Startup and Distribution
+    items:
+      - label: Run at login
+        value: Put script or shortcut in the Windows Startup folder
+      - label: Tray management
+        value: Running scripts live in the system tray and can be paused, reloaded, or exited there
+      - label: Compile script
+        value: AutoHotkey supports compiled standalone executables through its toolchain
+      - label: False positive caveat
+        value: Security tools sometimes flag AutoHotkey executables or compiled scripts; official docs call these likely false positives
+
+  - group: Practical Reminders
+    items:
+      - label: Best use cases
+        value: Repetitive UI work, text expansion, app launchers, remaps, small local automations
+      - label: Less ideal use case
+        value: Highly timing-sensitive GUI automation across apps that change layout frequently
+      - label: Official repo
+        value: github.com/AutoHotkey/AutoHotkey
+      - label: Official site
+        value: autohotkey.com

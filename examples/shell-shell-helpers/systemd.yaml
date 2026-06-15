@@ -1,0 +1,110 @@
+name: systemd
+group: shell / shell helpers
+references:
+  - group: Service Control
+    items:
+      - label: Start a service
+        command: sudo systemctl start nginx.service
+        notes: Start the named unit immediately for the current boot.
+      - label: Stop a service
+        command: sudo systemctl stop nginx.service
+        notes: Terminate a running service unit.
+      - label: Restart a service
+        command: sudo systemctl restart nginx.service
+        notes: Stop and start the service in one operation.
+      - label: Reload a service
+        command: sudo systemctl reload nginx.service
+        notes: Ask the service to reload config without a full restart when supported.
+      - label: Check service status
+        command: systemctl status nginx.service
+        notes: Show active state, recent logs, and high-level unit metadata.
+
+  - group: Enablement and Boot Behavior
+    items:
+      - label: Enable service at boot
+        command: sudo systemctl enable nginx.service
+        notes: Create the symlinks needed for automatic startup.
+      - label: Disable service at boot
+        command: sudo systemctl disable nginx.service
+        notes: Remove boot-time activation links without stopping the service immediately.
+      - label: Enable and start now
+        command: sudo systemctl enable --now nginx.service
+        notes: One-step workflow for both current and future activation.
+      - label: Mask a service
+        command: sudo systemctl mask nginx.service
+        notes: Prevent any start action by linking the unit to `/dev/null`.
+      - label: Unmask a service
+        command: sudo systemctl unmask nginx.service
+        notes: Reverse a prior mask operation.
+
+  - group: Listing and Inspection
+    items:
+      - label: List failed units
+        command: systemctl --failed
+        notes: Fast way to spot broken services after boot or deploys.
+      - label: List running services
+        command: systemctl list-units --type=service --state=running
+        notes: Filter active units by type and state.
+      - label: Show unit properties
+        command: systemctl show nginx.service
+        notes: Dump raw properties useful for scripting or deeper debugging.
+      - label: Show dependency tree
+        command: systemctl list-dependencies nginx.service
+        notes: Inspect required or ordering-related units.
+      - label: Search unit files
+        command: systemctl list-unit-files | rg nginx
+        notes: Combine systemctl listing with text search for broader discovery.
+
+  - group: Unit Files and Overrides
+    items:
+      - label: Edit override file
+        command: sudo systemctl edit nginx.service
+        notes: Create or modify a drop-in override under `/etc/systemd/system`.
+      - label: Show merged unit file
+        command: systemctl cat nginx.service
+        notes: Print the main unit plus any drop-in overrides in load order.
+      - label: Re-read unit files
+        command: sudo systemctl daemon-reload
+        notes: Required after editing unit definitions on disk.
+      - label: Re-exec systemd manager
+        command: sudo systemctl daemon-reexec
+        notes: Re-execute the manager binary itself; rarer than `daemon-reload`.
+      - label: Revert local overrides
+        command: sudo systemctl revert nginx.service
+        notes: Remove override drop-ins and restore vendor defaults.
+
+  - group: Targets, User Units, and Runtime
+    items:
+      - label: Switch default target
+        command: sudo systemctl set-default multi-user.target
+        notes: Change the boot target, similar to old runlevel defaults.
+      - label: Isolate a target now
+        command: sudo systemctl isolate rescue.target
+        notes: Transition immediately to a different target state.
+      - label: Manage user service
+        command: systemctl --user status syncthing.service
+        notes: Operate on per-user units without root when user systemd is active.
+      - label: Start user service now
+        command: systemctl --user start syncthing.service
+        notes: Same control model as system units, scoped to the user manager.
+      - label: Check boot performance
+        command: systemd-analyze blame
+        notes: Show which units contributed most to boot time.
+
+  - group: Troubleshooting and Recovery
+    items:
+      - label: Reset failed state
+        command: sudo systemctl reset-failed nginx.service
+        notes: Clear the failed marker after the underlying problem is resolved.
+      - label: Test if service is active
+        command: systemctl is-active nginx.service
+        notes: Script-friendly active-state check with meaningful exit status.
+      - label: Test if service is enabled
+        command: systemctl is-enabled nginx.service
+        notes: Script-friendly enablement check.
+      - label: Show recent logs for unit
+        command: journalctl -u nginx.service -b
+        notes: Pair systemd service state with its journal output from the current boot.
+      - label: Show help
+        command: systemctl --help
+        notes: systemd has a broad command surface; built-in help remains useful.
