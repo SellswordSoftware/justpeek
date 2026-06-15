@@ -13,7 +13,6 @@ import {
   isTauriRuntime,
   listen,
   loadPickerApp,
-  logClientEvent,
   openExternalUrl,
   openShortcutsDir,
   reloadShortcuts,
@@ -116,23 +115,21 @@ test("config helpers use the expected backend commands", async () => {
   try {
     assert.deepEqual(await getConfig(), config);
     await setConfig(config);
-  await reloadShortcuts();
-  await openShortcutsDir();
-  await openExternalUrl("https://example.com");
-  await logClientEvent("frontend started");
-  await hidePanelWindow();
-  await getPickerApps();
-  await loadPickerApp("picker-1");
+    await reloadShortcuts();
+    await openShortcutsDir();
+    await openExternalUrl("https://example.com");
+    await hidePanelWindow();
+    await getPickerApps();
+    await loadPickerApp("picker-1");
 
     assert.deepEqual(calls, [
       { command: "cmd_get_config", args: undefined },
-    { command: "cmd_set_config", args: { configData: config } },
-    { command: "cmd_reload_shortcuts", args: undefined },
-    { command: "cmd_open_shortcuts_dir", args: undefined },
-    { command: "cmd_open_external_url", args: { url: "https://example.com" } },
-    { command: "cmd_log_client_event", args: { message: "frontend started" } },
-    { command: "cmd_hide_panel", args: undefined },
-    { command: "cmd_get_picker_apps", args: undefined },
+      { command: "cmd_set_config", args: { configData: config } },
+      { command: "cmd_reload_shortcuts", args: undefined },
+      { command: "cmd_open_shortcuts_dir", args: undefined },
+      { command: "cmd_open_external_url", args: { url: "https://example.com" } },
+      { command: "cmd_hide_panel", args: undefined },
+      { command: "cmd_get_picker_apps", args: undefined },
       { command: "cmd_load_picker_app", args: { pickerId: "picker-1", picker_id: "picker-1" } },
     ]);
   } finally {

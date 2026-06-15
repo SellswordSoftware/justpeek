@@ -8,7 +8,6 @@ import {
   hidePanelWindow,
   isTauriRuntime,
   listen,
-  logClientEvent,
 } from "./runtime/tauri.js";
 
 const PANEL_WINDOW_LABEL = "panel";
@@ -21,14 +20,6 @@ if (!(rootNode instanceof HTMLElement)) {
 }
 
 const root = rootNode;
-
-function logStartup(message) {
-  if (!isTauriRuntime()) {
-    return;
-  }
-
-  void logClientEvent(message).catch(() => {});
-}
 
 /**
  * @typedef {object} MountedView
@@ -46,7 +37,6 @@ function unmountCurrentView() {
 }
 
 function showBrowserFallback() {
-  logStartup("showBrowserFallback");
   unmountCurrentView();
   root.classList.remove("panel-host");
 
@@ -87,10 +77,8 @@ function applyTheme(theme) {
 async function syncThemeFromConfig() {
   try {
     const config = await getConfig();
-    logStartup(`syncThemeFromConfig: theme=${config.theme}`);
     applyTheme(config.theme);
   } catch {
-    logStartup("syncThemeFromConfig: failed, defaulting to dark");
     applyTheme("dark");
   }
 }
@@ -101,7 +89,6 @@ async function syncThemeFromConfig() {
  * @returns {void}
  */
 function showPanel(data, options) {
-  logStartup(`showPanel: app=${data.app_name} groups=${data.groups.length}`);
   unmountCurrentView();
   root.classList.add("panel-host");
   mountedView = createPanel(data, options);
@@ -110,7 +97,6 @@ function showPanel(data, options) {
 }
 
 function showSettings() {
-  logStartup("showSettings");
   unmountCurrentView();
   root.classList.remove("panel-host");
   mountedView = createSettings();
@@ -123,19 +109,12 @@ function showSettings() {
  */
 async function wireTauriPanelEvents() {
   const windowLabel = getCurrentWindowLabel();
-  logStartup(`wireTauriPanelEvents:start window=${windowLabel}`);
   await syncThemeFromConfig();
-
-  if (windowLabel === SETTINGS_WINDOW_LABEL) {
-    logStartup("wireTauriPanelEvents: bootstrap settings window");
-    showSettings();
-  }
 
   await listen(APP_EVENTS.showPanel, (event) => {
     if (windowLabel !== PANEL_WINDOW_LABEL) {
       return;
     }
-    logStartup("event: show-panel");
     void syncThemeFromConfig().finally(() => {
       showPanel(/** @type {import("./panel.js").PanelData} */ (event.payload));
     });
@@ -145,7 +124,6 @@ async function wireTauriPanelEvents() {
     if (windowLabel !== PANEL_WINDOW_LABEL) {
       return;
     }
-    logStartup("event: show-panel-picker");
     const apps = /** @type {import("./panel.js").PickerApp[]} */ (event.payload);
     void syncThemeFromConfig().finally(() => {
       showPanel(pickerAppsToPanelData(apps), { initialMode: "picker", pickerApps: apps });
@@ -156,14 +134,12 @@ async function wireTauriPanelEvents() {
     if (windowLabel !== PANEL_WINDOW_LABEL) {
       return;
     }
-    logStartup("event: hide-panel");
     unmountCurrentView();
     root.classList.remove("panel-host");
     hidePanelWindow().catch(() => {});
   });
 
   await listen(APP_EVENTS.themeChanged, (event) => {
-    logStartup(`event: theme-changed payload=${String(event.payload)}`);
     applyTheme(/** @type {string | undefined} */ (event.payload));
   });
 
@@ -171,35 +147,20 @@ async function wireTauriPanelEvents() {
     if (windowLabel !== SETTINGS_WINDOW_LABEL) {
       return;
     }
-    logStartup("event: open-settings");
     void syncThemeFromConfig().finally(() => {
       showSettings();
     });
   });
 
   if (windowLabel === PANEL_WINDOW_LABEL) {
-    logStartup("wireTauriPanelEvents: emitting panel-ready");
     await emit(APP_EVENTS.panelReady, windowLabel);
   }
-
-  logStartup(`wireTauriPanelEvents:ready window=${windowLabel}`);
 }
 
 if (isTauriRuntime()) {
-  logStartup("main.js detected Tauri runtime");
-  window.addEventListener("error", (event) => {
-    const detail = event.error instanceof Error ? event.error.stack ?? event.error.message : event.message;
-    logStartup(`window.error: ${detail}`);
-  });
-  window.addEventListener("unhandledrejection", (event) => {
-    const detail = event.reason instanceof Error ? event.reason.stack ?? event.reason.message : String(event.reason);
-    logStartup(`window.unhandledrejection: ${detail}`);
-  });
   wireTauriPanelEvents().catch(() => {
-    logStartup("wireTauriPanelEvents: failed, falling back");
     showBrowserFallback();
   });
 } else {
-  console.info("[justpeek] browser fallback runtime");
   showBrowserFallback();
 }

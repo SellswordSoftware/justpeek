@@ -44,10 +44,6 @@ pub fn config_path() -> PathBuf {
     config_dir().join("config.yaml")
 }
 
-pub fn log_path() -> PathBuf {
-    config_dir().join("justpeek.log")
-}
-
 pub fn references_dir_path(config: &Config) -> PathBuf {
     config
         .references_dir

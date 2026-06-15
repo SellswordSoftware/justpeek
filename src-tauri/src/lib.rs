@@ -5,8 +5,6 @@ mod scanner;
 mod watcher;
 
 use std::collections::HashMap;
-use std::fs::OpenOptions;
-use std::io::Write;
 use std::sync::{Mutex, RwLock};
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::TrayIconBuilder;
@@ -89,7 +87,6 @@ pub fn run() {
             install_hotkey_toggle_handler(app.handle());
             build_tray(app)?;
             if let Some(window) = app.get_webview_window("main") {
-                debug_log("setup: configuring main/settings window behavior");
                 configure_settings_window_behavior(&window);
                 let _ = window.hide();
             }
@@ -106,7 +103,6 @@ pub fn run() {
             cmd_open_settings_window,
             cmd_open_shortcuts_dir,
             cmd_open_external_url,
-            cmd_log_client_event,
             cmd_get_picker_apps,
             cmd_load_picker_app,
         ])
@@ -138,26 +134,19 @@ fn build_tray(app: &mut tauri::App) -> tauri::Result<()> {
         .tooltip("JustPeek")
         .show_menu_on_left_click(true)
         .on_menu_event(move |app, event| match event.id().as_ref() {
-            "quit" => {
-                debug_log("tray action: quit");
-                app.exit(0)
-            }
+            "quit" => app.exit(0),
             "reload" => {
-                debug_log("tray action: reload references");
                 let _ = reload_shortcuts(app);
             }
             "open_dir" => {
-                debug_log("tray action: open references directory");
                 let _ = open_shortcuts_dir();
             }
             "settings" => {
-                debug_log("tray action: open settings");
                 let _ = show_settings_window(app);
             }
             _ => {}
         })
         .on_tray_icon_event(|tray, _event| {
-            debug_log("tray icon event: show panel");
             let _ = show_panel_window(&tray.app_handle());
         });
 
@@ -173,7 +162,6 @@ fn install_hotkey_toggle_handler(app: &AppHandle) {
     let app_handle = app.clone();
 
     app.listen("justpeek://toggle-panel", move |_event| {
-        debug_log("received toggle-panel event");
         let _ = show_panel_window(&app_handle);
     });
 
@@ -183,41 +171,16 @@ fn install_hotkey_toggle_handler(app: &AppHandle) {
 
 #[cfg(debug_assertions)]
 fn debug_log(message: impl AsRef<str>) {
-    append_log_line(message.as_ref());
     eprintln!("[justpeek] {}", message.as_ref());
 }
 
 #[cfg(not(debug_assertions))]
-fn debug_log(message: impl AsRef<str>) {
-    append_log_line(message.as_ref());
-}
-
-fn append_log_line(message: &str) {
-    let dir = config::config_dir();
-    let _ = std::fs::create_dir_all(&dir);
-
-    let mut file = match OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open(config::log_path())
-    {
-        Ok(file) => file,
-        Err(_) => return,
-    };
-
-    let timestamp = match std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH) {
-        Ok(duration) => duration.as_secs(),
-        Err(_) => 0,
-    };
-
-    let _ = writeln!(file, "[{timestamp}] {message}");
-}
+fn debug_log(_message: impl AsRef<str>) {}
 
 fn install_panel_ready_handler(app: &AppHandle) {
     let app_handle = app.clone();
 
     app.listen("justpeek://panel-ready", move |event| {
-        debug_log(format!("received panel-ready event payload={}", event.payload()));
         if !event.payload().contains(PANEL_WINDOW_LABEL) {
             return;
         }
@@ -299,47 +262,10 @@ fn create_panel_window(app: &AppHandle) -> Result<(), String> {
         return Ok(());
     }
 
-    debug_log("creating panel window");
     let panel_window = WebviewWindowBuilder::new(
         app,
         PANEL_WINDOW_LABEL,
         WebviewUrl::App("index.html".into()),
-    )
-    .on_navigation(|url| {
-        debug_log(format!("panel navigation: {url}"));
-        true
-    })
-    .on_page_load(|_window, payload| {
-        debug_log(format!(
-            "panel page load: event={:?} url={}",
-            payload.event(),
-            payload.url()
-        ));
-    })
-    .on_web_resource_request(|request, _response| {
-        debug_log(format!("panel resource request: {}", request.uri()));
-    })
-    .initialization_script(
-        r#"
-        (() => {
-          const send = (message) => {
-            try {
-              const invoke = window.__TAURI__?.core?.invoke;
-              if (typeof invoke === "function") {
-                void invoke("cmd_log_client_event", { message: `[init-script] ${message}` });
-              }
-            } catch {}
-          };
-
-          send(`location=${window.location.href}`);
-          document.addEventListener("DOMContentLoaded", () => {
-            send(`DOMContentLoaded readyState=${document.readyState}`);
-          });
-          window.addEventListener("load", () => {
-            send(`window.load readyState=${document.readyState}`);
-          });
-        })();
-        "#,
     )
     .title("JustPeek")
     .transparent(true)
@@ -356,24 +282,19 @@ fn create_panel_window(app: &AppHandle) -> Result<(), String> {
     .build()
     .map_err(|err| err.to_string())?;
 
-    debug_log("panel window created successfully");
-
     let app_handle = app.clone();
     let panel_window_handle = panel_window.clone();
     panel_window.on_window_event(move |event| match event {
         WindowEvent::Moved(position) => {
-            debug_log(format!("panel window moved to x={}, y={}", position.x, position.y));
             remember_panel_position(&app_handle, *position);
         }
         WindowEvent::CloseRequested { api, .. } => {
-            debug_log("panel window close requested; hiding instead");
             api.prevent_close();
             snapshot_panel_position(&panel_window_handle);
             set_panel_visible(&app_handle, false);
             let _ = panel_window_handle.hide();
         }
         WindowEvent::Destroyed => {
-            debug_log("panel window destroyed");
             let state = app_handle.state::<AppData>();
             *state.panel_window.write().unwrap() = None;
             *state.panel_visible.write().unwrap() = false;
@@ -402,38 +323,27 @@ fn show_panel_payload(app: &AppHandle, payload: PanelDisplayPayload) -> Result<(
         return Err("Panel window not found".to_string());
     };
 
-    debug_log("show_panel_payload: dispatching payload to panel window");
     match payload {
         PanelDisplayPayload::References(panel_data) => {
-            debug_log(format!(
-                "show_panel_payload: references app_name={}",
-                panel_data.app_name
-            ));
             window
                 .emit("show-panel", panel_data)
                 .map_err(|err| err.to_string())?;
         }
         PanelDisplayPayload::Picker(picker_apps) => {
-            debug_log(format!(
-                "show_panel_payload: picker app count={}",
-                picker_apps.len()
-            ));
             window
                 .emit("show-panel-picker", picker_apps)
                 .map_err(|err| err.to_string())?;
         }
     }
 
-    debug_log("show_panel_payload: calling window.show()");
     window.show().map_err(|err| err.to_string())?;
     restore_panel_position(&window);
     set_panel_visible(app, true);
-    debug_log("show_panel_payload: calling window.set_focus()");
     window.set_focus().map_err(|err| err.to_string())
 }
 
 fn show_panel_window(app: &AppHandle) -> Result<(), String> {
-    let Some(window) = app.get_webview_window(PANEL_WINDOW_LABEL) else {
+    let Some(_window) = app.get_webview_window(PANEL_WINDOW_LABEL) else {
         return Err("Panel window not found".to_string());
     };
 
@@ -483,17 +393,10 @@ fn show_panel_window(app: &AppHandle) -> Result<(), String> {
     };
 
     if *state.panel_ready.read().unwrap() {
-        debug_log("show_panel_window: panel already ready");
         show_panel_payload(app, payload)
     } else {
         debug_log("panel window not ready yet; queued payload until ready event arrives");
         *state.pending_panel_payload.write().unwrap() = Some(payload);
-        debug_log("show_panel_window: calling window.show() while waiting for ready");
-        window.show().map_err(|err| err.to_string())?;
-        restore_panel_position(&window);
-        set_panel_visible(app, true);
-        debug_log("show_panel_window: calling window.set_focus() while waiting for ready");
-        window.set_focus().map_err(|err| err.to_string())?;
         Ok(())
     }
 }
@@ -502,7 +405,6 @@ fn configure_settings_window_behavior(window: &WebviewWindow) {
     let window_handle = window.clone();
     window.on_window_event(move |event| {
         if let WindowEvent::CloseRequested { api, .. } = event {
-            debug_log("settings window close requested; hiding instead");
             api.prevent_close();
             let _ = window_handle.hide();
         }
@@ -514,14 +416,11 @@ fn show_settings_window(app: &AppHandle) -> Result<(), String> {
         return Err("Settings window not found".to_string());
     };
 
-    debug_log("show_settings_window: calling window.show()");
-    window.show().map_err(|err| err.to_string())?;
-    debug_log("show_settings_window: calling window.set_focus()");
-    window.set_focus().map_err(|err| err.to_string())?;
-    debug_log("show_settings_window: emitting open-settings");
     window
         .emit("open-settings", ())
         .map_err(|err| err.to_string())?;
+    window.show().map_err(|err| err.to_string())?;
+    window.set_focus().map_err(|err| err.to_string())?;
     Ok(())
 }
 
@@ -665,12 +564,6 @@ async fn cmd_open_shortcuts_dir() -> Result<(), String> {
 #[tauri::command]
 async fn cmd_open_external_url(url: String) -> Result<(), String> {
     open_external_url(&url)
-}
-
-#[tauri::command]
-async fn cmd_log_client_event(message: String) -> Result<(), String> {
-    debug_log(format!("client: {message}"));
-    Ok(())
 }
 
 #[tauri::command]
