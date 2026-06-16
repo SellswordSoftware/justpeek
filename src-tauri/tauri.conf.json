@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "identifier": "com.sellsword.JustPeek",
   "build": {
+    "beforeDevCommand": "npm run test:prepare:dev",
+    "beforeBuildCommand": "npm run test:prepare:prod",
     "frontendDist": "../src"
   },
   "app": {
@@ -19,7 +21,7 @@
         "resizable": true,
         "center": false,
         "visible": false,
-        "transparent": true,
+        "transparent": false,
         "decorations": false
       }
     ],

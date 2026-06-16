@@ -8,6 +8,8 @@
     "dev": "tauri dev",
     "build": "tauri build",
     "test": "node --test src/**/*.test.js",
+    "test:prepare:dev": "node scripts/use-dev-index.mjs",
+    "test:prepare:prod": "node scripts/use-prod-index.mjs",
     "typecheck": "tsc -p jsconfig.json --pretty false && tsc -p jsconfig.tooling.json --pretty false"
   },
   "dependencies": {

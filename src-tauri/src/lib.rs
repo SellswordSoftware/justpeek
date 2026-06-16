@@ -268,7 +268,7 @@ fn create_panel_window(app: &AppHandle) -> Result<(), String> {
         WebviewUrl::App("index.html".into()),
     )
     .title("JustPeek")
-    .transparent(true)
+    .transparent(false)
     .decorations(false)
     .always_on_top(true)
     .visible_on_all_workspaces(true)
