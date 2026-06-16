@@ -1,6 +1,6 @@
 [submodule "src/vendor/naf"]
 	path = src/vendor/naf
-	url = /home/mike/sellsword/naf
+	url = https://github.com/SellswordSoftware/naf.git
 [submodule "src/vendor/nass"]
 	path = src/vendor/nass
-	url = /home/mike/sellsword/nass
+	url = https://github.com/SellswordSoftware/nass.git
