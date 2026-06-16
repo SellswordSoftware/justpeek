@@ -52,7 +52,7 @@ $XDG_CONFIG_HOME/justpeek/references
 
 After that, start the app, open the panel with the configured global hotkey, and switch between reference packs based on the active app or the manual picker.
 
-If you want a reference pack for JustPeek itself, the repo includes [examples/justpeek.yaml]([/home/mike/sellsword/justpeek/examples/justpeek.yaml](https://github.com/SellswordSoftware/justpeek/blob/main/examples/justpeek.yaml)), which documents the app's own panel, picker, and search shortcuts.
+If you want a reference pack for JustPeek itself, the repo includes [examples/justpeek.yaml](https://github.com/SellswordSoftware/justpeek/blob/main/examples/justpeek.yaml), which documents the app's own panel, picker, and search shortcuts.
 
 ## Configuration
 
